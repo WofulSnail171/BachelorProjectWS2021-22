@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Event_Manager : MonoBehaviour
+public class Deck_Manager : MonoBehaviour
 {
     [SerializeField] private List<Event_Deck> event_Decks = new List<Event_Deck>();
     
