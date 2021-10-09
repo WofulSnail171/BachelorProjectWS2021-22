@@ -7,36 +7,23 @@ namespace IdleEngine.Session
     [CreateAssetMenu(fileName = "Session", menuName = "Idle/ Session", order = 0)]
     public class Session : ScriptableObject
     {
-        
+
+        #region vars
         public double Money;
         public double BaseIncome;
 
-        public double BaseProductionTimeInSeconds;
         public double ProductionTimeInSeconds;
         public double CollectedTimeInSeconds;
 
-
         public long LastTicks;
+        #endregion
+
 
         public void Tick(double deltaTime)
         {
             Money += CalculatedProgression(deltaTime);
         }
 
-       private double CalculatedProgression(double deltaTime)
-        {
-            CollectedTimeInSeconds += deltaTime;
-
-            double calculatedSum = 0;
-
-            while (CollectedTimeInSeconds >= ProductionTimeInSeconds)
-            {
-                calculatedSum += BaseIncome;
-                CollectedTimeInSeconds -= ProductionTimeInSeconds;
-            }
-
-            return calculatedSum;
-        }
 
         public void CalculateOfflineTick()
         {
@@ -58,5 +45,21 @@ namespace IdleEngine.Session
         {
             LastTicks = DateTime.UtcNow.Ticks;
         }
+
+        private double CalculatedProgression(double deltaTime)
+        {
+            CollectedTimeInSeconds += deltaTime;
+
+            double calculatedSum = 0;
+
+            while (CollectedTimeInSeconds >= ProductionTimeInSeconds)
+            {
+                calculatedSum += BaseIncome;
+                CollectedTimeInSeconds -= ProductionTimeInSeconds;
+            }
+
+            return calculatedSum;
+        }
+
     }
 }

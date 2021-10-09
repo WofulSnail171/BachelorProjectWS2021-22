@@ -2,26 +2,26 @@
 using System;
 using UnityEngine;
 using IdleEngine.Session;
+using System.Collections;
 
 namespace IdleEngine
 {
     public class IdleEngine : MonoBehaviour
     {
 
+        #region vars
         public Session.Session session;
+        private bool IsRunning = true;
+        #endregion
 
-        private void Update()
+
+        private void Start()
         {
-            if (!session)
-            {
-                return;
-            }
-            session.Tick(Time.deltaTime);
+            StartCoroutine(RunIdleEngine());
         }
 
-        
 
-        //replace with Iserializable calback reciever
+        //should replace with Iserializable callback reciever
         private void OnEnable()
         {
             if(!session)
@@ -40,6 +40,26 @@ namespace IdleEngine
             }
 
             session.SaveTicks();
+        }
+
+
+
+        //run idle engine in coroutine
+        IEnumerator RunIdleEngine()
+        {
+            while (IsRunning)
+            {
+                if (!session)
+                {
+                    IsRunning = false ;
+                    yield break;
+                }
+                session.Tick(Time.deltaTime);
+
+                yield return null;
+            }
+
+            yield return null;
         }
     }
 }

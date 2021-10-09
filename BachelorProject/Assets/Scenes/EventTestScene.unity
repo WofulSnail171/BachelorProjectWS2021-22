@@ -200,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   event_Decks:
   - {fileID: 11400000, guid: fa972d8a3074ba2418115e712380b940, type: 2}
+  seed: 12
 --- !u!23 &1500796848
 MeshRenderer:
   m_ObjectHideFlags: 0

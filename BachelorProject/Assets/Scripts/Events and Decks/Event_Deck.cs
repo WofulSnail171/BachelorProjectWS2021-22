@@ -5,7 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Event_Deck", menuName = "Event_System/Event_Deck", order = 1)]
 public class Event_Deck : ScriptableObject
 {
+
     [SerializeField] private List<Card> _cards_of_this_Deck = new List<Card>();
+
+
 
     public Card Draw_Card()
     {

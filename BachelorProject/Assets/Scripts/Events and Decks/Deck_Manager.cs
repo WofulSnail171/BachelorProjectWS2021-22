@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class Deck_Manager : MonoBehaviour
 {
+
+    #region vars
     [SerializeField] private List<Event_Deck> event_Decks = new List<Event_Deck>();
-    
+    [SerializeField] private int seed;
+    #endregion
+
 
     private void Start()
     {
         StartCoroutine(Test());
+
+        //testing seeds
+        Random.InitState(seed);
+
+        int test = Random.Range(0, 10);
+
+        Debug.Log($"the random number is {test} for {seed}");
     }
 
 
+    //waiting for key input in coroutine
     IEnumerator Test()
     {
         Debug.Log("hoi");
