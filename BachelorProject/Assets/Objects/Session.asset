@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ef2928177acdd64facb7d4caeb1d31f, type: 3}
   m_Name: Session
   m_EditorClassIdentifier: 
-  Money: 94
+  Money: 433
   BaseIncome: 1
   ProductionTimeInSeconds: 1
-  CollectedTimeInSeconds: 0.7837623498635367
-  LastTicks: 637693597715494329
+  CollectedTimeInSeconds: 0.5060744460206479
+  LastTicks: 637695326174718423
