@@ -59,6 +59,5 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-BachelorProject/.idea/.idea.BachelorProject/.xml
-BachelorProject/.idea/.idea.BachelorProject/.iml
 BachelorProject/.vsconfig
+BachelorProject/.idea/.idea.BachelorProject/
