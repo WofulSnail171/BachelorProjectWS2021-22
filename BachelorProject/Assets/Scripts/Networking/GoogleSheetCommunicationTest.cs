@@ -7,11 +7,10 @@ using System;
 
 public class GoogleSheetCommunicationTest : MonoBehaviour
 {
-    private UnityWebRequest _webRequest;
-    private bool Imported = true;
-    private bool Exported = true;
     public TMP_Text outputTextfield;
-    public TMP_InputField inputTextField;
+    public TMP_InputField nameTextField;
+    public TMP_InputField pwTextField;
+    public TMP_InputField requestTextField;
 
     // Start is called before the first frame update
     void Start()
@@ -25,31 +24,19 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_webRequest != null && _webRequest.isDone && !Imported)
-            CheckForImportRequestEnd();
-        if(_webRequest != null && _webRequest.isDone && !Exported)
-        {
-            _webRequest = null;
-            Exported = true;
-        }
+
     }
 
     public void FetchData()
     {
-        if(_webRequest == null)
-        {
-            outputTextfield.text = "Fetching Data...";
-            ServerRequest newRequest = new ServerRequest { request = Request.DownloadHeroList };
-            var JsonPackage = JsonUtility.ToJson(newRequest);
-            string parameters = "?data=" + JsonPackage;
-            _webRequest = UnityWebRequest.Get("https://script.google.com/macros/s/AKfycbxmcdlCpQ2CiN-4dmtM9iFHaQXyIVne-wGqieddb9eEKR7WkGh3ELBJh5E5VuJDh12Q/exec" + parameters);
-            _webRequest.SendWebRequest();
-            Imported = false;
-        }
+        Request requestType = (Request)Int32.Parse(requestTextField.text);
+        LoginInfo playerLogin = new LoginInfo { playerId = nameTextField.text, password = pwTextField.text };
+        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin));
     }
 
     public void FetchDataOld()
     {
+        /*
         if (_webRequest == null)
         {
             outputTextfield.text = "Fetching Data...";
@@ -117,18 +104,12 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             _webRequest.SendWebRequest();
             Imported = false;
         }
-    }
-
-    public void WriteData()
-    {
-        if (_webRequest == null)
-        {
-            PostInfos();
-        }
+        */
     }
 
     private void CheckForImportRequestEnd()
     {
+        /*
         if (_webRequest != null && _webRequest.isDone)
         {
             PlayerInfo thing = new PlayerInfo();
@@ -141,7 +122,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
             IncomingHeroData DefaultHeroList = new IncomingHeroData();
             DefaultHeroList = JsonUtility.FromJson<IncomingHeroData>(textMessage);
-            /*
+            
             switch (requestType)
             {
                 case Request.SignUp:
@@ -156,7 +137,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
                 default:
                     break;
             }
-            */
+            
             string[] splittedMessage = textMessage.Split('{');
             foreach (var item in splittedMessage)
             {
@@ -173,12 +154,15 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             _webRequest = null;
             Imported = true;
         }
+        */
     }
 
 
     //12833 characters can be send
     private void PostInfos()
     {
+        ServerCommunicationManager._instance.PostInfo(Request.DownloadHeroList, "");
+        /*
         //PlayerInfo newInfo = new PlayerInfo { result = new int[] { 123, 2, 3, 4 } };
         SendInfo newInfo = new SendInfo { input = inputTextField.text };
         int numOfHeroData = Int32.Parse(inputTextField.text);
@@ -221,7 +205,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             name = "Benedikt",
             password = "321",
             date = System.DateTime.Now.ToString(),
-            signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString()),
+            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString()),
             profileDescription = "",
             mtDoomCounter = 0,
             tradeCounter = 0,
@@ -235,64 +219,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             axel.heroID = i.ToString() + ":Axel";
             newPlayer.inventory[i] = axel;
         }
-        var JsonPackage = JsonUtility.ToJson(newPlayer);
-        Debug.Log(JsonPackage.Length);
+        */
 
-
-        //var JsonPackage = JsonUtility.ToJson(newInfo);
-        string manualJSON = "\"input\":\"test?\",\"someNumber\":0,\"aFloat\":0.30000001192092898,\"pInfo\":{\"result\":[0,1,2,3,4]}";
-
-        WWWForm form = new WWWForm();
-        form.AddField("data", JsonPackage);
-        _webRequest = UnityWebRequest.Post("https://script.google.com/macros/s/AKfycbxmcdlCpQ2CiN-4dmtM9iFHaQXyIVne-wGqieddb9eEKR7WkGh3ELBJh5E5VuJDh12Q/exec", form);
-        //https://script.google.com/macros/s/AKfycbxPMPxys3BNhNip71uoGyMPoF5Ag68qlGc6HKWxNAg/dev  https://script.google.com/macros/s/AKfycbxmcdlCpQ2CiN-4dmtM9iFHaQXyIVne-wGqieddb9eEKR7WkGh3ELBJh5E5VuJDh12Q/exec
-        //https://script.google.com/macros/s/AKfycbxPMPxys3BNhNip71uoGyMPoF5Ag68qlGc6HKWxNAg/dev
-        _webRequest.SendWebRequest();
-
-        Exported = false;
-    }
-
-    [System.Serializable]
-    public class ServerRequest
-    {
-        public Request request;
-        public string JsonData;
-    }
-
-    public enum Request
-    {
-        SignUp,
-        SignIn,
-        GetPlayerData,
-        DownloadHeroList
-    }
-
-    [System.Serializable]
-    public class PlayerInfo
-    {
-        public string[] result;
-    }
-
-    [System.Serializable]
-    public class SendInfo
-    {
-        public string input;
-        public int someNumber = 0;
-        public float aFloat = 0.3f;
-        public PlayerInfo pInfo = new PlayerInfo() { result = new string[] { "0","1", "2", "3", "4" } };
-    }
-
-    [System.Serializable]
-    public class SheetRequest
-    {
-        public string requType = "none";
-        public string sendInfoJson = "";
-    }
-
-    [System.Serializable]
-    public class LogInInfo
-    {
-        public string username = "name";
-        public string password = "pw";
-    }
+    }    
 }

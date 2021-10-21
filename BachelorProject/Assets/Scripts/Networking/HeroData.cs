@@ -3,26 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class HeroData
+public class PlayerHero
 {
-    public string heroID;
-    public string description;
-    public string race;
-    public string job;
-
-    public int rarity;
-    public string texture;
-    
+    public string heroId;
     public HeroStatus status;
 
-    public Stat physical;
-    public Stat magical;
-    public Stat social;
-
-    public MapNode buff;
-    public MapNode debuff;
-
-    public PathType pathAffinity;
+    public int pVal;
+    public int pPot;
+    public int mVal;
+    public int mPot;
+    public int sVal;
+    public int sPot;
 }
 
 [System.Serializable]
@@ -34,31 +25,31 @@ public class IncomingHeroData
 [System.Serializable]
 public class DefaultHero
 {
-    public string heroid;
+    public string heroId;
     public string description;
     public string race;
     public string job;
     public int rarity;
     public string texture;
 
-    public int pdef;
-    public int pmin;
-    public int pdefpot;
-    public int pmaxpot;
-           
-    public int mdef;
-    public int mmin;
-    public int mdefpot;
-    public int mmaxpot;
-           
-    public int sdef;
-    public int smin;
-    public int sdefpot;
-    public int smaxpot;
+    public int pDef;
+    public int pMin;
+    public int pDefPot;
+    public int pMaxPot;
 
-    public MapNode nodebuff;
-    public MapNode nodedebuff;
-    public PathType pathaff;
+    public int mDef;
+    public int mMin;
+    public int mDefPot;
+    public int mMaxPot;
+
+    public int sDef;
+    public int sMin;
+    public int sDefPot;
+    public int sMaxPot;
+
+    public MapNode nodeBuff;
+    public MapNode nodeDebuff;
+    public PathType pathAff;
 }
 
 public enum HeroRace
