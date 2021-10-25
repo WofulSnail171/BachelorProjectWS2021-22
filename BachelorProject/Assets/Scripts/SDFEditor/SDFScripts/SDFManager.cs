@@ -9,18 +9,18 @@ public class SDFManager : MonoBehaviour{
     private List <SDFScriptableObject>  SDFObjects = new List<SDFScriptableObject>();
 
     private TextAsset hlslInclude;
-    string path = "Assets/Shader/SDFInclude.txt";
+    [HideInInspector]public string path = @"Assets/Shader/SDFInclude.hlsl";
 
     public SDFScriptableObject sdf;
-
+    
     private void OnValidate() {
 
-        if (this.hlslStrings.Count < 3) {
-            this.hlslStrings.Add("#ifndef SDFFUNCTIONS_INCLUDED");
-            this.hlslStrings.Add("#def SDFFUNCTIONS_INCLUDED");
-            this.hlslStrings.Add("float dot2( in float2 v ) { return dot(v,v); }");
-        }
-
+        this.hlslStrings.Clear();
+        this.hlslStrings.Add("#ifndef SDFFUNCTIONS_INCLUDED");
+        this.hlslStrings.Add("#define SDFFUNCTIONS_INCLUDED");
+        this.hlslStrings.Add("float dot2( in float2 v ) { return dot(v,v); }");
+        
+        
         if(sdf != null)
             AddHlslString(sdf);
         WriteHlslToText();
@@ -28,7 +28,7 @@ public class SDFManager : MonoBehaviour{
 
     private void AddHlslString(SDFScriptableObject so) {
         string hlsl =
-            "void " + so.FunctionName + @"_float float2 uv,
+            @"void SDF_float (float2 uv,
              out float Out)
             { Out = " + so.SDFFunction() + "}";
         
@@ -37,14 +37,15 @@ public class SDFManager : MonoBehaviour{
 
     private void WriteHlslToText() {
         
-        using (StreamWriter sw = File.CreateText(path)) {
-
+        using (FileStream f = new FileStream(this.path, FileMode.OpenOrCreate, FileAccess.Write))
+        using (StreamWriter sw = new StreamWriter(f)){
             foreach (string s in this.hlslStrings) {
-                sw.WriteLine(s);
+                sw.WriteLine(s );
             }
 
             sw.WriteLine("#endif");
             sw.Close();
+            f.Close();
         }
     }
 }

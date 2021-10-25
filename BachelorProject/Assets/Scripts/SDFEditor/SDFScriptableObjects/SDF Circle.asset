@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SDF Circle
   m_EditorClassIdentifier: 
   name: Circle
-  functionName: new Function Name
-  position: {x: 0, y: 0, z: 0}
-  radius: 0
+  functionName: SDFCircle
+  position: {x: -0.5, y: -0.5}
+  radius: 0.5

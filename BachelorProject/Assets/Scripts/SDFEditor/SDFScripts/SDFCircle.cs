@@ -9,7 +9,7 @@ public class SDFCircle : SDFScriptableObject {
     public float Radius => this.radius;
     
     public override string SDFFunction() {
-        string hlslString = "length(" + Position + ")- " + radius + ";" ;
+        string hlslString = "length(" + Position + "+ uv)- " + Radius + ";" ;
         return hlslString;
     }
 }
