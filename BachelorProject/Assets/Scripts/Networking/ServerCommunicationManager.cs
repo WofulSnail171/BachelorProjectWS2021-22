@@ -58,6 +58,9 @@ public class ServerCommunicationManager : MonoBehaviour
         //ToDO! more length for the requestmarker!!! maybe check where the first non numeric symbol is ('{' maybe?)
         string requestMarker = message.Substring(0, 1);
         lastMessage = message.Remove(0, requestMarker.Length);
+        int requestTypeInt;
+        if (!Int32.TryParse(requestMarker, out requestTypeInt))
+            return;
         Request requestType = (Request)Int32.Parse(requestMarker);
         lastGetInfo = requestType;
         switch (requestType)
@@ -82,6 +85,10 @@ public class ServerCommunicationManager : MonoBehaviour
                 //download the default hero list and replace local copy
                 DatabaseManager._instance.UpdateDefaultHeroListFromServer(lastMessage);
                 break;
+            case Request.DownloadEventData:
+                //download the default hero list and replace local copy
+                DatabaseManager._instance.UpdateEventDataFromServer(lastMessage);
+                break;
             default:
                 break;
         }
@@ -101,6 +108,8 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.GetPlayerData:
                 break;
             case Request.DownloadHeroList:
+                break;
+            case Request.DownloadEventData:
                 break;
             default:
                 break;
@@ -153,5 +162,6 @@ public enum Request
     SignUp,
     SignIn,
     GetPlayerData,
-    DownloadHeroList
+    DownloadHeroList,
+    DownloadEventData
 }

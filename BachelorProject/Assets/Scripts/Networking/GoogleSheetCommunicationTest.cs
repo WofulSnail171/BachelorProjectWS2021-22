@@ -107,6 +107,16 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         */
     }
 
+    public void SaveData()
+    {
+        DatabaseManager._instance.SaveGameDataLocally();
+    }
+
+    public void LoadData()
+    {
+        DatabaseManager._instance.LoadLocalSave();
+    }
+
     private void CheckForImportRequestEnd()
     {
         /*
@@ -159,7 +169,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
 
     //12833 characters can be send
-    private void PostInfos()
+    public void PostInfos()
     {
         ServerCommunicationManager._instance.PostInfo(Request.DownloadHeroList, "");
         /*

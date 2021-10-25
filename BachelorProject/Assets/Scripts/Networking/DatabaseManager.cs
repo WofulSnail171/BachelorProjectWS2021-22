@@ -17,11 +17,46 @@ public class DatabaseManager : MonoBehaviour
         else
             Destroy(this);
     }
+    //some logic to compare local and online data and do something according
+    public void SaveGameDataLocally()
+    {
+        LocalSaveSystem.SaveLocaldata();
+    }
+    private GameData localSave;
+    public void LoadLocalSave()
+    {
+        //just happens on opening the app (i guessssss)
+        localSave = LocalSaveSystem.LoadLocalData();
+        if(localSave == null)
+        {
+            //perform no local load event
+        }
+        else
+        {
+            if(activePlayerData.lastUpdate != "" && DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+            {
+                //online save is younger the local one -> played on an other device -> need to fire special event
+
+                //dunno how that can happen lel, but i guess we want to save the current data instead of applying the old local one riiiiiiiiight?!
+                SaveGameDataLocally();
+            }
+            else
+            {
+                //online save is older -> probably need to update online savefile
+                //but we can savely apply the local savefile to the active data
+                defaultHeroData = localSave.defaultHeroData;
+                eventData = localSave.eventData;
+                activePlayerData = localSave.activePlayerData;
+            }
+        }
+    }
 
     public IncomingHeroData defaultHeroData;
     public void UpdateDefaultHeroListFromServer(string _message)
     {
         defaultHeroData = JsonUtility.FromJson<IncomingHeroData>(_message);
+        defaultHeroData.FillDictionary();
+        LocalSaveSystem.SaveLocaldata();
         return;
     }
 
@@ -29,8 +64,27 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateActivePlayerFromServer(string _message)
     {
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
+        //check for dates lol
+        if(localSave == null || DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+        {
+            //online save is younger the local one -> played on an other device -> need to fire special event
+            Debug.Log("online save is younger than the local one");
+        }
+        else
+        {
+            //online save is older -> probably need to update online savefile
+            Debug.Log("online save is older than the local one");
+        }
         return;
     }
+
+    public EventData eventData;
+    public void UpdateEventDataFromServer(string _message)
+    {
+        eventData = JsonUtility.FromJson<EventData>(_message);
+        LocalSaveSystem.SaveLocaldata();
+    }
+
     // data synced with online or fetched regularly
     //player daten
     //   ->stammdaten (pw, username, etc.)
@@ -63,14 +117,22 @@ public class DatabaseManager : MonoBehaviour
 [System.Serializable]
 public class GameData
 {
-    public GameData()
+    public GameData(DatabaseManager _manager)
     {
-
+        defaultHeroData = _manager.defaultHeroData;
+        activePlayerData = _manager.activePlayerData;
+        eventData = _manager.eventData;
     }
+    public IncomingHeroData defaultHeroData;
+    public PlayerData activePlayerData;
+    public EventData eventData;
+
+
+
     //Online Data:
     //PlayerData
     // -> own object (reuse same as for the on com
-    
+
     //defaultHero List -> same as on com
 
     //text events -> same as on com
@@ -114,4 +176,37 @@ public class BlacklistEntry
 {
     public string playerId;
     public string heroId;
+}
+
+[System.Serializable]
+public class EventData
+{
+    public DungeonEvent[] dungeonDeck;
+    public EventDeck[] eventDecks;
+    public string[] nodeTypes;
+    public string[] pathTypes;
+}
+
+[System.Serializable]
+public class EventDeck
+{
+    public string deckName;
+    public Event[] deck;
+}
+
+[System.Serializable]
+public class Event
+{
+    public string eventName;
+    public string statType;
+    public string startText;
+    public string endText;
+}
+[System.Serializable]
+public class DungeonEvent
+{
+    public string eventName;
+    public string dungeonType;
+    public string startText;
+    public string endText;
 }

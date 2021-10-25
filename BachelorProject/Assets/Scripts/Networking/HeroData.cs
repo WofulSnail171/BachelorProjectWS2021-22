@@ -14,12 +14,31 @@ public class PlayerHero
     public int mPot;
     public int sVal;
     public int sPot;
+
+    public string lastOwner;
+    public string origOwner;
+    public int invIndex;
+    public int traded;
+    public int runs;
 }
 
 [System.Serializable]
 public class IncomingHeroData
 {
     public DefaultHero[] defaultHeroList;
+    public Dictionary<string, DefaultHero> defaultHeroDictionary;
+
+    public void FillDictionary()
+    {
+        if (defaultHeroList == null)
+            return;
+        defaultHeroDictionary = new Dictionary<string, DefaultHero>();
+        foreach (var hero in defaultHeroList)
+        {
+            if(!defaultHeroDictionary.ContainsKey(hero.heroId))
+                defaultHeroDictionary.Add(hero.heroId, hero);
+        }
+    }
 }
 
 [System.Serializable]
@@ -47,9 +66,9 @@ public class DefaultHero
     public int sDefPot;
     public int sMaxPot;
 
-    public MapNode nodeBuff;
-    public MapNode nodeDebuff;
-    public PathType pathAff;
+    public string nodeBuff;
+    public string nodeDebuff;
+    public string pathAff;
 }
 
 public enum HeroRace
