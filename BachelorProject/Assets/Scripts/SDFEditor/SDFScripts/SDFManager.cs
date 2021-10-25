@@ -11,7 +11,7 @@ public class SDFManager : MonoBehaviour{
     private TextAsset hlslInclude;
     [HideInInspector]public string path = @"Assets/Shader/SDFInclude.hlsl";
 
-    public SDFScriptableObject sdf;
+    public SDFCombine sdfCombine;
     
     private void OnValidate() {
 
@@ -21,31 +21,30 @@ public class SDFManager : MonoBehaviour{
         this.hlslStrings.Add("float dot2( in float2 v ) { return dot(v,v); }");
         
         
-        if(sdf != null)
-            AddHlslString(sdf);
+        if(sdfCombine != null)
+            AddHlslString(sdfCombine);
         WriteHlslToText();
     }
 
-    private void AddHlslString(SDFScriptableObject so) {
+    private void AddHlslString(SDFCombine comb) {
         string hlsl =
             @"void SDF_float (float2 uv,
-             out float Out)
-            { Out = " + so.SDFFunction() + "}";
+             out float Out){ 
+                " + comb.Combine() + @"
+                Out =" + comb.o + "; }";
         
         this.hlslStrings.Add(hlsl);
     }
 
     private void WriteHlslToText() {
         
-        using (FileStream f = new FileStream(this.path, FileMode.OpenOrCreate, FileAccess.Write))
-        using (StreamWriter sw = new StreamWriter(f)){
+        using (StreamWriter sw = File.CreateText(this.path)){
             foreach (string s in this.hlslStrings) {
                 sw.WriteLine(s );
             }
 
             sw.WriteLine("#endif");
             sw.Close();
-            f.Close();
         }
     }
 }
