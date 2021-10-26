@@ -35,8 +35,6 @@ public class ScrollSnapButton : MonoBehaviour {
     private ScrollRect _scrollRectComponent;
     private RectTransform _scrollRectRect;
     private RectTransform _container;
-
-    private bool _horizontal;
     
     // number of pages in container
     private int _pageCount;
@@ -101,21 +99,6 @@ public class ScrollSnapButton : MonoBehaviour {
         _container = _scrollRectComponent.content;
         _pageCount = _container.childCount;
 
-        // is it horizontal or vertical scrollrect
-        if (_scrollRectComponent.horizontal && !_scrollRectComponent.vertical)
-        {
-            _horizontal = true;
-        }
-        else if (!_scrollRectComponent.horizontal && _scrollRectComponent.vertical)
-        {
-            _horizontal = false;
-        }
-        else
-        {
-            Debug.LogWarning("Confusing setting of horizontal/vertical direction. Default set to horizontal.");
-            _horizontal = true;
-        }
-
         _lerp = false;
 
         // init
@@ -134,22 +117,16 @@ public class ScrollSnapButton : MonoBehaviour {
         int containerWidth = 0;
         int containerHeight = 0;
 
-        if (_horizontal) {
-            // screen width in pixels of scrollrect window
-            width = (int)_scrollRectRect.rect.width;
-            // center position of all pages
-            offsetX = width / 2;
-            // total width
-            containerWidth = width * _pageCount;
-            // limit fast swipe length - beyond this length it is fast swipe no more
-            _fastSwipeThresholdMaxLimit = width;
-        } 
-        else {
-            height = (int)_scrollRectRect.rect.height;
-            offsetY = height / 2;
-            containerHeight = height * _pageCount;
-            _fastSwipeThresholdMaxLimit = height;
-        }
+
+        // screen width in pixels of scrollrect window
+        width = (int)_scrollRectRect.rect.width;
+        // center position of all pages
+        offsetX = width / 2;
+        // total width
+        containerWidth = width * _pageCount;
+        // limit fast swipe length - beyond this length it is fast swipe no more
+        _fastSwipeThresholdMaxLimit = width;
+
 
         // set width of container
         Vector2 newSize = new Vector2(containerWidth, containerHeight);
@@ -164,11 +141,9 @@ public class ScrollSnapButton : MonoBehaviour {
         for (int i = 0; i < _pageCount; i++) {
             RectTransform child = _container.GetChild(i).GetComponent<RectTransform>();
             Vector2 childPosition;
-            if (_horizontal) {
-                childPosition = new Vector2(i * width - containerWidth / 2 + offsetX, 0f);
-            } else {
-                childPosition = new Vector2(0f, -(i * height - containerHeight / 2 + offsetY));
-            }
+
+            childPosition = new Vector2(i * width - containerWidth / 2 + offsetX, 0f);
+
             child.anchoredPosition = childPosition;
             _pagePositions.Add(-childPosition);
         }
