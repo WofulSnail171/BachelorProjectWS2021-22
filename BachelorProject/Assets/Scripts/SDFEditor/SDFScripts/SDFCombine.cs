@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class SDFCombine : ScriptableObject {
+public class SDFCombine : SDFNode {
     [SerializeField] private SDFScriptableObject inputA;
     [SerializeField] private SDFScriptableObject inputB;
-    [SerializeField] private new string name = "newName";
 
-    [HideInInspector]public string o;
-
-    public string Combine() {
-        this.o = this.name +"_out";
+    public override string SDFFunction() {
+        this.o = this.SDFName +"_out";
         string a = this.inputA.SDFFunction();
         string b = this.inputB.SDFFunction();
         
-        string hlslString = a + System.Environment.NewLine + b + System.Environment.NewLine + "float " + this.o + "= min(" + this.inputA.o + "," + this.inputB.o + ");";
+        string hlslString = a +@"
+    " + b + @"
+    " + "float " + this.o + " = min(" + this.inputA.o + "," + this.inputB.o + ");";
         return hlslString;
     }
 }

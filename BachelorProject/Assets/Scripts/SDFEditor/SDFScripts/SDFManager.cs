@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+[ExecuteAlways]
 public class SDFManager : MonoBehaviour{
     private List<string> hlslStrings = new List<string>();
     private List <SDFScriptableObject>  SDFObjects = new List<SDFScriptableObject>();
@@ -11,9 +12,18 @@ public class SDFManager : MonoBehaviour{
     private TextAsset hlslInclude;
     [HideInInspector]public string path = @"Assets/Shader/SDFInclude.hlsl";
 
-    public SDFCombine sdfCombine;
-    
-    private void OnValidate() {
+    public SDFNode sdfNode;
+    public bool apply;
+
+    private void Update() {
+        if (apply) {
+            this.Apply();
+            Debug.Log("updated");
+            apply = false;
+        }
+    }
+
+    private void Apply() {
 
         this.hlslStrings.Clear();
         this.hlslStrings.Add("#ifndef SDFFUNCTIONS_INCLUDED");
@@ -21,17 +31,19 @@ public class SDFManager : MonoBehaviour{
         this.hlslStrings.Add("float dot2( in float2 v ) { return dot(v,v); }");
         
         
-        if(sdfCombine != null)
-            AddHlslString(sdfCombine);
+        if(this.sdfNode != null)
+            AddHlslString(this.sdfNode);
         WriteHlslToText();
     }
 
-    private void AddHlslString(SDFCombine comb) {
-        string hlsl =
-            @"void SDF_float (float2 uv,
-             out float Out){ 
-                " + comb.Combine() + @"
-                Out =" + comb.o + "; }";
+    private void AddHlslString(SDFNode node) {
+        string hlsl = @"
+void SDF_float (float2 uv, out float Out){ 
+    " + node.SDFFunction() + @"
+
+    Out = " + node.o + @";
+}
+";
         
         this.hlslStrings.Add(hlsl);
     }

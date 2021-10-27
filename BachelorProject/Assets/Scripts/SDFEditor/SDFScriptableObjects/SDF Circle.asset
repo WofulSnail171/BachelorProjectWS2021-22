@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936f2e0c406190e40b680e6f1214acad, type: 3}
   m_Name: SDF Circle
   m_EditorClassIdentifier: 
-  name: Circle
-  functionName: SDFCircle
+  sdfName: circle
+  o: newSDF_out
   position: {x: 0.5, y: 0.5}
-  o: Circle_out
   radius: 0.2
