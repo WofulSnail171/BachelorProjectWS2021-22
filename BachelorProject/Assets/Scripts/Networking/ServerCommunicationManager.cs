@@ -9,6 +9,11 @@ public class ServerCommunicationManager : MonoBehaviour
 {
     public static ServerCommunicationManager _instance;
     // Start is called before the first frame update
+    public InventoryUI InventoryUI;
+
+
+
+
     void Awake()
     {
         if (_instance == null)
@@ -45,8 +50,6 @@ public class ServerCommunicationManager : MonoBehaviour
         if (_webRequest != null && _webRequest.isDone)
         {
             ExecuteImport();
-            _webRequest = null;
-            Imported = true;
         }
     }
 
@@ -73,6 +76,9 @@ public class ServerCommunicationManager : MonoBehaviour
                 //create new userprofil with data given
                 //tutorials + first hero
                 DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
+                _webRequest = null;
+                Imported = true;
+                InventoryUI.NewDataAssign();
                 break;
             case Request.SignIn:
                 //get user profil
@@ -84,6 +90,9 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.DownloadHeroList:
                 //download the default hero list and replace local copy
                 DatabaseManager._instance.UpdateDefaultHeroListFromServer(lastMessage);
+                _webRequest = null;
+                Imported = true;
+                ServerCommunicationManager._instance.GetInfo(Request.SignUp, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "123" }));
                 break;
             case Request.DownloadEventData:
                 //download the default hero list and replace local copy
