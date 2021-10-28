@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SDF Circle
   m_EditorClassIdentifier: 
   sdfName: circle
-  o: newSDF_out
+  o: circle106_out
   position: {x: 0.5, y: 0.5}
-  radius: 0.2
+  radius: 0.35
