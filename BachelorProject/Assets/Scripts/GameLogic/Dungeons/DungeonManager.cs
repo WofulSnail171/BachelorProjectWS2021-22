@@ -51,5 +51,6 @@ public class DungeonManager : MonoBehaviour
             DatabaseManager._instance.dungeonData.currentRun = new DungeonRun { valid = false };
         }
         List<DailyDungeon> tempList = new List<DailyDungeon>();
+
     }
 }
