@@ -85,6 +85,13 @@ public class DatabaseManager : MonoBehaviour
         LocalSaveSystem.SaveLocaldata();
     }
 
+    public DungeonData dungeonData;
+    public void UpdateDungeonDataFromServer(string _message)
+    {
+        dungeonData = JsonUtility.FromJson<DungeonData>(_message);
+        LocalSaveSystem.SaveLocaldata();
+    }
+
     // data synced with online or fetched regularly
     //player daten
     //   ->stammdaten (pw, username, etc.)
@@ -209,4 +216,10 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+}
+
+public enum DungeonType
+{
+    basic,
+    doom
 }

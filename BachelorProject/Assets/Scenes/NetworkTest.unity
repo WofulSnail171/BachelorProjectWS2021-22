@@ -883,6 +883,81 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 97.99988}
   m_SizeDelta: {x: 200, y: 138.0002}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &413296322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 413296325}
+  - component: {fileID: 413296324}
+  - component: {fileID: 413296323}
+  m_Layer: 0
+  m_Name: DatabaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &413296323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413296322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e8f913ee31ed1408118a510b36cf0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &413296324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413296322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec0d84456797c1448b45970cc558b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHeroData:
+    defaultHeroList: []
+  activePlayerData:
+    playerId: 
+    password: 
+    joinDate: 
+    lastUpdate: 
+    profileDescription: 
+    mtdCounter: 0
+    tradeCounter: 0
+    lastDungeonDate: 
+    currentDungeonRun: 
+    blacklist: []
+    inventory: []
+  eventData:
+    dungeonDeck: []
+    eventDecks: []
+    nodeTypes: []
+    pathTypes: []
+--- !u!4 &413296325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413296322}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &431415607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,8 +1126,6 @@ GameObject:
   - component: {fileID: 538073641}
   - component: {fileID: 538073640}
   - component: {fileID: 538073644}
-  - component: {fileID: 538073646}
-  - component: {fileID: 538073645}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1152,44 +1225,6 @@ MonoBehaviour:
   nameTextField: {fileID: 35802068}
   pwTextField: {fileID: 905411826}
   requestTextField: {fileID: 1875265995}
---- !u!114 &538073645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538073639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70e8f913ee31ed1408118a510b36cf0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &538073646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 538073639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec0d84456797c1448b45970cc558b05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultHeroData:
-    defaultHeroList: []
-  activePlayerData:
-    playerId: 
-    password: 
-    joinDate: 
-    lastUpdate: 
-    profileDescription: 
-    mtdCounter: 0
-    tradeCounter: 0
-    lastDungeonDate: 
-    currentDungeonRun: 
-    blacklist: []
-    inventory: []
 --- !u!1 &794719926
 GameObject:
   m_ObjectHideFlags: 0
