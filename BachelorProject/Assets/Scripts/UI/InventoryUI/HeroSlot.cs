@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System;
 
-public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHandler
+public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHandler, IDropHandler
 {
     #region vars
     //basics
-    [SerializeField] private bool isFull = false;
+    [HideInInspector] public bool isFull = false;
+    [HideInInspector] public PlayerHero playerHero;
+
+    [HideInInspector] public int slotID;
+
     [SerializeField] private GameObject heroCard;
+    [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;
     [SerializeField] GameObject [] rarityGraphics;
@@ -28,6 +34,12 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     bool isDragging = false;
     #endregion
 
+    //events
+    public event Action<HeroSlot> OnDragEvent;
+    public event Action<HeroSlot> OnBeginDragEvent;
+    public event Action<HeroSlot> OnEndDragEvent;
+    public event Action<HeroSlot> OnDropEvent;
+    public event Action<HeroSlot> OnCancelDragEvent;
 
 
     //base funcs
@@ -44,29 +56,31 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         }
     }
 
-    public bool showHero()
+    public void showHero()
     {
-        if (isFull)
-        {
-            return false; 
-        }
-
-        isFull = true;
+        disabledCard.SetActive(false);
         heroCard.SetActive(true);
-        return true;
     }
 
     public void hideHero()
     {
-        isFull = false;
         heroCard.SetActive(false);
+        disabledCard.SetActive(true);
     }
 
-
-    public void updateHero(int rarity, string name, Sprite sprite,HeroStatus status)
+    public void removeHero()
     {
+        isFull = false;
+        playerHero = null;
+    }
+
+    public void updateHero(PlayerHero hero, Sprite sprite,int rarity)
+    {
+        playerHero = hero;
+        isFull = true;
+
         portrait.sprite = sprite;
-        heroName.text = name;
+        heroName.text = hero.heroId;
 
         int spacing = -130;
 
@@ -84,7 +98,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         rarityGroup.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
 
 
-        switch(status)
+        switch(hero.status)
         {
             case HeroStatus.Trading:
                 TradeStatusUI.SetActive(true);
@@ -99,53 +113,54 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
                 DungeonStatusUI.SetActive(false);
                 break;
         }
-
     }
-
-
-
 
 
     //drag funcs
     //-------------------------------------------------------------------------------------------------------------------------------------------
+
     public void OnDrag(PointerEventData pointerEventData)
     {
-        if (Input.touchCount == 1 && isDragging)
+        if (isDragging && Input.touchCount == 1)
         {
-            heroCard.transform.position = Input.mousePosition;
-            heroCard.transform.position = Vector3.MoveTowards(heroCard.transform.position, Input.mousePosition, speed * Time.deltaTime);
+            OnDragEvent(this);
+            return;
         }
 
-        else if (isDragging)
-        {
-            StartCoroutine(ResetDrag());
+        if (isDragging)
+        { 
+            OnCancelDragEvent(this);
+            isDragging = false;
+            scroll.GetComponent<ScrollRect>().vertical = true;
         }
     }
 
     public void OnBeginDrag(PointerEventData pointerEventData)
     {
-        if (Input.touchCount == 1)
+        if(isFull && playerHero != null && Input.touchCount == 1)
         {
-            scroll.GetComponent<ScrollRect>().vertical = false;
-            originalPosition = heroCard.transform.position;
+            OnBeginDragEvent(this);
             isDragging = true;
+            scroll.GetComponent<ScrollRect>().vertical = false;
         }
     }
 
     public void OnEndDrag(PointerEventData pointerEventData)
     {
         if (isDragging)
-        { StartCoroutine(ResetDrag()); }
+        {
+            OnEndDragEvent(this);
+            isDragging = false;
+            scroll.GetComponent<ScrollRect>().vertical = true;
+        }
     }
-
-
-    //coroutine
-    IEnumerator ResetDrag()
+    
+    public void OnDrop(PointerEventData pointerEventData)
     {
-        heroCard.transform.position = originalPosition;
-        yield return new WaitForSeconds(0.1f);
-        isDragging = false; 
-        scroll.GetComponent<ScrollRect>().vertical = true;
+        if (OnDropEvent != null)
+        {
+            OnDropEvent(this);
+        }
     }
 
 }

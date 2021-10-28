@@ -2,78 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 
 public class InventoryUI : MonoBehaviour
 {
-
+    #region vars
     [SerializeField] Transform slotParent;
     [SerializeField] HeroSlot[] heroSlots;
-    [SerializeField] List<PlayerHero> playerHeroes;
+    [Space]
+    [SerializeField] DragHero draggableHero;
+    [SerializeField] private float dragSpeed;
     [Space]
     [SerializeField] Sprite fallbackImage;
 
     private Dictionary<string, Sprite> defaultImageDict = new Dictionary<string, Sprite>(); //this does not exist yet
 
+    private HeroSlot draggedSlot;
+    private int draggedSlotIndex;
+    private Vector3 originalPosition;
+
+    bool isDragging = false;
+    #endregion
+
+
+
+    //Init
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------
     private void Awake()
     {
-        if(slotParent != null)
+        //set up events:
+        for (int i = 0; i < heroSlots.Length; i++)
         {
-            heroSlots = slotParent.GetComponentsInChildren<HeroSlot>();
+            heroSlots[i].OnBeginDragEvent += BeginDrag;
+            heroSlots[i].OnCancelDragEvent += CancelDrag;
+            heroSlots[i].OnDragEvent += Drag;
+            heroSlots[i].OnEndDragEvent += EndDrag;
+            heroSlots[i].OnDropEvent += Drop;
+
+            heroSlots[i].slotID = i;
         }
     }
 
     private void Start()
     {
         ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "123" }));
-
     }
 
-    private void RefreshHeroes()
-    {
-        //check if default heroes exist
-        if(DatabaseManager._instance != null && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroDictionary != null)
-        {
-
-            //check if heroes exist
-            if (DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.inventory != null)
-            {
-                playerHeroes.Clear();
-
-                foreach (PlayerHero hero in DatabaseManager._instance.activePlayerData.inventory)
-                {
-                    AddHero(hero);
-                }
-            }
-        }
-    }
-
-    private void RefreshInventoryUI()
+    private void InitInventoryUI()
     {
         if (DatabaseManager._instance != null && DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.inventory != null && heroSlots != null)
         {     
             //reset
             for (int i = 0; i < heroSlots.Length; i++ )
             {
+                heroSlots[i].removeHero();
                 heroSlots[i].hideHero();
             }
 
             //assign
-            foreach(PlayerHero hero in playerHeroes)
+            foreach(PlayerHero hero in DatabaseManager._instance.activePlayerData.inventory)
             {
-                AssignHeroToSlot(hero);
+                InitAssignHeroToSlot(hero);
             }
         }
     }
 
-    private void AssignHeroToSlot(PlayerHero hero)
+    private void InitAssignHeroToSlot(PlayerHero hero)
     {
+        //catch exeptions
         if(hero.invIndex > heroSlots.Length)
         {
             Debug.Log("trying to show hero which is in slot that is bigger than the inventory size");
             return;
         }
 
-        if (!heroSlots[hero.invIndex].showHero())
+        if (heroSlots[hero.invIndex].isFull)
         {
             Debug.Log("trying to show hero which is already shown or assign more heroes to one slot");
             return;
@@ -81,50 +85,127 @@ public class InventoryUI : MonoBehaviour
 
         if (!DatabaseManager._instance.defaultHeroData.defaultHeroDictionary.ContainsKey(hero.heroId))
         {
+            heroSlots[hero.invIndex].removeHero();
             heroSlots[hero.invIndex].hideHero();
             Debug.Log("trying to show hero that does not exist");
             return;
         }
 
-
-        if (!defaultImageDict.ContainsKey(hero.heroId))
-        {
-            heroSlots[hero.invIndex].updateHero(DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity, hero.heroId, fallbackImage,hero.status);
-            return;
-        }
-
-        heroSlots[hero.invIndex].updateHero(DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity, hero.heroId, defaultImageDict[hero.heroId],hero.status);
+        AssignHeroToSlot(hero, hero.invIndex);
     }
 
-    private bool AddHero(PlayerHero hero)
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void AssignHeroToSlot(PlayerHero hero, int ID)
     {
-        if (IsFull())
-        {
-            Debug.Log("inventory is full");
-            return false; 
-        }
+        heroSlots[ID].showHero();
+        heroSlots[ID].updateHero(hero, CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity);
 
-        playerHeroes.Add(hero);
-        return true;
+
+        //assign ID to the invIndex in Database
+        //
+        //
+
     }
+
+    //DragDrop
+    private void BeginDrag (HeroSlot heroSlot)
+    {
+        if(heroSlot.isFull && heroSlot != null && heroSlot.playerHero != null && DatabaseManager._instance !=null && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroDictionary != null)
+        {
+            //where we started
+            isDragging = true;
+
+            draggedSlot = heroSlot;
+            originalPosition = heroSlot.transform.position;
+            draggableHero.gameObject.SetActive(true);
+
+
+            //set drag represetnation to the item in the slot
+            draggableHero.updateDragHero(heroSlot.playerHero, CheckForSprite(heroSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroSlot.playerHero.heroId].rarity);
+
+
+            //show dragable hero
+            draggableHero.transform.position = Input.mousePosition;
+            heroSlot.hideHero();
+        }
+    }
+
+    private void EndDrag(HeroSlot heroSlot)
+    {
+        draggableHero.gameObject.SetActive(false);
+        heroSlot.showHero();
+        isDragging = false;
+    }
+
+    private void CancelDrag(HeroSlot heroSlot)
+    {
+        Debug.Log("cancel not assigned yet");
+        heroSlot.showHero();
+        isDragging = false;
+    }
+
+    private void Drag(HeroSlot heroSlot)
+    {
+        draggableHero.transform.position = Input.mousePosition;
+    }
+
+    private void Drop(HeroSlot heroSlot)
+    {
+        StartCoroutine(DoDrop(heroSlot));
+    }
+
 
 
 
     //public funcs
-    public bool IsFull ()
-    {
-        return playerHeroes.Count >= heroSlots.Length;
-    }
-    
-
+    //probably will be removed later
     public void NewDataAssign()
     {
+        InitInventoryUI();
+    }
 
-        //pull data or something here
-        //
-        //
 
-        RefreshHeroes();
-        RefreshInventoryUI();
+    //helper checks
+    private Sprite CheckForSprite(PlayerHero hero)
+    {
+        if (defaultImageDict.ContainsKey(hero.heroId))
+            return defaultImageDict[hero.heroId];
+
+        return fallbackImage;
+    }
+
+    //shitty work around
+    IEnumerator DoDrop(HeroSlot heroSlot)
+    {
+        while(isDragging)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        //switch two full fields
+        if (heroSlot.isFull && draggedSlot.isFull && heroSlot != draggedSlot)
+        {
+            PlayerHero temphero = draggedSlot.playerHero;
+
+            AssignHeroToSlot(heroSlot.playerHero, draggedSlot.slotID);
+            AssignHeroToSlot(temphero, heroSlot.slotID);
+           
+        }
+
+        else if (!heroSlot.isFull && draggedSlot.isFull && heroSlot != draggedSlot)
+        {
+
+            PlayerHero temphero = draggedSlot.playerHero;
+
+            draggedSlot.removeHero();
+            draggedSlot.hideHero();
+
+            AssignHeroToSlot(temphero, heroSlot.slotID);
+        }
+
+
+        else
+            Debug.Log("drop not executed");
     }
 }
