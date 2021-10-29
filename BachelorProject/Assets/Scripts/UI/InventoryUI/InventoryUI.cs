@@ -8,21 +8,24 @@ using System;
 public class InventoryUI : MonoBehaviour
 {
     #region vars
-    [SerializeField] Transform slotParent;
-    [SerializeField] HeroSlot[] heroSlots;
+    [SerializeField] TradeInventoryUI tradeInventory;
+    [SerializeField] GameObject slotParent;
+    [HideInInspector] public HeroSlot[] heroSlots;
     [Space]
     [SerializeField] DragHero draggableHero;
-    [SerializeField] private float dragSpeed;
     [Space]
-    [SerializeField] Sprite fallbackImage;
+    [SerializeField] Sprite fallbackImage;//this and the pic dictionary could be a scriptable object?
 
     private Dictionary<string, Sprite> defaultImageDict = new Dictionary<string, Sprite>(); //this does not exist yet
 
     private HeroSlot draggedSlot;
-    private int draggedSlotIndex;
     private Vector3 originalPosition;
 
-    bool isDragging = false;
+    private bool isDragging = false;
+
+    private ScrollRect scroll;
+
+    private int amountInTrade = 0;
     #endregion
 
 
@@ -31,6 +34,15 @@ public class InventoryUI : MonoBehaviour
     //-----------------------------------------------------------------------------------------------------------------------------------------------------
     private void Awake()
     {
+        heroSlots = slotParent.GetComponentsInChildren<HeroSlot>();
+        tradeInventory.inventory = this;
+        tradeInventory.heroSlots = heroSlots;
+
+        tradeInventory.InitTradeHub();
+        tradeInventory.ResetTrade();
+
+        scroll = GetComponent<ScrollRect>();
+
         //set up events:
         for (int i = 0; i < heroSlots.Length; i++)
         {
@@ -92,6 +104,20 @@ public class InventoryUI : MonoBehaviour
         }
 
         AssignHeroToSlot(hero, hero.invIndex);
+
+        
+        if(hero.status == HeroStatus.Trading)
+        {
+            amountInTrade += 1;
+
+            if (amountInTrade > 4)
+            {
+                Debug.Log("trying to trade too many heroes");
+                return;
+            }
+
+            tradeInventory.AssignHeroToSlot(hero, amountInTrade-1);
+        }
     }
 
 
@@ -113,6 +139,9 @@ public class InventoryUI : MonoBehaviour
     {
         if(heroSlot.isFull && heroSlot != null && heroSlot.playerHero != null && DatabaseManager._instance !=null && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroDictionary != null)
         {
+            //deactivate scrolling
+            scroll.vertical = false;
+
             //where we started
             isDragging = true;
 
@@ -133,6 +162,10 @@ public class InventoryUI : MonoBehaviour
 
     private void EndDrag(HeroSlot heroSlot)
     {
+        //activate scrolling
+        scroll.vertical = true;
+
+
         draggableHero.gameObject.SetActive(false);
         heroSlot.showHero();
         isDragging = false;
@@ -140,6 +173,9 @@ public class InventoryUI : MonoBehaviour
 
     private void CancelDrag(HeroSlot heroSlot)
     {
+        //activate scrolling
+        scroll.vertical = true;
+
         Debug.Log("cancel not assigned yet");
         heroSlot.showHero();
         isDragging = false;
@@ -167,7 +203,7 @@ public class InventoryUI : MonoBehaviour
 
 
     //helper checks
-    private Sprite CheckForSprite(PlayerHero hero)
+    public Sprite CheckForSprite(PlayerHero hero)
     {
         if (defaultImageDict.ContainsKey(hero.heroId))
             return defaultImageDict[hero.heroId];
@@ -180,7 +216,7 @@ public class InventoryUI : MonoBehaviour
     {
         while(isDragging)
         {
-            yield return new WaitForFixedUpdate();
+            yield return null;
         }
 
         //switch two full fields
@@ -193,6 +229,7 @@ public class InventoryUI : MonoBehaviour
            
         }
 
+        //assign to empty
         else if (!heroSlot.isFull && draggedSlot.isFull && heroSlot != draggedSlot)
         {
 

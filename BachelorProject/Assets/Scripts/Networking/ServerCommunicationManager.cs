@@ -83,6 +83,10 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.SignIn:
                 //get user profil
                 //if time stamp on online profile is newer than local discard local data and reapply online data
+                DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
+                _webRequest = null;
+                Imported = true;
+                InventoryUI.NewDataAssign();
                 break;
             case Request.GetPlayerData:
                 // generically download a specified user profile for diverse use cases
@@ -92,7 +96,7 @@ public class ServerCommunicationManager : MonoBehaviour
                 DatabaseManager._instance.UpdateDefaultHeroListFromServer(lastMessage);
                 _webRequest = null;
                 Imported = true;
-                ServerCommunicationManager._instance.GetInfo(Request.SignUp, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "123" }));
+                ServerCommunicationManager._instance.GetInfo(Request.SignIn, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "EvenSaferPassword" }));
                 break;
             case Request.DownloadEventData:
                 //download the default hero list and replace local copy

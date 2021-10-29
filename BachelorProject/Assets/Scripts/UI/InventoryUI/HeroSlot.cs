@@ -27,10 +27,6 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     [SerializeField] GameObject DungeonStatusUI;
  
     //drag and drop
-    [SerializeField] private float speed;
-    [SerializeField] private GameObject scroll;
-
-    Vector3 originalPosition;
     bool isDragging = false;
     #endregion
 
@@ -44,17 +40,6 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     //base funcs
     //------------------------------------------------------------------------------------------------------------------------------------------
-    private void Awake()
-    {
-        if (isFull)
-        {
-            heroCard.SetActive(true);
-        }
-        else
-        {
-            heroCard.SetActive(false);
-        }
-    }
 
     public void showHero()
     {
@@ -62,6 +47,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         heroCard.SetActive(true);
     }
 
+    //public funcs
     public void hideHero()
     {
         heroCard.SetActive(false);
@@ -97,8 +83,14 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
         rarityGroup.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
 
+        changeStatus(hero.status);
 
-        switch(hero.status)
+    }
+
+
+    public void changeStatus(HeroStatus status)
+    {
+        switch (status)
         {
             case HeroStatus.Trading:
                 TradeStatusUI.SetActive(true);
@@ -115,35 +107,30 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         }
     }
 
-
     //drag funcs
     //-------------------------------------------------------------------------------------------------------------------------------------------
 
     public void OnDrag(PointerEventData pointerEventData)
     {
-        if (isDragging && Input.touchCount == 1)
+        if (isDragging) //&& Input.touchCount == 1)
         {
             OnDragEvent(this);
             return;
         }
 
-        if (isDragging)
+        /*if (isDragging)
         { 
             OnCancelDragEvent(this);
             isDragging = false;
-            scroll.GetComponent<ScrollRect>().vertical = true;
-        }
+        }*/
     }
 
     public void OnBeginDrag(PointerEventData pointerEventData)
     {
-        Debug.Log("start");
-
-        if(isFull && playerHero != null && Input.touchCount == 1)
+        if(isFull && playerHero != null) //&& Input.touchCount == 1)
         {
             OnBeginDragEvent(this);
             isDragging = true;
-            scroll.GetComponent<ScrollRect>().vertical = false;
         }
     }
 
@@ -153,7 +140,6 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         {
             OnEndDragEvent(this);
             isDragging = false;
-            scroll.GetComponent<ScrollRect>().vertical = true;
         }
     }
     
