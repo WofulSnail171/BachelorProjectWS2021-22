@@ -137,6 +137,8 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     public void OnBeginDrag(PointerEventData pointerEventData)
     {
+        Debug.Log("start");
+
         if(isFull && playerHero != null && Input.touchCount == 1)
         {
             OnBeginDragEvent(this);
@@ -157,7 +159,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     
     public void OnDrop(PointerEventData pointerEventData)
     {
-        if (OnDropEvent != null)
+        if (pointerEventData != null)
         {
             OnDropEvent(this);
         }
