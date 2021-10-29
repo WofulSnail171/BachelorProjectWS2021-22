@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class DungeonManager : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class DungeonManager : MonoBehaviour
         if(_instance == null)
         {
             _instance = this;
+            layoutList = Resources.Load<LayoutList>("LayoutList");
         }
         else
         {
@@ -17,13 +20,14 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
+    LayoutList layoutList;
     public CalculatedDungeonRun currentCalcRun;
 
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreateDailyDungeons();
     }
 
     // Update is called once per frame
@@ -51,6 +55,27 @@ public class DungeonManager : MonoBehaviour
             DatabaseManager._instance.dungeonData.currentRun = new DungeonRun { valid = false };
         }
         List<DailyDungeon> tempList = new List<DailyDungeon>();
-
+        int numBasicDungeons = 3;
+        for (int i = 0; i < numBasicDungeons; i++)
+        {
+            DailyDungeon tempDungeon = new DailyDungeon
+            {
+                dailySeed = UnityEngine.Random.Range(1, 3000),
+                layoutId = layoutList.layoutNames[UnityEngine.Random.Range(0, layoutList.layoutNames.Length)],
+                date = DateTime.Now.ToString(),
+                type = DungeonType.basic
+            };
+            tempList.Add(tempDungeon);
+        }
+        DailyDungeon tempDoomDungeon = new DailyDungeon
+        {
+            dailySeed = UnityEngine.Random.Range(1, 3000),
+            layoutId = layoutList.layoutNames[UnityEngine.Random.Range(0, layoutList.layoutNames.Length)],
+            date = DateTime.Now.ToString(),
+            type = DungeonType.doom
+        };
+        tempList.Add(tempDoomDungeon);
+        DatabaseManager._instance.dungeonData.dailyDungeons = tempList.ToArray();
+        //probably try to save data online
     }
 }

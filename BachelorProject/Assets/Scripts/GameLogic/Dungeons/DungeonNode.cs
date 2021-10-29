@@ -34,7 +34,7 @@ public class DungeonNode : MonoBehaviour
         // Draw a yellow sphere at the transform's position
         Handles.Label(transform.position, eventName);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, .3f);
+        Gizmos.DrawSphere(transform.position, .2f);
         // Draws a blue line from this transform to the target
         if(nextNodes != null)
         {
@@ -53,10 +53,10 @@ public class DungeonNode : MonoBehaviour
             foreach (var item in nextNodes)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(transform.position + 0.5f * (item.transform.position - transform.position), .7f);
-                Gizmos.DrawSphere(transform.position + 0.55f * (item.transform.position - transform.position), .5f);
-                Gizmos.DrawSphere(transform.position + 0.60f * (item.transform.position - transform.position), .4f);
-                Gizmos.DrawCube(transform.position + 0.90f * (item.transform.position - transform.position), new Vector3(.4f, .4f, .4f));
+                Gizmos.DrawSphere(transform.position + 0.5f * (item.transform.position - transform.position), .4f);
+                Gizmos.DrawSphere(transform.position + 0.60f * (item.transform.position - transform.position), .3f);
+                Gizmos.DrawSphere(transform.position + 0.65f * (item.transform.position - transform.position), .2f);
+                Gizmos.DrawCube(transform.position + 0.90f * (item.transform.position - transform.position), new Vector3(.2f, .2f, .2f));
             }
         }
     }

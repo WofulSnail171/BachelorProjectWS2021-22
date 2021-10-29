@@ -6,6 +6,7 @@ using System;
 public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager _instance;
+    public static int maxInventorySize;
     // Start is called before the first frame update
     void Awake()
     {
@@ -175,7 +176,7 @@ public class PlayerData
     public string currentDungeonRun;
 
     public BlacklistEntry[] blacklist;
-    public PlayerHero[] inventory;
+    public List<PlayerHero> inventory;
 }
 
 [System.Serializable]

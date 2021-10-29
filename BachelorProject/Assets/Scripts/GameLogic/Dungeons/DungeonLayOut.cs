@@ -38,10 +38,10 @@ public class DungeonLayOut : MonoBehaviour
         
         Gizmos.color = Color.green;
         if(startNode != null)
-            Gizmos.DrawSphere(startNode.transform.position, .5f);
+            Gizmos.DrawSphere(startNode.transform.position, .3f);
         Gizmos.color = Color.red;
         if (endNode != null)
-            Gizmos.DrawSphere(endNode.transform.position, .5f);
+            Gizmos.DrawSphere(endNode.transform.position, .3f);
 
         // Draws a blue line from this transform to the target
 
