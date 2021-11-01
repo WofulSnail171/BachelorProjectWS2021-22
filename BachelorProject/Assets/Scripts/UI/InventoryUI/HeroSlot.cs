@@ -10,10 +10,12 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 {
     #region vars
     //basics
-    [HideInInspector] public bool isFull = false;
     [HideInInspector] public PlayerHero playerHero;
+    
 
     [HideInInspector] public int slotID;
+    [HideInInspector] public int tradeReferenceID = -1;
+    [HideInInspector] public int exploreReferenceID = -1;
 
     [SerializeField] private GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
@@ -56,14 +58,16 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     public void removeHero()
     {
-        isFull = false;
         playerHero = null;
+        tradeReferenceID = -1;
+        exploreReferenceID = -1;
     }
 
-    public void updateHero(PlayerHero hero, Sprite sprite,int rarity)
+    public void updateHero(PlayerHero hero, Sprite sprite,int rarity, int tradeID, int exploreID)
     {
         playerHero = hero;
-        isFull = true;
+        tradeReferenceID = tradeID;
+        exploreReferenceID = exploreID;
 
         portrait.sprite = sprite;
         heroName.text = hero.heroId;
@@ -83,12 +87,25 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
         rarityGroup.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
 
-        changeStatus(hero.status);
-
+        displayStatus(hero.status);
     }
 
-
     public void changeStatus(HeroStatus status)
+    {
+        if (playerHero != null)
+        {
+            playerHero.status = status;
+            displayStatus(status);
+        }
+
+        else
+        {
+            tradeReferenceID = -1;
+            exploreReferenceID = -1;
+        }
+    }
+
+    private void displayStatus(HeroStatus status)
     {
         switch (status)
         {
@@ -112,7 +129,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     public void OnDrag(PointerEventData pointerEventData)
     {
-        if (isDragging) //&& Input.touchCount == 1)
+        if (isDragging)// && Input.touchCount == 1)
         {
             OnDragEvent(this);
             return;
@@ -127,7 +144,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     public void OnBeginDrag(PointerEventData pointerEventData)
     {
-        if(isFull && playerHero != null) //&& Input.touchCount == 1)
+        if(playerHero != null)// && Input.touchCount == 1)
         {
             OnBeginDragEvent(this);
             isDragging = true;

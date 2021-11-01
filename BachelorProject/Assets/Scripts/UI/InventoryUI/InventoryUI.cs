@@ -9,12 +9,14 @@ public class InventoryUI : MonoBehaviour
 {
     #region vars
     [SerializeField] TradeInventoryUI tradeInventory;
+    [SerializeField] ExploreInventoryUI exploreInventory;
     [SerializeField] GameObject slotParent;
-    [HideInInspector] public HeroSlot[] heroSlots;
+    [HideInInspector] HeroSlot[] heroSlots;
+
     [Space]
     [SerializeField] DragHero draggableHero;
     [Space]
-    [SerializeField] Sprite fallbackImage;//this and the pic dictionary could be a scriptable object?
+    [SerializeField] Sprite fallbackImage;
 
     private Dictionary<string, Sprite> defaultImageDict = new Dictionary<string, Sprite>(); //this does not exist yet
 
@@ -26,6 +28,7 @@ public class InventoryUI : MonoBehaviour
     private ScrollRect scroll;
 
     private int amountInTrade = 0;
+    private int amountInDungeon = 0;
     #endregion
 
 
@@ -35,12 +38,21 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         heroSlots = slotParent.GetComponentsInChildren<HeroSlot>();
+        //init tred inventory
         tradeInventory.inventory = this;
         tradeInventory.heroSlots = heroSlots;
 
         tradeInventory.InitTradeHub();
         tradeInventory.ResetTrade();
 
+        //init explore inventory
+        exploreInventory.inventory = this;
+        exploreInventory.heroSlots = heroSlots;
+
+        exploreInventory.InitExploreHub();
+        exploreInventory.ResetExplore();
+
+        //get scroll
         scroll = GetComponent<ScrollRect>();
 
         //set up events:
@@ -89,7 +101,7 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        if (heroSlots[hero.invIndex].isFull)
+        if (heroSlots[hero.invIndex].playerHero != null)
         {
             Debug.Log("trying to show hero which is already shown or assign more heroes to one slot");
             return;
@@ -103,7 +115,7 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        AssignHeroToSlot(hero, hero.invIndex);
+        AssignHeroToSlot(hero, hero.invIndex, -1,-1);//default is -1
 
         
         if(hero.status == HeroStatus.Trading)
@@ -116,28 +128,53 @@ public class InventoryUI : MonoBehaviour
                 return;
             }
 
-            tradeInventory.AssignHeroToSlot(hero, amountInTrade-1);
+            tradeInventory.AssignHeroToSlot(hero, amountInTrade - 1, hero.invIndex);
+            heroSlots[hero.invIndex].tradeReferenceID = amountInTrade-1;
+
+            exploreInventory.UpdateReference(hero.invIndex, -1);
+            tradeInventory.UpdateReference(hero.invIndex, amountInTrade - 1);
+        }
+
+        if (hero.status == HeroStatus.Exploring)
+        {
+            amountInDungeon+= 1;
+
+            if (amountInDungeon > 4)
+            {
+                Debug.Log("trying to explore too many heroes");
+                return;
+            }
+
+            exploreInventory.AssignHeroToSlot(hero, amountInDungeon - 1,hero.invIndex);
+            heroSlots[hero.invIndex].exploreReferenceID = amountInDungeon - 1;
+
+            tradeInventory.UpdateReference(hero.invIndex, -1);
+            exploreInventory.UpdateReference(hero.invIndex, amountInDungeon - 1);
         }
     }
 
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------
-    private void AssignHeroToSlot(PlayerHero hero, int ID)
+    private void AssignHeroToSlot(PlayerHero hero, int ID, int tradeID, int exploreID)
     {
         heroSlots[ID].showHero();
-        heroSlots[ID].updateHero(hero, CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity);
+        heroSlots[ID].updateHero(hero, CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity,tradeID,exploreID);
 
+        if(heroSlots[ID].playerHero.status == HeroStatus.Trading)
+        {
+            tradeInventory.UpdateReference(ID, heroSlots[ID].tradeReferenceID);
+        }
 
-        //assign ID to the invIndex in Database
-        //
-        //
-
+        if(heroSlots[ID].playerHero.status == HeroStatus.Exploring)
+        {
+            exploreInventory.UpdateReference( ID, heroSlots[ID].exploreReferenceID);
+        }
     }
 
     //DragDrop
     private void BeginDrag (HeroSlot heroSlot)
     {
-        if(heroSlot.isFull && heroSlot != null && heroSlot.playerHero != null && DatabaseManager._instance !=null && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroDictionary != null)
+        if(heroSlot != null && heroSlot.playerHero != null && DatabaseManager._instance !=null && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroDictionary != null)
         {
             //deactivate scrolling
             scroll.vertical = false;
@@ -146,7 +183,6 @@ public class InventoryUI : MonoBehaviour
             isDragging = true;
 
             draggedSlot = heroSlot;
-            originalPosition = heroSlot.transform.position;
             draggableHero.gameObject.SetActive(true);
 
 
@@ -188,18 +224,18 @@ public class InventoryUI : MonoBehaviour
 
     private void Drop(HeroSlot heroSlot)
     {
-        StartCoroutine(DoDrop(heroSlot));
+        if (draggedSlot != null && draggedSlot.playerHero != null)
+            StartCoroutine(DoDrop(heroSlot));
     }
 
 
 
 
     //public funcs
-    //probably will be removed later
     public void NewDataAssign()
     {
         InitInventoryUI();
-    }
+    }//probably will be outdated
 
 
     //helper checks
@@ -211,7 +247,7 @@ public class InventoryUI : MonoBehaviour
         return fallbackImage;
     }
 
-    //shitty work around
+    //shitty work around coroutine
     IEnumerator DoDrop(HeroSlot heroSlot)
     {
         while(isDragging)
@@ -220,29 +256,42 @@ public class InventoryUI : MonoBehaviour
         }
 
         //switch two full fields
-        if (heroSlot.isFull && draggedSlot.isFull && heroSlot != draggedSlot)
+        if (heroSlot.playerHero != null && heroSlot != draggedSlot)
         {
             PlayerHero temphero = draggedSlot.playerHero;
+            int tempTradeID = draggedSlot.tradeReferenceID;
+            int tempExploreID = draggedSlot.exploreReferenceID;
 
-            AssignHeroToSlot(heroSlot.playerHero, draggedSlot.slotID);
-            AssignHeroToSlot(temphero, heroSlot.slotID);
-           
+            AssignHeroToSlot(heroSlot.playerHero, draggedSlot.slotID, heroSlot.tradeReferenceID, heroSlot.exploreReferenceID);
+            AssignHeroToSlot(temphero, heroSlot.slotID, tempTradeID,tempExploreID);
+
+            //update references
+            tradeInventory.UpdateReference(draggedSlot.slotID, draggedSlot.tradeReferenceID);
+            tradeInventory.UpdateReference(heroSlot.slotID, heroSlot.tradeReferenceID);
+
+            exploreInventory.UpdateReference(draggedSlot.slotID, draggedSlot.exploreReferenceID);
+            exploreInventory.UpdateReference(heroSlot.slotID, heroSlot.exploreReferenceID);
         }
 
         //assign to empty
-        else if (!heroSlot.isFull && draggedSlot.isFull && heroSlot != draggedSlot)
+        else if (heroSlot.playerHero == null && heroSlot != draggedSlot)
         {
-
             PlayerHero temphero = draggedSlot.playerHero;
+            int tempTradeID = draggedSlot.tradeReferenceID;
+            int tempExploreID = draggedSlot.exploreReferenceID;
 
             draggedSlot.removeHero();
             draggedSlot.hideHero();
 
-            AssignHeroToSlot(temphero, heroSlot.slotID);
+            AssignHeroToSlot(temphero, heroSlot.slotID,tempTradeID,tempExploreID);
+
+            Debug.Log(heroSlot.slotID);
+
+            tradeInventory.UpdateReference(draggedSlot.slotID, -1);
+            tradeInventory.UpdateReference(heroSlot.slotID, heroSlot.tradeReferenceID);
+
+            exploreInventory.UpdateReference(draggedSlot.slotID, -1);
+            exploreInventory.UpdateReference(heroSlot.slotID, heroSlot.exploreReferenceID);
         }
-
-
-        else
-            Debug.Log("drop not executed");
     }
 }

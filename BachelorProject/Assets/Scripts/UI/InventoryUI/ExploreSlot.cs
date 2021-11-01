@@ -6,7 +6,7 @@ using TMPro;
 using System;
 using UnityEngine.EventSystems;
 
-public class TradeSlot : MonoBehaviour, IDropHandler
+public class ExploreSlot : MonoBehaviour, IDropHandler
 {
     [HideInInspector] public PlayerHero playerHero;
 
@@ -23,9 +23,10 @@ public class TradeSlot : MonoBehaviour, IDropHandler
     [SerializeField] Image portrait;
 
     //events
-    public event Action <TradeSlot> OnDropEvent;
-    public event Action <TradeSlot> OnRemoveEvent;
-    
+    public event Action <ExploreSlot> OnDropEvent;
+    public event Action <ExploreSlot> OnRemoveEvent;
+
+
     public void updateHero(PlayerHero hero, Sprite sprite, int rarity, int referenceID)
     {
         playerHero = hero;
@@ -62,7 +63,7 @@ public class TradeSlot : MonoBehaviour, IDropHandler
         heroCard.SetActive(false);
         disabledCard.SetActive(true);
     }
-
+    
     public void removeHero()
     {
         OnRemoveEvent(this);
