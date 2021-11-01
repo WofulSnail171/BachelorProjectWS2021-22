@@ -1,14 +1,23 @@
-#ifndef SDFFUNCTIONS_INCLUDED
-#define SDFFUNCTIONS_INCLUDED
-float dot2( in float2 v ) { return dot(v,v); }
-
-void SDF_float (float2 uv, out float Out){ 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+[CreateAssetMenu(menuName = "SDF/Bezier")]
+public class SDFBezier : SDFScriptableObject
+{
+    [SerializeField] private Vector2 a;
+    [SerializeField] private Vector2 b;
+    [SerializeField] private Vector2 c;
     
-    float2 pos = uv - float2(0.0, 0.0);
-    float2 A = float2(1.0, 1.0) - float2(0.0, 0.0);
-    float2 B = float2(0.0, 0.0) - 2.0 * float2(1.0, 1.0) + float2(0.5, 1.0);
+    public override string SDFFunction() {
+        
+        this.o = this.SDFName + "_out";
+        
+        string hlslString = @"
+    float2 pos = uv - float2" + this.Position + @";
+    float2 A = float2" + this.b + " - float2" + this.a + @";
+    float2 B = float2" + this.a + " - 2.0 * float2" + this.b + " + float2" + this.c + @";
     float2 C =  A * 2.0;
-    float2 D =  float2(0.0, 0.0) - pos;
+    float2 D =  float2" + this.a + @" - pos;
     float kk = 1.0/dot(B, B);
     float kx = kk * dot(A, B);
     float ky = kk * (2.0*dot(A, A)+dot(D, B)) / 3.0;
@@ -37,9 +46,8 @@ void SDF_float (float2 uv, out float Out){
         res = min( dot2(D + (C + B * t.x) * t.x),
             dot2(D + (C + B * t.y) * t.y) );
     }
-    float bezier976_out = sqrt(res);
+    float " + this.o + " = sqrt(res);";
 
-    Out = bezier976_out;
+        return hlslString;
+    }
 }
-
-#endif

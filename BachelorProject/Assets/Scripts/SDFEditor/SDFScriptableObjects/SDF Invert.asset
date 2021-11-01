@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0df76ed01223f4a4086b85788543c7c3, type: 3}
-  m_Name: SDF Rectangle
+  m_Script: {fileID: 11500000, guid: 8c585759fc2f3e244a8aa7f7bf612df3, type: 3}
+  m_Name: SDF Invert
   m_EditorClassIdentifier: 
-  sdfName: rect
-  o: rect235_out
-  position: {x: 0.5, y: 0.5}
-  box: {x: 0.1, y: 0.4}
-  scale: 1
+  sdfName: invert
+  o: invert192_out
+  inputA: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}

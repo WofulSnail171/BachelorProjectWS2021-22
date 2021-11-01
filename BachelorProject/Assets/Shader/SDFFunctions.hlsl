@@ -82,8 +82,6 @@ void SDFBezier_float(float2 A, float2 B, float2 C, float2 UV,
         
         res = min( dot2(d+(c+b*t.x)*t.x),
                    dot2(d+(c+b*t.y)*t.y) );
-        // the third root cannot be the closest
-        //res = min(res,dot2(d+(c+b*t.z)*t.z));
     }
     Out = sqrt(res);
 }

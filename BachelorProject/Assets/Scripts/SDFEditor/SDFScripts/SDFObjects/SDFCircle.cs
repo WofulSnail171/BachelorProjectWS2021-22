@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "SDF/Circle")]
 public class SDFCircle : SDFScriptableObject {
     [SerializeField]private float radius = 0f;
     public float Radius => this.radius;
