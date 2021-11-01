@@ -5,6 +5,7 @@ using UnityEngine;
 public class SDFLine : SDFScriptableObject {
     [SerializeField] private Vector2 a;
     [SerializeField] private Vector2 b;
+    [SerializeField] private float roundness;
     
     public override string SDFFunction() {
         this.o = this.SDFName + "_out";
@@ -12,7 +13,7 @@ public class SDFLine : SDFScriptableObject {
         float2 pa = uv - float2" + this.Position + " - float2" + this.a + @";
         float2 ba = float2" + this.b + " - float2" + this.a + @";
         float h = clamp(dot(pa, ba)/dot(ba, ba), 0, 1);
-        float "+ this.o + " = length(pa - ba*h);";
+        float "+ this.o + " = length(pa - ba*h) - " + this.roundness * 0.1 + ";";
         return hlslString;
     }
 }

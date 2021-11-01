@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SDF Line
   m_EditorClassIdentifier: 
   sdfName: newSDF
-  o: 
+  o: newSDF175_out
   position: {x: 0, y: 0}
-  a: {x: 0, y: 0}
-  b: {x: 0, y: 0}
+  a: {x: 0.5, y: 0.2}
+  b: {x: 0.5, y: 0.2}
+  roundness: 0
