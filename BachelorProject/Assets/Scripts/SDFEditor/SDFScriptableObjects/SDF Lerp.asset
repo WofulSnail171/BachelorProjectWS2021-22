@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec3a03eeeaa1394b8c1b5b657d2e7ae, type: 3}
+  m_Name: SDF Lerp
+  m_EditorClassIdentifier: 
+  sdfName: lerp
+  o: lerp321_out
+  inputA: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  inputB: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
+  t: 0.5
