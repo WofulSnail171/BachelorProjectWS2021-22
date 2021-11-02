@@ -187,9 +187,6 @@ public class InventoryUI : MonoBehaviour
 
             draggedSlot = heroSlot;
 
-            Debug.Log(heroSlot.tradeReferenceID);
-            Debug.Log(heroSlot.exploreReferenceID);
-
             draggableHero.gameObject.SetActive(true);
 
 
