@@ -5,7 +5,9 @@ public class TradeInventoryUI : MonoBehaviour
     #region vars
     [HideInInspector]public HeroSlot[] heroSlots;
     [HideInInspector]public InventoryUI inventory;
+
     [SerializeField] GameObject slotParent;
+    [SerializeField] GameObject completeParent;
 
     private TradeSlot[] tradeSlots;
     private HeroSlot draggedSlot;
@@ -25,16 +27,14 @@ public class TradeInventoryUI : MonoBehaviour
             //assign to empty
             if (tradeSlot.playerHero == null)
             {
-                Debug.Log("do empty");
-
                 //assign
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
 
-                Debug.Log(tempID);
-
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
+
+                //update original
                 draggedSlot.changeStatus(HeroStatus.Trading);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
@@ -44,16 +44,15 @@ public class TradeInventoryUI : MonoBehaviour
             //switcheroo
             if (draggedSlot.slotID != tradeSlot.originalSlotReferenceID)
             {
-                Debug.Log("do switch");
-
+                //assign
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
                 int originalID = tradeSlot.originalSlotReferenceID;
 
-                Debug.Log(tempID);
-
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
+
+                //update original
                 draggedSlot.changeStatus(HeroStatus.Trading);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
@@ -73,55 +72,11 @@ public class TradeInventoryUI : MonoBehaviour
     }
 
 
-    //button events
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void RemoveAllHeroesFromTrade()
-    {
-        foreach (HeroSlot slot in heroSlots)
-        {
-            if (slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Trading)
-                slot.changeStatus(HeroStatus.Idle);
-        }
-
-        foreach (TradeSlot slot in tradeSlots)
-        {
-            slot.hideHero();
-            slot.removeHero();
-
-            RemoveHeroFromSlot(slot);
-        }
-    }
-
-    public void ConfirmAllHeroesForTrade()
-    {
-        bool anySlotIsFull = false;
-
-        foreach (TradeSlot slot in tradeSlots)
-        {
-            if (slot.playerHero != null)
-            {
-                anySlotIsFull = true;
-                break;
-            }
-
-            Debug.Log("there are no heroes selected");
-        }
-
-        if (anySlotIsFull)
-        {
-            Debug.Log("do transfer logic");
-
-
-            //transmit the data here and update the databas
-            //
-            //
-        }
-    }
 
 
     //public funcs
-    //init
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
+    //init
     public void ResetTrade()
     {
         foreach (TradeSlot slot in tradeSlots)
@@ -157,16 +112,57 @@ public class TradeInventoryUI : MonoBehaviour
     {
         if (ID >= 0 && ID < tradeSlots.Length)
             tradeSlots[ID].originalSlotReferenceID = referenceID;
-
-        //Debug.Log("updated" + ID + "with" + referenceID);
     }//helper
 
     public void AssignHeroToSlot(PlayerHero hero, int ID, int referenceID)
     {
         tradeSlots[ID].updateHero(hero, inventory.CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity, referenceID);
         tradeSlots[ID].showHero();
+    }
 
-        Debug.Log("reference is: " + tradeSlots[ID].originalSlotReferenceID + " and slot ID is : " + tradeSlots[ID].slotID);
- 
+
+
+    //button events
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void RemoveAllHeroesFromTrade()
+    {
+        foreach (HeroSlot slot in heroSlots)
+        {
+            if (slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Trading)
+                slot.changeStatus(HeroStatus.Idle);
+        }
+
+        foreach (TradeSlot slot in tradeSlots)
+        {
+            slot.hideHero();
+            slot.removeHero();
+
+            RemoveHeroFromSlot(slot);
+        }
+    }
+
+    public void ConfirmAllHeroesForTrade()
+    {
+        bool anySlotIsFull = false;
+
+        foreach (TradeSlot slot in tradeSlots)
+        {
+            if (slot.playerHero != null)
+            {
+                anySlotIsFull = true;
+                break;
+            }
+        }
+
+        if (anySlotIsFull)
+        {
+            Debug.Log("do transfer logic");
+
+            UIEnablerManager.Instance.DisableElement("TradeSelect"); //hide UI
+
+            //transmit the data here and update the database
+            //
+            //
+        }
     }
 }

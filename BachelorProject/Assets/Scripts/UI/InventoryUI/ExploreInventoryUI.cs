@@ -8,7 +8,9 @@ public class ExploreInventoryUI : MonoBehaviour
     #region vars
     [HideInInspector] public HeroSlot[] heroSlots;
     [HideInInspector] public InventoryUI inventory;
+
     [SerializeField] GameObject slotParent;
+    [SerializeField] GameObject completeParent;
 
     private ExploreSlot[] exploreSlots;
     private HeroSlot draggedSlot;
@@ -29,14 +31,14 @@ public class ExploreInventoryUI : MonoBehaviour
             //assign to empty
             if (exploreSlot.playerHero == null)
             {
-                Debug.Log("do empty");
-
                 //assign
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
 
                 AssignHeroToSlot(temphero, exploreSlot.slotID,tempID);
 
+
+                //update original
                 draggedSlot.changeStatus(HeroStatus.Exploring);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, -1, exploreSlot.slotID);
 
@@ -46,14 +48,14 @@ public class ExploreInventoryUI : MonoBehaviour
             //switcheroo
             if (draggedSlot.slotID != exploreSlot.originalSlotReferenceID)
             {
-                Debug.Log("do switch");
-
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
                 int originalID = exploreSlot.originalSlotReferenceID;
 
                 AssignHeroToSlot(temphero, exploreSlot.slotID, tempID);
 
+
+                //update original
                 draggedSlot.changeStatus(HeroStatus.Exploring);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, -1, exploreSlot.slotID);
 
@@ -73,55 +75,10 @@ public class ExploreInventoryUI : MonoBehaviour
     }
 
 
-    //button events
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void RemoveAllHeroesFromExplore()
-    {
-        foreach (HeroSlot slot in heroSlots)
-        {
-            if(slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Exploring)
-                slot.changeStatus(HeroStatus.Idle);
-        }
-
-        foreach (ExploreSlot slot in exploreSlots)
-        {
-            slot.hideHero();
-            slot.removeHero();
-
-            RemoveHeroFromSlot(slot);
-        }
-    }
-
-    public void ConfirmAllHeroesForExplore()
-    {
-        bool anySlotIsFull = false;
-
-        foreach (ExploreSlot slot in exploreSlots)
-        {
-            if (slot.playerHero != null)
-            {
-                anySlotIsFull = true;
-                break;
-            }
-
-            Debug.Log("there are no heroes selected");
-        }
-
-        if (anySlotIsFull)
-        {
-            Debug.Log("do transfer logic");
-
-
-            //transmit the exploredata here and update the databas
-            //
-            //
-        }
-    }
-
 
     //public funcs
-    //init
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
+    //init
     public void ResetExplore()
     {
         foreach (ExploreSlot slot in exploreSlots)
@@ -152,6 +109,7 @@ public class ExploreInventoryUI : MonoBehaviour
         }
     }
 
+
     //inventory assignment
     public void UpdateReference(int referenceID, int ID)
     {
@@ -164,4 +122,60 @@ public class ExploreInventoryUI : MonoBehaviour
         exploreSlots[ID].updateHero(hero, inventory.CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity, referenceID);
         exploreSlots[ID].showHero();
     }
+
+
+
+    //button events
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void RemoveAllHeroesFromExplore()
+    {
+        foreach (HeroSlot slot in heroSlots)
+        {
+            if(slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Exploring)
+                slot.changeStatus(HeroStatus.Idle);
+        }
+
+        foreach (ExploreSlot slot in exploreSlots)
+        {
+            slot.hideHero();
+            slot.removeHero();
+
+            RemoveHeroFromSlot(slot);
+        }
+
+        string key = this.name;
+        int index = key.LastIndexOf("_"); // Character to remove "_"
+        if (index > 0)
+            key = key.Substring(0, index);
+
+        UIEnablerManager.Instance.DisableElement(key);
+    }
+
+    public void ConfirmAllHeroesForExplore()
+    {
+        bool anySlotIsFull = false;
+
+        foreach (ExploreSlot slot in exploreSlots)
+        {
+            if (slot.playerHero != null)
+            {
+                anySlotIsFull = true;
+                break;
+            }
+
+            Debug.Log("there are no heroes selected");
+        }
+
+        if (anySlotIsFull)
+        {
+            Debug.Log("do transfer logic");
+
+            UIEnablerManager.Instance.DisableElement("ExploreSelect");
+
+            //transmit the exploredata here and update the databas
+            //
+            //
+        }
+    }
+
 }
