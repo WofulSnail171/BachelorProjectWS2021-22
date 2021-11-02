@@ -36,7 +36,7 @@ public class TradeInventoryUI : MonoBehaviour
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
                 draggedSlot.changeStatus(HeroStatus.Trading);
-                draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, -1, tradeSlot.slotID);
+                draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
                 return;
             }
@@ -55,7 +55,7 @@ public class TradeInventoryUI : MonoBehaviour
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
                 draggedSlot.changeStatus(HeroStatus.Trading);
-                draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, -1, tradeSlot.slotID);
+                draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
                 heroSlots[originalID].changeStatus(HeroStatus.Idle);
             }
@@ -79,7 +79,7 @@ public class TradeInventoryUI : MonoBehaviour
     {
         foreach (HeroSlot slot in heroSlots)
         {
-            if (slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Exploring)
+            if (slot != null && slot.playerHero != null && slot.playerHero.status == HeroStatus.Trading)
                 slot.changeStatus(HeroStatus.Idle);
         }
 

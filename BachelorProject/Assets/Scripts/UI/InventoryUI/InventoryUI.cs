@@ -199,7 +199,7 @@ public class InventoryUI : MonoBehaviour
             heroSlot.hideHero();
 
             Debug.Log(draggedSlot.tradeReferenceID);
-            Debug.Log(draggedSlot.exploreReferenceID);
+
         }
     }
 
