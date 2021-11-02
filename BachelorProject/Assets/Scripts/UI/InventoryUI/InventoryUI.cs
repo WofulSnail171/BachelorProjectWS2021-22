@@ -137,7 +137,7 @@ public class InventoryUI : MonoBehaviour
 
         if (hero.status == HeroStatus.Exploring)
         {
-            amountInDungeon+= 1;
+            amountInDungeon += 1;
 
             if (amountInDungeon > 4)
             {
@@ -159,6 +159,9 @@ public class InventoryUI : MonoBehaviour
     {
         heroSlots[ID].showHero();
         heroSlots[ID].updateHero(hero, CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity,tradeID,exploreID);
+
+        Debug.Log("trade ref: " + tradeID);
+        Debug.Log("explore ref: " + exploreID);
 
         if(heroSlots[ID].playerHero.status == HeroStatus.Trading)
         {
@@ -183,6 +186,10 @@ public class InventoryUI : MonoBehaviour
             isDragging = true;
 
             draggedSlot = heroSlot;
+
+            Debug.Log(heroSlot.tradeReferenceID);
+            Debug.Log(heroSlot.exploreReferenceID);
+
             draggableHero.gameObject.SetActive(true);
 
 
@@ -193,6 +200,9 @@ public class InventoryUI : MonoBehaviour
             //show dragable hero
             draggableHero.transform.position = Input.mousePosition;
             heroSlot.hideHero();
+
+            Debug.Log(draggedSlot.tradeReferenceID);
+            Debug.Log(draggedSlot.exploreReferenceID);
         }
     }
 
@@ -262,20 +272,25 @@ public class InventoryUI : MonoBehaviour
             int tempTradeID = draggedSlot.tradeReferenceID;
             int tempExploreID = draggedSlot.exploreReferenceID;
 
+            Debug.Log(tempTradeID);
+
             AssignHeroToSlot(heroSlot.playerHero, draggedSlot.slotID, heroSlot.tradeReferenceID, heroSlot.exploreReferenceID);
             AssignHeroToSlot(temphero, heroSlot.slotID, tempTradeID,tempExploreID);
 
             //update references
-            tradeInventory.UpdateReference(draggedSlot.slotID, draggedSlot.tradeReferenceID);
+            tradeInventory.UpdateReference(draggedSlot.slotID, tempTradeID);
             tradeInventory.UpdateReference(heroSlot.slotID, heroSlot.tradeReferenceID);
 
-            exploreInventory.UpdateReference(draggedSlot.slotID, draggedSlot.exploreReferenceID);
+            exploreInventory.UpdateReference(draggedSlot.slotID, tempExploreID);
             exploreInventory.UpdateReference(heroSlot.slotID, heroSlot.exploreReferenceID);
         }
 
         //assign to empty
         else if (heroSlot.playerHero == null && heroSlot != draggedSlot)
         {
+            Debug.Log(draggedSlot.tradeReferenceID);
+
+
             PlayerHero temphero = draggedSlot.playerHero;
             int tempTradeID = draggedSlot.tradeReferenceID;
             int tempExploreID = draggedSlot.exploreReferenceID;
@@ -283,9 +298,9 @@ public class InventoryUI : MonoBehaviour
             draggedSlot.removeHero();
             draggedSlot.hideHero();
 
-            AssignHeroToSlot(temphero, heroSlot.slotID,tempTradeID,tempExploreID);
+            Debug.Log(tempTradeID);
 
-            Debug.Log(heroSlot.slotID);
+            AssignHeroToSlot(temphero, heroSlot.slotID,tempTradeID,tempExploreID);
 
             tradeInventory.UpdateReference(draggedSlot.slotID, -1);
             tradeInventory.UpdateReference(heroSlot.slotID, heroSlot.tradeReferenceID);

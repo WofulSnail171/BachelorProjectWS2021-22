@@ -31,6 +31,8 @@ public class TradeInventoryUI : MonoBehaviour
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
 
+                Debug.Log(tempID);
+
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
                 draggedSlot.changeStatus(HeroStatus.Trading);
@@ -47,6 +49,8 @@ public class TradeInventoryUI : MonoBehaviour
                 PlayerHero temphero = draggedSlot.playerHero;
                 int tempID = draggedSlot.slotID;
                 int originalID = tradeSlot.originalSlotReferenceID;
+
+                Debug.Log(tempID);
 
                 AssignHeroToSlot(temphero, tradeSlot.slotID, tempID);
 
@@ -153,11 +157,16 @@ public class TradeInventoryUI : MonoBehaviour
     {
         if (ID >= 0 && ID < tradeSlots.Length)
             tradeSlots[ID].originalSlotReferenceID = referenceID;
+
+        //Debug.Log("updated" + ID + "with" + referenceID);
     }//helper
 
     public void AssignHeroToSlot(PlayerHero hero, int ID, int referenceID)
     {
         tradeSlots[ID].updateHero(hero, inventory.CheckForSprite(hero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId].rarity, referenceID);
         tradeSlots[ID].showHero();
+
+        Debug.Log("reference is: " + tradeSlots[ID].originalSlotReferenceID + " and slot ID is : " + tradeSlots[ID].slotID);
+ 
     }
 }
