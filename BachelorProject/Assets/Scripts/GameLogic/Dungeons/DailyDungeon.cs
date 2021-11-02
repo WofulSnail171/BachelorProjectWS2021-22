@@ -8,6 +8,7 @@ public class DailyDungeon
     public int dailySeed;
     public string layoutId;
     public string date;
+    public string questName;
     public DungeonType type;
 }
 

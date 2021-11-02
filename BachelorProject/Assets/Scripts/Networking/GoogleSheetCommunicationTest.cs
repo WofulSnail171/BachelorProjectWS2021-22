@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GoogleSheetCommunicationTest : MonoBehaviour
 {
@@ -133,6 +134,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
             ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData);
+            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
         }
     }
 
@@ -150,7 +152,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
             ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData);
-            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
+            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
     }
@@ -178,6 +180,12 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     {
         DeleventSystem.trySignIn -= OnTrySignIn;
         DeleventSystem.trySignUp -= OnTrySignUp;
+    }
+
+    public void FinishedLogIn()
+    {
+        Debug.Log("Finished Login");
+        SceneManager.LoadScene(1);
     }
     void Start()
     {

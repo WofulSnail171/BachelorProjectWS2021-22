@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f93cc1b3d6d40fb449525e1cc58b4765, type: 3}
   m_Name: LayoutList
   m_EditorClassIdentifier: 
-  layoutNames:
-  - TestLayout
+  layouts:
+  - name: Test Layout
+    layoutPrefab: {fileID: 2086558566736342541, guid: 03153aa7fab7b6f4dadff296a6c5005c, type: 3}

@@ -105,6 +105,12 @@ public class ServerCommunicationManager : MonoBehaviour
             default:
                 break;
         }
+        WebRequestInstance _temp = webRequestQueue[0];
+        webRequestQueue.RemoveAt(0); //in case one of the functions throw an error i want to ´still remove the message
+        if (_temp.simpleEvent != null)
+            _temp.simpleEvent();
+        if (_temp.messageEvent != null)
+            _temp.messageEvent(lastMessage);
     }
 
     private void ErrorHandling(string _message)
@@ -136,7 +142,6 @@ public class ServerCommunicationManager : MonoBehaviour
     public void PopRequestQueue()
     {
         WebRequestInstance _temp = webRequestQueue[0];
-        webRequestQueue.RemoveAt(0);
         _webRequest = _temp.request;
         _webRequest.SendWebRequest();
         Debug.Log(_temp.requestType);
@@ -148,10 +153,11 @@ public class ServerCommunicationManager : MonoBehaviour
         else
         {
             Exported = false;
+            webRequestQueue.RemoveAt(0);
         }
     }
 
-    public void GetInfo(Request _request, string _message = "")
+    public void GetInfo(Request _request, string _message = "", DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         if (_webRequest != null)
         {
@@ -161,7 +167,7 @@ public class ServerCommunicationManager : MonoBehaviour
         var JsonPackage = JsonUtility.ToJson(newRequest);
         string parameters = "?data=" + JsonPackage;
         //check for message length?
-        WebRequestInstance _temp = new WebRequestInstance{ request = UnityWebRequest.Get(_URL + parameters), requestType = _request, waitForAnswer = true};
+        WebRequestInstance _temp = new WebRequestInstance{ request = UnityWebRequest.Get(_URL + parameters), requestType = _request, waitForAnswer = true, simpleEvent = _simpleEvent, messageEvent = _messageEvent};
         webRequestQueue.Add(_temp);        
     }
 
@@ -205,4 +211,6 @@ public struct WebRequestInstance
     public UnityWebRequest request;
     public Request requestType;
     public bool waitForAnswer;
+    public DeleventSystem.SimpleEvent simpleEvent;
+    public DeleventSystem.MessageEvent messageEvent;
 }

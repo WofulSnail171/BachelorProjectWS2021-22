@@ -13,6 +13,8 @@ public class DungeonManager : MonoBehaviour
         {
             _instance = this;
             layoutList = Resources.Load<LayoutList>("LayoutList");
+            layoutList.CreateDictionary();
+            DontDestroyOnLoad(this);
         }
         else
         {
@@ -25,15 +27,13 @@ public class DungeonManager : MonoBehaviour
 
     
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
-        CreateDailyDungeons();
+        DeleventSystem.eventDataDownloaded += CreateDailyDungeons;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        DeleventSystem.eventDataDownloaded -= CreateDailyDungeons;
     }
 
     public void StartDungeonRun()
@@ -54,6 +54,15 @@ public class DungeonManager : MonoBehaviour
             DatabaseManager._instance.dungeonData = new DungeonData();
             DatabaseManager._instance.dungeonData.currentRun = new DungeonRun { valid = false };
         }
+        if (DatabaseManager._instance.dungeonData.dailyDungeons != null && DatabaseManager._instance.dungeonData.dailyDungeons.Length > 0)
+        {
+            //check if current daily dungeon data is older than 24 hours
+            if (DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).Date == DateTime.Now.Date)
+            {
+                Debug.Log("Current daily dungeons are still valid");
+                return;
+            }
+        }
         List<DailyDungeon> tempList = new List<DailyDungeon>();
         int numBasicDungeons = 3;
         for (int i = 0; i < numBasicDungeons; i++)
@@ -61,8 +70,9 @@ public class DungeonManager : MonoBehaviour
             DailyDungeon tempDungeon = new DailyDungeon
             {
                 dailySeed = UnityEngine.Random.Range(1, 3000),
-                layoutId = layoutList.layoutNames[UnityEngine.Random.Range(0, layoutList.layoutNames.Length)],
+                layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
                 date = DateTime.Now.ToString(),
+                questName = DatabaseManager._instance.eventData.basicQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.basicQuestDeck.Length)].eventName,
                 type = DungeonType.basic
             };
             tempList.Add(tempDungeon);
@@ -70,12 +80,14 @@ public class DungeonManager : MonoBehaviour
         DailyDungeon tempDoomDungeon = new DailyDungeon
         {
             dailySeed = UnityEngine.Random.Range(1, 3000),
-            layoutId = layoutList.layoutNames[UnityEngine.Random.Range(0, layoutList.layoutNames.Length)],
+            layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
             date = DateTime.Now.ToString(),
+            questName = DatabaseManager._instance.eventData.doomQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.doomQuestDeck.Length)].eventName,
             type = DungeonType.doom
         };
         tempList.Add(tempDoomDungeon);
         DatabaseManager._instance.dungeonData.dailyDungeons = tempList.ToArray();
+        DatabaseManager._instance.SaveGameDataLocally();
         //probably try to save data online
     }
 }

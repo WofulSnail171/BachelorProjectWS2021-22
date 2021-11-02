@@ -22,6 +22,7 @@ public class DatabaseManager : MonoBehaviour
     public void SaveGameDataLocally()
     {
         LocalSaveSystem.SaveLocaldata();
+        //Push to server?
     }
     private GameData localSave;
     public void LoadLocalSave()
@@ -47,7 +48,9 @@ public class DatabaseManager : MonoBehaviour
                 //but we can savely apply the local savefile to the active data
                 defaultHeroData = localSave.defaultHeroData;
                 eventData = localSave.eventData;
+                eventData.CreateDictionaries();
                 activePlayerData = localSave.activePlayerData;
+                dungeonData = localSave.dungeonData;
             }
         }
     }
@@ -83,6 +86,7 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateEventDataFromServer(string _message)
     {
         eventData = JsonUtility.FromJson<EventData>(_message);
+        eventData.CreateDictionaries();
         LocalSaveSystem.SaveLocaldata();
     }
 
@@ -130,10 +134,12 @@ public class GameData
         defaultHeroData = _manager.defaultHeroData;
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
+        dungeonData = _manager.dungeonData;
     }
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
+    public DungeonData dungeonData;
 
 
 
@@ -189,7 +195,29 @@ public class BlacklistEntry
 [System.Serializable]
 public class EventData
 {
-    public DungeonEvent[] dungeonDeck;
+    public void CreateDictionaries()
+    {
+        basicQuestDict = new Dictionary<string, DungeonEvent>();
+        foreach (var item in basicQuestDeck)
+        {
+            if (basicQuestDict.ContainsKey(item.eventName))
+            {
+                basicQuestDict.Add(item.eventName, item);
+            }
+        }
+        doomQuestDict = new Dictionary<string, DungeonEvent>();
+        foreach (var item in doomQuestDeck)
+        {
+            if (doomQuestDict.ContainsKey(item.eventName))
+            {
+                doomQuestDict.Add(item.eventName, item);
+            }
+        }
+    }
+    public DungeonEvent[] basicQuestDeck;
+    public Dictionary<string, DungeonEvent> basicQuestDict;
+    public DungeonEvent[] doomQuestDeck;
+    public Dictionary<string, DungeonEvent> doomQuestDict;
     public EventDeck[] eventDecks;
     public string[] nodeTypes;
     public string[] pathTypes;
