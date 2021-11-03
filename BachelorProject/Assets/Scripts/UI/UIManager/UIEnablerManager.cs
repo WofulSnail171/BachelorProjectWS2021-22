@@ -45,8 +45,12 @@ public class UIEnablerManager : MonoBehaviour
     {
         string name = UIelement.name;
         int index = name.LastIndexOf("_"); // Character to remove "_"
+
+
         if (index > 0)
             name = name.Substring(0, index);
+
+        Debug.Log(name);
 
         switch (reference)
         {
@@ -133,21 +137,25 @@ public class UIEnablerManager : MonoBehaviour
     #region enabler funcs
     private bool EnableFooter(GameObject element)
     {
+        element.SetActive(true);
         return true;
     }
 
     private bool EnableHeader(GameObject element)
     {
+        element.SetActive(true);
         return true;
     }
 
     private bool EnableCentered(GameObject element)
     {
+        element.SetActive(true);
         return true;
     }
 
     private bool EnablePopUp(GameObject element)
     {
+        element.SetActive(true);
         return true;
     }
     #endregion

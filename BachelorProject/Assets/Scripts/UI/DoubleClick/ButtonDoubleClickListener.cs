@@ -7,13 +7,16 @@ using UnityEngine ;
 using UnityEngine.Events ;
 using UnityEngine.EventSystems ;
 using UnityEngine.UI ;
+using System;
 
 [RequireComponent (typeof(Button))]
 public class ButtonDoubleClickListener : MonoBehaviour,IPointerClickHandler {
-   
+
+   public int heroReference;
+
    [Tooltip ("Max duration between 2 clicks in seconds")]
    [Range (0.01f, 0.5f)] public float doubleClickDuration = 0.4f ;
-   public UnityEvent onDoubleClick ;
+   public event Action <int> onDoubleClick ;
 
    private byte clicks = 0 ;
    private float elapsedTime = 0f ;
@@ -44,9 +47,8 @@ public class ButtonDoubleClickListener : MonoBehaviour,IPointerClickHandler {
             clicks = 0 ;
             elapsedTime = 0f ;
             if (button.interactable && !object.ReferenceEquals (onDoubleClick, null))
-               onDoubleClick.Invoke () ;
+               onDoubleClick(heroReference) ;
          }
       }
    }
-
 }

@@ -17,7 +17,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     [HideInInspector] public int tradeReferenceID = -1;
     [HideInInspector] public int exploreReferenceID = -1;
 
-    [SerializeField] private GameObject heroCard;
+    [SerializeField] public GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;

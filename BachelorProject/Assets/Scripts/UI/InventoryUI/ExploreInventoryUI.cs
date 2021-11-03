@@ -143,12 +143,7 @@ public class ExploreInventoryUI : MonoBehaviour
             RemoveHeroFromSlot(slot);
         }
 
-        string key = this.name;
-        int index = key.LastIndexOf("_"); // Character to remove "_"
-        if (index > 0)
-            key = key.Substring(0, index);
-
-        UIEnablerManager.Instance.DisableElement(key);
+        UIEnablerManager.Instance.DisableElement("ExploreSelect");
     }
 
     public void ConfirmAllHeroesForExplore()

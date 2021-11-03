@@ -8,6 +8,8 @@ using System;
 public class InventoryUI : MonoBehaviour
 {
     #region vars
+    [SerializeField] GameObject PopUpHeroCard;
+    
     [SerializeField] TradeInventoryUI tradeInventory;
     [SerializeField] ExploreInventoryUI exploreInventory;
     [SerializeField] GameObject slotParent;
@@ -29,8 +31,8 @@ public class InventoryUI : MonoBehaviour
 
     private int amountInTrade = 0;
     private int amountInDungeon = 0;
-    #endregion
 
+    #endregion
 
 
     //Init
@@ -65,6 +67,9 @@ public class InventoryUI : MonoBehaviour
             heroSlots[i].OnDropEvent += Drop;
 
             heroSlots[i].slotID = i;
+
+            heroSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
+            heroSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
         }
     }
 
@@ -254,7 +259,13 @@ public class InventoryUI : MonoBehaviour
     }
 
 
+    //double click
 
+    private void DoubleClick(int index)
+    {
+        PopUpHeroCard.GetComponent<UpdateHeroCard>().UpdateHero(heroSlots[index].playerHero);
+        UIEnablerManager.Instance.EnableElement("HeroCard");
+    }
 
     //helper checks
     //------------------------------------------------------------------------------------------------------------------------------------------------------
