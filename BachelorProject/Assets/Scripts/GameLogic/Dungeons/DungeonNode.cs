@@ -6,23 +6,29 @@ using UnityEditor;
 public class DungeonNode : MonoBehaviour
 {
     //relevant for creating layoutPrefab
-    public GameObject[] nextNodes;
+    public DungeonNode[] nextNodes;
 
     //Relevant for runtime logic
-    public string[] nextPaths;
+    //gets calculated with daily seed
+    public List<string> nextPaths;
     public string nodeType;
 
-    public string statType;
-    public string eventName;
+    //gets calculated with run seed
+    public Event nodeEvent;
+    //public string statType;
+    //public string eventName;
     public int maxEventHealth;
-    public int eventHealth;
     public int defaultGrowth;
+
+    //on run. Calculated eventually also with run seed
+    public int eventHealth;
     public int currentGrowth;
+    public int chosenPathIndex = -1;
 
     public Vector3 PathPosition(int _pathIndex)
     {
         Vector3 result = Vector3.zero;
-        if(nextNodes.Length > _pathIndex && nextPaths.Length > _pathIndex)
+        if(nextNodes.Length > _pathIndex && nextPaths.Count > _pathIndex)
         {
             result = transform.position + 0.5f * (nextNodes[_pathIndex].transform.position - transform.position);
         }
@@ -32,15 +38,56 @@ public class DungeonNode : MonoBehaviour
     void OnDrawGizmos()
     {
         // Draw a yellow sphere at the transform's position
-        Handles.Label(transform.position, eventName);
-        Gizmos.color = Color.yellow;
+        if (nodeEvent != null)
+            Handles.Label(transform.position + Vector3.up * .4f + Vector3.left * .75f, nodeEvent.eventName);
+        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 0 && nodeType == DatabaseManager._instance.eventData.nodeTypes[0])
+            Gizmos.color = Color.yellow;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 1 && nodeType == DatabaseManager._instance.eventData.nodeTypes[1])
+            Gizmos.color = Color.red;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 2 && nodeType == DatabaseManager._instance.eventData.nodeTypes[2])
+            Gizmos.color = Color.blue;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 3 && nodeType == DatabaseManager._instance.eventData.nodeTypes[3])
+            Gizmos.color = Color.green;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 4 && nodeType == DatabaseManager._instance.eventData.nodeTypes[4])
+            Gizmos.color = Color.cyan;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 5 && nodeType == DatabaseManager._instance.eventData.nodeTypes[5])
+            Gizmos.color = Color.black;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 6 && nodeType == DatabaseManager._instance.eventData.nodeTypes[6])
+            Gizmos.color = Color.magenta;
+        else
+            Gizmos.color = Color.grey;
         Gizmos.DrawSphere(transform.position, .2f);
         // Draws a blue line from this transform to the target
         if(nextNodes != null)
         {
             foreach (var item in nextNodes)
             {
-                Gizmos.color = Color.blue;
+                if (nextPaths == null || nextPaths.Count <= 0)
+                {
+                    Gizmos.color = Color.blue;
+                }
+                else
+                {
+                    for (int i = 0; i < nextPaths.Count; i++)
+                    {
+                        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 0 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[0])
+                            Gizmos.color = Color.yellow;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 1 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[1])
+                            Gizmos.color = Color.red;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 2 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[2])
+                            Gizmos.color = Color.blue;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 3 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[3])
+                            Gizmos.color = Color.green;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 4 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[4])
+                            Gizmos.color = Color.cyan;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 5 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[5])
+                            Gizmos.color = Color.black;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 6 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[6])
+                            Gizmos.color = Color.magenta;
+                        else
+                            Gizmos.color = Color.grey;
+                    }
+                }
                 Gizmos.DrawLine(transform.position, item.transform.position);
             }
         }

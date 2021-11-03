@@ -10,7 +10,8 @@ public class DungeonTest : MonoBehaviour
 {
     public GameObject dungeonScreenUI;
     public TMP_Text outputTextfield;
-    public TMP_InputField dungeonNum;
+    public TMP_InputField dungeonNumField;
+    public int dungeonNum;
     public TMP_InputField autoSpeed;
 
     public Button startButton;
@@ -19,14 +20,15 @@ public class DungeonTest : MonoBehaviour
     public Button uiToggleButton;
 
     public bool AutoPlay = false;
-    public int AutoPlaySpeed = 1;
+    public int AutoPlaySpeed = 100;
+    public int CurrentStep = 0;
 
     void OnSceneInit()
     {
         dungeonScreenUI.SetActive(true);
-        dungeonNum.interactable = true;
+        dungeonNumField.interactable = true;
         autoSpeed.interactable = false;
-        startButton.interactable = true;
+        startButton.interactable = false;
         stepButton.interactable = false;
         autoButton.interactable = false;
         uiToggleButton.interactable = true;
@@ -46,13 +48,18 @@ public class DungeonTest : MonoBehaviour
     public void OnStartButton()
     {
         dungeonScreenUI.SetActive(true);
-        dungeonNum.interactable = false;
+        dungeonNumField.interactable = false;
         autoSpeed.interactable = false;
         startButton.interactable = false;
         stepButton.interactable = true;
         autoButton.interactable = true;
         uiToggleButton.interactable = true;
         AutoPlay = false;
+
+        //create the dungeon run gogogogo!
+        
+        DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(dungeonNum);
+        DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
     }
 
     public void OnAutoPlayToggle()
@@ -60,6 +67,17 @@ public class DungeonTest : MonoBehaviour
         stepButton.interactable = AutoPlay;
         autoSpeed.interactable = !AutoPlay;
         AutoPlay = !AutoPlay;
+        StartCoroutine(AutoplayRoutine(.5f));
+    }
+
+    IEnumerator AutoplayRoutine(float waitTime)
+    {
+        while (AutoPlay)
+        {
+            yield return new WaitForSeconds((float)AutoPlaySpeed / 100.0f);
+            CurrentStep++;
+            DungeonManager._instance.CalculateRun(CurrentStep);
+        }
     }
 
     public void OnAutoPlayValueChanged()
@@ -71,6 +89,25 @@ public class DungeonTest : MonoBehaviour
         catch (FormatException)
         {
             Console.WriteLine($"Unable to parse '{autoSpeed.text}'");
+        }
+    }
+
+    public void OnDungeonNumChanged()
+    {
+        try
+        {
+            dungeonNum = Int32.Parse(dungeonNumField.text);
+            if(dungeonNum <= DatabaseManager._instance.dungeonData.dailyDungeons.Length && dungeonNum > 0)
+            {
+                startButton.interactable = true;
+            }
+            else
+                startButton.interactable = false;
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"Unable to parse '{dungeonNumField.text}'");
+            startButton.interactable = false;
         }
         Debug.Log(autoSpeed.text);
     }

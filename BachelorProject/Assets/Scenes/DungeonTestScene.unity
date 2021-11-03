@@ -1550,7 +1550,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1924594762}
+        m_TargetAssemblyTypeName: DungeonTest, Assembly-CSharp
+        m_MethodName: OnDungeonNumChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5855,14 +5867,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonScreenUI: {fileID: 1007771953}
   outputTextfield: {fileID: 575952774}
-  dungeonNum: {fileID: 529086338}
+  dungeonNumField: {fileID: 529086338}
+  dungeonNum: 0
   autoSpeed: {fileID: 905566196}
   startButton: {fileID: 380817405}
   stepButton: {fileID: 473978137}
   autoButton: {fileID: 18934947}
   uiToggleButton: {fileID: 1368353535}
   AutoPlay: 0
-  AutoPlaySpeed: 0
+  AutoPlaySpeed: 100
+  CurrentStep: 0
 --- !u!4 &1924594763
 Transform:
   m_ObjectHideFlags: 0

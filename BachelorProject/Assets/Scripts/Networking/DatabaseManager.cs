@@ -180,6 +180,7 @@ public class PlayerData
     public int tradeCounter;
     public string lastDungeonDate;
     public string currentDungeonRun;
+    public int rewardTierBuff;
 
     public BlacklistEntry[] blacklist;
     public List<PlayerHero> inventory;
@@ -198,6 +199,8 @@ public class EventData
     public void CreateDictionaries()
     {
         basicQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
         foreach (var item in basicQuestDeck)
         {
             if (basicQuestDict.ContainsKey(item.eventName))
@@ -213,6 +216,16 @@ public class EventData
                 doomQuestDict.Add(item.eventName, item);
             }
         }
+    }
+
+    public int GetNodeTypeIndex(string nodeType)
+    {
+        for (int i = 0; i < nodeTypes.Length; i++)
+        {
+            if (nodeType == nodeTypes[i])
+                return i;
+        }
+        return -1;
     }
     public DungeonEvent[] basicQuestDeck;
     public Dictionary<string, DungeonEvent> basicQuestDict;

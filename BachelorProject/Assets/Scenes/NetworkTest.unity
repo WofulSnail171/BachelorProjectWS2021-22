@@ -1372,10 +1372,12 @@ MonoBehaviour:
     tradeCounter: 0
     lastDungeonDate: 
     currentDungeonRun: 
+    rewardTierBuff: 0
     blacklist: []
     inventory: []
   eventData:
-    dungeonDeck: []
+    basicQuestDeck: []
+    doomQuestDeck: []
     eventDecks: []
     nodeTypes: []
     pathTypes: []
@@ -1390,8 +1392,10 @@ MonoBehaviour:
         dailySeed: 0
         layoutId: 
         date: 
+        questName: 
         type: 0
       initialRewardTier: 0
+      maxSteps: 0
 --- !u!4 &413296325
 Transform:
   m_ObjectHideFlags: 0
@@ -2124,6 +2128,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc27f4b819e1ea34dacaa66f7fb43c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layoutList: {fileID: 0}
+  currentCalcRun:
+    currentStep: 0
+    currentActivity: 0
+    remainingActivitySteps: 0
+    rewardHealthBar: 0
+    currentNode: {fileID: 0}
+    pStatGrowth: 0
+    mStatGrowth: 0
+    sStatGrowth: 0
+    nextHero: 0
+    dungeonLogArr: []
+  playerParty: {fileID: 1082394158}
 --- !u!4 &668027270
 Transform:
   m_ObjectHideFlags: 0
@@ -2134,7 +2151,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1082394158}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3264,6 +3282,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040354372}
   m_CullTransparentMesh: 1
+--- !u!1001 &1082394157
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 668027270}
+    m_Modifications:
+    - target: {fileID: 4491333013279243617, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_Name
+      value: PlayerParty
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+--- !u!4 &1082394158 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4491333013279243621, guid: 366449f85f12f4f4cbcb4468721ab228, type: 3}
+  m_PrefabInstance: {fileID: 1082394157}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1098701164
 GameObject:
   m_ObjectHideFlags: 0
