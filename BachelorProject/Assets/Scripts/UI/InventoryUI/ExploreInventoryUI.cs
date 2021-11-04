@@ -143,7 +143,7 @@ public class ExploreInventoryUI : MonoBehaviour
             RemoveHeroFromSlot(slot);
         }
 
-        UIEnablerManager.Instance.DisableElement("ExploreSelect");
+        UIEnablerManager.Instance.DisableElement("DungeonSelect", true);
     }
 
     public void ConfirmAllHeroesForExplore()
@@ -165,7 +165,7 @@ public class ExploreInventoryUI : MonoBehaviour
         {
             Debug.Log("do transfer logic");
 
-            UIEnablerManager.Instance.DisableElement("ExploreSelect");
+            UIEnablerManager.Instance.DisableElement("DungeonHeroSelect",true);
 
             //transmit the exploredata here and update the databas
             //

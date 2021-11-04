@@ -264,7 +264,7 @@ public class InventoryUI : MonoBehaviour
     private void DoubleClick(int index)
     {
         PopUpHeroCard.GetComponent<UpdateHeroCard>().UpdateHero(heroSlots[index].playerHero);
-        UIEnablerManager.Instance.EnableElement("HeroCard");
+        UIEnablerManager.Instance.EnableElement("HeroCard",true);
     }
 
     //helper checks

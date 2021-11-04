@@ -140,7 +140,7 @@ public class TradeInventoryUI : MonoBehaviour
             RemoveHeroFromSlot(slot);
         }
 
-        UIEnablerManager.Instance.DisableElement("TradeSelect"); //hide UI
+        UIEnablerManager.Instance.DisableElement("TradeSelect", true); //hide UI
     }
 
     public void ConfirmAllHeroesForTrade()
@@ -160,7 +160,7 @@ public class TradeInventoryUI : MonoBehaviour
         {
             Debug.Log("do transfer logic");
 
-            UIEnablerManager.Instance.DisableElement("TradeSelect"); //hide UI
+            UIEnablerManager.Instance.EnableElement("TradeSelect",true); //hide UI
 
             //transmit the data here and update the database
             //
