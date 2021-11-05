@@ -77,11 +77,7 @@ public class UIEnablerManager : MonoBehaviour
     //during runtime to be called
     public void EnableElement(string element, bool DoAnimation)
     {
-        bool IsSomewhere = false;
-
-        //differemt enable logics for dictionary type
-        //find if in Dictionaries there is something to be enabled
-        //only do if not already enabled
+        bool IsSomewhere = false;//catch bool
 
 
         //debug check
@@ -184,7 +180,7 @@ public class UIEnablerManager : MonoBehaviour
 
 
 
-
+        //not found
         if (!IsSomewhere)
             Debug.Log("trying to enable: " + element + ", but this does not exist in any dict as key");
     }
@@ -296,6 +292,7 @@ public class UIEnablerManager : MonoBehaviour
                     Debug.Log("No animation set for center element " + element);
             }
         }
+        
         //not found
         if (!IsSomewhere)
             Debug.Log("trying to disable: " + element + ", but this does not exist in any dict as key");

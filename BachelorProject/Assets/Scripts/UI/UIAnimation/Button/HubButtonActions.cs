@@ -18,19 +18,13 @@ public class HubButtonActions : MonoBehaviour
     //actual buttons
     [SerializeField] GameObject tradeButton;
     [SerializeField] GameObject tradeFocusedButton;
+    [SerializeField] GameObject tradeReadyButton;
     [SerializeField] GameObject dungeonButton;
     [SerializeField] GameObject dungeonFocusedButton;
+    [SerializeField] GameObject dungeonReadyButton;
     [SerializeField] GameObject hubButton;
     [SerializeField] GameObject hubFocusedButton;//do nothing, just set active
 
-
-    //animation buttons
-    [SerializeField] GameObject animtradeButton;
-    [SerializeField] GameObject animtradeFocusedButton;
-    [SerializeField] GameObject animdungeonButton;
-    [SerializeField] GameObject animdungeonFocusedButton;
-    [SerializeField] GameObject animhubButton;
-    [SerializeField] GameObject animhubFocusedButton;
 
 
     private HubState currentHubFocus;
@@ -67,11 +61,20 @@ public class HubButtonActions : MonoBehaviour
 
         //pending
         //------------------------------------
-
+        //check where you are coming from
+        switch (currentHubFocus)
+        {
+            case HubState.DungeonHub:
+                break;
+            case HubState.TradeHub:
+                break;
+            default:
+                break;
+        }
 
         //pending is done
         //------------------------------------
-
+        //do pop up
 
     }
 
@@ -81,27 +84,40 @@ public class HubButtonActions : MonoBehaviour
 
         //empty
         //------------------------------------
+        //
+
+
+
         tradeButton.GetComponent<Button>().interactable = false;
         dungeonButton.GetComponent<Button>().interactable = false;
 
-        UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonSelect", true);
+        UIEnablerManager.Instance.SwitchElements("SwitchHub", "DungeonSelect", true);
 
 
         //pending
         //------------------------------------
-
+        //check where you are coming from
+        switch (currentHubFocus)
+        {
+            case HubState.DungeonHub:
+                break;
+            case HubState.TradeHub:
+                break;
+            default:
+                break;
+        }
 
 
         //pending is done
         //------------------------------------
-
+        //do pop up
 
     }
 
     private void ClickedHub()
     {
         //check where you are coming from
-        switch(currentHubFocus)
+        switch (currentHubFocus)
         {
             case HubState.DungeonHub:
                 break;

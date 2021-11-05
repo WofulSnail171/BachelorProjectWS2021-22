@@ -224,12 +224,12 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         // unselect old
         if (_previousPageSelectionIndex >= 0) {
             _pageSelectionImages[_previousPageSelectionIndex].sprite = unselectedPage;
-            _pageSelectionImages[_previousPageSelectionIndex].SetNativeSize();
+            //_pageSelectionImages[_previousPageSelectionIndex].SetNativeSize();
         }
 
         // select new
         _pageSelectionImages[aPageIndex].sprite = selectedPage;
-        _pageSelectionImages[aPageIndex].SetNativeSize();
+        //_pageSelectionImages[aPageIndex].SetNativeSize();
 
         _previousPageSelectionIndex = aPageIndex;
     }
