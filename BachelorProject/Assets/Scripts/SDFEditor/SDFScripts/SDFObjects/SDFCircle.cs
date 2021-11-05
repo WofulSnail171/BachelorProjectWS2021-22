@@ -8,8 +8,18 @@ public class SDFCircle : SDFScriptableObject {
     public float Radius => this.radius;
     
     public override string SDFFunction() {
-        this.o = this.SDFName + "_out";
-        string hlslString = "float " + this.o + " = length(" + this.Position + "- uv)- " + this.Radius + ";" ;
+        
+        this.sdfName = "circle" + this.index;
+        this.o = this.sdfName + "_out";
+        
+        this.variables.Clear();
+        this.types.Clear();
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_radius");
+        this.types.Add("float2");
+        
+        string hlslString = "float " + this.o + " = length(" + this.variables[0] + "- uv)- " + this.variables[1] + ";" ;
         return hlslString;
     }
     

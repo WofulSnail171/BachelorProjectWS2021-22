@@ -4,12 +4,13 @@ using UnityEngine;
 
 public abstract class SDFNode : ScriptableObject
 {
-    [SerializeField] private string sdfName = "newSDF";
-
     [HideInInspector] public string o;
+    protected string sdfName = "newSDF";
+    
+    protected uint index;
 
-    private uint index;
-    protected string SDFName => this.sdfName + this.index;
+    public List<string> variables;
+    public List<string> types;
 
     public abstract string SDFFunction();
 

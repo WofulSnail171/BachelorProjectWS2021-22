@@ -9,16 +9,32 @@ public class SDFTriangle : SDFScriptableObject {
     [SerializeField] private float scale;
 
     public override string SDFFunction() {
-        this.o = this.SDFName + "_out";
-        string hlslString ="float2 e0 = float2" + this.b + " - float2" + this.a + @";
-    float2 e1 = float2" + this.c + " - float2" + this.b + @";
-    float2 e2 = float2" + this.a + " - float2" + this.c + @";
+        
+        this.sdfName = "triangle" + this.index;
+        this.o = this.sdfName + "_out";
+        
+        this.variables.Clear();
+        this.types.Clear();
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_a");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_b");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_c");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_scale");
+        this.types.Add("float");
+        
+        string hlslString ="float2 e0 = " + this.variables[2] + " - " + this.variables[1] + @";
+    float2 e1 = " + this.variables[3] + " - " + this.variables[2] + @";
+    float2 e2 = " + this.variables[1] + " - " + this.variables[3] + @";
     
-    float2 uv_" + this.SDFName + " = 1/" + this.scale + " * uv - float2" + this.Position + @";
+    float2 uv_" + this.sdfName + " = 1/" + this.variables[4] + " * uv - " + this.variables[0] + @";
     
-    float2 v0 = uv_" + this.SDFName + " - float2" + a + @";
-    float2 v1 = uv_" + this.SDFName + " - float2" + b + @";
-    float2 v2 = uv_" + this.SDFName + " - float2" + c + @";
+    float2 v0 = uv_" + this.sdfName + " - " + this.variables[1] + @";
+    float2 v1 = uv_" + this.sdfName + " - " + this.variables[2] + @";
+    float2 v2 = uv_" + this.sdfName + " - " + this.variables[3] + @";
     
     float2 pq0 = v0 - e0 * clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
     float2 pq1 = v1 - e1 * clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );

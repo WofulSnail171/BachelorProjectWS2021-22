@@ -37,8 +37,15 @@ public class SDFManager : MonoBehaviour{
     }
 
     private void AddHlslString(SDFNode node) {
+        string variables = "";
+
+        for (int i = 0; i < this.sdfNode.variables.Count; i++) {
+            variables += this.sdfNode.types[i] + " " + this.sdfNode.variables[i] + ", ";
+        }
+        
+
         string hlsl = @"
-void SDF_float (float2 uv, out float Out){ 
+void SDF_float (float2 uv, " + variables + @"out float Out){ 
     " + node.SDFFunction() + @"
 
     Out = " + node.o + @";

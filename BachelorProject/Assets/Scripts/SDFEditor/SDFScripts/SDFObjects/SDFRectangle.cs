@@ -7,13 +7,32 @@ public class SDFRectangle : SDFScriptableObject
 {
     [SerializeField] Vector2 box = new Vector2(0,0);
     [SerializeField] private float scale = 1;
-    
+    [SerializeField] private Vector4 roundness = new Vector4(0, 0, 0, 0);
+
     public override string SDFFunction() {
-        this.o = this.SDFName + "_out";
+        
+        this.sdfName = "rect" + this.index;
+        this.o = this.sdfName + "_out";
+        
+        this.variables.Clear();
+        this.types.Clear();
+        
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_box");
+        this.types.Add("float2");
+        this.variables.Add( this.sdfName + "_scale");
+        this.types.Add("float");
+        this.variables.Add(this.sdfName + "_roundness");
+        this.types.Add("float4");
+
         Vector2 b = this.box * this.scale;
 
-        string hlslString = "float2 d = abs(" + this.Position + " - uv) - float2" + b + @";
-    float "+ this.o + " = length(max(d, 0)) + min(max(d.x, d.y), 0) * 0.5 * " + this.scale +";";
+        string hlslString = this.variables[3] + ".xy = (" + this.variables[0] + ".x - uv.x > 0.0) ? " + this.variables[3] + ".xy : " + this.variables[3] + @".zw;
+    " + this.variables[3] + ".x  = (" + this.variables[0] + ".y - uv.y > 0.0) ? " + this.variables[3] + ".x  : " + this.variables[3] + @".y;
+    float2 q = abs(" + this.variables[0] + " - uv) - " + this.variables[1] + " + " + this.variables[3] + @".x;
+    float " + this.o + " = min(max(q.x,q.y),0.0) + length(max(q,0.0)) - " + this.variables[3] + ".x;";
+        
         return hlslString;
     }
 }

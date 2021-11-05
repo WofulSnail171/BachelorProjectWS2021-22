@@ -10,14 +10,28 @@ public class SDFBezier : SDFScriptableObject
     
     public override string SDFFunction() {
         
-        this.o = this.SDFName + "_out";
+        this.sdfName = "bezier" + this.index;
+        this.o = this.sdfName + "_out";
+        
+        this.variables.Clear();
+        this.types.Clear();
+        
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_a");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_b");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_c");
+        this.types.Add("float2");
+        
         
         string hlslString = @"
-    float2 pos = uv - float2" + this.Position + @";
-    float2 A = float2" + this.b + " - float2" + this.a + @";
-    float2 B = float2" + this.a + " - 2.0 * float2" + this.b + " + float2" + this.c + @";
+    float2 pos = uv - " + this.variables[0] + @";
+    float2 A = " + this.variables[2] + " - " + this.variables[1] + @";
+    float2 B = " + this.variables[1] + " - 2.0 * " + this.variables[2] + " + " + this.variables[3] + @";
     float2 C =  A * 2.0;
-    float2 D =  float2" + this.a + @" - pos;
+    float2 D =  float2" + this.variables[1] + @" - pos;
     float kk = 1.0/dot(B, B);
     float kx = kk * dot(A, B);
     float ky = kk * (2.0*dot(A, A)+dot(D, B)) / 3.0;
