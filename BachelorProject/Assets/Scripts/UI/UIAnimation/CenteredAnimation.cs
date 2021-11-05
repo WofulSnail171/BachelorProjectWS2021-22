@@ -8,8 +8,8 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        //gameObject.transform.localScale = new Vector3(1, 1, 1);
-        //LeanTween.scaleX(gameObject, 0, animSpeed);
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
+        LeanTween.scaleX(gameObject, 0, animSpeed);
 
         StartCoroutine(Pause());
 
@@ -20,9 +20,9 @@ public class CenteredAnimation : AbstractElementAnimation
     {
         gameObject.SetActive(true);
 
-        //gameObject.transform.localScale = new Vector3(0, 1, 1);
+        gameObject.transform.localScale = new Vector3(0, 1, 1);
 
-        //LeanTween.scaleX(gameObject, 1, animSpeed);
+        LeanTween.scaleX(gameObject, 1, animSpeed);
     }
 
     IEnumerator Pause()
@@ -31,6 +31,6 @@ public class CenteredAnimation : AbstractElementAnimation
 
 
         gameObject.SetActive(false);
-        //gameObject.transform.localScale = new Vector3(1, 1, 1);
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 }
