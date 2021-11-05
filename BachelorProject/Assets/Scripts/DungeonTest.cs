@@ -133,6 +133,9 @@ public class DungeonTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (DungeonManager._instance == null)
+            return;
+        if (DungeonManager._instance.currentCalcRun != null && DungeonManager._instance.currentCalcRun.dungeonLogArr != null && DungeonManager._instance.currentCalcRun.dungeonLogArr.Length > 0)
+            outputTextfield.text = DungeonManager._instance.currentCalcRun.dungeonLogArr[DungeonManager._instance.currentCalcRun.dungeonLogArr.Length - 1].entry;
     }
 }

@@ -7,6 +7,16 @@ public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager _instance;
     public static int maxInventorySize;
+    public static bool CheckDatabaseValid()
+    {
+        if (_instance == null 
+            || DatabaseManager._instance.dungeonData == null 
+            || DatabaseManager._instance.defaultHeroData == null
+            || DatabaseManager._instance.eventData == null)
+            return false;
+        return true;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -203,15 +213,17 @@ public class EventData
             return;
         foreach (var item in basicQuestDeck)
         {
-            if (basicQuestDict.ContainsKey(item.eventName))
+            if (!basicQuestDict.ContainsKey(item.eventName))
             {
                 basicQuestDict.Add(item.eventName, item);
             }
         }
         doomQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
         foreach (var item in doomQuestDeck)
         {
-            if (doomQuestDict.ContainsKey(item.eventName))
+            if (!doomQuestDict.ContainsKey(item.eventName))
             {
                 doomQuestDict.Add(item.eventName, item);
             }

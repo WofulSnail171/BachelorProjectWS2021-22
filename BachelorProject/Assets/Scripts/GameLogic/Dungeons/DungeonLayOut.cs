@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class DungeonLayOut : MonoBehaviour
         nodes = new List<DungeonNode>();
         SetupNodeDailySeed(startNode);
         DontDestroyOnLoad(this);
+        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
     }
 
     public void SetupDungeonRunSeed(int _seed)
@@ -25,6 +27,7 @@ public class DungeonLayOut : MonoBehaviour
         UnityEngine.Random.InitState(_seed);
         nodes = new List<DungeonNode>();
         SetupNodeRunSeed(startNode);
+        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
     }
 
     public void ResetNodes()
@@ -33,7 +36,8 @@ public class DungeonLayOut : MonoBehaviour
         {
             item.eventHealth = item.maxEventHealth;
             item.currentGrowth = item.defaultGrowth;
-            //maybe i also need to reset hero information ion the future
+            item.chosenPathIndex = -1;
+            //maybe i also need to reset hero information in the future
         }
     }
 

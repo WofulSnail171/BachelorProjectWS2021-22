@@ -22,6 +22,7 @@ public class CalculatedDungeonRun
         dungeonRun = _dungeonRun;
         currentStep = 0;
         currentActivity = DungeonActivity.startQuest;
+        startActivitySteps = 0;
         remainingActivitySteps = 0;
         rewardHealthBar = dungeonRun.initialRewardTier * 10;
         currentNode = dungeonRun.dungeon.dungeonLayout.startNode;
@@ -35,6 +36,7 @@ public class CalculatedDungeonRun
     DungeonRun dungeonRun;
     public int currentStep;
     public DungeonActivity currentActivity;
+    public int startActivitySteps;
     public int remainingActivitySteps;
     public int rewardHealthBar; //initial rewardbuff *10 -> gets later devided by 10 to get reward tier again
     public DungeonNode currentNode;

@@ -37,6 +37,7 @@ public class DungeonNode : MonoBehaviour
 
     void OnDrawGizmos()
     {
+#if(UNITY_EDITOR)
         // Draw a yellow sphere at the transform's position
         if (nodeEvent != null)
             Handles.Label(transform.position + Vector3.up * .4f + Vector3.left * .75f, nodeEvent.eventName);
@@ -106,5 +107,6 @@ public class DungeonNode : MonoBehaviour
                 Gizmos.DrawCube(transform.position + 0.90f * (item.transform.position - transform.position), new Vector3(.2f, .2f, .2f));
             }
         }
+#endif
     }
 }
