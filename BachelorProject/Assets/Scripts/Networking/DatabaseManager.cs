@@ -6,6 +6,17 @@ using System;
 public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager _instance;
+    public static int maxInventorySize;
+    public static bool CheckDatabaseValid()
+    {
+        if (_instance == null 
+            || DatabaseManager._instance.dungeonData == null 
+            || DatabaseManager._instance.defaultHeroData == null
+            || DatabaseManager._instance.eventData == null)
+            return false;
+        return true;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,6 +32,7 @@ public class DatabaseManager : MonoBehaviour
     public void SaveGameDataLocally()
     {
         LocalSaveSystem.SaveLocaldata();
+        //Push to server?
     }
     private GameData localSave;
     public void LoadLocalSave()
@@ -46,7 +58,9 @@ public class DatabaseManager : MonoBehaviour
                 //but we can savely apply the local savefile to the active data
                 defaultHeroData = localSave.defaultHeroData;
                 eventData = localSave.eventData;
+                eventData.CreateDictionaries();
                 activePlayerData = localSave.activePlayerData;
+                dungeonData = localSave.dungeonData;
             }
         }
     }
@@ -82,6 +96,14 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateEventDataFromServer(string _message)
     {
         eventData = JsonUtility.FromJson<EventData>(_message);
+        eventData.CreateDictionaries();
+        LocalSaveSystem.SaveLocaldata();
+    }
+
+    public DungeonData dungeonData;
+    public void UpdateDungeonDataFromServer(string _message)
+    {
+        dungeonData = JsonUtility.FromJson<DungeonData>(_message);
         LocalSaveSystem.SaveLocaldata();
     }
 
@@ -122,10 +144,12 @@ public class GameData
         defaultHeroData = _manager.defaultHeroData;
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
+        dungeonData = _manager.dungeonData;
     }
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
+    public DungeonData dungeonData;
 
 
 
@@ -166,9 +190,10 @@ public class PlayerData
     public int tradeCounter;
     public string lastDungeonDate;
     public string currentDungeonRun;
+    public int rewardTierBuff;
 
     public BlacklistEntry[] blacklist;
-    public PlayerHero[] inventory;
+    public List<PlayerHero> inventory;
 }
 
 [System.Serializable]
@@ -181,7 +206,43 @@ public class BlacklistEntry
 [System.Serializable]
 public class EventData
 {
-    public DungeonEvent[] dungeonDeck;
+    public void CreateDictionaries()
+    {
+        basicQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
+        foreach (var item in basicQuestDeck)
+        {
+            if (!basicQuestDict.ContainsKey(item.eventName))
+            {
+                basicQuestDict.Add(item.eventName, item);
+            }
+        }
+        doomQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
+        foreach (var item in doomQuestDeck)
+        {
+            if (!doomQuestDict.ContainsKey(item.eventName))
+            {
+                doomQuestDict.Add(item.eventName, item);
+            }
+        }
+    }
+
+    public int GetNodeTypeIndex(string nodeType)
+    {
+        for (int i = 0; i < nodeTypes.Length; i++)
+        {
+            if (nodeType == nodeTypes[i])
+                return i;
+        }
+        return -1;
+    }
+    public DungeonEvent[] basicQuestDeck;
+    public Dictionary<string, DungeonEvent> basicQuestDict;
+    public DungeonEvent[] doomQuestDeck;
+    public Dictionary<string, DungeonEvent> doomQuestDict;
     public EventDeck[] eventDecks;
     public string[] nodeTypes;
     public string[] pathTypes;
@@ -209,4 +270,10 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+}
+
+public enum DungeonType
+{
+    basic,
+    doom
 }

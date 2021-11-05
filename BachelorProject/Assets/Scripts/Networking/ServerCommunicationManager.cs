@@ -9,11 +9,6 @@ public class ServerCommunicationManager : MonoBehaviour
 {
     public static ServerCommunicationManager _instance;
     // Start is called before the first frame update
-    public InventoryUI InventoryUI;
-
-
-
-
     void Awake()
     {
         if (_instance == null)
@@ -25,6 +20,8 @@ public class ServerCommunicationManager : MonoBehaviour
             Destroy(this);
     }
     private string _URL = "https://script.google.com/macros/s/AKfycbxmcdlCpQ2CiN-4dmtM9iFHaQXyIVne-wGqieddb9eEKR7WkGh3ELBJh5E5VuJDh12Q/exec";
+
+    private List<WebRequestInstance> webRequestQueue = new List<WebRequestInstance>();
     private UnityWebRequest _webRequest;
     private bool Imported = true;
     private Request lastGetInfo;
@@ -43,6 +40,10 @@ public class ServerCommunicationManager : MonoBehaviour
             _webRequest = null;
             Exported = true;
         }
+        if(_webRequest == null && webRequestQueue.Count > 0)
+        {
+            PopRequestQueue();
+        }
     }
 
     private void CheckForImportRequestEnd()
@@ -50,6 +51,7 @@ public class ServerCommunicationManager : MonoBehaviour
         if (_webRequest != null && _webRequest.isDone)
         {
             ExecuteImport();
+            
         }
     }
 
@@ -65,7 +67,9 @@ public class ServerCommunicationManager : MonoBehaviour
         if (!Int32.TryParse(requestMarker, out requestTypeInt))
             return;
         Request requestType = (Request)Int32.Parse(requestMarker);
-        lastGetInfo = requestType;
+        _webRequest = null;
+        Imported = true;
+        Debug.Log(lastMessage);
         switch (requestType)
         {
             case Request.Error:
@@ -75,18 +79,13 @@ public class ServerCommunicationManager : MonoBehaviour
                 //start game
                 //create new userprofil with data given
                 //tutorials + first hero
-                DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
-                _webRequest = null;
-                Imported = true;
-                InventoryUI.NewDataAssign();
+                //DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
+                DeleventSystem.trySignUp(JsonUtility.FromJson<PlayerData>(lastMessage));
                 break;
             case Request.SignIn:
                 //get user profil
                 //if time stamp on online profile is newer than local discard local data and reapply online data
-                DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
-                _webRequest = null;
-                Imported = true;
-                InventoryUI.NewDataAssign();
+                DeleventSystem.trySignIn(JsonUtility.FromJson<PlayerData>(lastMessage));
                 break;
             case Request.GetPlayerData:
                 // generically download a specified user profile for diverse use cases
@@ -94,29 +93,38 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.DownloadHeroList:
                 //download the default hero list and replace local copy
                 DatabaseManager._instance.UpdateDefaultHeroListFromServer(lastMessage);
-                _webRequest = null;
-                Imported = true;
-                ServerCommunicationManager._instance.GetInfo(Request.SignIn, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "EvenSaferPassword" }));
                 break;
             case Request.DownloadEventData:
                 //download the default hero list and replace local copy
                 DatabaseManager._instance.UpdateEventDataFromServer(lastMessage);
+                if(DeleventSystem.eventDataDownloaded != null)
+                    DeleventSystem.eventDataDownloaded();
+                break;
+            case Request.PushPlayerData:
                 break;
             default:
                 break;
         }
+        WebRequestInstance _temp = webRequestQueue[0];
+        webRequestQueue.RemoveAt(0); //in case one of the functions throw an error i want to ´still remove the message
+        if (_temp.simpleEvent != null)
+            _temp.simpleEvent();
+        if (_temp.messageEvent != null)
+            _temp.messageEvent(lastMessage);
     }
 
     private void ErrorHandling(string _message)
     {
-        Debug.LogError(_message);
+        Debug.LogWarning(_message);
         switch (LastGetInfo)
         {
             case Request.Error:
                 break;
             case Request.SignUp:
+                DeleventSystem.trySignUp(new PlayerData { playerId = "Error", password = _message});
                 break;
             case Request.SignIn:
+                DeleventSystem.trySignIn(new PlayerData { playerId = "Error", password = _message});
                 break;
             case Request.GetPlayerData:
                 break;
@@ -124,12 +132,32 @@ public class ServerCommunicationManager : MonoBehaviour
                 break;
             case Request.DownloadEventData:
                 break;
+            case Request.PushPlayerData:
+                break;
             default:
                 break;
         }
     }
 
-    public void GetInfo(Request _request, string _message = "")
+    public void PopRequestQueue()
+    {
+        WebRequestInstance _temp = webRequestQueue[0];
+        _webRequest = _temp.request;
+        _webRequest.SendWebRequest();
+        Debug.Log(_temp.requestType);
+        if (_temp.waitForAnswer)
+        {
+            lastGetInfo = _temp.requestType;
+            Imported = false;
+        }
+        else
+        {
+            Exported = false;
+            webRequestQueue.RemoveAt(0);
+        }
+    }
+
+    public void GetInfo(Request _request, string _message = "", DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         if (_webRequest != null)
         {
@@ -139,10 +167,8 @@ public class ServerCommunicationManager : MonoBehaviour
         var JsonPackage = JsonUtility.ToJson(newRequest);
         string parameters = "?data=" + JsonPackage;
         //check for message length?
-        _webRequest = UnityWebRequest.Get(_URL + parameters);
-        _webRequest.SendWebRequest();
-        lastGetInfo = _request;
-        Imported = false;
+        WebRequestInstance _temp = new WebRequestInstance{ request = UnityWebRequest.Get(_URL + parameters), requestType = _request, waitForAnswer = true, simpleEvent = _simpleEvent, messageEvent = _messageEvent};
+        webRequestQueue.Add(_temp);        
     }
 
     public void PostInfo(Request _request, string _message = "")
@@ -156,9 +182,8 @@ public class ServerCommunicationManager : MonoBehaviour
         //check for message length?
         WWWForm form = new WWWForm();
         form.AddField("data", JsonPackage);
-        _webRequest = UnityWebRequest.Post(_URL, form);
-        _webRequest.SendWebRequest();
-        Exported = false;
+        WebRequestInstance _temp = new WebRequestInstance { request = UnityWebRequest.Post(_URL, form), requestType = _request, waitForAnswer = false };
+        webRequestQueue.Add(_temp);
     }
 }
 
@@ -176,5 +201,16 @@ public enum Request
     SignIn,
     GetPlayerData,
     DownloadHeroList,
-    DownloadEventData
+    DownloadEventData,
+    PushPlayerData
+}
+
+//for the request queue:
+public struct WebRequestInstance
+{
+    public UnityWebRequest request;
+    public Request requestType;
+    public bool waitForAnswer;
+    public DeleventSystem.SimpleEvent simpleEvent;
+    public DeleventSystem.MessageEvent messageEvent;
 }
