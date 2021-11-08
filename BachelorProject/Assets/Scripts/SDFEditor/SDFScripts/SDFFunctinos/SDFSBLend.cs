@@ -7,11 +7,22 @@ public class SDFSBLend : SDFNode
     [SerializeField] private SDFScriptableObject inputA;
     [SerializeField] private SDFScriptableObject inputB;
     [SerializeField] private float k;
-    public override string SDFFunction() {
+    
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "sblend" + this.index;
         this.o = this.sdfName + "_out";
         
+        this.variables.Clear();
+        this.types.Clear();
+        
+        this.variables.Add(this.sdfName + "_k");
+        this.types.Add("float");
+    }
+    public override string SDFFunction() {
+
         this.variables.Clear();
         this.types.Clear();
         

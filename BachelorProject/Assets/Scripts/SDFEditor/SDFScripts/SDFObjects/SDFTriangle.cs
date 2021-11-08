@@ -8,7 +8,9 @@ public class SDFTriangle : SDFScriptableObject {
     [SerializeField] private Vector2 c;
     [SerializeField] private float scale;
 
-    public override string SDFFunction() {
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "triangle" + this.index;
         this.o = this.sdfName + "_out";
@@ -25,7 +27,10 @@ public class SDFTriangle : SDFScriptableObject {
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_scale");
         this.types.Add("float");
-        
+    }
+    
+    public override string SDFFunction() {
+
         string hlslString ="float2 e0 = " + this.variables[2] + " - " + this.variables[1] + @";
     float2 e1 = " + this.variables[3] + " - " + this.variables[2] + @";
     float2 e2 = " + this.variables[1] + " - " + this.variables[3] + @";

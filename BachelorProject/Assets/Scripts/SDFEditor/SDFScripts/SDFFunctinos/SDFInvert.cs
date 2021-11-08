@@ -5,10 +5,15 @@ using UnityEngine;
 public class SDFInvert : SDFNode
 {
     [SerializeField] private SDFScriptableObject inputA;
-    public override string SDFFunction() {
+    
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
-        this.sdfName = "invert" + this.index;
-        this.o = this.sdfName + "_out";
+        this.sdfName = "invert";
+        this.o = this.sdfName +"_out";
+    }
+    public override string SDFFunction() {
         
         string a = this.inputA.SDFFunction();
         

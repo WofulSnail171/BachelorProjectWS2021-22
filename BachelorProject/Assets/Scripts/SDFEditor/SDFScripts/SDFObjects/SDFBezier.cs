@@ -8,7 +8,9 @@ public class SDFBezier : SDFScriptableObject
     [SerializeField] private Vector2 b;
     [SerializeField] private Vector2 c;
     
-    public override string SDFFunction() {
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "bezier" + this.index;
         this.o = this.sdfName + "_out";
@@ -24,7 +26,9 @@ public class SDFBezier : SDFScriptableObject
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_c");
         this.types.Add("float2");
-        
+    }
+    
+    public override string SDFFunction() {
         
         string hlslString = @"
     float2 pos = uv - " + this.variables[0] + @";

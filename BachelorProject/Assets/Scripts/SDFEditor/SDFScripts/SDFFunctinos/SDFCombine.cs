@@ -6,12 +6,17 @@ using UnityEngine;
 public class SDFCombine : SDFNode {
     [SerializeField] private SDFNode inputA;
     [SerializeField] private SDFNode inputB;
-
-    public override string SDFFunction() {
+    
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "comb";
         this.o = this.sdfName +"_out";
-        
+    }
+
+    public override string SDFFunction() {
+
         string a = this.inputA.SDFFunction();
         string b = this.inputB.SDFFunction();
         

@@ -7,11 +7,23 @@ public class SDFLerp : SDFNode
     [SerializeField] private SDFNode inputA;
     [SerializeField] private SDFNode inputB;
     [SerializeField] private float t;
-    public override string SDFFunction() {
+    
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";
         
+        this.variables.Clear();
+        this.types.Clear();
+        
+        this.variables.Add(this.sdfName + "_t");
+        this.types.Add("float");
+    }
+    
+    public override string SDFFunction() {
+
         string a = this.inputA.SDFFunction();
         string b = this.inputB.SDFFunction();
         

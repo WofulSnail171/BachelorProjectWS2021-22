@@ -7,7 +7,9 @@ public class SDFLine : SDFScriptableObject {
     [SerializeField] private Vector2 b;
     [SerializeField] private float roundness;
     
-    public override string SDFFunction() {
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "line" + this.index;
         this.o = this.sdfName + "_out";
@@ -21,7 +23,10 @@ public class SDFLine : SDFScriptableObject {
         this.variables.Add(this.sdfName + "_b");
         this.types.Add(this.sdfName + "_roundness");
         this.types.Add("float2");
-        
+    }
+    
+    public override string SDFFunction() {
+
         string hlslString = @"
         float2 pa = uv - " + this.variables[0] + " - " + this.variables[1] + @";
         float2 ba = " + this.variables[2] + " - " + this.variables[1] + @";

@@ -10,7 +10,7 @@ public class SDFManager : MonoBehaviour{
     private List <SDFScriptableObject>  SDFObjects = new List<SDFScriptableObject>();
 
     private TextAsset hlslInclude;
-    [HideInInspector]public string path = @"Assets/Shader/SDFInclude.hlsl";
+    private string path = @"Assets/Shader/HlslInclude.shader";
 
     public SDFNode sdfNode;
     public bool apply;
@@ -30,7 +30,8 @@ public class SDFManager : MonoBehaviour{
         this.hlslStrings.Add("#define SDFFUNCTIONS_INCLUDED");
         this.hlslStrings.Add("float dot2( in float2 v ) { return dot(v,v); }");
         
-        
+        path = @"Assets/Shader/TestShader.shader";
+
         if(this.sdfNode != null)
             AddHlslString(this.sdfNode);
         WriteHlslToText();
@@ -53,6 +54,7 @@ void SDF_float (float2 uv, " + variables + @"out float Out){
 ";
         
         this.hlslStrings.Add(hlsl);
+        this.hlslStrings.Add(node.SDFFunction());
     }
 
     private void WriteHlslToText() {

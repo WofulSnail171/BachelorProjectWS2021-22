@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[ExecuteAlways]
 public abstract class SDFNode : ScriptableObject
 {
     [HideInInspector] public string o;
@@ -9,12 +9,8 @@ public abstract class SDFNode : ScriptableObject
     
     protected uint index;
 
-    public List<string> variables;
-    public List<string> types;
+    [HideInInspector]public List<string> variables;
+    [HideInInspector]public List<string> types;
 
     public abstract string SDFFunction();
-
-    private void OnValidate() {
-        this.index = (uint)Random.Range(0, 1000);
-    }
 }

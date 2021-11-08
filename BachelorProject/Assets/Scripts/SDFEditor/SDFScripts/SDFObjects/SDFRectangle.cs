@@ -9,7 +9,9 @@ public class SDFRectangle : SDFScriptableObject
     [SerializeField] private float scale = 1;
     [SerializeField] private Vector4 roundness = new Vector4(0, 0, 0, 0);
 
-    public override string SDFFunction() {
+    private void Awake() {
+        this.index = (uint)Random.Range(0, 1000);
+        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "rect" + this.index;
         this.o = this.sdfName + "_out";
@@ -25,6 +27,8 @@ public class SDFRectangle : SDFScriptableObject
         this.types.Add("float");
         this.variables.Add(this.sdfName + "_roundness");
         this.types.Add("float4");
+    }
+    public override string SDFFunction() {
 
         Vector2 b = this.box * this.scale;
 
