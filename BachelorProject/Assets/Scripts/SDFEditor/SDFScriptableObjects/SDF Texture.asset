@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677f389da7180654581bece8a96bdf25, type: 3}
   m_Name: SDF Texture
   m_EditorClassIdentifier: 
-  o: tex541_out
+  o: tex643_out
   variables:
-  - tex541_tex
-  - tex541_sampleState
+  - tex643_tex
+  - tex643_sampleState
   types:
   - UnityTexture2D
   - UnitySamplerState

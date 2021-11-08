@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SDFTestMat
-  m_Shader: {fileID: -6465566751694194690, guid: da7395150a9a8214897b4c85f2d0934b, type: 3}
+  m_Shader: {fileID: 4800000, guid: e0bfa8eccd9f03347bfccb5195773ca9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
