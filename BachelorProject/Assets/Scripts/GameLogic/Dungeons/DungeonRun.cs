@@ -12,6 +12,7 @@ public class DungeonRun
     public DailyDungeon dungeon;
     public int initialRewardTier; //dungeon assigned rt + rewardbuff
     public int maxSteps;
+    public List<RandomNum> randomNums;
 }
 
 [System.Serializable]
@@ -32,7 +33,32 @@ public class CalculatedDungeonRun
         sStatGrowth = 0;
 
         nextHero = 0;
+        randomNums = new Dictionary<int, int>();
+        foreach (RandomNum randNum in _dungeonRun.randomNums)
+        {
+            randomNums.Add(randNum.step, randNum.num);
+        }
     }
+
+    public int RandomNum(int min, int max)
+    {
+        if (randomNums.ContainsKey(currentStep))
+        {
+            Debug.Log(randomNums[currentStep]);
+            return randomNums[currentStep];
+        }
+        else
+        {
+            // In theory this should only be the case when setting up with calcMaxStep
+            int randomNum = UnityEngine.Random.Range(min, max);
+            randomNums.Add(currentStep, randomNum);
+            DatabaseManager._instance.dungeonData.currentRun.randomNums.Add(new RandomNum { num = randomNum, step = currentStep });
+            Debug.Log(randomNum);
+            return randomNum;
+        }
+    }
+    Dictionary<int, int> randomNums;
+
     DungeonRun dungeonRun;
     public int currentStep;
     public DungeonActivity currentActivity;
@@ -72,4 +98,11 @@ public struct LogEntry
 {
     public int step;
     public string entry;
+}
+
+[System.Serializable]
+public struct RandomNum
+{
+    public int step;
+    public int num;
 }

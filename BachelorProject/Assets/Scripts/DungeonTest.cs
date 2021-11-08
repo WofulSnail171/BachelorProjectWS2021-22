@@ -60,6 +60,7 @@ public class DungeonTest : MonoBehaviour
         
         DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(dungeonNum);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
+        DungeonManager._instance.CalculateRun(0);
     }
 
     public void OnAutoPlayToggle()
@@ -75,8 +76,9 @@ public class DungeonTest : MonoBehaviour
         while (AutoPlay)
         {
             yield return new WaitForSeconds((float)AutoPlaySpeed / 100.0f);
-            CurrentStep++;
-            DungeonManager._instance.CalculateRun(CurrentStep);
+            //CurrentStep++;
+            //DungeonManager._instance.CalculateRun(CurrentStep);
+            DungeonManager._instance.NextStepRun();
         }
     }
 
@@ -114,7 +116,7 @@ public class DungeonTest : MonoBehaviour
 
     public void OnStepButton()
     {
-
+        DungeonManager._instance.NextStepRun();
     }
 
     public void OnUiToggleButton()

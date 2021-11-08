@@ -270,6 +270,7 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+    public string description;
 }
 
 public enum DungeonType

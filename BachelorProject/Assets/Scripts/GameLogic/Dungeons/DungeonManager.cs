@@ -122,7 +122,8 @@ public class DungeonManager : MonoBehaviour
                 date = DateTime.Now.ToString(),
                 valid = false,
                 dungeonSeed = UnityEngine.Random.Range(0, 500),
-                initialRewardTier = DatabaseManager._instance.activePlayerData.rewardTierBuff
+                initialRewardTier = DatabaseManager._instance.activePlayerData.rewardTierBuff,
+                randomNums = new List<RandomNum>()
             };
             DatabaseManager._instance.activePlayerData.rewardTierBuff = 0;
             result.party = chosenParty.ToArray();
@@ -135,10 +136,18 @@ public class DungeonManager : MonoBehaviour
         return result;
     }
 
+    public void NextStepRun()
+    {
+        if (currentCalcRun == null)
+            return;
+        StepCalcRun();
+    }
+
+    //refresh Run and calc until step
     public void CalculateRun(int _targetStep)
     {
         currentCalcRun = null;
-        UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
+        //UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         StartCalcRun();
         if (_targetStep > DatabaseManager._instance.dungeonData.currentRun.maxSteps)
             _targetStep = DatabaseManager._instance.dungeonData.currentRun.maxSteps;
@@ -148,9 +157,10 @@ public class DungeonManager : MonoBehaviour
             StepCalcRun();
         }
 
-        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        //UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
     }
 
+    //calculate until max step for setup purposes
     void CalculateMaxStep(DungeonRun _dungeonRun)
     {
         currentCalcRun = null;
@@ -287,7 +297,7 @@ public class DungeonManager : MonoBehaviour
         {
             currentCalcRun.remainingActivitySteps = 20;
             currentCalcRun.currentActivity = DungeonActivity.pathHandling;
-            currentCalcRun.currentNode.chosenPathIndex = UnityEngine.Random.Range(0, currentCalcRun.currentNode.nextPaths.Count);
+            currentCalcRun.currentNode.chosenPathIndex = currentCalcRun.RandomNum(0, currentCalcRun.currentNode.nextPaths.Count);
             currentCalcRun.UpdateLog("the party decided on the " + currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex] + " path");
             //playerParty.position = currentCalcRun.currentNode.PathPosition(currentCalcRun.currentNode.chosenPathIndex);
         }
@@ -317,7 +327,7 @@ public class DungeonManager : MonoBehaviour
         {
             currentCalcRun.remainingActivitySteps = 20;
             currentCalcRun.UpdateLog("the party finished their epic adventure");
-            Debug.LogError("Finished Boiiii");
+            //Debug.LogError("Finished Boiiii");
         }
     }
 }

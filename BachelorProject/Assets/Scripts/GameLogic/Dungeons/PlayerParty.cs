@@ -64,7 +64,7 @@ public class PlayerParty : MonoBehaviour
                 transform.position = DungeonManager._instance.currentCalcRun.currentNode.nextNodes[temp].transform.position - offsetStep * DungeonManager._instance.currentCalcRun.remainingActivitySteps;
                 break;
             case DungeonActivity.pathChoosing:
-                activityText.text = "Choosing aa Path";
+                activityText.text = "Choosing a Path";
                 transform.position = DungeonManager._instance.currentCalcRun.currentNode.transform.position;
                 break;
             case DungeonActivity.startQuest:
