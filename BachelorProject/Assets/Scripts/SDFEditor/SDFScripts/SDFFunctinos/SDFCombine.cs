@@ -15,10 +15,10 @@ public class SDFCombine : SDFNode {
         this.o = this.sdfName +"_out";
     }
 
-    public override string SDFFunction() {
+    public override string SdfFunction() {
 
-        string a = this.inputA.SDFFunction();
-        string b = this.inputB.SDFFunction();
+        string a = this.inputA.SdfFunction();
+        string b = this.inputB.SdfFunction();
         
         this.variables.Clear();
         this.types.Clear();

@@ -13,9 +13,9 @@ public class SDFInvert : SDFNode
         this.sdfName = "invert";
         this.o = this.sdfName +"_out";
     }
-    public override string SDFFunction() {
+    public override string SdfFunction() {
         
-        string a = this.inputA.SDFFunction();
+        string a = this.inputA.SdfFunction();
         
         this.variables.Clear();
         this.types.Clear();

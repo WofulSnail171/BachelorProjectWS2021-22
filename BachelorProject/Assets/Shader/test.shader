@@ -1,4 +1,4 @@
-Shader "SDF/TestShader"
+Shader "SDF/test"
         {
 
             Properties
@@ -19,6 +19,7 @@ Shader "SDF/TestShader"
             #pragma multi_compile_fog
                         
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"       
+            #include "test.hlsl"
             
                 struct appdata
             {
@@ -35,36 +36,23 @@ Shader "SDF/TestShader"
         v2f vert (appdata v)
         {
             v2f o;
-            o.vertex = TransformObjectToHClip(v.vertex);
+            o.vertex = TransformObjectToHClip(v.vertex.xyz);
             o.uv = v.uv;
             return o;
         }
 
 CBUFFER_START(UnityPerMaterial)
-float2 rect998_position;
-float2 rect998_box;
-float rect998_scale;
-float4 rect998_roundness;
-
-CBUFFER_END
-
+   float2 rect636_position;
+    float2 rect636_box;
+    float rect636_scale;
+    float4 rect636_roundness;
     
-    float dot2( in float2 v ) { return dot(v,v); }
-
-    float sdf (float2 uv, float2 rect998_position, float2 rect998_box, float rect998_scale, float4 rect998_roundness){ 
-        rect998_roundness.xy = (rect998_position.x - uv.x > 0.0) ? rect998_roundness.xy : rect998_roundness.zw;
-    rect998_roundness.x  = (rect998_position.y - uv.y > 0.0) ? rect998_roundness.x  : rect998_roundness.y;
-    float2 q = abs(rect998_position - uv) - rect998_box + rect998_roundness.x;
-    float rect998_out = min(max(q.x,q.y),0.0) + length(max(q,0.0)) - rect998_roundness.x;
-
-         return rect998_out;
-        }
-        
+CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             
-            //ffloat4 col = fixed4(sdf(i.uv, );
+            float sdfOut = sdf(i.uv,rect636_position, rect636_box, rect636_scale, rect636_roundness);
             float4 col = float4(1,1,1,1);
             return col;
         }

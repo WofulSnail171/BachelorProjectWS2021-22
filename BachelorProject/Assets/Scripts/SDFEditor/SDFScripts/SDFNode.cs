@@ -12,5 +12,19 @@ public abstract class SDFNode : ScriptableObject
     [HideInInspector]public List<string> variables;
     [HideInInspector]public List<string> types;
 
-    public abstract string SDFFunction();
+    [HideInInspector] public List<ScriptableObject> nodes;
+
+    public abstract string SdfFunction();
+    
+    //TODO: create update event for variables on editor change -> OnValidate()
+    //TODO: check for node changes
+    ////TODO: create event for unsubscribe 
+
+
+    private void OnValidate() {
+        //call event update variable
+        //check for change in parent node(s)
+        
+    }
+    
 }

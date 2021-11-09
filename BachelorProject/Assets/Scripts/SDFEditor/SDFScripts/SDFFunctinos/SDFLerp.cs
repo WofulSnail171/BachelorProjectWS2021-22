@@ -22,10 +22,10 @@ public class SDFLerp : SDFNode
         this.types.Add("float");
     }
     
-    public override string SDFFunction() {
+    public override string SdfFunction() {
 
-        string a = this.inputA.SDFFunction();
-        string b = this.inputB.SDFFunction();
+        string a = this.inputA.SdfFunction();
+        string b = this.inputB.SdfFunction();
         
         this.variables.Clear();
         this.types.Clear();

@@ -28,7 +28,7 @@ public class SDFBezier : SDFScriptableObject
         this.types.Add("float2");
     }
     
-    public override string SDFFunction() {
+    public override string SdfFunction() {
         
         string hlslString = @"
     float2 pos = uv - " + this.variables[0] + @";

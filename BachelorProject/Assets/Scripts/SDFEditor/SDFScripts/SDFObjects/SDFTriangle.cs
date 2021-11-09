@@ -29,7 +29,7 @@ public class SDFTriangle : SDFScriptableObject {
         this.types.Add("float");
     }
     
-    public override string SDFFunction() {
+    public override string SdfFunction() {
 
         string hlslString ="float2 e0 = " + this.variables[2] + " - " + this.variables[1] + @";
     float2 e1 = " + this.variables[3] + " - " + this.variables[2] + @";

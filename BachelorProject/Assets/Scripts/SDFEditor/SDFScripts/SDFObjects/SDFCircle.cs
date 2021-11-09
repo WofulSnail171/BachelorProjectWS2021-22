@@ -22,7 +22,7 @@ public class SDFCircle : SDFScriptableObject {
         this.types.Add("float2");
     }
     
-    public override string SDFFunction() {
+    public override string SdfFunction() {
         
         this.sdfName = "circle" + this.index;
         this.o = this.sdfName + "_out";

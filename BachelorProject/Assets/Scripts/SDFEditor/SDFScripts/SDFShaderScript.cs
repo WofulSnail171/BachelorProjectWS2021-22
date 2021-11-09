@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 [CreateAssetMenu(menuName = "SDF/ShaderScript")]
 public class SDFShaderScript : SDFNode
 {
-    public override string SDFFunction() {
+    public override string SdfFunction() {
         string shaderString =  @"Shader ""SDF/TestShader""
         {
             Properties

@@ -21,7 +21,7 @@ public class SDFSBLend : SDFNode
         this.variables.Add(this.sdfName + "_k");
         this.types.Add("float");
     }
-    public override string SDFFunction() {
+    public override string SdfFunction() {
 
         this.variables.Clear();
         this.types.Clear();

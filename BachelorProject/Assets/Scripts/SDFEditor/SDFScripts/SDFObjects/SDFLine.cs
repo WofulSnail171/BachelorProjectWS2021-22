@@ -25,7 +25,7 @@ public class SDFLine : SDFScriptableObject {
         this.types.Add("float2");
     }
     
-    public override string SDFFunction() {
+    public override string SdfFunction() {
 
         string hlslString = @"
         float2 pa = uv - " + this.variables[0] + " - " + this.variables[1] + @";
