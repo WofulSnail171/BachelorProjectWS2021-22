@@ -4,10 +4,37 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Smooth Blend")]
 public class SDFSBLend : SDFNode
 {
-    [SerializeField] private SDFScriptableObject inputA;
-    [SerializeField] private SDFScriptableObject inputB;
-    [SerializeField] private float k;
+    private SDFNode inputA;
+    private SDFNode inputB;
+    private float k;
+
+    public SDFNode InputA {
+        get => this.inputA;
+        set {
+            if (this.inputA == value) return;
+            this.inputA = value;
+            //TODO: call OnChange event
+        }
+    }
     
+    public SDFNode InputB {
+        get => this.inputB;
+        set {
+            if (this.inputB == value) return;
+            this.inputB = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public float K {
+        get => this.k;
+        set {
+            if (this.k == value) return;
+            this.k = value;
+            //TODO: call OnChange event
+        }
+    }
+
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);
         Debug.Log("changed index from " + this.sdfName);

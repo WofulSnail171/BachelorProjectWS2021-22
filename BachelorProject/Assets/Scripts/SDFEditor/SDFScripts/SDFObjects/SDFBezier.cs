@@ -4,9 +4,36 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Bezier")]
 public class SDFBezier : SDFScriptableObject
 {
-    [SerializeField] private Vector2 a;
-    [SerializeField] private Vector2 b;
-    [SerializeField] private Vector2 c;
+    private Vector2 a;
+    private Vector2 b;
+    private Vector2 c;
+    
+    public Vector2 A {
+        get => this.a;
+        set {
+            if (this.a == value) return;
+            this.a = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector2 B {
+        get => this.b;
+        set {
+            if (this.b == value) return;
+            this.b = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector2 C {
+        get => this.c;
+        set {
+            if (this.c == value) return;
+            this.c = value;
+            //TODO: call OnChange event
+        }
+    }
     
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);

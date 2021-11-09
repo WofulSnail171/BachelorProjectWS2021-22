@@ -3,9 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Line")]
 public class SDFLine : SDFScriptableObject {
-    [SerializeField] private Vector2 a;
-    [SerializeField] private Vector2 b;
-    [SerializeField] private float roundness;
+    private Vector2 a;
+    private Vector2 b;
+    private float roundness;
+    
+    public Vector2 A {
+        get => this.a;
+        set {
+            if (this.a == value) return;
+            this.a = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector2 B {
+        get => this.b;
+        set {
+            if (this.b == value) return;
+            this.b = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public float Roundness {
+        get => this.roundness;
+        set {
+            if (this.roundness == value) return;
+            this.roundness = value;
+            //TODO: call OnChange event
+        }
+    }
     
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);

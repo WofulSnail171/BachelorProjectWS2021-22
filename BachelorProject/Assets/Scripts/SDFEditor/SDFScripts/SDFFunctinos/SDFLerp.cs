@@ -4,9 +4,36 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Lerp")]
 public class SDFLerp : SDFNode
 {
-    [SerializeField] private SDFNode inputA;
-    [SerializeField] private SDFNode inputB;
-    [SerializeField] private float t;
+    private SDFNode inputA;
+    private SDFNode inputB;
+    private float t;
+    
+    public SDFNode InputA {
+        get => this.inputA;
+        set {
+            if (this.inputA == value) return;
+            this.inputA = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public SDFNode InputB {
+        get => this.inputB;
+        set {
+            if (this.inputB == value) return;
+            this.inputB = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public float T {
+        get => this.t;
+        set {
+            if (this.t == value) return;
+            this.t = value;
+            //TODO: call OnChange event
+        }
+    }
     
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);

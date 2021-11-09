@@ -3,10 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Triangle")]
 public class SDFTriangle : SDFScriptableObject {
-    [SerializeField] private Vector2 a;
-    [SerializeField] private Vector2 b;
-    [SerializeField] private Vector2 c;
-    [SerializeField] private float scale;
+    private Vector2 a;
+    private Vector2 b;
+    private Vector2 c;
+    private float scale;
+    
+    public Vector2 A {
+        get => this.a;
+        set {
+            if (this.a == value) return;
+            this.a = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector2 B {
+        get => this.b;
+        set {
+            if (this.b == value) return;
+            this.b = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector2 C {
+        get => this.c;
+        set {
+            if (this.c == value) return;
+            this.c = value;
+            //TODO: call OnChange event
+        }
+    }
+
+    public float Scale {
+        get => this.scale;
+        set {
+            if (this.scale == value) return;
+            this.scale = value;
+            //TODO: call OnChange event
+        }
+    }
 
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);

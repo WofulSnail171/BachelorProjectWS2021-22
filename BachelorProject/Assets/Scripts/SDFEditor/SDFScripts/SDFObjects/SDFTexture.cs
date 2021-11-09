@@ -3,7 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Texture")]
 public class SDFTexture : SDFScriptableObject {
-    [SerializeField] private Texture sdfTexture;
+    private Texture sdfTexture;
+    
+    public Texture SdfTexture {
+        get => this.sdfTexture;
+        set {
+            if (this.sdfTexture == value) return;
+            this.sdfTexture = value;
+            //TODO: call OnChange event
+        }
+    }
     
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);
@@ -23,8 +32,6 @@ public class SDFTexture : SDFScriptableObject {
     public override string SdfFunction() {
 
         string hlslString =  "float " + this.o + " = SAMPLE_TEXTURE2D(" + this.variables[0] + ", " + this.variables[1] + ", uv).r;";
-
         return hlslString;
-
     }
 }

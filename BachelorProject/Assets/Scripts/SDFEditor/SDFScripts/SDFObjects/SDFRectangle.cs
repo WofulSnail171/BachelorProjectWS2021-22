@@ -5,9 +5,36 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Rectangle")]
 public class SDFRectangle : SDFScriptableObject
 {
-    [SerializeField] Vector2 box = new Vector2(0,0);
-    [SerializeField] private float scale = 1;
-    [SerializeField] private Vector4 roundness = new Vector4(0, 0, 0, 0);
+    Vector2 box = new Vector2(0,0);
+    private float scale = 1;
+    private Vector4 roundness = new Vector4(0, 0, 0, 0);
+    
+    public Vector2 Box {
+        get => this.box;
+        set {
+            if (this.box == value) return;
+            this.box = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public float Scale {
+        get => this.scale;
+        set {
+            if (this.scale == value) return;
+            this.scale = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    public Vector4 Roundness {
+        get => this.roundness;
+        set {
+            if (this.roundness == value) return;
+            this.roundness = value;
+            //TODO: call OnChange event
+        }
+    }
 
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);

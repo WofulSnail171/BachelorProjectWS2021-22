@@ -4,8 +4,18 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "SDF/Circle")]
 public class SDFCircle : SDFScriptableObject {
-    [SerializeField]private float radius = 0f;
-    public float Radius => this.radius;
+    
+    private float radius = 0f;
+    public float Radius {
+        get => this.radius;
+        set {
+            if (this.radius == value) return;
+            this.radius = value;
+            //TODO: call OnChange event
+        }
+    }
+    
+    
     
     private void Awake() {
         this.index = (uint)Random.Range(0, 1000);
