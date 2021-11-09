@@ -347,5 +347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shaderName: test
   sdfNode: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
   apply: 0
