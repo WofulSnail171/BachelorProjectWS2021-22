@@ -61,6 +61,13 @@ public class DungeonTest : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(dungeonNum);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
         DungeonManager._instance.CalculateRun(0);
+        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = "Rika", password = "pw" } };
+        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon), OnDataPushed);
+    }
+
+    public void OnDataPushed()
+    {
+        ServerCommunicationManager._instance.GetInfo(Request.DownloadDungeonData, JsonUtility.ToJson(new LoginInfo { playerId = "Rika", password = "pw" }));
     }
 
     public void OnAutoPlayToggle()
@@ -111,7 +118,6 @@ public class DungeonTest : MonoBehaviour
             Console.WriteLine($"Unable to parse '{dungeonNumField.text}'");
             startButton.interactable = false;
         }
-        Debug.Log(autoSpeed.text);
     }
 
     public void OnStepButton()

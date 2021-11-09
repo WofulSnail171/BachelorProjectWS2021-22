@@ -44,7 +44,6 @@ public class CalculatedDungeonRun
     {
         if (randomNums.ContainsKey(currentStep))
         {
-            Debug.Log(randomNums[currentStep]);
             return randomNums[currentStep];
         }
         else
@@ -53,7 +52,6 @@ public class CalculatedDungeonRun
             int randomNum = UnityEngine.Random.Range(min, max);
             randomNums.Add(currentStep, randomNum);
             DatabaseManager._instance.dungeonData.currentRun.randomNums.Add(new RandomNum { num = randomNum, step = currentStep });
-            Debug.Log(randomNum);
             return randomNum;
         }
     }

@@ -174,7 +174,6 @@ public class DungeonManager : MonoBehaviour
             StepCalcRun();
         }
         _dungeonRun.maxSteps = currentCalcRun.currentStep;
-        Debug.Log(_dungeonRun.maxSteps);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
 
         UnityEngine.Random.InitState((int)DateTime.Now.Ticks);

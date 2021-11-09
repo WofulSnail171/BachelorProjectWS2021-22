@@ -102,6 +102,12 @@ public class ServerCommunicationManager : MonoBehaviour
                 break;
             case Request.PushPlayerData:
                 break;
+            case Request.PushDungeonData:
+                break;
+            case Request.DownloadDungeonData:
+                Debug.Log(lastMessage);
+                DungeonData newData = JsonUtility.FromJson<DungeonData>(lastMessage);
+                break;
             default:
                 break;
         }
@@ -133,6 +139,10 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.DownloadEventData:
                 break;
             case Request.PushPlayerData:
+                break;
+            case Request.PushDungeonData:
+                break;
+            case Request.DownloadDungeonData:
                 break;
             default:
                 break;
@@ -202,7 +212,9 @@ public enum Request
     GetPlayerData,
     DownloadHeroList,
     DownloadEventData,
-    PushPlayerData
+    PushPlayerData,
+    PushDungeonData,
+    DownloadDungeonData
 }
 
 //for the request queue:

@@ -120,7 +120,7 @@ public class CameraMover : MonoBehaviour
         if(moveSpeed != 0)
             lerpTime = (_targetPos - transform.position).magnitude / moveSpeed;
         currentLerpTime = 0.0f;
-        Debug.Log("t: " + lerpTime.ToString());
+        //Debug.Log("t: " + lerpTime.ToString());
 
         targetPosition = new Vector3(_targetPos.x, _targetPos.y, transform.position.z);
         startPosition = transform.position;

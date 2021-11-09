@@ -278,3 +278,17 @@ public enum DungeonType
     basic,
     doom
 }
+
+[System.Serializable]
+public class LoginInfo
+{
+    public string playerId = "name";
+    public string password = "pw";
+}
+
+[System.Serializable]
+public class UploadDungeonData
+{
+    public LoginInfo playerInfo;
+    public DungeonData dungeonData;
+}
