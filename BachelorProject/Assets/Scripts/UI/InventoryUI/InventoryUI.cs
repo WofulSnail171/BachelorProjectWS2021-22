@@ -73,10 +73,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList, JsonUtility.ToJson(new LoginInfo { playerId = "Sarah", password = "123" }));
-    }
+  
 
     private void InitInventoryUI()
     {
@@ -95,7 +92,8 @@ public class InventoryUI : MonoBehaviour
                 InitAssignHeroToSlot(hero);
             }
         }
-    }
+
+    }//do this somewhere at the start
 
     private void InitAssignHeroToSlot(PlayerHero hero)
     {
@@ -172,13 +170,6 @@ public class InventoryUI : MonoBehaviour
             tradeInventory.UpdateReference(hero.invIndex, -1);
             exploreInventory.UpdateReference(hero.invIndex, amountInDungeon - 1);
         }
-    }
-
-
-    //probably will be outdated
-    public void NewDataAssign()
-    {
-        InitInventoryUI();
     }
 
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIEnablerManager : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class UIEnablerManager : MonoBehaviour
 
     #region vars
     public static UIEnablerManager Instance;
+
+    [SerializeField] Canvas canvas;          
+    [SerializeField] float canvasAnimTime;          
 
     //dictionaries
     Dictionary<string,GameObject> FooterElements = new Dictionary<string, GameObject>();
@@ -187,6 +191,7 @@ public class UIEnablerManager : MonoBehaviour
 
     public float DisableElement(string element, bool DoAnimation)
     {
+
         float time = 0;
         bool IsSomewhere = false;//catch bool
         
@@ -310,9 +315,30 @@ public class UIEnablerManager : MonoBehaviour
         StartCoroutine(Pause(waitTime, DoAnimation, newElement));
     }
 
+    public void EnableCanvas()
+    {
+        LeanTween.value(canvas.gameObject, 0f, 1f, canvasAnimTime)
+            .setOnUpdate((value) =>
+            {
+                canvas.GetComponent<Image>().color = new Color(canvas.GetComponent<Image>().color.r, canvas.GetComponent<Image>().color.g, canvas.GetComponent<Image>().color.b, value);
+            });
+    }    
+    
+    public void DisableCanvas()
+    {
+        LeanTween.value(canvas.gameObject, 1f, 0f, canvasAnimTime)
+            .setOnUpdate((value) =>
+            {
+                canvas.GetComponent<Image>().color = new Color(canvas.GetComponent<Image>().color.r, canvas.GetComponent<Image>().color.g, canvas.GetComponent<Image>().color.b, value);
+            });
+    }
+
+
     IEnumerator Pause(float time, bool DoAnimation, string newElement)
     {
         yield return new WaitForSeconds(time);
         EnableElement(newElement, DoAnimation);
     }
+
+
 }

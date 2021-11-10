@@ -8,6 +8,8 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
+        StopAllCoroutines();
+
         gameObject.transform.localScale = new Vector3(1, 1, 1);
         LeanTween.scaleX(gameObject, 0, animSpeed);
 
@@ -18,6 +20,8 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
+        StopAllCoroutines();
+
         gameObject.SetActive(true);
 
         gameObject.transform.localScale = new Vector3(0, 1, 1);

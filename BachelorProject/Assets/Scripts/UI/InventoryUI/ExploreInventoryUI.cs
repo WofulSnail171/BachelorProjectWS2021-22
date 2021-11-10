@@ -142,11 +142,9 @@ public class ExploreInventoryUI : MonoBehaviour
 
             RemoveHeroFromSlot(slot);
         }
-
-        UIEnablerManager.Instance.DisableElement("DungeonSelect", true);
     }
 
-    public void ConfirmAllHeroesForExplore()
+    public bool ConfirmAllHeroesForExplore()
     {
         bool anySlotIsFull = false;
 
@@ -164,13 +162,14 @@ public class ExploreInventoryUI : MonoBehaviour
         if (anySlotIsFull)
         {
             Debug.Log("do transfer logic");
-
-            UIEnablerManager.Instance.DisableElement("DungeonHeroSelect",true);
-
             //transmit the exploredata here and update the databas
             //
             //
+
+            return true;
         }
+
+        return false;
     }
 
 }

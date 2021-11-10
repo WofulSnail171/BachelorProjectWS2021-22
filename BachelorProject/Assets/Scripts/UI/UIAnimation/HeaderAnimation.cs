@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FooterAnimation : AbstractElementAnimation
+public class HeaderAnimation : AbstractElementAnimation
 {
     [SerializeField] float animSpeed = 2;
     [SerializeField] LeanTweenType animationType;
@@ -14,7 +14,7 @@ public class FooterAnimation : AbstractElementAnimation
         StopAllCoroutines();
 
         original = gameObject.GetComponent<RectTransform>().rect.y;
-        float removed = -gameObject.GetComponent<RectTransform>().rect.height;
+        float removed = Screen.height + gameObject.GetComponent<RectTransform>().rect.height;
 
 
         LeanTween.moveY(gameObject, removed, animSpeed).setEase(animationType);
@@ -27,18 +27,17 @@ public class FooterAnimation : AbstractElementAnimation
     public override void ShowObject()
     {
         StopAllCoroutines();
-
         float original = gameObject.GetComponent<RectTransform>().rect.y;
 
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, - gameObject.GetComponent<RectTransform>().rect.height, gameObject.transform.position.z);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, Screen.height + gameObject.GetComponent<RectTransform>().rect.height, gameObject.transform.position.z);
         gameObject.SetActive(true);
 
-        LeanTween.moveY(gameObject, original, animSpeed).setEase(animationType);
+        LeanTween.moveY(gameObject, Screen.height, animSpeed).setEase(animationType);
     }
 
     IEnumerator Pause()
     {
-        yield return new WaitForSeconds(animSpeed +1);
+        yield return new WaitForSeconds(animSpeed + 1);
 
 
         gameObject.SetActive(false);

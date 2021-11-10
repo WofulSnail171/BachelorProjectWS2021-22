@@ -140,10 +140,10 @@ public class TradeInventoryUI : MonoBehaviour
             RemoveHeroFromSlot(slot);
         }
 
-        UIEnablerManager.Instance.DisableElement("TradeSelect", true); //hide UI
+        UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", true); //hide UI
     }
 
-    public void ConfirmAllHeroesForTrade()
+    public bool ConfirmAllHeroesForTrade()
     {
         bool anySlotIsFull = false;
 
@@ -160,11 +160,14 @@ public class TradeInventoryUI : MonoBehaviour
         {
             Debug.Log("do transfer logic");
 
-            UIEnablerManager.Instance.EnableElement("TradeSelect",true); //hide UI
 
             //transmit the data here and update the database
             //
             //
+
+            return true;
         }
+
+        return false;
     }
 }
