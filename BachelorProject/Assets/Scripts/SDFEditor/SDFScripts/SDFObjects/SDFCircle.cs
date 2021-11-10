@@ -1,26 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF/Circle")]
-public class SDFCircle : SDFScriptableObject {
+public class SDFCircle : SDFObject {
     
-    private float radius = 0f;
+    public float radius;
+    
     public float Radius {
         get => this.radius;
         set {
-            if (this.radius == value) return;
-            this.radius = value;
-            //TODO: call OnChange event
+            if (this.Radius == value) return;
+            this.Radius = value;
+            this.OnValueChange?.Invoke(this);
         }
     }
     
-    
+    private void OnValidate() {
+        if (this.Radius != this.radius) this.Radius = this.radius;
+    }
     
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        nodeType = NodeType.Circle;
         
+        this.index = (uint)Random.Range(0, 1000);
+
         this.sdfName = "circle" + this.index;
         this.o = this.sdfName + "_out";
         

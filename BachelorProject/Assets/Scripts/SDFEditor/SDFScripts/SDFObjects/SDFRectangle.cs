@@ -1,20 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF/Rectangle")]
-public class SDFRectangle : SDFScriptableObject
+public class SDFRectangle : SDFObject
 {
-    Vector2 box = new Vector2(0,0);
-    private float scale = 1;
-    private Vector4 roundness = new Vector4(0, 0, 0, 0);
+    public Vector2 box = new Vector2(0,0);
+    public float scale = 1;
+    public Vector4 roundness = new Vector4(0, 0, 0, 0);
     
     public Vector2 Box {
         get => this.box;
         set {
             if (this.box == value) return;
             this.box = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -23,7 +25,7 @@ public class SDFRectangle : SDFScriptableObject
         set {
             if (this.scale == value) return;
             this.scale = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -32,14 +34,21 @@ public class SDFRectangle : SDFScriptableObject
         set {
             if (this.roundness == value) return;
             this.roundness = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
 
+    private void OnValidate() {
+        if (this.Box == this.box) this.Box = this.box;
+        if (this.Scale == this.scale) this.Scale = this.scale;
+        if (this.Roundness == this.roundness) this.Roundness = this.roundness;
+    }
+
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.Rect;
         
+        this.index = (uint)Random.Range(0, 1000);
+   
         this.sdfName = "rect" + this.index;
         this.o = this.sdfName + "_out";
         

@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 [CreateAssetMenu(menuName = "SDF Function/Smooth Blend")]
 public class SDFSBLend : SDFNode
 {
-    private SDFNode inputA;
-    private SDFNode inputB;
-    private float k;
+    public SDFNode inputA;
+    public SDFNode inputB;
+    public float k;
 
     public SDFNode InputA {
         get => this.inputA;
         set {
             if (this.inputA == value) return;
             this.inputA = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -22,7 +25,7 @@ public class SDFSBLend : SDFNode
         set {
             if (this.inputB == value) return;
             this.inputB = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -31,14 +34,21 @@ public class SDFSBLend : SDFNode
         set {
             if (this.k == value) return;
             this.k = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
 
+    private void OnValidate() {
+        if (this.InputA == this.inputA) this.InputA = this.inputA;
+        if (this.InputB == this.inputB) this.InputB = this.inputB;
+        if (this.K == this.k) this.K = this.k;
+    }
+
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.Lerp;
         
+        this.index = (uint)Random.Range(0, 1000);
+       
         this.sdfName = "sblend" + this.index;
         this.o = this.sdfName + "_out";
         

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class SDFManager : MonoBehaviour{
     
     private List<string> shaderStrings = new List<string>();
     private List<string> includeStrings = new List<string>();
-    //private List <SDFScriptableObject>  SDFObjects = new List<SDFScriptableObject>();
+    private List <SDFObject>  SDFObjects = new List<SDFObject>();
     
     //TODO: create SDFNodeList 
     //TODO: subscribe to action for varibale changes
@@ -34,8 +35,11 @@ public class SDFManager : MonoBehaviour{
         pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
         pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
 
-        if(this.sdfNode != null)
+        if (this.sdfNode != null) {
             this.AddHlslString(this.sdfNode);
+            this.sdfNode.OnValueChange += this.ChangeShaderValues;
+        }
+
         this.WriteHlslToText();
     }
 
@@ -71,7 +75,9 @@ public class SDFManager : MonoBehaviour{
         return @"
             Properties
             {
-               
+                [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Float) = 0
+                [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend (""Source Blend mode"", Float) = 1
+                [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend (""Destination Blend mode"", Float) = 1
             }";
     }
     
@@ -212,4 +218,61 @@ CBUFFER_END";
             sw.Close();
         }
     }
+    
+    private void ChangeShaderValues(SDFNode sdfNode){
+
+        switch (sdfNode.nodeType) {
+            case SDFNode.NodeType.Circle: {
+                
+                break;
+            }
+            case SDFNode.NodeType.Rect: {
+                
+                break;
+            }
+            case SDFNode.NodeType.Triangle: {
+
+                break;
+            }
+            case SDFNode.NodeType.Line: {
+
+                break;
+            }
+            case SDFNode.NodeType.BezieCurve: {
+
+                break;
+            }
+            case SDFNode.NodeType.Texture: {
+
+                break;
+            }
+            case SDFNode.NodeType.Comb: {
+
+                break;
+            }
+            case SDFNode.NodeType.Invert: {
+
+                break;
+            }
+            case SDFNode.NodeType.SBlend: {
+
+                break;
+            }
+            case SDFNode.NodeType.Lerp: {
+
+                break;
+            }
+        }
+    }
 }
+
+
+///       variablesNames[].index == variablesTypes[].index
+///    -> variable[]index should be the same
+///     [Node index] [Variable index]
+///
+/// circleVar [radius]
+/// lineVar      [a]      [b]     [roundness]
+///
+///     TODO: rewrite variablesNames and variablesTypes to [][]
+///     TODO: add [][] for nodes

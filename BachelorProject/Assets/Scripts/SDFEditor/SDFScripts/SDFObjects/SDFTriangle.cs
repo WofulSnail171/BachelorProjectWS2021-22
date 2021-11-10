@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 [CreateAssetMenu(menuName = "SDF/Triangle")]
-public class SDFTriangle : SDFScriptableObject {
-    private Vector2 a;
-    private Vector2 b;
-    private Vector2 c;
-    private float scale;
+public class SDFTriangle : SDFObject {
+    public Vector2 a;
+    public Vector2 b;
+    public Vector2 c;
+    public float scale;
     
     public Vector2 A {
         get => this.a;
         set {
             if (this.a == value) return;
             this.a = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -22,7 +25,7 @@ public class SDFTriangle : SDFScriptableObject {
         set {
             if (this.b == value) return;
             this.b = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -31,7 +34,7 @@ public class SDFTriangle : SDFScriptableObject {
         set {
             if (this.c == value) return;
             this.c = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
 
@@ -40,14 +43,22 @@ public class SDFTriangle : SDFScriptableObject {
         set {
             if (this.scale == value) return;
             this.scale = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
 
+    private void OnValidate() {
+        if (this.A == this.a) this.A = this.a;
+        if (this.B == this.b) this.B = this.b;
+        if (this.C == this.c) this.C = this.c;
+        if (this.Scale == this.scale) this.Scale = this.scale;
+    }
+
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.Triangle;
         
+        this.index = (uint)Random.Range(0, 1000);
+     
         this.sdfName = "triangle" + this.index;
         this.o = this.sdfName + "_out";
         

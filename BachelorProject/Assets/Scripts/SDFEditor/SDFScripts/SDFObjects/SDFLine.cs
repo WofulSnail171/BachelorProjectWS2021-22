@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Line")]
-public class SDFLine : SDFScriptableObject {
-    private Vector2 a;
-    private Vector2 b;
-    private float roundness;
-    
+public class SDFLine : SDFObject {
+    public Vector2 a;
+    public Vector2 b;
+    public float roundness;
+
     public Vector2 A {
         get => this.a;
         set {
             if (this.a == value) return;
             this.a = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -21,7 +21,7 @@ public class SDFLine : SDFScriptableObject {
         set {
             if (this.b == value) return;
             this.b = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -30,14 +30,21 @@ public class SDFLine : SDFScriptableObject {
         set {
             if (this.roundness == value) return;
             this.roundness = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
+    private void OnValidate() {
+        if (this.A != this.a) this.A = this.a;
+        if (this.B != this.b) this.B = this.b;
+        if (this.Roundness != this.roundness) this.Roundness = this.roundness;
+    }
+    
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.Line;
         
+        this.index = (uint)Random.Range(0, 1000);
+ 
         this.sdfName = "line" + this.index;
         this.o = this.sdfName + "_out";
         

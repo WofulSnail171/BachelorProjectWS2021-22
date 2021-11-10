@@ -2,22 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Texture")]
-public class SDFTexture : SDFScriptableObject {
-    private Texture sdfTexture;
+public class SDFTexture : SDFObject {
+    public Texture sdfTexture;
     
     public Texture SdfTexture {
         get => this.sdfTexture;
         set {
             if (this.sdfTexture == value) return;
             this.sdfTexture = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
+    }
+
+    private void OnValidate() {
+        if (this.SdfTexture == this.sdfTexture) this.SdfTexture = this.sdfTexture;
     }
     
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.Texture;
         
+        this.index = (uint)Random.Range(0, 1000);
+
         this.sdfName = "tex" + this.index;
         this.o = this.sdfName + "_out";
         

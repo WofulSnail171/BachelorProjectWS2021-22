@@ -4,16 +4,16 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Lerp")]
 public class SDFLerp : SDFNode
 {
-    private SDFNode inputA;
-    private SDFNode inputB;
-    private float t;
+    public SDFNode inputA;
+    public SDFNode inputB;
+    public float t;
     
     public SDFNode InputA {
         get => this.inputA;
         set {
             if (this.inputA == value) return;
             this.inputA = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -22,7 +22,7 @@ public class SDFLerp : SDFNode
         set {
             if (this.inputB == value) return;
             this.inputB = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -31,13 +31,20 @@ public class SDFLerp : SDFNode
         set {
             if (this.t == value) return;
             this.t = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
+    }
+
+    private void OnValidate() {
+        if (this.InputA != this.inputA) this.InputA = this.inputA;
+        if (this.InputB != this.inputB) this.InputB = this.inputB;
+        if (this.T != this.t) this.T = this.t;
     }
     
     private void Awake() {
+        this.nodeType = NodeType.Lerp;
+        
         this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
         
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";

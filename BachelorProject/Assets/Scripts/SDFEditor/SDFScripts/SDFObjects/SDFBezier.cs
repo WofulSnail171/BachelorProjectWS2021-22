@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Bezier")]
-public class SDFBezier : SDFScriptableObject
+public class SDFBezier : SDFObject
 {
-    private Vector2 a;
-    private Vector2 b;
-    private Vector2 c;
-    
+    public Vector2 a;
+    public Vector2 b;
+    public Vector2 c;
+
     public Vector2 A {
         get => this.a;
         set {
             if (this.a == value) return;
             this.a = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -22,7 +24,7 @@ public class SDFBezier : SDFScriptableObject
         set {
             if (this.b == value) return;
             this.b = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
@@ -31,14 +33,21 @@ public class SDFBezier : SDFScriptableObject
         set {
             if (this.c == value) return;
             this.c = value;
-            //TODO: call OnChange event
+            this.OnValueChange?.Invoke(this);
         }
     }
     
+    void OnValidate() {
+        if(this.A != this.a) this.A = this.a;
+        if(this.B != this.b) this.B = this.b;
+        if(this.C != this.c) this.C = this.c;
+    }
+    
     private void Awake() {
-        this.index = (uint)Random.Range(0, 1000);
-        Debug.Log("changed index from " + this.sdfName);
+        this.nodeType = NodeType.BezieCurve;
         
+        this.index = (uint)Random.Range(0, 1000);
+       
         this.sdfName = "bezier" + this.index;
         this.o = this.sdfName + "_out";
         
