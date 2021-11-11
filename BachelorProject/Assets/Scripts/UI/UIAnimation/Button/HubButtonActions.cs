@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class HubButtonActions : MonoBehaviour
 {
+    public enum ButtonState
+    {
+        Focused,
+        Unfocused,
+        Finished,
+    }
 
     private enum HubState
     {
@@ -32,21 +39,37 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject dungeonReadyButton;
     [SerializeField] GameObject hubButton;
     [SerializeField] GameObject hubFocusedButton;//do nothing, just set active
-
+    [Space]
+    [SerializeField] GameObject tradeTextGroup;
+    [SerializeField] GameObject tradeSungleTextGroup;
+    [SerializeField] GameObject dungeonTextGroup;
+    [SerializeField] GameObject dungeonSingleTextGroup;
+    [Space]
     [SerializeField] Image tradeProgressBar;
     [SerializeField] Image dungeonProgressBar;
     [SerializeField] TextMeshProUGUI tradeProgressTime;
     [SerializeField] TextMeshProUGUI dungeonProgressTime;
+    [Space]
+    [SerializeField] Image tradeFocusProgressBar;
+    [SerializeField] Image dungeonFocusProgressBar;
+    [SerializeField] TextMeshProUGUI tradeFocusProgressTime;
+    [SerializeField] TextMeshProUGUI dungeonFocusProgressTime;
 
     private HubState currentHubFocus;
-
-    private HeroState tradeState;
-    private HeroState dungeonState;
+    [Space]
+    [Space]
+    [Space]
+    [SerializeField] private HeroState tradeState;
+    [SerializeField] private HeroState dungeonState;//wil be hidden later on
 
 
     [SerializeField] float alreadyPassedTime;
     [SerializeField] float maxTime;
-    [SerializeField] float bufferTime;
+    [SerializeField] float bufferTime;//helper for tests
+
+
+    float pausedtime;
+
     #endregion
 
 
@@ -60,9 +83,14 @@ public class HubButtonActions : MonoBehaviour
 
 
         //animation test
-        //AnimateTradeProgress(alreadyPassedTime,maxTime);
-        //AnimateDungeonProgress(alreadyPassedTime, maxTime);
+        AnimateTradeProgress(alreadyPassedTime,maxTime);
+        AnimateDungeonProgress(alreadyPassedTime, maxTime);
     }
+
+    //init
+
+
+
 
 
     //click checks
@@ -94,11 +122,10 @@ public class HubButtonActions : MonoBehaviour
 
                         //
                         //ui
-                        UIEnablerManager.Instance.EnableElement("TradeObserve",true);
+                        UIEnablerManager.Instance.SwitchElements("DungeonObserve", "TradeObserve", true);
 
                         //change buttons
-                        dungeonFocusedButton.SetActive(false);
-                        dungeonButton.SetActive(true);
+                        UpdateDungeonButton(ButtonState.Unfocused);
                         break;
 
                     case HubState.HeroHub:
@@ -106,8 +133,7 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.SwitchElements("HeroHub", "TradeObserve", true);
 
                         //buttons
-                        hubFocusedButton.SetActive(false);
-                        hubButton.SetActive(true);
+                        UpdateHubButton(ButtonState.Unfocused);
                         break;
 
                     default:
@@ -115,8 +141,7 @@ public class HubButtonActions : MonoBehaviour
                 }
 
                 //do always
-                tradeButton.SetActive(false);
-                tradeFocusedButton.SetActive(true);
+                UpdateTradeButton(ButtonState.Focused);
 
                 //change hub focus state
                 currentHubFocus = HubState.TradeHub;
@@ -134,7 +159,6 @@ public class HubButtonActions : MonoBehaviour
                 Debug.Log("no trade state");
                 break;
         }
-
 
     }
 
@@ -171,8 +195,7 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.DisableElement("HeroHub", true);
 
                         //buttons
-                        hubFocusedButton.SetActive(false);
-                        hubButton.SetActive(true);
+                        UpdateHubButton(ButtonState.Unfocused);
 
                         break;
                     case HubState.TradeHub:
@@ -185,17 +208,15 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.DisableElement("TradeObserve", true);
 
                         //buttons
-                        tradeFocusedButton.SetActive(false);
-                        tradeButton.SetActive(true);
+                        UpdateTradeButton(ButtonState.Unfocused);
 
                         break;
                     default:
                         break;
                 }
-                
+
                 //do always
-                dungeonButton.SetActive(false);
-                dungeonFocusedButton.SetActive(true);
+                UpdateDungeonButton(ButtonState.Focused);
 
                 //change hub focus state
                 currentHubFocus = HubState.DungeonHub;
@@ -229,8 +250,12 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                dungeonFocusedButton.SetActive(false);
-                dungeonButton.SetActive(true);
+                if(dungeonState == HeroState.Pending)
+                    UpdateDungeonButton(ButtonState.Unfocused);
+
+                else
+                    UpdateDungeonButton(ButtonState.Finished);
+
 
                 break;
             case HubState.TradeHub:
@@ -238,8 +263,12 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.SwitchElements("TradeObserve", "HeroHub", true);
 
                 //buttons
-                tradeFocusedButton.SetActive(false);
-                tradeButton.SetActive(true);
+                if(tradeState == HeroState.Pending)
+                    UpdateTradeButton(ButtonState.Unfocused);
+
+                else
+                    UpdateTradeButton(ButtonState.Finished);
+
 
                 break;
             default:
@@ -247,8 +276,9 @@ public class HubButtonActions : MonoBehaviour
         }
 
         //always do
-        hubButton.SetActive(false);
-        hubFocusedButton.SetActive(true);
+        currentHubFocus = HubState.HeroHub;
+
+        UpdateHubButton(ButtonState.Focused);
     }
 
 
@@ -258,44 +288,112 @@ public class HubButtonActions : MonoBehaviour
     private void ClickedFocusedDungeon()
     {
         //wanna cancel?
-        
-        //cancel tween and coroutine
-        StopAllCoroutines();
-        LeanTween.cancelAll();
-        
-        
-        //do pop up
 
+        //do pop up
+        UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
 
     private void ClickedFocusedTrade()
     {
         //wanna cancel?
 
-        //cancel tween and coroutine
-        StopAllCoroutines();
-        LeanTween.cancelAll();
-        
-
         //do pop up
-
+        UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
 
 
 
 
 
+    //update buttons
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //
+    public void UpdateTradeButton(ButtonState state)
+    {
+        switch (state)
+        {
+            case ButtonState.Unfocused:
+                tradeFocusedButton.SetActive(false);
+                tradeReadyButton.SetActive(false);
+                tradeButton.SetActive(true);
+                break;
+            case ButtonState.Focused:
+                tradeReadyButton.SetActive(false);
+                tradeButton.SetActive(false);
+                tradeFocusedButton.SetActive(true);
+                break;
+            case ButtonState.Finished:
+                tradeFocusedButton.SetActive(false);
+                tradeButton.SetActive(false);
+                tradeReadyButton.SetActive(true);
+                break;
+            default:
+                Debug.Log("using unknown button state to update trade button");
+                break;
+        }
+    }
+
+    public void UpdateDungeonButton(ButtonState state)
+    {
+        switch (state)
+        {
+            case ButtonState.Unfocused:
+                dungeonReadyButton.SetActive(false);
+                dungeonFocusedButton.SetActive(false);
+                dungeonButton.SetActive(true);
+                break;
+            case ButtonState.Focused:
+                dungeonReadyButton.SetActive(false);
+                dungeonButton.SetActive(false);
+                dungeonFocusedButton.SetActive(true);
+                break;
+            case ButtonState.Finished:
+                dungeonFocusedButton.SetActive(false);
+                dungeonButton.SetActive(false);
+                dungeonReadyButton.SetActive(true);
+                break;
+            default:
+                Debug.Log("using unknown button state to update dungeon button");
+                break;
+        }
+    }
+
+    public void UpdateHubButton(ButtonState state)
+    {
+        switch (state)
+        {
+            case ButtonState.Unfocused:
+                hubFocusedButton.SetActive(false);
+                hubButton.SetActive(true);
+                break;
+            case ButtonState.Focused:
+                hubButton.SetActive(false);
+                hubFocusedButton.SetActive(true);
+                break;
+            default:
+                Debug.Log("using unknown button state to update trade button");
+                break;
+        }
+    }
+    
+
+
     //
-    //
-    //maybe in different script?
     //animation progress
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void AnimateTradeProgress( float start, float target)
     {
+        //activate
+        tradeProgressBar.gameObject.SetActive(true);
+        tradeFocusProgressBar.gameObject.SetActive(true);
+        tradeTextGroup.SetActive(true);
+        tradeSungleTextGroup.SetActive(false);
+
+        //calc
         float tweenTime = target - start;
         float progressStart = start / target;
 
+        //animate
         StartCoroutine(WaitForTradeFinish(tweenTime));
 
         LeanTween.value(tradeProgressBar.gameObject, progressStart, 1f, tweenTime)
@@ -303,6 +401,13 @@ public class HubButtonActions : MonoBehaviour
             {
                 tradeProgressBar.fillAmount = value;
                 setTradeText(value,tradeProgressTime);
+            });
+
+        LeanTween.value(tradeFocusProgressBar.gameObject, progressStart, 1f, tweenTime)
+            .setOnUpdate((value) =>
+            {
+                tradeFocusProgressBar.fillAmount = value;
+                setTradeText(value, tradeFocusProgressTime);
             });
     }
 
@@ -318,16 +423,32 @@ public class HubButtonActions : MonoBehaviour
 
     private void AnimateDungeonProgress(float start,float target)
     {
+        //activate
+        dungeonProgressBar.gameObject.SetActive(true);
+        dungeonFocusProgressBar.gameObject.SetActive(true);
+        dungeonTextGroup.SetActive(true);
+        dungeonSingleTextGroup.SetActive(false);
+
+        //calc
         float tweenTime = target - start;
         float progressStart = start / target;
 
+
+        //animate
         StartCoroutine(WaitForDungeonFinish(tweenTime));
 
-        LeanTween.value(tradeProgressBar.gameObject, progressStart, 1f, tweenTime)
+        LeanTween.value(dungeonProgressBar.gameObject, progressStart, 1f, tweenTime)
             .setOnUpdate((value) =>
             {
                 dungeonProgressBar.fillAmount = value;
                 setDungeonText(value, dungeonProgressTime);
+            });
+
+        LeanTween.value(dungeonFocusProgressBar.gameObject, progressStart, 1f, tweenTime)
+            .setOnUpdate((value) =>
+            {
+                dungeonFocusProgressBar.fillAmount = value;
+                setDungeonText(value, dungeonFocusProgressTime);
             });
     }
 
@@ -344,18 +465,25 @@ public class HubButtonActions : MonoBehaviour
     {
         yield return new WaitForSeconds(time + bufferTime);
 
-        tradeFocusedButton.SetActive(false);
-        tradeReadyButton.SetActive(true);
+        UpdateTradeButton(ButtonState.Finished);
+
+        tradeProgressBar.gameObject.SetActive(false);
+        tradeFocusProgressBar.gameObject.SetActive(false);
+        tradeTextGroup.SetActive(false);
+        tradeSungleTextGroup.SetActive(true);
     }
 
     IEnumerator WaitForDungeonFinish(float time)
     {
         yield return new WaitForSeconds(time + bufferTime);
 
-        dungeonFocusedButton.SetActive(false);
-        dungeonReadyButton.SetActive(true);
+        UpdateDungeonButton(ButtonState.Finished);
+
+        dungeonProgressBar.gameObject.SetActive(false);
+        dungeonFocusProgressBar.gameObject.SetActive(false);
+        dungeonTextGroup.SetActive(false);
+        dungeonSingleTextGroup.SetActive(true);
     }
 
-    //do button animations
 }
 

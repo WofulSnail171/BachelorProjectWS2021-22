@@ -3,33 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
-using UnityEngine.EventSystems;
 
-public class TradeSlot : MonoBehaviour, IDropHandler
+public class SwipeSlot : MonoBehaviour
 {
+    #region vars
     [HideInInspector] public PlayerHero playerHero;
 
     [HideInInspector] public int slotID;
     [HideInInspector] public int originalSlotReferenceID;
-
 
     [SerializeField] private GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;
     [SerializeField] GameObject[] rarityGraphics;
-    [SerializeField] public TMP_Text heroName; 
-    [SerializeField] public Image portrait { get; private set; }
-    [HideInInspector]public int slotrarity { get; private set; }
+    [SerializeField] TMP_Text heroName;
+    [SerializeField] Image portrait;
 
-//events
-public event Action <TradeSlot> OnDropEvent;
-    public event Action <TradeSlot> OnRemoveEvent;
-    
+
+    [SerializeField] GameObject matched;
+    [SerializeField] public bool IsMatched;
+    #endregion
+
+
     public void updateHero(PlayerHero hero, Sprite sprite, int rarity, int referenceID)
     {
-        slotrarity = rarity;
         playerHero = hero;
         originalSlotReferenceID = referenceID;
 
@@ -65,18 +63,23 @@ public event Action <TradeSlot> OnDropEvent;
         disabledCard.SetActive(true);
     }
 
-    public void removeHero()
+    public void focusHero()
     {
-        OnRemoveEvent(this);
-        playerHero = null;
+
+    }
+
+    public void matchHero()
+    {
+        matched.SetActive(true);
+        IsMatched = true;
+    }
+
+    public void unmatchHero()
+    {
+        matched.SetActive(false);
+        IsMatched = false;
     }
 
 
-    public void OnDrop(PointerEventData pointerEventData)
-    {
-        if (pointerEventData != null)
-        {
-            OnDropEvent(this);
-        }
-    }
+    //drag
 }

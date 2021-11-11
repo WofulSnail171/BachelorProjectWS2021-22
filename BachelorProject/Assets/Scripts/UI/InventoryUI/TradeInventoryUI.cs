@@ -9,7 +9,7 @@ public class TradeInventoryUI : MonoBehaviour
     [SerializeField] GameObject slotParent;
     [SerializeField] GameObject completeParent;
 
-    private TradeSlot[] tradeSlots;
+    [HideInInspector] public TradeSlot[] tradeSlots;
     private HeroSlot draggedSlot;
     #endregion
 

@@ -34,8 +34,11 @@ public class TradSelectActions : MonoBehaviour
 
         if(confirmed)
         {
+            //update the cards of the swipe offer
+            //update the swipe buttons
+
             //go to swipe
-            UIEnablerManager.Instance.DisableElement("TradeSelect",true);//different
+            UIEnablerManager.Instance.SwitchElements("TradeSelect","TradeSwipe",true);
 
         }
 
