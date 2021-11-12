@@ -20,6 +20,58 @@ public class PlayerHero
     public int invIndex;
     public int traded;
     public int runs;
+
+    public void ApplyGrowth(int _pGrowth, int _mGrowth, int _sGrowth, DungeonType dType = DungeonType.basic)
+    {
+        switch (dType)
+        {
+            case DungeonType.basic:
+                _pGrowth = (int)((float)_pGrowth * 2.0f);
+                _mGrowth = (int)((float)_pGrowth * 2.0f);
+                _sGrowth = (int)((float)_pGrowth * 2.0f);
+                break;
+            case DungeonType.doom:
+                _pGrowth = (int)((float)_pGrowth * 3.0f);
+                _mGrowth = (int)((float)_pGrowth * 3.0f);
+                _sGrowth = (int)((float)_pGrowth * 3.0f);
+                break;
+            default:
+                break;
+        }
+        if (_pGrowth < -10)
+            _pGrowth = -10;
+        if (_mGrowth < -10)
+            _mGrowth = -10;
+        if (_sGrowth < -10)
+            _sGrowth = -10;
+        pVal += _pGrowth;
+        if(pVal >= pPot)
+        {
+            pVal = pPot;
+        }
+        else if(pVal <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin)
+        {
+            pVal = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin;
+        }
+        mVal += _mGrowth;
+        if (mVal >= mPot)
+        {
+            mVal = mPot;
+        }
+        else if (mVal <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].mMin)
+        {
+            mVal = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].mMin;
+        }
+        sVal += _sGrowth;
+        if (sVal >= sPot)
+        {
+            sVal = sPot;
+        }
+        else if (sVal <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].sMin)
+        {
+            sVal = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].sMin;
+        }
+    }
 }
 
 [System.Serializable]

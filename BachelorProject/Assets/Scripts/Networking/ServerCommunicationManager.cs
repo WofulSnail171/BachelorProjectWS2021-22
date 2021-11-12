@@ -69,7 +69,7 @@ public class ServerCommunicationManager : MonoBehaviour
         Request requestType = (Request)Int32.Parse(requestMarker);
         _webRequest = null;
         Imported = true;
-        Debug.Log(lastMessage);
+        //Debug.Log(lastMessage);
         switch (requestType)
         {
             case Request.Error:
@@ -171,13 +171,18 @@ public class ServerCommunicationManager : MonoBehaviour
     {
         if (_webRequest != null)
         {
-            return;
+            //return;
         }
         ServerRequest newRequest = new ServerRequest { request = _request, jsonData = _message};
         var JsonPackage = JsonUtility.ToJson(newRequest);
         string parameters = "?data=" + JsonPackage;
+        //Debug.Log(_request.ToString() + " length: " + JsonPackage.Length.ToString());
+        if(parameters.Length >= 3000)
+        {
+            Debug.LogError("Attention. URL Might be too long!!! " + _request.ToString() + " length: " + parameters.Length.ToString());
+        }
         //check for message length?
-        WebRequestInstance _temp = new WebRequestInstance{ request = UnityWebRequest.Get(_URL + parameters), requestType = _request, waitForAnswer = true, simpleEvent = _simpleEvent, messageEvent = _messageEvent};
+        WebRequestInstance _temp = new WebRequestInstance{jsonText = JsonPackage, request = UnityWebRequest.Get(_URL + parameters), requestType = _request, waitForAnswer = true, simpleEvent = _simpleEvent, messageEvent = _messageEvent};
         webRequestQueue.Add(_temp);        
     }
 
@@ -192,7 +197,7 @@ public class ServerCommunicationManager : MonoBehaviour
         //check for message length?
         WWWForm form = new WWWForm();
         form.AddField("data", JsonPackage);
-        WebRequestInstance _temp = new WebRequestInstance { request = UnityWebRequest.Post(_URL, form), requestType = _request, waitForAnswer = false };
+        WebRequestInstance _temp = new WebRequestInstance { jsonText = JsonPackage, request = UnityWebRequest.Post(_URL, form), requestType = _request, waitForAnswer = false };
         webRequestQueue.Add(_temp);
     }
 }
@@ -221,6 +226,7 @@ public enum Request
 public struct WebRequestInstance
 {
     public UnityWebRequest request;
+    public string jsonText;
     public Request requestType;
     public bool waitForAnswer;
     public DeleventSystem.SimpleEvent simpleEvent;

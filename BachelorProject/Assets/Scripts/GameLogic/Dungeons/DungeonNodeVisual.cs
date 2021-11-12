@@ -9,6 +9,8 @@ public class DungeonNodeVisual : MonoBehaviour
     LineRenderer lineRenderer;
     public TMP_Text nodeType;
     public TMP_Text eventName;
+    public TMP_Text eventGrowth;
+    public CheapProgressBar pgBar;
     public GameObject pathVisualPrefab;
     public List<LineRenderer> pathVisualizer;
 
@@ -58,12 +60,16 @@ public class DungeonNodeVisual : MonoBehaviour
     void UpdateVisuals()
     {
         nodeType.text = dungeonNode.nodeType;
+        pgBar.SetVal(dungeonNode.eventHealth, dungeonNode.maxEventHealth);
         if (dungeonNode.eventHealth != dungeonNode.maxEventHealth)
         {
             eventName.text = dungeonNode.nodeEvent.eventName;
+            eventGrowth.text = "Growth: " + dungeonNode.currentGrowth.ToString();
         }
         else
+        {
             eventName.text = "???";
+        }
 
         for (int i = 0; i < pathVisualizer.Count; i++)
         {

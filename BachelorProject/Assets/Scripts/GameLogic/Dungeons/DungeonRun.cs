@@ -79,11 +79,17 @@ public class CalculatedDungeonRun
         dungeonLog.Add(new LogEntry {step = currentStep, entry = _newEntry });
         dungeonLogArr = dungeonLog.ToArray();
     }
-
+    public void SetActivitySteps(int _newSteps)
+    {
+        startActivitySteps = _newSteps;
+        remainingActivitySteps = _newSteps;
+    }
 }
 
 public enum DungeonActivity
 {
+    eventStart,
+    eventEnd,
     eventHandling,
     pathHandling,
     pathChoosing,

@@ -57,11 +57,15 @@ public class DungeonTest : MonoBehaviour
         AutoPlay = false;
 
         //create the dungeon run gogogogo!
+        DatabaseManager._instance.activePlayerData.inventory[0].status = HeroStatus.Exploring;
+        DatabaseManager._instance.activePlayerData.inventory[1].status = HeroStatus.Exploring;
+        DatabaseManager._instance.activePlayerData.inventory[2].status = HeroStatus.Exploring;
+
         
         DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(dungeonNum);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
         DungeonManager._instance.CalculateRun(0);
-        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = "Rika", password = "pw" } };
+        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
         ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon), OnDataPushed);
     }
 
@@ -72,6 +76,7 @@ public class DungeonTest : MonoBehaviour
 
     public void OnAutoPlayToggle()
     {
+        StopCoroutine("AutoplayRoutine");
         stepButton.interactable = AutoPlay;
         autoSpeed.interactable = !AutoPlay;
         AutoPlay = !AutoPlay;
@@ -130,12 +135,37 @@ public class DungeonTest : MonoBehaviour
         dungeonScreenUI.SetActive(!dungeonScreenUI.activeSelf);
     }
 
+    public void OnDungeonFinished()
+    {
+        DungeonManager._instance.ApplyGrowth();
+        DungeonManager._instance.EventRewardHandling();
+        DungeonManager._instance.WrapUpDungeon();
+        ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
+        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
+
+        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
+        OnSceneInit();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         OnSceneInit();
         if (ServerCommunicationManager._instance == null || DatabaseManager._instance == null)
             SceneManager.LoadScene(0);
+    }
+
+    private void OnEnable()
+    {
+        DeleventSystem.dungeonRunFinished += OnDungeonFinished;
+
+    }
+
+    private void OnDisable()
+    {
+        DeleventSystem.dungeonRunFinished -= OnDungeonFinished;
+
+
     }
 
     // Update is called once per frame
