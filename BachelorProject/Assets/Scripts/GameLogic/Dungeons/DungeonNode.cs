@@ -25,6 +25,8 @@ public class DungeonNode : MonoBehaviour
     public int currentGrowth;
     public int chosenPathIndex = -1;
 
+    bool hovered = false;
+
     public Vector3 PathPosition(int _pathIndex)
     {
         Vector3 result = Vector3.zero;
@@ -35,10 +37,37 @@ public class DungeonNode : MonoBehaviour
         return result;
     }
 
+    private void Update()
+    {
+        if (CameraMover._instance == null)
+            return;
+        Vector3 mousePosition = CameraMover._instance.mousePosition;
+        mousePosition.z = transform.position.z;
+        if ((mousePosition - transform.position).magnitude <= .5f)
+        {
+            //Debug.Log((mousePosition - transform.position).magnitude);
+            //hovers over node
+            hovered = true;
+            if (Input.GetMouseButtonDown(0))
+            {
+                //on clicked
+                CameraMover._instance.SetTargetPos(transform.position);
+            }
+        }
+        else
+        {
+            hovered = false;
+        }
+    }
+
     void OnDrawGizmos()
     {
 #if(UNITY_EDITOR)
         // Draw a yellow sphere at the transform's position
+        float size = .2f;
+        if (hovered)
+            size = .5f;
+
         if (nodeEvent != null)
             Handles.Label(transform.position + Vector3.up * .4f + Vector3.left * .75f, nodeEvent.eventName);
         if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 0 && nodeType == DatabaseManager._instance.eventData.nodeTypes[0])
@@ -57,12 +86,14 @@ public class DungeonNode : MonoBehaviour
             Gizmos.color = Color.magenta;
         else
             Gizmos.color = Color.grey;
-        Gizmos.DrawSphere(transform.position, .2f);
+        Gizmos.DrawSphere(transform.position, size);
         // Draws a blue line from this transform to the target
         if(nextNodes != null)
         {
             foreach (var item in nextNodes)
             {
+                if (item == null)
+                    continue;
                 if (nextPaths == null || nextPaths.Count <= 0)
                 {
                     Gizmos.color = Color.blue;
@@ -100,6 +131,8 @@ public class DungeonNode : MonoBehaviour
         {
             foreach (var item in nextNodes)
             {
+                if (item == null)
+                    continue;
                 Gizmos.color = Color.blue;
                 Gizmos.DrawSphere(transform.position + 0.5f * (item.transform.position - transform.position), .4f);
                 Gizmos.DrawSphere(transform.position + 0.60f * (item.transform.position - transform.position), .3f);

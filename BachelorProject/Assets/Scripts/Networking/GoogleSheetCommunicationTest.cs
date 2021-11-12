@@ -151,8 +151,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.activePlayerData = _playerData;
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData);
-            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
+            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "",FinishedLogIn);
+            //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
     }

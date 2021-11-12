@@ -11,6 +11,7 @@ public class PlayerParty : MonoBehaviour
     public TMP_Text party;
     public TMP_Text growths;
     public TMP_Text reward;
+    public CheapProgressBar pgBar;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,8 @@ public class PlayerParty : MonoBehaviour
         }
         if (visuals != null && visuals.activeSelf != true)
             visuals.SetActive(true);
+
+        pgBar.SetVal(DungeonManager._instance.currentCalcRun.remainingActivitySteps, DungeonManager._instance.currentCalcRun.startActivitySteps);
 
         steps.text = (DungeonManager._instance.currentCalcRun.startActivitySteps - DungeonManager._instance.currentCalcRun.remainingActivitySteps).ToString() + "/" + DungeonManager._instance.currentCalcRun.startActivitySteps.ToString();
         string partyText = "";
@@ -64,7 +67,7 @@ public class PlayerParty : MonoBehaviour
                 transform.position = DungeonManager._instance.currentCalcRun.currentNode.nextNodes[temp].transform.position - offsetStep * DungeonManager._instance.currentCalcRun.remainingActivitySteps;
                 break;
             case DungeonActivity.pathChoosing:
-                activityText.text = "Choosing aa Path";
+                activityText.text = "Choosing a Path";
                 transform.position = DungeonManager._instance.currentCalcRun.currentNode.transform.position;
                 break;
             case DungeonActivity.startQuest:
