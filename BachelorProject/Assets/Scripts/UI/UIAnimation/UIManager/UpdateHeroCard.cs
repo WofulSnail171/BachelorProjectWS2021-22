@@ -18,13 +18,13 @@ public class UpdateHeroCard : MonoBehaviour
     [SerializeField] TMP_Text magicalStatText;
     [SerializeField] TMP_Text socialStatText;
     [Space]
-    [SerializeField] Slider physicalStatBar;
-    [SerializeField] Slider magicalStatBar;
-    [SerializeField] Slider socialStatBar;
+    [SerializeField] Image physicalStatBar;
+    [SerializeField] Image magicalStatBar;
+    [SerializeField] Image socialStatBar;
     [Space]
-    [SerializeField] Slider physicalPotentialStatBar;
-    [SerializeField] Slider magicalPotentialStatBar;
-    [SerializeField] Slider socialPotentialStatBar;
+    [SerializeField] Image physicalPotentialStatBar;
+    [SerializeField] Image magicalPotentialStatBar;
+    [SerializeField] Image socialPotentialStatBar;
     [Space]
     [SerializeField] GameObject[] Rarity;
     [Space]
@@ -54,6 +54,8 @@ public class UpdateHeroCard : MonoBehaviour
     private string magicalPotential;
     private string socialPotential;
 
+
+    private float max = 999;
     #endregion
 
 
@@ -76,9 +78,12 @@ public class UpdateHeroCard : MonoBehaviour
         socialStatText.text = $"{hero.sVal} / {hero.sPot} ({socialPotential})";
 
         //set actual stat
-        physicalStatBar.value = hero.pVal;
-        magicalStatBar.value = hero.mVal;
-        socialStatBar.value = hero.sVal;
+
+
+
+        physicalStatBar.fillAmount = hero.pVal / max;
+        magicalStatBar.fillAmount = hero.mVal / max;
+        socialStatBar.fillAmount = hero.sVal / max;
 
 
 
@@ -206,7 +211,7 @@ public class UpdateHeroCard : MonoBehaviour
             physicalPotential = "max";
 
             //bar
-            physicalPotentialStatBar.value = physicalPotentialStatBar.maxValue - defaultHero.pMaxPot;
+            physicalPotentialStatBar.fillAmount = 1 - defaultHero.pMaxPot / max;
         }
 
         else
@@ -214,7 +219,7 @@ public class UpdateHeroCard : MonoBehaviour
             physicalPotential = hero.pPot.ToString();
 
             //bar
-            physicalPotentialStatBar.value = physicalPotentialStatBar.maxValue - hero.pPot;
+            physicalPotentialStatBar.fillAmount = 1 - hero.pPot / max;
 
         }
 
@@ -226,7 +231,7 @@ public class UpdateHeroCard : MonoBehaviour
             magicalPotential = "max";
 
             //bar
-            magicalPotentialStatBar.value = magicalPotentialStatBar.maxValue - defaultHero.mMaxPot;
+            magicalPotentialStatBar.fillAmount = 1 - defaultHero.mMaxPot/ max;
         }
 
         else
@@ -234,7 +239,7 @@ public class UpdateHeroCard : MonoBehaviour
             magicalPotential = hero.mPot.ToString();
 
             //bar
-            magicalPotentialStatBar.value = magicalPotentialStatBar.maxValue - hero.mPot;
+            magicalPotentialStatBar.fillAmount = 1 - hero.mPot/max;
         }
 
 
@@ -245,7 +250,7 @@ public class UpdateHeroCard : MonoBehaviour
             socialPotential = "max";
 
             //bar
-            socialPotentialStatBar.value = socialPotentialStatBar.maxValue - defaultHero.sMaxPot;
+            socialPotentialStatBar.fillAmount = 1 - defaultHero.sMaxPot/max;
         }
 
         else
@@ -253,7 +258,7 @@ public class UpdateHeroCard : MonoBehaviour
             socialPotential = hero.sPot.ToString();
             
             //bar
-            socialPotentialStatBar.value = socialPotentialStatBar.maxValue - hero.sPot;
+            socialPotentialStatBar.fillAmount = 1 - hero.sPot/ max;
         }
     }
 }
