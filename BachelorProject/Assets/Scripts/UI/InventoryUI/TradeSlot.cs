@@ -14,13 +14,13 @@ public class TradeSlot : MonoBehaviour, IDropHandler
     [HideInInspector] public int originalSlotReferenceID;
 
 
-    [SerializeField] private GameObject heroCard;
+    [SerializeField] public  GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;
     [SerializeField] GameObject[] rarityGraphics;
-    [SerializeField] public TMP_Text heroName; 
-    [SerializeField] public Image portrait { get; private set; }
+    [SerializeField] public TMP_Text heroName;
+    [SerializeField] public Image portrait;
     [HideInInspector]public int slotrarity { get; private set; }
 
 //events

@@ -99,6 +99,8 @@ public class ExploreInventoryUI : MonoBehaviour
             exploreSlots[i].OnRemoveEvent += RemoveHeroFromSlot;
 
             exploreSlots[i].slotID = i;
+            exploreSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
+            exploreSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
         }
 
         for (int i = 0; i < heroSlots.Length; i++)
@@ -172,4 +174,11 @@ public class ExploreInventoryUI : MonoBehaviour
         return false;
     }
 
+
+    private void DoubleClick(int index)
+    {
+        RemoveHeroFromSlot(exploreSlots[index]);
+        exploreSlots[index].removeHero();
+        exploreSlots[index].hideHero();
+    }
 }

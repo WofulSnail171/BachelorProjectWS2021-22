@@ -73,7 +73,10 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-  
+    private void Start()
+    {
+        InitInventoryUI();
+    }
 
     private void InitInventoryUI()
     {
@@ -86,11 +89,15 @@ public class InventoryUI : MonoBehaviour
                 heroSlots[i].hideHero();
             }
 
+            int index = 0;
             //assign
             foreach(PlayerHero hero in DatabaseManager._instance.activePlayerData.inventory)
             {
+                hero.invIndex = index;
+                index++;
                 InitAssignHeroToSlot(hero);
             }
+            DatabaseManager._instance.SaveGameDataLocally();
         }
 
     }//do this somewhere at the start
@@ -105,9 +112,9 @@ public class InventoryUI : MonoBehaviour
         }
 
         if (heroSlots[hero.invIndex].playerHero != null)
-        {
+        {            
             Debug.Log("trying to show hero which is already shown or assign more heroes to one slot");
-            return;
+            //return;
         }
 
         if (!DatabaseManager._instance.defaultHeroData.defaultHeroDictionary.ContainsKey(hero.heroId))
@@ -254,7 +261,8 @@ public class InventoryUI : MonoBehaviour
 
     private void DoubleClick(int index)
     {
-        PopUpHeroCard.GetComponent<UpdateHeroCard>().UpdateHero(heroSlots[index].playerHero);
+        //ToDo
+        //PopUpHeroCard.GetComponent<UpdateHeroCard>().UpdateHero(heroSlots[index].playerHero);
         UIEnablerManager.Instance.EnableElement("HeroCard",true);
     }
 

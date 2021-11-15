@@ -68,6 +68,7 @@ public class UpdateHeroCard : MonoBehaviour
 
         //stats
         //check if potential is maxed
+        
         CheckPotential(hero);
 
         //text

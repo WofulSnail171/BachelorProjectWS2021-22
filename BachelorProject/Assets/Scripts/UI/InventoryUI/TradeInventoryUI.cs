@@ -97,6 +97,9 @@ public class TradeInventoryUI : MonoBehaviour
             tradeSlots[i].OnRemoveEvent += RemoveHeroFromSlot;
 
             tradeSlots[i].slotID = i;
+
+            tradeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
+            tradeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
         }
 
         for (int i = 0; i < heroSlots.Length; i++)
@@ -169,5 +172,12 @@ public class TradeInventoryUI : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void DoubleClick(int index)
+    {
+        RemoveHeroFromSlot(tradeSlots[index]);
+        tradeSlots[index].removeHero();
+        tradeSlots[index].hideHero();
     }
 }
