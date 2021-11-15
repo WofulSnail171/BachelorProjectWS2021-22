@@ -5,6 +5,20 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+public enum HubState
+{
+    HeroHub,
+    TradeHub,
+    DungeonHub
+}
+
+public enum ProgressState
+{
+    Empty,
+    Pending,
+    Done
+}
+
 public class HubButtonActions : MonoBehaviour
 {
     public enum ButtonState
@@ -13,21 +27,6 @@ public class HubButtonActions : MonoBehaviour
         Unfocused,
         Finished,
     }
-
-    private enum HubState
-    {
-        HeroHub,
-        TradeHub,
-        DungeonHub
-    }
-
-    private enum HeroState
-    {
-        Empty,
-        Pending,
-        Done
-    }
-
 
     #region vars
     //actual buttons
@@ -59,8 +58,8 @@ public class HubButtonActions : MonoBehaviour
     [Space]
     [Space]
     [Space]
-    [SerializeField] private HeroState tradeState;
-    [SerializeField] private HeroState dungeonState;//wil be hidden later on
+    [SerializeField] private ProgressState tradeState;
+    [SerializeField] private ProgressState dungeonState;//wil be hidden later on
 
 
     [SerializeField] float alreadyPassedTime;
@@ -81,6 +80,15 @@ public class HubButtonActions : MonoBehaviour
         tradeFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedTrade(); });
         dungeonFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedDungeon(); });
 
+        DeleventSystem.DungeonStep += UpdateStates;
+        DeleventSystem.DungeonStart += UpdateStates;
+        DeleventSystem.DungeonEnd += UpdateStates;
+        DeleventSystem.DungeonEvent += UpdateStates;
+
+        DeleventSystem.TradeStart += UpdateStates;
+        DeleventSystem.TradeEnd += UpdateStates;
+        DeleventSystem.TradeCancel += UpdateStates;
+
 
         //animation test
         //AnimateTradeProgress(alreadyPassedTime,maxTime);
@@ -89,7 +97,11 @@ public class HubButtonActions : MonoBehaviour
 
     //init
 
-
+    private void UpdateStates()
+    {
+        tradeState = DatabaseManager.GetTradeState();
+        dungeonState = DatabaseManager.GetDungeonRunState();
+    }
 
 
 
@@ -100,7 +112,7 @@ public class HubButtonActions : MonoBehaviour
         //check what state the trade is in
         switch (tradeState)
         {
-            case HeroState.Empty:
+            case ProgressState.Empty:
                 //empty
                 //------------------------------------
 
@@ -109,7 +121,7 @@ public class HubButtonActions : MonoBehaviour
                 break;
 
 
-            case HeroState.Pending:
+            case ProgressState.Pending:
                 //pending
                 //------------------------------------
                 //check where you are coming from
@@ -149,7 +161,7 @@ public class HubButtonActions : MonoBehaviour
 
                 break;
 
-            case HeroState.Done:
+            case ProgressState.Done:
                 //pending is done
                 //------------------------------------
                 //do pop up
@@ -169,7 +181,7 @@ public class HubButtonActions : MonoBehaviour
         //check what state the dungeon is in
         switch (dungeonState)
         {
-            case HeroState.Empty:
+            case ProgressState.Empty:
                 //empty
                 //------------------------------------
 
@@ -180,7 +192,7 @@ public class HubButtonActions : MonoBehaviour
 
                 break;
 
-            case HeroState.Pending:
+            case ProgressState.Pending:
                 //pending
                 //------------------------------------
                 //check where you are coming from
@@ -223,7 +235,7 @@ public class HubButtonActions : MonoBehaviour
 
                 break;
 
-            case HeroState.Done:
+            case ProgressState.Done:
                 //pending is done
                 //------------------------------------
                 //do pop up
@@ -250,7 +262,7 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if(dungeonState == HeroState.Pending)
+                if(dungeonState == ProgressState.Pending)
                     UpdateDungeonButton(ButtonState.Unfocused);
 
                 else
@@ -264,7 +276,7 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if (tradeState == HeroState.Pending)
+                if (tradeState == ProgressState.Pending)
                     UpdateTradeButton(ButtonState.Unfocused);
 
                 else

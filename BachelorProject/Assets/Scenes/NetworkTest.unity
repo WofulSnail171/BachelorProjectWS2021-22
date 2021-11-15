@@ -1396,6 +1396,7 @@ MonoBehaviour:
         type: 0
       initialRewardTier: 0
       maxSteps: 0
+      randomNums: []
 --- !u!4 &413296325
 Transform:
   m_ObjectHideFlags: 0
@@ -2128,10 +2129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc27f4b819e1ea34dacaa66f7fb43c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chosenDailyDungeonIndex: 0
   layoutList: {fileID: 0}
   currentCalcRun:
     currentStep: 0
     currentActivity: 0
+    startActivitySteps: 0
     remainingActivitySteps: 0
     rewardHealthBar: 0
     currentNode: {fileID: 0}
@@ -2140,7 +2143,7 @@ MonoBehaviour:
     sStatGrowth: 0
     nextHero: 0
     dungeonLogArr: []
-  playerParty: {fileID: 1082394158}
+  AutoPlayWaitTimeSec: 0.01
 --- !u!4 &668027270
 Transform:
   m_ObjectHideFlags: 0

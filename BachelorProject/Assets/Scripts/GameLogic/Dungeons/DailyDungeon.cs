@@ -17,6 +17,10 @@ public class DailyDungeon
 
     public void InitDungeonLayout()
     {
+        if(dungeonLayout != null)
+        {
+            MonoBehaviour.Destroy(dungeonLayout.gameObject);
+        }
         GameObject go = GameObject.Instantiate(DungeonManager._instance.layoutList.layoutPrefabs[layoutId], new Vector3(0, 0, 0), Quaternion.identity);
         dungeonLayout =  go.GetComponent<DungeonLayOut>();
         dungeonLayout.SetupDungeonDailySeed(dailySeed);

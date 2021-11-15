@@ -55,6 +55,12 @@ public class CalculatedDungeonRun
             return randomNum;
         }
     }
+
+    public bool Finished()
+    {
+        return currentStep >= dungeonRun.maxSteps;
+    }
+
     Dictionary<int, int> randomNums;
 
     DungeonRun dungeonRun;
@@ -78,6 +84,8 @@ public class CalculatedDungeonRun
             dungeonLog = new List<LogEntry>();
         dungeonLog.Add(new LogEntry {step = currentStep, entry = _newEntry });
         dungeonLogArr = dungeonLog.ToArray();
+        if(DeleventSystem.DungeonLog != null)
+            DeleventSystem.DungeonLog();
     }
     public void SetActivitySteps(int _newSteps)
     {

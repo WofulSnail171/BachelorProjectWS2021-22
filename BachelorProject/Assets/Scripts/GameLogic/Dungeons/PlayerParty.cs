@@ -28,8 +28,7 @@ public class PlayerParty : MonoBehaviour
 
     void SetPosition()
     {
-        if(!DatabaseManager.CheckDatabaseValid() || DatabaseManager._instance.dungeonData.currentRun == null || !DatabaseManager._instance.dungeonData.currentRun.valid ||
-        DungeonManager._instance.currentCalcRun == null)
+        if(!DatabaseManager.CheckDatabaseValid() || DatabaseManager._instance.dungeonData.currentRun == null || !DatabaseManager._instance.dungeonData.currentRun.valid || DungeonManager._instance.currentCalcRun == null || DungeonManager._instance.currentCalcRun.currentNode == null)
         {
             visuals.SetActive(false);
             return;

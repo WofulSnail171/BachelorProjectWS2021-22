@@ -22,12 +22,20 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
+    public int chosenDailyDungeonIndex = 0;
+
     public LayoutList layoutList;
     public CalculatedDungeonRun currentCalcRun;
+    public bool CheckCalcRun()
+    {
+        if (currentCalcRun != null && currentCalcRun.currentNode != null)
+            return true;
+        return false;
+    }
     //public Transform playerParty;
 
     private bool AutoPLay = true;
-    private float AutoPlayWaitTimeSec = 1.0f;
+    public float AutoPlayWaitTimeSec = 1.0f;
 
     
     // Start is called before the first frame update
@@ -35,6 +43,7 @@ public class DungeonManager : MonoBehaviour
     {
         DeleventSystem.eventDataDownloaded += CreateDailyDungeons;
         StartCoroutine(AutoplayRoutine());
+        currentCalcRun = null;
     }
     private void OnDisable()
     {
@@ -50,6 +59,24 @@ public class DungeonManager : MonoBehaviour
     public void ProceedDungeonRun()
     {
         //utilizes saved dungeonRun object to recreate dungeonRun
+    }
+
+    public void ShowDungeonLayout(int _dailyDungeonIndex)
+    {
+        HideDungeonLayouts();
+        if(_dailyDungeonIndex < DatabaseManager._instance.dungeonData.dailyDungeons.Length)
+        {
+            DatabaseManager._instance.dungeonData.dailyDungeons[_dailyDungeonIndex].dungeonLayout.gameObject.SetActive(true);
+            DatabaseManager._instance.dungeonData.dailyDungeons[_dailyDungeonIndex].dungeonLayout.FocusCamera();
+        }            
+    }
+
+    public void HideDungeonLayouts()
+    {
+        foreach (var dd in DatabaseManager._instance.dungeonData.dailyDungeons)
+        {
+            dd.dungeonLayout.gameObject.SetActive(false);
+        }
     }
 
     public void CreateDailyDungeons()
@@ -182,6 +209,7 @@ public class DungeonManager : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
 
         UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        currentCalcRun = null;
     }
 
     void StartCalcRun()
@@ -498,7 +526,7 @@ public class DungeonManager : MonoBehaviour
         while (AutoPLay)
         {
             //Update Loop for dungeonRun
-            if(currentCalcRun != null && DatabaseManager._instance.dungeonData.currentRun.valid)
+            if(CheckCalcRun() && DatabaseManager._instance.dungeonData.currentRun.valid)
             {
                 NextStepRun();
             }

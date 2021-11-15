@@ -17,6 +17,30 @@ public class DatabaseManager : MonoBehaviour
         return true;
     }
 
+    public static ProgressState GetDungeonRunState()
+    {
+        ProgressState result = ProgressState.Empty;
+        if(DatabaseManager.CheckDatabaseValid() && DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
+        {
+            if(DungeonManager._instance.CheckCalcRun())
+            {
+                if (DungeonManager._instance.currentCalcRun.Finished())
+                {
+                    result = ProgressState.Done;
+                }
+                else
+                    result = ProgressState.Pending;
+            }
+        }
+        return result;
+    }
+
+    public static ProgressState GetTradeState()
+    {
+        ProgressState result = ProgressState.Empty;
+        return result;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {

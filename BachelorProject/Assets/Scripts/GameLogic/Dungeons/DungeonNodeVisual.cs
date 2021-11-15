@@ -75,7 +75,7 @@ public class DungeonNodeVisual : MonoBehaviour
         {
             pathVisualizer[i].colorGradient = pathGradientDict[dungeonNode.nextPaths[i]];
         }
-        if(dungeonNode.chosenPathIndex != -1 && DungeonManager._instance.currentCalcRun != null && DungeonManager._instance.currentCalcRun.currentNode != dungeonNode)
+        if(dungeonNode.chosenPathIndex != -1 && DungeonManager._instance.CheckCalcRun() && DungeonManager._instance.currentCalcRun.currentNode != dungeonNode)
         {
             pathVisualizer[dungeonNode.chosenPathIndex].colorGradient = pathGradientDict["cleared"];
         }

@@ -168,6 +168,18 @@ public class ExploreInventoryUI : MonoBehaviour
             //
             //
 
+            DatabaseManager._instance.activePlayerData.inventory[0].status = HeroStatus.Exploring;
+            DatabaseManager._instance.activePlayerData.inventory[1].status = HeroStatus.Exploring;
+            DatabaseManager._instance.activePlayerData.inventory[2].status = HeroStatus.Exploring;
+
+            DungeonManager._instance.chosenDailyDungeonIndex = 1;
+            DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(DungeonManager._instance.chosenDailyDungeonIndex);
+            DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
+            DungeonManager._instance.CalculateRun(0);
+            UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
+            ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
+            DatabaseManager._instance.SaveGameDataLocally();
+
             return true;
         }
 

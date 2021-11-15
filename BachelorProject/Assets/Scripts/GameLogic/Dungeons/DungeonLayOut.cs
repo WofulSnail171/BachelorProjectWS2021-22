@@ -12,6 +12,11 @@ public class DungeonLayOut : MonoBehaviour
     //not to fill out
     public List<DungeonNode> nodes;
 
+    public void FocusCamera()
+    {
+        //ToDo
+    }
+
     public void SetupDungeonDailySeed(int _seed)
     {
         UnityEngine.Random.InitState(_seed);

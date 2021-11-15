@@ -61,8 +61,13 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 
     //------------------------------------------------------------------------
     void Start() {
-        InitSetUp();
+        //InitSetUp();
 	}
+
+    private void OnEnable()
+    {
+        InitSetUp();
+    }
 
     //------------------------------------------------------------------------
     void Update() {
@@ -93,7 +98,9 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         _scrollRectComponent = GetComponent<ScrollRect>();
         _scrollRectRect = GetComponent<RectTransform>();
         _container = _scrollRectComponent.content;
-        _pageCount = _container.childCount;
+        if (!DatabaseManager.CheckDatabaseValid())
+            return;
+        _pageCount = DatabaseManager._instance.dungeonData.dailyDungeons.Length;
 
         // is it horizontal or vertical scrollrect
         if (_scrollRectComponent.horizontal && !_scrollRectComponent.vertical)
@@ -161,7 +168,13 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         _pagePositions.Clear();
 
         // iterate through all container childern and set their positions
-        for (int i = 0; i < _pageCount; i++) {
+        for (int i = 0; i < _container.childCount; i++) {
+            if(i >= _pageCount)
+            {
+                _container.GetChild(i).gameObject.SetActive(false);
+                continue;
+            }
+            _container.GetChild(i).gameObject.SetActive(true);
             RectTransform child = _container.GetChild(i).GetComponent<RectTransform>();
             Vector2 childPosition;
             if (_horizontal) {
@@ -195,7 +208,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         _showPageSelection = unselectedPage != null && selectedPage != null;
         if (_showPageSelection) {
             // also container with selection images must be defined and must have exatly the same amount of items as pages container
-            if (pageSelectionIcons == null || pageSelectionIcons.childCount != _pageCount) {
+            if (pageSelectionIcons == null || pageSelectionIcons.childCount < _pageCount) {
                 Debug.LogWarning("Different count of pages and selection icons - will not show page selection");
                 _showPageSelection = false;
             } else {
@@ -204,6 +217,12 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 
                 // cache all Image components into list
                 for (int i = 0; i < pageSelectionIcons.childCount; i++) {
+                    if(i >= _pageCount)
+                    {
+                        pageSelectionIcons.GetChild(i).gameObject.SetActive(false);
+                        continue;
+                    }
+                    pageSelectionIcons.GetChild(i).gameObject.SetActive(true);
                     Image image = pageSelectionIcons.GetChild(i).GetComponent<Image>();
                     if (image == null) {
                         Debug.LogWarning("Page selection icon at position " + i + " is missing Image component");
