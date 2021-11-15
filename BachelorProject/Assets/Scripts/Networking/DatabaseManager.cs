@@ -270,10 +270,25 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+    public string description;
 }
 
 public enum DungeonType
 {
     basic,
     doom
+}
+
+[System.Serializable]
+public class LoginInfo
+{
+    public string playerId = "name";
+    public string password = "pw";
+}
+
+[System.Serializable]
+public class UploadDungeonData
+{
+    public LoginInfo playerInfo;
+    public DungeonData dungeonData;
 }

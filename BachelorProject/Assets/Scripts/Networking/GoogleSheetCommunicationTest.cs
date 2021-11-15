@@ -20,11 +20,12 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         localSaveNo.interactable = false;
 
         DatabaseManager._instance.LoadLocalSave();
-        if(DatabaseManager._instance.activePlayerData != null)
+        if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
         {
             localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
-            localSaveYes.interactable = true;
-            localSaveNo.interactable = true;
+            //localSaveYes.interactable = true;
+            //localSaveNo.interactable = true;
+            OnLocalSaveYes();
         }
         else
         {
@@ -151,8 +152,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.activePlayerData = _playerData;
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData);
-            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
+            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "",FinishedLogIn);
+            //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
     }

@@ -14,7 +14,7 @@ public class ExploreSlot : MonoBehaviour, IDropHandler
     [HideInInspector] public int originalSlotReferenceID;
 
 
-    [SerializeField] private GameObject heroCard;
+    [SerializeField] public GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;

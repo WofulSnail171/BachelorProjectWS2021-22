@@ -6,6 +6,7 @@ public class DeleventSystem : MonoBehaviour
 {
     public delegate void SimpleEvent();
     public static SimpleEvent eventDataDownloaded;
+    public static SimpleEvent dungeonRunFinished;
 
     public delegate void MessageEvent(string _message);
 

@@ -36,9 +36,7 @@ public class UIEnablerManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
-
         else
             Destroy(this);
     }
@@ -60,16 +58,20 @@ public class UIEnablerManager : MonoBehaviour
         switch (reference)
         {
             case ListReference.Header:
-                HeaderElements.Add(name,UIelement);
+                if(!HeaderElements.ContainsKey(name))
+                    HeaderElements.Add(name,UIelement);
                 break;
             case ListReference.Footer:
-                FooterElements.Add(name,UIelement);
+                if(!FooterElements.ContainsKey(name))
+                    FooterElements.Add(name,UIelement);
                 break;
             case ListReference.Centered:
-                CenterElements.Add(name,UIelement);
+                if(!CenterElements.ContainsKey(name))
+                    CenterElements.Add(name,UIelement);
                 break;
             case ListReference.PopUp:
-                PopUpElements.Add(name,UIelement);
+                if(!PopUpElements.ContainsKey(name))
+                    PopUpElements.Add(name,UIelement);
                 break;
             default:
                 Debug.Log("trying to assign none existant element");
@@ -187,6 +189,11 @@ public class UIEnablerManager : MonoBehaviour
         //not found
         if (!IsSomewhere)
             Debug.Log("trying to enable: " + element + ", but this does not exist in any dict as key");
+    }
+
+    public void Test()
+    {
+        DisableElement("HeroCard", true);
     }
 
     public float DisableElement(string element, bool DoAnimation)
