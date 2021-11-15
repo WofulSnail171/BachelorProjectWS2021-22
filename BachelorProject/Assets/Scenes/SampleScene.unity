@@ -349,4 +349,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shaderName: test
   sdfNode: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  sdfMaterial: {fileID: 2100000, guid: ba2e67f302df9274e93011572ad3da37, type: 2}
   apply: 0

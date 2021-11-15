@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class SDFNode : ScriptableObject
 {
     [HideInInspector] public string o;
-    protected string sdfName = "newSDF";
+    [HideInInspector] public string sdfName = "newSDF";
 
     protected uint index;
 
@@ -13,7 +13,8 @@ public abstract class SDFNode : ScriptableObject
     [HideInInspector]public List<string> types;
 
     [HideInInspector] public List<ScriptableObject> nodes;
-    
+
+    protected bool isDirty;
     public Action<SDFNode> OnValueChange;
 
     public enum NodeType {
@@ -21,7 +22,7 @@ public abstract class SDFNode : ScriptableObject
         Rect,
         Triangle, 
         Line,
-        BezieCurve,
+        BezierCurve,
         Texture,
         Comb,
         Invert,

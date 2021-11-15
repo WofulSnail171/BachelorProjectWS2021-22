@@ -6,52 +6,63 @@ using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF/Triangle")]
 public class SDFTriangle : SDFObject {
-    public Vector2 a;
-    public Vector2 b;
-    public Vector2 c;
-    public float scale;
+    [SerializeField] private Vector2 a;
+    private Vector2 _a;
+    
+    [SerializeField] private Vector2 b;
+    private Vector2 _b;
+    
+    [SerializeField] private Vector2 c;
+    private Vector2 _c;
+    
+    [SerializeField] private float scale;
+    private float _scale;
     
     public Vector2 A {
-        get => this.a;
+        get => this._a;
         set {
-            if (this.a == value) return;
-            this.a = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._a == value) return;
+            this._a = value;
+            this.isDirty = true;
         }
     }
     
     public Vector2 B {
-        get => this.b;
+        get => this._b;
         set {
-            if (this.b == value) return;
-            this.b = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._b == value) return;
+            this._b = value;
+            this.isDirty = true;
         }
     }
     
     public Vector2 C {
-        get => this.c;
+        get => this._c;
         set {
-            if (this.c == value) return;
-            this.c = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._c == value) return;
+            this._c = value;
+            this.isDirty = true;
         }
     }
 
     public float Scale {
-        get => this.scale;
+        get => this._scale;
         set {
-            if (this.scale == value) return;
-            this.scale = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._scale == value) return;
+            this._scale = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.A == this.a) this.A = this.a;
-        if (this.B == this.b) this.B = this.b;
-        if (this.C == this.c) this.C = this.c;
-        if (this.Scale == this.scale) this.Scale = this.scale;
+        this.A = this.a;
+        this.B = this.b;
+        this.C = this.c;
+        this.Scale = this.scale;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
 
     private void Awake() {

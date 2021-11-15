@@ -12,18 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df76ed01223f4a4086b85788543c7c3, type: 3}
   m_Name: SDF Rectangle
   m_EditorClassIdentifier: 
-  o: rect359_out
+  o: rect817_out
+  sdfName: rect817
   variables:
-  - rect359_position
-  - rect359_box
-  - rect359_scale
-  - rect359_roundness
+  - rect817_position
+  - rect817_box
+  - rect817_scale
+  - rect817_roundness
   types:
   - float2
   - float2
   - float
   - float4
-  position: {x: 0.5, y: 0.5}
-  box: {x: 0.1, y: 0.4}
-  scale: 1
-  roundness: {x: 0, y: 0, z: 0, w: 0}
+  nodes: []
+  nodeType: 1
+  position: {x: -0.9, y: -0.23}
+  box: {x: 0.23, y: 0.4}
+  scale: 2.85
+  roundness: {x: 0.94, y: -0.3, z: 0, w: 0.18}

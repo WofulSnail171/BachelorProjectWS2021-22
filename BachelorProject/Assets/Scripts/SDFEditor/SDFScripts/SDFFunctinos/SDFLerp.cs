@@ -4,41 +4,51 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Lerp")]
 public class SDFLerp : SDFNode
 {
-    public SDFNode inputA;
-    public SDFNode inputB;
-    public float t;
+    [SerializeField] private SDFNode inputA;
+    private SDFNode _inputA;
+    
+    [SerializeField] private SDFNode inputB;
+    private SDFNode _inputB;
+    
+    [SerializeField] private float t;
+    private float _t;
+    
     
     public SDFNode InputA {
-        get => this.inputA;
+        get => this._inputA;
         set {
-            if (this.inputA == value) return;
-            this.inputA = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputA == value) return;
+            this._inputA = value;
+            this.isDirty = true;
         }
     }
     
     public SDFNode InputB {
-        get => this.inputB;
+        get => this._inputB;
         set {
-            if (this.inputB == value) return;
-            this.inputB = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputB == value) return;
+            this._inputB = value;
+            this.isDirty = true;
         }
     }
     
     public float T {
-        get => this.t;
+        get => this._t;
         set {
-            if (this.t == value) return;
-            this.t = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._t == value) return;
+            this._t = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.InputA != this.inputA) this.InputA = this.inputA;
-        if (this.InputB != this.inputB) this.InputB = this.inputB;
-        if (this.T != this.t) this.T = this.t;
+        this.InputA = this.inputA;
+        this.InputB = this.inputB;
+        this.T = this.t;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
     
     private void Awake() {

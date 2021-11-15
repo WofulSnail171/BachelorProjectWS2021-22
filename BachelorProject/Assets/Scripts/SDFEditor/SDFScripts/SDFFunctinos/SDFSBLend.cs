@@ -7,41 +7,51 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu(menuName = "SDF Function/Smooth Blend")]
 public class SDFSBLend : SDFNode
 {
-    public SDFNode inputA;
-    public SDFNode inputB;
-    public float k;
+    [SerializeField] private SDFNode inputA;
+    private SDFNode _inputA;
+    
+    [SerializeField] private SDFNode inputB;
+    private SDFNode _inputB;
+    
+    [SerializeField] private float k;
+    private float _k;
+
 
     public SDFNode InputA {
-        get => this.inputA;
+        get => this._inputA;
         set {
-            if (this.inputA == value) return;
-            this.inputA = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputA == value) return;
+            this._inputA = value;
+            this.isDirty = true;
         }
     }
     
     public SDFNode InputB {
-        get => this.inputB;
+        get => this._inputB;
         set {
-            if (this.inputB == value) return;
-            this.inputB = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputB == value) return;
+            this._inputB = value;
+            this.isDirty = true;
         }
     }
     
     public float K {
-        get => this.k;
+        get => this._k;
         set {
-            if (this.k == value) return;
-            this.k = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._k == value) return;
+            this._k = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.InputA == this.inputA) this.InputA = this.inputA;
-        if (this.InputB == this.inputB) this.InputB = this.inputB;
-        if (this.K == this.k) this.K = this.k;
+        this.InputA = this.inputA;
+        this.InputB = this.inputB;
+        this.K = this.k;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
 
     private void Awake() {

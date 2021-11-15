@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class SDFObject : SDFNode {
-    
+
+    private Vector2 _position;
     public Vector2 position = new Vector2(0, 0);
 
     public Vector2 Position {
-        get => this.position;
+        get => this._position;
         set {
-            if (this.position == value) {return;}
-            this.position = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._position == value) {return;}
+            this._position = value;
+            this.isDirty = true;
         }
     }
 

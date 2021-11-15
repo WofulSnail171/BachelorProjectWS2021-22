@@ -6,30 +6,38 @@ using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF Function/Combine")]
 public class SDFCombine : SDFNode {
-    public SDFNode inputA;
-    public SDFNode inputB;
+    
+    [SerializeField] private SDFNode inputA;
+    private SDFNode _inputA;
+    
+    [SerializeField] private SDFNode inputB;
+    private SDFNode _inputB;
 
     public SDFNode InputA {
-        get => this.inputA;
+        get => this._inputA;
         set {
-            if (this.InputA == value) return;
-            this.InputA = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputA == value) return;
+            this._inputA = value;
+            this.isDirty = true;
         }
     }
     
     public SDFNode InputB {
-        get => this.inputB;
+        get => this._inputB;
         set {
-            if (this.InputB == value) return;
-            this.InputB = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._inputB == value) return;
+            this._inputB = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.InputA != this.inputA) this.InputA = this.inputA;
-        if (this.InputB != this.inputB) this.InputB = this.inputB;
+        this.InputA = this.inputA;
+        this.InputB = this.inputB;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
 
     private void Awake() {

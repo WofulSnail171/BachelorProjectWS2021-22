@@ -3,21 +3,27 @@ using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF/Circle")]
 public class SDFCircle : SDFObject {
-    
-    public float radius;
+
+    private float _radius;
+    [SerializeField] private float radius;
     
     public float Radius {
-        get => this.radius;
+        get => this._radius;
         set {
-            if (this.Radius == value) return;
-            this.Radius = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._radius == value) return;
+            this._radius = value;
+            this.isDirty = true;
         }
     }
     
     private void OnValidate() {
-        if (this.Radius != this.radius) this.Radius = this.radius;
-    }
+        this.Radius = this.radius;
+        this.Position = this.position;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
+    }  
     
     private void Awake() {
         nodeType = NodeType.Circle;
@@ -32,20 +38,10 @@ public class SDFCircle : SDFObject {
         this.variables.Add(this.sdfName + "_position");
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_radius");
-        this.types.Add("float2");
+        this.types.Add("float");
     }
     
     public override string SdfFunction() {
-        
-        this.sdfName = "circle" + this.index;
-        this.o = this.sdfName + "_out";
-        
-        this.variables.Clear();
-        this.types.Clear();
-        this.variables.Add(this.sdfName + "_position");
-        this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_radius");
-        this.types.Add("float2");
         
         string hlslString = "float " + this.o + " = length(" + this.variables[0] + "- uv)- " + this.variables[1] + ";" ;
         return hlslString;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -12,6 +13,9 @@ public class SDFManager : MonoBehaviour{
     private string pathIncludeFile;
 
     public SDFNode sdfNode;
+    public Material sdfMaterial;
+    private Shader sdfShader;
+    
     public bool apply;
     
     private List<string> shaderStrings = new List<string>();
@@ -20,7 +24,6 @@ public class SDFManager : MonoBehaviour{
     
     //TODO: create SDFNodeList 
     //TODO: subscribe to action for varibale changes
-    
 
     private void Update() {
         if (this.apply) {
@@ -63,7 +66,16 @@ public class SDFManager : MonoBehaviour{
         this.includeStrings.Add(this.GenerateShaderSdfFunction(node));
         
         this.WriteHlslToText();
-       
+        
+        if (this.sdfMaterial == null){
+            sdfShader = Shader.Find("SDF/" + this.shaderName);
+            if (sdfShader != null) {
+                this.sdfMaterial = new Material(sdfShader);
+            }
+            else{
+                Debug.LogWarning("shader could not be found");
+            }
+        }
     }
 
     string GenerateShaderName() {
@@ -156,7 +168,7 @@ CBUFFER_END";
         {
             
             float sdfOut = sdf(i.uv," + variables + @");
-            float4 col = float4(1,1,1,1);
+            float4 col = sdfOut;
             return col;
         }
 ";
@@ -199,8 +211,6 @@ CBUFFER_END";
         return sdfFunction;
     }
 
-
-
     private void WriteHlslToText() {
         
         using (StreamWriter sw = File.CreateText(this.pathIncludeFile)) {
@@ -219,31 +229,57 @@ CBUFFER_END";
         }
     }
     
-    private void ChangeShaderValues(SDFNode sdfNode){
+    private void ChangeShaderValues(SDFNode node){
 
-        switch (sdfNode.nodeType) {
+        switch (node.nodeType) {
             case SDFNode.NodeType.Circle: {
-                
+                var n = (SDFCircle) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetFloat(n.sdfName + "_radius" , n.Radius);
                 break;
             }
             case SDFNode.NodeType.Rect: {
+                var n = (SDFRectangle) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetVector(n.sdfName + "_box" , n.Box);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale" , n.Scale);
+                this.sdfMaterial.SetVector(n.sdfName + "_roundness" , n.Roundness);
                 
                 break;
             }
             case SDFNode.NodeType.Triangle: {
+                var n = (SDFTriangle) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
+                this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
+                this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale" , n.Scale);
 
                 break;
             }
             case SDFNode.NodeType.Line: {
-
+                var n = (SDFLine) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
+                this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
+                this.sdfMaterial.SetFloat(n.sdfName + "_roundness" , n.Roundness);
+                
                 break;
             }
-            case SDFNode.NodeType.BezieCurve: {
+            case SDFNode.NodeType.BezierCurve: {
+ 
+                var n = (SDFBezier) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
+                this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
+                this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
 
                 break;
             }
             case SDFNode.NodeType.Texture: {
-
+                var n = (SDFTexture) node;
+                this.sdfMaterial.SetTexture(n.sdfName + "_tex" , n.SdfTexture);
+                
                 break;
             }
             case SDFNode.NodeType.Comb: {
@@ -255,11 +291,13 @@ CBUFFER_END";
                 break;
             }
             case SDFNode.NodeType.SBlend: {
-
+                var n = (SDFSBLend) node;
+                this.sdfMaterial.SetFloat(n.sdfName + "_k" , n.K);
                 break;
             }
             case SDFNode.NodeType.Lerp: {
-
+                var n = (SDFLerp) node;
+                this.sdfMaterial.SetFloat(n.sdfName + "_t" , n.T);
                 break;
             }
         }

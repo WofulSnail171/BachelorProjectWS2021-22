@@ -7,19 +7,24 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu(menuName = "SDF Function/Invert")]
 public class SDFInvert : SDFNode
 {
-    public SDFNode input;
+    [SerializeField]private SDFNode input;
+    private SDFNode _input;
 
     public SDFNode Input {
-        get => this.input;
+        get => this._input;
         set {
-            if (this.Input == value) return;
-            this.input = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._input == value) return;
+            this._input = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.Input != this.input) this.Input = this.Input;
+        this.Input = this.input;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
 
     private void Awake() {

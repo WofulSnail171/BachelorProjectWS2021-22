@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Texture")]
 public class SDFTexture : SDFObject {
-    public Texture sdfTexture;
+    [SerializeField] private Texture sdfTexture;
+    private Texture _sdfTexture;
     
     public Texture SdfTexture {
-        get => this.sdfTexture;
+        get => this._sdfTexture;
         set {
-            if (this.sdfTexture == value) return;
-            this.sdfTexture = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._sdfTexture == value) return;
+            this._sdfTexture = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.SdfTexture == this.sdfTexture) this.SdfTexture = this.sdfTexture;
+        this.SdfTexture = this.sdfTexture;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
     
     private void Awake() {

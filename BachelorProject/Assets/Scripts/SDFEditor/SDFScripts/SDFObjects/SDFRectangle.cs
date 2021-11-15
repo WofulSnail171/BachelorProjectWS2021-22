@@ -7,41 +7,51 @@ using Random = UnityEngine.Random;
 [CreateAssetMenu(menuName = "SDF/Rectangle")]
 public class SDFRectangle : SDFObject
 {
-    public Vector2 box = new Vector2(0,0);
-    public float scale = 1;
-    public Vector4 roundness = new Vector4(0, 0, 0, 0);
+    
+    [SerializeField] private Vector2 box = new Vector2(0,0);
+    private Vector2 _box = new Vector2(0,0);
+    
+    [SerializeField] private float scale = 1;
+    private float _scale = 1;
+    
+    [SerializeField] private Vector4 roundness = new Vector4(0, 0, 0, 0);
+    private Vector4 _roundness = new Vector4(0, 0, 0, 0);
     
     public Vector2 Box {
-        get => this.box;
+        get => this._box;
         set {
-            if (this.box == value) return;
-            this.box = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._box == value) return;
+            this._box = value;
+            this.isDirty = true;
         }
     }
     
     public float Scale {
-        get => this.scale;
+        get => this._scale;
         set {
-            if (this.scale == value) return;
-            this.scale = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._scale == value) return;
+            this._scale = value;
+            this.isDirty = true;
         }
     }
     
     public Vector4 Roundness {
-        get => this.roundness;
+        get => this._roundness;
         set {
-            if (this.roundness == value) return;
-            this.roundness = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._roundness == value) return;
+            this._roundness = value;
+            this.isDirty = true;
         }
     }
 
     private void OnValidate() {
-        if (this.Box == this.box) this.Box = this.box;
-        if (this.Scale == this.scale) this.Scale = this.scale;
-        if (this.Roundness == this.roundness) this.Roundness = this.roundness;
+        this.Box = this.box;
+        this.Scale = this.scale;
+        this.Roundness = this.roundness;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
 
     private void Awake() {

@@ -3,7 +3,9 @@ Shader "SDF/test"
 
             Properties
             {
-               
+                [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
+                [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
+                [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend mode", Float) = 1
             }
 
             SubShader
@@ -42,18 +44,18 @@ Shader "SDF/test"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float2 rect636_position;
-    float2 rect636_box;
-    float rect636_scale;
-    float4 rect636_roundness;
+   float2 rect817_position;
+    float2 rect817_box;
+    float rect817_scale;
+    float4 rect817_roundness;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             
-            float sdfOut = sdf(i.uv,rect636_position, rect636_box, rect636_scale, rect636_roundness);
-            float4 col = float4(1,1,1,1);
+            float sdfOut = sdf(i.uv,rect817_position, rect817_box, rect817_scale, rect817_roundness);
+            float4 col = sdfOut;
             return col;
         }
 

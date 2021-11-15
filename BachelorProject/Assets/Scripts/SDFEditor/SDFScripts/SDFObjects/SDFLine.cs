@@ -3,41 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Line")]
 public class SDFLine : SDFObject {
-    public Vector2 a;
-    public Vector2 b;
-    public float roundness;
-
+    [SerializeField] private Vector2 a;
+    private Vector2 _a;
+    
+    [SerializeField] private Vector2 b;
+    private Vector2 _b;
+    
+    [SerializeField] private float roundness;
+    private float _roundness;
+    
     public Vector2 A {
-        get => this.a;
+        get => this._a;
         set {
-            if (this.a == value) return;
-            this.a = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._a == value) return;
+            this._a = value;
+            this.isDirty = true;
         }
     }
     
     public Vector2 B {
-        get => this.b;
+        get => this._b;
         set {
-            if (this.b == value) return;
-            this.b = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._b == value) return;
+            this._b = value;
+            this.isDirty = true;
         }
     }
     
     public float Roundness {
-        get => this.roundness;
+        get => this._roundness;
         set {
-            if (this.roundness == value) return;
-            this.roundness = value;
-            this.OnValueChange?.Invoke(this);
+            if (this._roundness == value) return;
+            this._roundness = value;
+            this.isDirty = true;
         }
     }
     
     private void OnValidate() {
-        if (this.A != this.a) this.A = this.a;
-        if (this.B != this.b) this.B = this.b;
-        if (this.Roundness != this.roundness) this.Roundness = this.roundness;
+        this.A = this.a;
+        this.B = this.b;
+        this.Roundness = this.roundness;
+        if (this.isDirty) {
+            this.OnValueChange?.Invoke(this);
+            this.isDirty = false;
+        }
     }
     
     private void Awake() {
