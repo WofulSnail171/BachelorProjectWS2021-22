@@ -26,15 +26,20 @@ public class DungeonManager : MonoBehaviour
     public CalculatedDungeonRun currentCalcRun;
     //public Transform playerParty;
 
+    private bool AutoPLay = true;
+    private float AutoPlayWaitTimeSec = 1.0f;
+
     
     // Start is called before the first frame update
     void OnEnable()
     {
         DeleventSystem.eventDataDownloaded += CreateDailyDungeons;
+        StartCoroutine(AutoplayRoutine());
     }
     private void OnDisable()
     {
         DeleventSystem.eventDataDownloaded -= CreateDailyDungeons;
+        StopCoroutine(AutoplayRoutine());
     }
 
     public void StartDungeonRun()
@@ -484,5 +489,20 @@ public class DungeonManager : MonoBehaviour
         Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(false);
+    }
+
+
+
+    IEnumerator AutoplayRoutine()
+    {
+        while (AutoPLay)
+        {
+            //Update Loop for dungeonRun
+            if(currentCalcRun != null && DatabaseManager._instance.dungeonData.currentRun.valid)
+            {
+                NextStepRun();
+            }
+            yield return new WaitForSeconds(AutoPlayWaitTimeSec);
+        }
     }
 }

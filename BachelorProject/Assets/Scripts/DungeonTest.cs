@@ -90,7 +90,7 @@ public class DungeonTest : MonoBehaviour
             yield return new WaitForSeconds((float)AutoPlaySpeed / 100.0f);
             //CurrentStep++;
             //DungeonManager._instance.CalculateRun(CurrentStep);
-            DungeonManager._instance.NextStepRun();
+            //DungeonManager._instance.NextStepRun();
         }
     }
 

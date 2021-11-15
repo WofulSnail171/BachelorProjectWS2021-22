@@ -20,11 +20,12 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         localSaveNo.interactable = false;
 
         DatabaseManager._instance.LoadLocalSave();
-        if(DatabaseManager._instance.activePlayerData != null)
+        if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
         {
             localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
-            localSaveYes.interactable = true;
-            localSaveNo.interactable = true;
+            //localSaveYes.interactable = true;
+            //localSaveNo.interactable = true;
+            OnLocalSaveYes();
         }
         else
         {
