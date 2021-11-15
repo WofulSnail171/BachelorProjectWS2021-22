@@ -83,8 +83,8 @@ public class HubButtonActions : MonoBehaviour
 
 
         //animation test
-        AnimateTradeProgress(alreadyPassedTime,maxTime);
-        AnimateDungeonProgress(alreadyPassedTime, maxTime);
+        //AnimateTradeProgress(alreadyPassedTime,maxTime);
+        //AnimateDungeonProgress(alreadyPassedTime, maxTime);
     }
 
     //init
