@@ -131,6 +131,7 @@ public class HubButtonActions : MonoBehaviour
                     case HubState.HeroHub:
                         //ui
                         UIEnablerManager.Instance.SwitchElements("HeroHub", "TradeObserve", true);
+                        UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
 
                         //buttons
                         UpdateHubButton(ButtonState.Unfocused);
@@ -204,8 +205,7 @@ public class HubButtonActions : MonoBehaviour
 
                         //
                         //ui
-                        UIEnablerManager.Instance.SwitchElements("ShardAndBuff", "DungeonObserve", true);
-                        UIEnablerManager.Instance.DisableElement("TradeObserve", true);
+                        UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonObserve", true);
 
                         //buttons
                         UpdateTradeButton(ButtonState.Unfocused);
@@ -260,10 +260,11 @@ public class HubButtonActions : MonoBehaviour
                 break;
             case HubState.TradeHub:
                 //ui
-                UIEnablerManager.Instance.SwitchElements("TradeObserve", "HeroHub", true);
+                UIEnablerManager.Instance.SwitchElements("TradeObserve", "ShardAndBuff", true);
+                UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if(tradeState == HeroState.Pending)
+                if (tradeState == HeroState.Pending)
                     UpdateTradeButton(ButtonState.Unfocused);
 
                 else
