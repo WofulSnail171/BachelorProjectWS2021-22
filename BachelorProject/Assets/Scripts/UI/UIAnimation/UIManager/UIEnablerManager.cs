@@ -36,7 +36,6 @@ public class UIEnablerManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         else
             Destroy(this);
