@@ -40,14 +40,12 @@ public class DungeonManager : MonoBehaviour
     
     // Start is called before the first frame update
     void OnEnable()
-    {
-        DeleventSystem.eventDataDownloaded += CreateDailyDungeons;
+    {        
         StartCoroutine(AutoplayRoutine());
         currentCalcRun = null;
     }
     private void OnDisable()
-    {
-        DeleventSystem.eventDataDownloaded -= CreateDailyDungeons;
+    {        
         StopCoroutine(AutoplayRoutine());
     }
 
@@ -77,6 +75,20 @@ public class DungeonManager : MonoBehaviour
         {
             dd.dungeonLayout.gameObject.SetActive(false);
         }
+    }
+
+    public int CurrentStep()
+    {
+        double elapsedSeconds = 0;
+        if (DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.date != null)
+        {
+            elapsedSeconds = DateTime.Now.Subtract(DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date)).TotalSeconds;
+            if(AutoPlayWaitTimeSec != 0)
+            {
+                elapsedSeconds /= AutoPlayWaitTimeSec;
+            }
+        }
+        return (int)elapsedSeconds;
     }
 
     public void CreateDailyDungeons()
@@ -170,7 +182,7 @@ public class DungeonManager : MonoBehaviour
 
     public void NextStepRun()
     {
-        if (currentCalcRun == null)
+        if (currentCalcRun == null || currentCalcRun.currentStep > DatabaseManager._instance.dungeonData.currentRun.maxSteps)
             return;
         StepCalcRun();
     }
@@ -186,7 +198,7 @@ public class DungeonManager : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.ResetNodes();
         for (int i = 0; i <= _targetStep; i++)
         {
-            StepCalcRun();
+            NextStepRun();
         }
 
         //UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
@@ -223,6 +235,8 @@ public class DungeonManager : MonoBehaviour
     void StepCalcRun()
     {
         currentCalcRun.currentStep++;
+        if(DeleventSystem.DungeonStep != null)
+            DeleventSystem.DungeonStep();
         switch (currentCalcRun.currentActivity)
         {
             case DungeonActivity.eventStart:
@@ -471,6 +485,9 @@ public class DungeonManager : MonoBehaviour
         }
         else
         {
+            DatabaseManager._instance.dungeonData.currentRun.valid = false;
+            DatabaseManager._instance.SaveGameDataLocally();
+            Debug.Log("Run Ended");
             if (DeleventSystem.dungeonRunFinished != null)
             {
                 DeleventSystem.dungeonRunFinished();

@@ -152,7 +152,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.activePlayerData = _playerData;
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "",FinishedLogIn);
+            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "", FinishedLogIn);
+            //FinishedLogIn();
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
@@ -186,6 +187,13 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     public void FinishedLogIn()
     {
         Debug.Log("Finished Login");
+        DungeonManager._instance.CreateDailyDungeons();
+        if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
+        {
+            DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
+            DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());           
+        }
+
         SceneManager.LoadScene(1);
     }
     void Start()

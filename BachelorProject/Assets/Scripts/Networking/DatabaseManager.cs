@@ -215,6 +215,7 @@ public class PlayerData
     public string lastDungeonDate;
     public string currentDungeonRun;
     public int rewardTierBuff;
+    public int shards;
 
     public BlacklistEntry[] blacklist;
     public List<PlayerHero> inventory;

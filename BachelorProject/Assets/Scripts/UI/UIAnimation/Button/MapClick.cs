@@ -61,7 +61,7 @@ public class MapClick : MonoBehaviour
         //
         //enable dungeon detail select footer
         
-        DungeonManager._instance.chosenDailyDungeonIndex = DailyDungeonIndex;
+        DungeonManager._instance.chosenDailyDungeonIndex = DailyDungeonIndex + 1;
         DungeonManager._instance.ShowDungeonLayout(DailyDungeonIndex);
         UIEnablerManager.Instance.SwitchElements("DungeonMapSelect", "DungeonDetailSelect", true);
 

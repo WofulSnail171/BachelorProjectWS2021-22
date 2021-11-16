@@ -1373,6 +1373,7 @@ MonoBehaviour:
     lastDungeonDate: 
     currentDungeonRun: 
     rewardTierBuff: 0
+    shards: 0
     blacklist: []
     inventory: []
   eventData:
@@ -2143,7 +2144,7 @@ MonoBehaviour:
     sStatGrowth: 0
     nextHero: 0
     dungeonLogArr: []
-  AutoPlayWaitTimeSec: 0.01
+  AutoPlayWaitTimeSec: 1
 --- !u!4 &668027270
 Transform:
   m_ObjectHideFlags: 0
