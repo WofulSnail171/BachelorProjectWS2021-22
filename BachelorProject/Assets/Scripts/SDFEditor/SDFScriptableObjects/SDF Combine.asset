@@ -12,7 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc6db39e8ee8bb459e53c718edd5f2e, type: 3}
   m_Name: SDF Combine
   m_EditorClassIdentifier: 
+  o: comb_out
   sdfName: comb
-  o: newSDF_out
+  variables:
+  - circle343_position
+  - circle343_radius
+  - rect474_position
+  - rect474_box
+  - rect474_scale
+  - rect474_roundness
+  types:
+  - float2
+  - float
+  - float2
+  - float2
+  - float
+  - float4
+  nodes: []
+  nodeType: 6
   inputA: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
-  inputB: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  inputB: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}

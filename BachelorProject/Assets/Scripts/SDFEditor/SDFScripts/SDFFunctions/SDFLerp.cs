@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Lerp")]
-public class SDFLerp : SDFNode
+public class SDFLerp : SDFFunction
 {
     [SerializeField] private SDFNode inputA;
     private SDFNode _inputA;
@@ -19,7 +19,7 @@ public class SDFLerp : SDFNode
         set {
             if (this._inputA == value) return;
             this._inputA = value;
-            this.isDirty = true;
+            this.OnInputChange?.Invoke();
         }
     }
     
@@ -28,7 +28,7 @@ public class SDFLerp : SDFNode
         set {
             if (this._inputB == value) return;
             this._inputB = value;
-            this.isDirty = true;
+            this.OnInputChange?.Invoke();
         }
     }
     
@@ -37,7 +37,7 @@ public class SDFLerp : SDFNode
         set {
             if (this._t == value) return;
             this._t = value;
-            this.isDirty = true;
+            this.OnValueChange?.Invoke(this);
         }
     }
 
@@ -45,10 +45,6 @@ public class SDFLerp : SDFNode
         this.InputA = this.inputA;
         this.InputB = this.inputB;
         this.T = this.t;
-        if (this.isDirty) {
-            this.OnValueChange?.Invoke(this);
-            this.isDirty = false;
-        }
     }
     
     private void Awake() {
@@ -59,21 +55,50 @@ public class SDFLerp : SDFNode
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";
         
-        this.variables.Clear();
-        this.types.Clear();
+        this.OnInputChange += this.GenerateVariables;
+        GenerateVariables();
         
-        this.variables.Add(this.sdfName + "_t");
-        this.types.Add("float");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
-        string a = this.inputA.SdfFunction();
-        string b = this.inputB.SdfFunction();
+        string a = this.inputA.GenerateHlslFunction();
+        string b = this.inputB.GenerateHlslFunction();
+
+        string hlslString = a +@"
+    " + b + @"
+    " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
+        return hlslString;
+    }
+    
+    public override void GetActiveNodes(List<SDFNode> nodes) {
+        nodes.Add(this);
+        
+        if (this.inputA is SDFFunction) {
+            SDFFunction i = (SDFFunction) this.inputA;
+            i.GetActiveNodes(nodes);
+        }
+        else {
+            nodes.Add(this.inputA);
+        }
+        if (this.inputB is SDFFunction) {
+            SDFFunction i = (SDFFunction) this.inputB;
+            i.GetActiveNodes(nodes);
+        }
+        else {
+            nodes.Add(this.inputB);
+        }
+    }
+    
+    public void GenerateVariables() {
         
         this.variables.Clear();
         this.types.Clear();
         
+        if (this._inputA == null || this.inputB == null) {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
+            return;}
+
         this.variables.Add(this.sdfName + "_t");
         this.types.Add("float");
 
@@ -90,10 +115,9 @@ public class SDFLerp : SDFNode
         foreach (string s in this.inputB.types) {
             this.types.Add(s);
         }
+    }
 
-        string hlslString = a +@"
-    " + b + @"
-    " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
-        return hlslString;
+    private void OnDisable() {
+        this.OnInputChange -= GenerateVariables;
     }
 }

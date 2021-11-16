@@ -32,10 +32,5 @@ public abstract class SDFNode : ScriptableObject
 
     [HideInInspector]public NodeType nodeType;
 
-    public abstract string SdfFunction();
-    
-    //TODO: create update event for variables on editor change -> OnValidate()
-    //TODO: check for node changes
-    ////TODO: create event for unsubscribe 
-
+    public abstract string GenerateHlslFunction();
 }

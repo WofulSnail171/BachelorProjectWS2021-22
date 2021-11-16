@@ -55,6 +55,7 @@ public class SDFTriangle : SDFObject {
     }
 
     private void OnValidate() {
+        this.Position = this.position;
         this.A = this.a;
         this.B = this.b;
         this.C = this.c;
@@ -87,7 +88,7 @@ public class SDFTriangle : SDFObject {
         this.types.Add("float");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
         string hlslString ="float2 e0 = " + this.variables[2] + " - " + this.variables[1] + @";
     float2 e1 = " + this.variables[3] + " - " + this.variables[2] + @";

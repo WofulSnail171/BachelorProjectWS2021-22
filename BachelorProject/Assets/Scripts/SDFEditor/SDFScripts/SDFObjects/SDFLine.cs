@@ -40,6 +40,7 @@ public class SDFLine : SDFObject {
     }
     
     private void OnValidate() {
+        this.Position = this.position;
         this.A = this.a;
         this.B = this.b;
         this.Roundness = this.roundness;
@@ -64,11 +65,12 @@ public class SDFLine : SDFObject {
         this.variables.Add(this.sdfName + "_a");
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_b");
-        this.types.Add(this.sdfName + "_roundness");
         this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_roundness");
+        this.types.Add("float");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
         string hlslString = @"
         float2 pa = uv - " + this.variables[0] + " - " + this.variables[1] + @";

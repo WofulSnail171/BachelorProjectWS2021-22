@@ -43,6 +43,7 @@ public class SDFBezier : SDFObject
     }
     
     void OnValidate() {
+        this.Position = this.position;
         this.A = this.a;
         this.B = this.b;
         this.C = this.c;
@@ -73,14 +74,14 @@ public class SDFBezier : SDFObject
         this.types.Add("float2");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
         
         string hlslString = @"
     float2 pos = uv - " + this.variables[0] + @";
     float2 A = " + this.variables[2] + " - " + this.variables[1] + @";
     float2 B = " + this.variables[1] + " - 2.0 * " + this.variables[2] + " + " + this.variables[3] + @";
     float2 C =  A * 2.0;
-    float2 D =  float2" + this.variables[1] + @" - pos;
+    float2 D =  " + this.variables[1] + @" - pos;
     float kk = 1.0/dot(B, B);
     float kx = kk * dot(A, B);
     float ky = kk * (2.0*dot(A, A)+dot(D, B)) / 3.0;

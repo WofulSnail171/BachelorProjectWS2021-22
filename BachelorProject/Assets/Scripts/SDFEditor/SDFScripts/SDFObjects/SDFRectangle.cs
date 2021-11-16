@@ -45,6 +45,7 @@ public class SDFRectangle : SDFObject
     }
 
     private void OnValidate() {
+        this.Position = this.position;
         this.Box = this.box;
         this.Scale = this.scale;
         this.Roundness = this.roundness;
@@ -74,7 +75,7 @@ public class SDFRectangle : SDFObject
         this.variables.Add(this.sdfName + "_roundness");
         this.types.Add("float4");
     }
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
         Vector2 b = this.box * this.scale;
 

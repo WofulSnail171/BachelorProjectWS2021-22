@@ -209,7 +209,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -251,7 +251,6 @@ GameObject:
   - component: {fileID: 649720039}
   - component: {fileID: 649720038}
   - component: {fileID: 649720037}
-  - component: {fileID: 649720041}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -291,7 +290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ba2e67f302df9274e93011572ad3da37, type: 2}
+  - {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -335,19 +334,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &649720041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649720036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shaderName: test
-  sdfNode: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
-  sdfMaterial: {fileID: 2100000, guid: ba2e67f302df9274e93011572ad3da37, type: 2}
-  apply: 0

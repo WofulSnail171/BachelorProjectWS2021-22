@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF Function/Smooth Blend")]
-public class SDFSBLend : SDFNode
+public class SDFSBLend : SDFFunction
 {
     [SerializeField] private SDFNode inputA;
     private SDFNode _inputA;
@@ -22,7 +22,7 @@ public class SDFSBLend : SDFNode
         set {
             if (this._inputA == value) return;
             this._inputA = value;
-            this.isDirty = true;
+            this.OnInputChange?.Invoke();
         }
     }
     
@@ -31,7 +31,7 @@ public class SDFSBLend : SDFNode
         set {
             if (this._inputB == value) return;
             this._inputB = value;
-            this.isDirty = true;
+            this.OnInputChange?.Invoke();
         }
     }
     
@@ -40,7 +40,7 @@ public class SDFSBLend : SDFNode
         set {
             if (this._k == value) return;
             this._k = value;
-            this.isDirty = true;
+            this.OnValueChange?.Invoke(this);
         }
     }
 
@@ -48,10 +48,6 @@ public class SDFSBLend : SDFNode
         this.InputA = this.inputA;
         this.InputB = this.inputB;
         this.K = this.k;
-        if (this.isDirty) {
-            this.OnValueChange?.Invoke(this);
-            this.isDirty = false;
-        }
     }
 
     private void Awake() {
@@ -65,14 +61,46 @@ public class SDFSBLend : SDFNode
         this.variables.Clear();
         this.types.Clear();
         
-        this.variables.Add(this.sdfName + "_k");
-        this.types.Add("float");
+        this.OnInputChange += this.GenerateVariables;
+        GenerateVariables();
     }
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
+        string hlslString = @"
+    float h = max( " + this.variables[0] +" - abs(" + this.inputA + " - " + this.inputB + @"), 0.0 )/" + this.variables[0] + @";
+    float this.o =  min( " + this.inputA + ", " + this.inputB + ") - h*h*" + this.variables[0] +"*(1.0/4.0);";
+        
+        return hlslString;
+    }
+    
+    public override void GetActiveNodes(List<SDFNode> nodes) {
+        nodes.Add(this);
+        
+        if (this.inputA is SDFFunction) {
+            SDFFunction i = (SDFFunction) this.inputA;
+            i.GetActiveNodes(nodes);
+        }
+        else {
+            nodes.Add(this.inputA);
+        }
+        if (this.inputB is SDFFunction) {
+            SDFFunction i = (SDFFunction) this.inputB;
+            i.GetActiveNodes(nodes);
+        }
+        else {
+            nodes.Add(this.inputB);
+        }
+    }
+    
+    public void GenerateVariables() {
+        
         this.variables.Clear();
         this.types.Clear();
         
+        if (this._inputA == null || this.inputB == null) {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
+            return;}
+
         this.variables.Add(this.sdfName + "_k");
         this.types.Add("float");
 
@@ -89,11 +117,9 @@ public class SDFSBLend : SDFNode
         foreach (string s in this.inputB.types) {
             this.types.Add(s);
         }
+    }
 
-        string hlslString = @"
-    float h = max( " + this.variables[0] +" - abs(" + this.inputA + " - " + this.inputB + @"), 0.0 )/" + this.variables[0] + @";
-    float this.o =  min( " + this.inputA + ", " + this.inputB + ") - h*h*" + this.variables[0] +"*(1.0/4.0);";
-        
-        return hlslString;
+    private void OnDisable() {
+        this.OnInputChange -= GenerateVariables;
     }
 }

@@ -39,7 +39,7 @@ public class SDFTexture : SDFObject {
         this.types.Add("UnitySamplerState");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
 
         string hlslString =  "float " + this.o + " = SAMPLE_TEXTURE2D(" + this.variables[0] + ", " + this.variables[1] + ", uv).r;";
         return hlslString;

@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-[ExecuteAlways]
-public class SDFManager : MonoBehaviour{
+[ExecuteAlways][CreateAssetMenu(menuName = "SDF Output/Output")]
+public class SDFOutput : SDFFunction{
 
     [SerializeField] private string shaderName; 
         
     private string pathShaderFile;
     private string pathIncludeFile;
 
-    public SDFNode sdfNode;
+    public SDFNode input;
     public Material sdfMaterial;
     private Shader sdfShader;
     
@@ -20,15 +19,15 @@ public class SDFManager : MonoBehaviour{
     
     private List<string> shaderStrings = new List<string>();
     private List<string> includeStrings = new List<string>();
-    private List <SDFObject>  SDFObjects = new List<SDFObject>();
+    private List <SDFNode>  SDFNodes = new List<SDFNode>();
     
     //TODO: create SDFNodeList 
     //TODO: subscribe to action for varibale changes
 
-    private void Update() {
+    private void OnValidate() {
         if (this.apply) {
             this.Apply();
-            Debug.Log("updated");
+
             this.apply = false;
         }
     }
@@ -38,12 +37,25 @@ public class SDFManager : MonoBehaviour{
         pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
         pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
 
-        if (this.sdfNode != null) {
-            this.AddHlslString(this.sdfNode);
-            this.sdfNode.OnValueChange += this.ChangeShaderValues;
+        if (this.input != null) {
+            this.AddHlslString(this.input);
+
+            this.UpdateActiveNodes();
         }
 
-        this.WriteHlslToText();
+        if (this.sdfMaterial == null){
+            sdfShader = Shader.Find("SDF/" + this.shaderName);
+            if (sdfShader != null) {
+                this.sdfMaterial = new Material("SDFMaterial");
+                this.sdfMaterial.shader = this.sdfShader;
+            }
+            else{
+                Debug.LogWarning("shader could not be found");
+            }
+        }
+        else if(this.sdfMaterial.shader != this.sdfShader) {
+            this.sdfMaterial.shader = this.sdfShader;
+        }
     }
 
     private void AddHlslString(SDFNode node) {
@@ -66,16 +78,6 @@ public class SDFManager : MonoBehaviour{
         this.includeStrings.Add(this.GenerateShaderSdfFunction(node));
         
         this.WriteHlslToText();
-        
-        if (this.sdfMaterial == null){
-            sdfShader = Shader.Find("SDF/" + this.shaderName);
-            if (sdfShader != null) {
-                this.sdfMaterial = new Material(sdfShader);
-            }
-            else{
-                Debug.LogWarning("shader could not be found");
-            }
-        }
     }
 
     string GenerateShaderName() {
@@ -97,7 +99,9 @@ public class SDFManager : MonoBehaviour{
         return@"
             SubShader
             {
-            Tags { ""RenderType""=""Opaque"" }
+            Tags { ""RenderType""=""Opaque"" 
+                   ""RenderPipeline""=""UniversalRenderPipeline""
+                 }
             LOD 100";
     }
     
@@ -141,11 +145,11 @@ public class SDFManager : MonoBehaviour{
     private string GenerateShaderVariables() {
         string variables = "";
 
-        for (int i = 0; i < this.sdfNode.variables.Count; i++) {
-            variables += this.sdfNode.types[i] + " " + this.sdfNode.variables[i] + @";
+        for (int i = 0; i < this.input.variables.Count; i++) {
+            variables += this.input.types[i] + " " + this.input.variables[i] + @";
     ";
         }
-
+        Debug.Log(variables);
         return @"
 CBUFFER_START(UnityPerMaterial)
    " + variables + @"
@@ -156,9 +160,9 @@ CBUFFER_END";
 
         string variables = "";
         
-        for (int i = 0; i < this.sdfNode.variables.Count; i++) {
-            variables += this.sdfNode.variables[i];
-            if (i != this.sdfNode.variables.Count - 1) {
+        for (int i = 0; i < this.input.variables.Count; i++) {
+            variables += this.input.variables[i];
+            if (i != this.input.variables.Count - 1) {
                 variables += ", ";
             }
         }
@@ -166,9 +170,9 @@ CBUFFER_END";
         return @"
         float4 frag (v2f i) : SV_Target
         {
-            
+            i.uv -= float2(0.5, 0.5);
             float sdfOut = sdf(i.uv," + variables + @");
-            float4 col = sdfOut;
+            float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }
 ";
@@ -191,9 +195,9 @@ CBUFFER_END";
     private string GenerateShaderSdfFunction(SDFNode node) {
         string variables = "";
 
-        for (int i = 0; i < this.sdfNode.variables.Count; i++) {
-            variables += this.sdfNode.types[i] + " " + this.sdfNode.variables[i];
-            if (i != this.sdfNode.variables.Count - 1) {
+        for (int i = 0; i < this.input.variables.Count; i++) {
+            variables += this.input.types[i] + " " + this.input.variables[i];
+            if (i != this.input.variables.Count - 1) {
                 variables += ", ";
             }
         }
@@ -202,7 +206,7 @@ CBUFFER_END";
     float dot2( in float2 v ) { return dot(v,v); }
 
     float sdf (float2 uv, " + variables + @"){ 
-        " + node.SdfFunction() + @"
+        " + node.GenerateHlslFunction() + @"
 
          return " + node.o + @";
         }
@@ -244,7 +248,7 @@ CBUFFER_END";
                 this.sdfMaterial.SetVector(n.sdfName + "_box" , n.Box);
                 this.sdfMaterial.SetFloat(n.sdfName + "_scale" , n.Scale);
                 this.sdfMaterial.SetVector(n.sdfName + "_roundness" , n.Roundness);
-                
+
                 break;
             }
             case SDFNode.NodeType.Triangle: {
@@ -253,7 +257,7 @@ CBUFFER_END";
                 this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
-                this.sdfMaterial.SetFloat(n.sdfName + "_scale" , n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
 
                 break;
             }
@@ -273,7 +277,7 @@ CBUFFER_END";
                 this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
-
+                
                 break;
             }
             case SDFNode.NodeType.Texture: {
@@ -302,15 +306,42 @@ CBUFFER_END";
             }
         }
     }
+
+    public override string GenerateHlslFunction() {
+        throw new NotImplementedException();
+    }
+
+    public override void GetActiveNodes(List<SDFNode> nodes) {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateActiveNodes() {
+        //remove all actions
+        foreach (SDFNode s in this.SDFNodes) {
+            s.OnValueChange -= this.ChangeShaderValues;
+
+            if (s is SDFFunction) {
+                SDFFunction sfunc = (SDFFunction) s;
+                sfunc.OnInputChange -= this.UpdateActiveNodes;
+            }
+        }
+        //get active nodes
+        if (this.input is SDFFunction) {
+            SDFFunction i = (SDFFunction) this.input;
+            i.GetActiveNodes(this.SDFNodes);
+        }
+        else {
+            nodes.Add(this.input);
+        }
+        //add actions from active nodes
+        foreach (SDFNode s in this.SDFNodes) {
+            ChangeShaderValues(s);
+            s.OnValueChange += this.ChangeShaderValues;
+
+            if (s is SDFFunction) {
+                SDFFunction sfunc = (SDFFunction) s;
+                sfunc.OnInputChange += this.UpdateActiveNodes;
+            }
+        }
+    }
 }
-
-
-///       variablesNames[].index == variablesTypes[].index
-///    -> variable[]index should be the same
-///     [Node index] [Variable index]
-///
-/// circleVar [radius]
-/// lineVar      [a]      [b]     [roundness]
-///
-///     TODO: rewrite variablesNames and variablesTypes to [][]
-///     TODO: add [][] for nodes

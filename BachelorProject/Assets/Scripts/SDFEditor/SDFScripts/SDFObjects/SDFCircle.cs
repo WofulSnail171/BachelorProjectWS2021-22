@@ -41,7 +41,7 @@ public class SDFCircle : SDFObject {
         this.types.Add("float");
     }
     
-    public override string SdfFunction() {
+    public override string GenerateHlslFunction() {
         
         string hlslString = "float " + this.o + " = length(" + this.variables[0] + "- uv)- " + this.variables[1] + ";" ;
         return hlslString;

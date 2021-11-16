@@ -1,4 +1,4 @@
-Shader "SDF/test"
+Shader "SDF/test2"
         {
 
             Properties
@@ -10,7 +10,9 @@ Shader "SDF/test"
 
             SubShader
             {
-            Tags { "RenderType"="Opaque" }
+            Tags { "RenderType"="Opaque" 
+                   "RenderPipeline"="UniversalRenderPipeline"
+                 }
             LOD 100
 
             Pass
@@ -21,7 +23,7 @@ Shader "SDF/test"
             #pragma multi_compile_fog
                         
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"       
-            #include "test.hlsl"
+            #include "test2.hlsl"
             
                 struct appdata
             {
@@ -44,18 +46,19 @@ Shader "SDF/test"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float2 triangle999_position;
-    float2 triangle999_a;
-    float2 triangle999_b;
-    float2 triangle999_c;
-    float triangle999_scale;
+   float2 circle343_position;
+    float circle343_radius;
+    float2 rect474_position;
+    float2 rect474_box;
+    float rect474_scale;
+    float4 rect474_roundness;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,triangle999_position, triangle999_a, triangle999_b, triangle999_c, triangle999_scale);
+            float sdfOut = sdf(i.uv,circle343_position, circle343_radius, rect474_position, rect474_box, rect474_scale, rect474_roundness);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }
