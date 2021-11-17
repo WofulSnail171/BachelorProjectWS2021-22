@@ -13,6 +13,7 @@ public class SDFCircle : SDFObject {
             if (this._radius == value) return;
             this._radius = value;
             this.isDirty = true;
+            Debug.Log("changing radius");
         }
     }
     
@@ -33,8 +34,11 @@ public class SDFCircle : SDFObject {
         this.sdfName = "circle" + this.index;
         this.o = this.sdfName + "_out";
         
-        this.variables.Clear();
-        this.types.Clear();
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
+        
         this.variables.Add(this.sdfName + "_position");
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_radius");

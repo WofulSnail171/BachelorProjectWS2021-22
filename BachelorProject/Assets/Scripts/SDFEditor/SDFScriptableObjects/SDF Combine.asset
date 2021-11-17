@@ -15,20 +15,20 @@ MonoBehaviour:
   o: comb_out
   sdfName: comb
   variables:
-  - circle343_position
-  - circle343_radius
-  - rect474_position
-  - rect474_box
-  - rect474_scale
-  - rect474_roundness
+  - line538_position
+  - line538_a
+  - line538_b
+  - line538_roundness
+  - circle892_position
+  - circle892_radius
   types:
   - float2
-  - float
   - float2
   - float2
   - float
-  - float4
+  - float2
+  - float
   nodes: []
   nodeType: 6
-  inputA: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
-  inputB: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}
+  inputA: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}
+  inputB: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}

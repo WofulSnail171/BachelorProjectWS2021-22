@@ -19,7 +19,7 @@ public class SDFCombine : SDFFunction {
             if (this._inputA == value) return;
             this._inputA = value;
             this.OnInputChange?.Invoke();
-            Debug.Log("input a has changed");
+            Debug.Log("input A has changed");
         }
     }
     
@@ -29,6 +29,7 @@ public class SDFCombine : SDFFunction {
             if (this._inputB == value) return;
             this._inputB = value;
             this.OnInputChange?.Invoke();
+            Debug.Log("input B has changed");
         }
     }
 
@@ -84,8 +85,11 @@ public class SDFCombine : SDFFunction {
     public void GenerateVariables() {
         
         Debug.Log("generating new variables");
-        this.variables.Clear();
-        this.types.Clear();
+        
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
 
         if (this.inputA == null || this.inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
@@ -106,7 +110,8 @@ public class SDFCombine : SDFFunction {
         foreach (string s in this.inputB.types) {
             this.types.Add(s);
         }
-        Debug.Log(variables);
+        
+        Debug.Log(this.variables);
     }
 
     private void OnDestroy() {

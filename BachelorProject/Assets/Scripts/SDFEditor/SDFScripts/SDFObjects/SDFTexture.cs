@@ -31,8 +31,11 @@ public class SDFTexture : SDFObject {
         this.sdfName = "tex" + this.index;
         this.o = this.sdfName + "_out";
         
-        this.variables.Clear();
-        this.types.Clear();
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
+        
         this.variables.Add(this.sdfName + "_tex");
         this.types.Add("UnityTexture2D");
         this.variables.Add(this.sdfName + "_sampleState");

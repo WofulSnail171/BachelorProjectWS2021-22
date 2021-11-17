@@ -92,8 +92,10 @@ public class SDFLerp : SDFFunction
     
     public void GenerateVariables() {
         
-        this.variables.Clear();
-        this.types.Clear();
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
         
         if (this._inputA == null || this.inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);

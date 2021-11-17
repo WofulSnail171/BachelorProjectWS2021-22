@@ -10,7 +10,9 @@ Shader "SDF/test"
 
             SubShader
             {
-            Tags { "RenderType"="Opaque" }
+            Tags { "RenderType"="Opaque" 
+                   "RenderPipeline"="UniversalRenderPipeline"
+                 }
             LOD 100
 
             Pass
@@ -44,18 +46,15 @@ Shader "SDF/test"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float2 triangle999_position;
-    float2 triangle999_a;
-    float2 triangle999_b;
-    float2 triangle999_c;
-    float triangle999_scale;
+   float2 circle892_position;
+    float circle892_radius;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,triangle999_position, triangle999_a, triangle999_b, triangle999_c, triangle999_scale);
+            float sdfOut = sdf(i.uv,circle892_position, circle892_radius);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }

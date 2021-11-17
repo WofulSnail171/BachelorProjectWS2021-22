@@ -11,11 +11,22 @@ public class SDFOutput : SDFFunction{
     private string pathShaderFile;
     private string pathIncludeFile;
 
-    public SDFNode input;
+    [SerializeField]private SDFNode input;
+    private SDFNode _input;
+
+    public SDFNode Input {
+        get => this._input;
+        set {
+            if (this._input == value) return;
+            this._input = value;
+            this.OnValueChange?.Invoke(this);
+        }
+    }
+    
     public Material sdfMaterial;
     private Shader sdfShader;
     
-    public bool apply;
+    public bool applyMaterial;
     
     private List<string> shaderStrings = new List<string>();
     private List<string> includeStrings = new List<string>();
@@ -25,27 +36,29 @@ public class SDFOutput : SDFFunction{
     //TODO: subscribe to action for varibale changes
 
     private void OnValidate() {
-        if (this.apply) {
-            this.Apply();
-
-            this.apply = false;
+        this.Input = this.input;
+        
+        if (this.applyMaterial) {
+            
+            this.ApplyMaterial();
+            this.applyMaterial = false;
         }
     }
 
-    private void Apply() {
+    private void Awake() {
+        this.OnValueChange += this.UpdateShader;
+    }
 
-        pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
-        pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
+    private void ApplyMaterial() {
 
-        if (this.input != null) {
-            this.AddHlslString(this.input);
+        this.pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
+        this.pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
 
-            this.UpdateActiveNodes();
-        }
+        this.UpdateShader(this);
 
         if (this.sdfMaterial == null){
-            sdfShader = Shader.Find("SDF/" + this.shaderName);
-            if (sdfShader != null) {
+            this.sdfShader = Shader.Find("SDF/" + this.shaderName);
+            if (this.sdfShader != null) {
                 this.sdfMaterial = new Material("SDFMaterial");
                 this.sdfMaterial.shader = this.sdfShader;
             }
@@ -54,7 +67,16 @@ public class SDFOutput : SDFFunction{
             }
         }
         else if(this.sdfMaterial.shader != this.sdfShader) {
+            this.sdfShader = Shader.Find("SDF/" + this.shaderName);
             this.sdfMaterial.shader = this.sdfShader;
+        }
+    }
+
+    private void UpdateShader(SDFNode sdfNode) {
+        if (this.Input != null) {
+            
+            this.UpdateActiveNodes();
+            this.AddHlslString(this.Input);
         }
     }
 
@@ -234,12 +256,15 @@ CBUFFER_END";
     }
     
     private void ChangeShaderValues(SDFNode node){
-
+        
+        Debug.Log("changing shader variables");
+        
         switch (node.nodeType) {
             case SDFNode.NodeType.Circle: {
                 var n = (SDFCircle) node;
                 this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
                 this.sdfMaterial.SetFloat(n.sdfName + "_radius" , n.Radius);
+                Debug.Log("updated shader variables");
                 break;
             }
             case SDFNode.NodeType.Rect: {
@@ -304,6 +329,10 @@ CBUFFER_END";
                 this.sdfMaterial.SetFloat(n.sdfName + "_t" , n.T);
                 break;
             }
+            default: {
+                Debug.LogWarning("unknow node");
+                break;
+            }
         }
     }
 
@@ -318,26 +347,31 @@ CBUFFER_END";
     public void UpdateActiveNodes() {
         //remove all actions
         foreach (SDFNode s in this.SDFNodes) {
-            s.OnValueChange -= this.ChangeShaderValues;
+            if (s != null) {
+                s.OnValueChange -= this.ChangeShaderValues;
 
-            if (s is SDFFunction) {
-                SDFFunction sfunc = (SDFFunction) s;
-                sfunc.OnInputChange -= this.UpdateActiveNodes;
+                if (s is SDFFunction) {
+                    SDFFunction sfunc = (SDFFunction) s;
+                    sfunc.OnInputChange -= this.UpdateActiveNodes;
+                }
             }
         }
+        
         //get active nodes
         if (this.input is SDFFunction) {
             SDFFunction i = (SDFFunction) this.input;
             i.GetActiveNodes(this.SDFNodes);
         }
         else {
-            nodes.Add(this.input);
+            this.SDFNodes.Add(this.input);
+            Debug.Log("in here");
         }
+        
         //add actions from active nodes
         foreach (SDFNode s in this.SDFNodes) {
             ChangeShaderValues(s);
             s.OnValueChange += this.ChangeShaderValues;
-
+            Debug.Log("subscribed to value change on " +  s.sdfName);
             if (s is SDFFunction) {
                 SDFFunction sfunc = (SDFFunction) s;
                 sfunc.OnInputChange += this.UpdateActiveNodes;

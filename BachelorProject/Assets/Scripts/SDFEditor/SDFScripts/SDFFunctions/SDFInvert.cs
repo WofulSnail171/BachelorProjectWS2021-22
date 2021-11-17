@@ -60,9 +60,11 @@ public class SDFInvert : SDFFunction
 
     public void GenerateVariables() {
         
-        this.variables.Clear();
-        this.types.Clear();
-
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
+        
         if (this.input == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
             return;

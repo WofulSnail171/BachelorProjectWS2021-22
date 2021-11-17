@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fef9d6fb277be4081f81da0e574a28, type: 3}
   m_Name: SDF Bezier
   m_EditorClassIdentifier: 
-  o: bezier671_out
-  sdfName: bezier671
+  o: bezier420_out
+  sdfName: bezier420
   variables:
-  - bezier671_position
-  - bezier671_a
-  - bezier671_b
-  - bezier671_c
+  - bezier420_position
+  - bezier420_a
+  - bezier420_b
+  - bezier420_c
   types:
   - float2
   - float2
@@ -27,6 +27,6 @@ MonoBehaviour:
   nodes: []
   nodeType: 4
   position: {x: 0, y: 0}
-  a: {x: -0.1, y: -0.27}
-  b: {x: 0.52, y: -0.19}
-  c: {x: 0.07, y: 0.01}
+  a: {x: -0.4, y: -0.44}
+  b: {x: 0.74, y: -0.11}
+  c: {x: -0.31, y: 0.17}
