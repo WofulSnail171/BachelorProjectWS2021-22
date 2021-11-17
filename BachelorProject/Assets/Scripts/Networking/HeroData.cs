@@ -8,6 +8,8 @@ public class PlayerHero
     public string heroId;
     public HeroStatus status;
 
+    public int uniqueId;
+
     public int pVal;
     public int pPot;
     public int mVal;

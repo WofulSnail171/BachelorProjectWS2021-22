@@ -21,6 +21,7 @@ public class CalculatedDungeonRun
     public CalculatedDungeonRun(DungeonRun _dungeonRun)
     {
         dungeonRun = _dungeonRun;
+        ended = false;
         currentStep = 0;
         currentActivity = DungeonActivity.startQuest;
         startActivitySteps = 0;
@@ -58,12 +59,13 @@ public class CalculatedDungeonRun
 
     public bool Finished()
     {
-        return currentStep >= dungeonRun.maxSteps;
+        return ended;
     }
 
     Dictionary<int, int> randomNums;
 
     DungeonRun dungeonRun;
+    public bool ended;
     public int currentStep;
     public DungeonActivity currentActivity;
     public int startActivitySteps;

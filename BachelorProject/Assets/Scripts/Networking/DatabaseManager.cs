@@ -84,9 +84,59 @@ public class DatabaseManager : MonoBehaviour
                 eventData = localSave.eventData;
                 eventData.CreateDictionaries();
                 activePlayerData = localSave.activePlayerData;
+                ValidateInventory();
                 dungeonData = localSave.dungeonData;
             }
         }
+    }
+
+    public static void ValidateInventory()
+    {
+        foreach (var item in _instance.activePlayerData.inventory)
+        {
+            ValidatePlayerHero(item);
+        }
+    }
+
+    public static void ValidatePlayerHero(PlayerHero _hero)
+    {        
+        while (!CheckUniqueId(_hero, _hero.uniqueId) || _hero.uniqueId < 1000)
+        {
+            _hero.uniqueId = UnityEngine.Random.Range(1000, 10000);
+        }
+        if (!CheckUniqueInvIndex(_hero, _hero.invIndex))
+        {
+            _hero.invIndex = -1;
+            while (!CheckUniqueInvIndex(_hero, _hero.invIndex) || _hero.invIndex < 0)
+            {
+                _hero.invIndex++;
+            }
+        }
+            
+    }
+
+    private static bool CheckUniqueId(PlayerHero _hero, int _uniqueId)
+    {
+        foreach (var item in DatabaseManager._instance.activePlayerData.inventory)
+        {
+            if (item != _hero && item.uniqueId == _uniqueId)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static bool CheckUniqueInvIndex(PlayerHero _hero, int _uniqueInvIndex)
+    {
+        foreach (var item in DatabaseManager._instance.activePlayerData.inventory)
+        {
+            if (item != _hero && item.invIndex == _uniqueInvIndex)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public IncomingHeroData defaultHeroData;
@@ -199,8 +249,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString(),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString()),
+//date = System.DateTime.Now.ToString("o"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("o")),
 
 [System.Serializable]
 public class PlayerData

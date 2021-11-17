@@ -88,13 +88,9 @@ public class InventoryUI : MonoBehaviour
                 heroSlots[i].removeHero();
                 heroSlots[i].hideHero();
             }
-
-            int index = 0;
             //assign
             foreach(PlayerHero hero in DatabaseManager._instance.activePlayerData.inventory)
             {
-                hero.invIndex = index;
-                index++;
                 InitAssignHeroToSlot(hero);
             }
             DatabaseManager._instance.SaveGameDataLocally();
@@ -133,7 +129,7 @@ public class InventoryUI : MonoBehaviour
 
         //update tradeing and exploring heroes
         InitUpdateTradeHeroes(hero);
-        InitUodateExploreHeroes(hero);
+        InitUpdateExploreHeroes(hero);
         //should be actually only called when the UI is being enabled and not at the start 
     }
 
@@ -159,7 +155,7 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void InitUodateExploreHeroes(PlayerHero hero)
+    private void InitUpdateExploreHeroes(PlayerHero hero)
     {
         if (hero.status == HeroStatus.Exploring)
         {
@@ -295,7 +291,12 @@ public class InventoryUI : MonoBehaviour
 
             //switch
             AssignHeroToSlot(heroSlot.playerHero, draggedSlot.slotID, heroSlot.tradeReferenceID, heroSlot.exploreReferenceID);
+            //ToDO change slotId in database
+            heroSlot.playerHero.invIndex = draggedSlot.slotID;
+
             AssignHeroToSlot(temphero, heroSlot.slotID, tempTradeID,tempExploreID);
+            //ToDO change slotId in database
+            temphero.invIndex = heroSlot.slotID;
 
             //update references
             tradeInventory.UpdateReference(draggedSlot.slotID, tempTradeID);
@@ -319,6 +320,9 @@ public class InventoryUI : MonoBehaviour
 
             //assign
             AssignHeroToSlot(temphero, heroSlot.slotID,tempTradeID,tempExploreID);
+            //ToDO change slotId in database
+            heroSlot.playerHero.invIndex = heroSlot.slotID;
+
 
             //update references
             tradeInventory.UpdateReference(draggedSlot.slotID, -1);

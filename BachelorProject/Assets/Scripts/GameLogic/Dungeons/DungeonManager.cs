@@ -118,7 +118,7 @@ public class DungeonManager : MonoBehaviour
             {
                 dailySeed = UnityEngine.Random.Range(1, 3000),
                 layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-                date = DateTime.Now.ToString(),
+                date = DateTime.Now.ToString("o"),
                 questName = DatabaseManager._instance.eventData.basicQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.basicQuestDeck.Length)].eventName,
                 type = DungeonType.basic
             };
@@ -128,7 +128,7 @@ public class DungeonManager : MonoBehaviour
         {
             dailySeed = UnityEngine.Random.Range(1, 3000),
             layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-            date = DateTime.Now.ToString(),
+            date = DateTime.Now.ToString("o"),
             questName = DatabaseManager._instance.eventData.doomQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.doomQuestDeck.Length)].eventName,
             type = DungeonType.doom
         };
@@ -163,7 +163,7 @@ public class DungeonManager : MonoBehaviour
             result = new DungeonRun
             {
                 dungeon = chosenDungeon,
-                date = DateTime.Now.ToString(),
+                date = DateTime.Now.ToString("o"),
                 valid = false,
                 dungeonSeed = UnityEngine.Random.Range(0, 500),
                 initialRewardTier = DatabaseManager._instance.activePlayerData.rewardTierBuff,
@@ -182,7 +182,7 @@ public class DungeonManager : MonoBehaviour
 
     public void NextStepRun()
     {
-        if (currentCalcRun == null || currentCalcRun.currentStep > DatabaseManager._instance.dungeonData.currentRun.maxSteps)
+        if (currentCalcRun == null || !DatabaseManager._instance.dungeonData.currentRun.valid) //currentCalcRun.currentStep > DatabaseManager._instance.dungeonData.currentRun.maxSteps)
             return;
         StepCalcRun();
     }
@@ -228,6 +228,7 @@ public class DungeonManager : MonoBehaviour
     {
         if (DatabaseManager._instance.dungeonData.currentRun == null || DatabaseManager._instance.dungeonData.currentRun.valid == false)
             return;
+        DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         currentCalcRun = new CalculatedDungeonRun(DatabaseManager._instance.dungeonData.currentRun);
         //playerParty.position = DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.startNode.transform.position;
     }
@@ -483,9 +484,10 @@ public class DungeonManager : MonoBehaviour
         {
             currentCalcRun.remainingActivitySteps--;
         }
-        else
+        else if(!currentCalcRun.ended)
         {
-            DatabaseManager._instance.dungeonData.currentRun.valid = false;
+            currentCalcRun.ended = true;
+            //DatabaseManager._instance.dungeonData.currentRun.valid = false;
             DatabaseManager._instance.SaveGameDataLocally();
             Debug.Log("Run Ended");
             if (DeleventSystem.dungeonRunFinished != null)

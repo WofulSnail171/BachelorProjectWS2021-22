@@ -150,6 +150,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             outputTextfield.text = "SignIn successful";
             DatabaseManager._instance.activePlayerData = _playerData;
+            DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
             ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "", FinishedLogIn);
@@ -191,7 +192,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
         {
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
-            DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());           
+            DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
+            //DungeonManager._instance.CalculateRun(0);
         }
 
         SceneManager.LoadScene(1);
@@ -397,8 +399,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             name = "Benedikt",
             password = "321",
-            date = System.DateTime.Now.ToString(),
-            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString()),
+            date = System.DateTime.Now.ToString("o"),
+            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString("o")),
             profileDescription = "",
             mtDoomCounter = 0,
             tradeCounter = 0,

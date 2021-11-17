@@ -41,6 +41,7 @@ public class HeroCreator
                     break;
             }
         }
+        DatabaseManager.ValidatePlayerHero(result);
         return result;
     }
 

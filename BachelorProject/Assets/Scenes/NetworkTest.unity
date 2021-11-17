@@ -2133,6 +2133,7 @@ MonoBehaviour:
   chosenDailyDungeonIndex: 0
   layoutList: {fileID: 0}
   currentCalcRun:
+    ended: 0
     currentStep: 0
     currentActivity: 0
     startActivitySteps: 0
@@ -2144,7 +2145,7 @@ MonoBehaviour:
     sStatGrowth: 0
     nextHero: 0
     dungeonLogArr: []
-  AutoPlayWaitTimeSec: 1
+  AutoPlayWaitTimeSec: 0.01
 --- !u!4 &668027270
 Transform:
   m_ObjectHideFlags: 0

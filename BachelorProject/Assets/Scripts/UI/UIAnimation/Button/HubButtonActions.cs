@@ -79,11 +79,13 @@ public class HubButtonActions : MonoBehaviour
         hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickedHub(); });
         tradeFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedTrade(); });
         dungeonFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedDungeon(); });
+        dungeonReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickedReadyDungeon(); });
 
         DeleventSystem.DungeonStep += UpdateStates;
         DeleventSystem.DungeonStart += UpdateStates;
         DeleventSystem.DungeonEnd += UpdateStates;
         DeleventSystem.DungeonEvent += UpdateStates;
+        DeleventSystem.DungeonRewardFinished += UpdateStates;
 
         DeleventSystem.TradeStart += UpdateStates;
         DeleventSystem.TradeEnd += UpdateStates;
@@ -101,6 +103,42 @@ public class HubButtonActions : MonoBehaviour
     {
         tradeState = DatabaseManager.GetTradeState();
         dungeonState = DatabaseManager.GetDungeonRunState();
+        
+        dungeonReadyButton.SetActive(false);
+        dungeonButton.SetActive(false);
+        dungeonSingleTextGroup.SetActive(false);
+        dungeonTextGroup.SetActive(false);
+        dungeonProgressBar.gameObject.SetActive(false);
+        switch (dungeonState)
+        {
+            case ProgressState.Empty:
+                dungeonButton.SetActive(true);
+                dungeonSingleTextGroup.SetActive(true);
+
+                break;
+            case ProgressState.Pending:
+                dungeonButton.SetActive(true);
+                dungeonTextGroup.SetActive(true);
+                dungeonProgressBar.gameObject.SetActive(true);
+                break;
+            case ProgressState.Done:
+                dungeonReadyButton.SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void Update()
+    {
+        if(DungeonManager._instance.currentCalcRun != null && dungeonState == ProgressState.Pending)
+        {
+            float value = (float)DungeonManager._instance.currentCalcRun.currentStep / (float)DatabaseManager._instance.dungeonData.currentRun.maxSteps;
+            dungeonFocusProgressBar.fillAmount = value;
+            dungeonProgressBar.fillAmount = value;
+            setDungeonText(value, dungeonFocusProgressTime);
+            setDungeonText(value, dungeonProgressTime);
+        }
     }
 
 
@@ -314,7 +352,21 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
 
-
+    private void ClickedReadyDungeon()
+    {
+        //split into more steps with pop ups:
+        DungeonManager._instance.ApplyGrowth();
+        DungeonManager._instance.EventRewardHandling();
+        DungeonManager._instance.WrapUpDungeon();
+        DatabaseManager._instance.SaveGameDataLocally();
+        ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
+        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
+        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
+        if(DeleventSystem.DungeonRewardFinished != null)
+        {
+            DeleventSystem.DungeonRewardFinished();
+        }
+    }
 
 
 
