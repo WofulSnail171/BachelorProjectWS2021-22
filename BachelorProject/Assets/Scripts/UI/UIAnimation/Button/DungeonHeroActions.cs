@@ -10,6 +10,9 @@ public class DungeonHeroActions : MonoBehaviour
 
     [SerializeField] GameObject cancelButton;
     [SerializeField] GameObject confirmButton;
+
+    [SerializeField] HubButtonActions HubFooter;
+
     #endregion
 
     private void Start()
@@ -40,15 +43,21 @@ public class DungeonHeroActions : MonoBehaviour
 
         if(confirmed)
         {
+            //change buttons of general
+            //
+            HubFooter.UpdateHubButton(ButtonState.Unfocused);
+            HubFooter.UpdateTradeButton(ButtonState.Unfocused);
+            HubFooter.UpdateDungeonButton(ButtonState.Focused);
+
             //disable background
             UIEnablerManager.Instance.DisableCanvas();
 
             //go to observation
             UIEnablerManager.Instance.DisableElement("HeroHub", true);
             UIEnablerManager.Instance.SwitchElements("DungeonHeroSelect", "General", true);
-            //change buttons of general
-            //
-            //
+            UIEnablerManager.Instance.EnableElement("DungeonObserve", true);
+
+            HubFooter.UpdateHubState(HubState.DungeonHub);
         }
 
     }

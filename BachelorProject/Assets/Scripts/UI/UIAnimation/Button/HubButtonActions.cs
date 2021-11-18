@@ -19,14 +19,15 @@ public enum ProgressState
     Done
 }
 
-public class HubButtonActions : MonoBehaviour
-{
-    public enum ButtonState
+public enum ButtonState
     {
         Focused,
         Unfocused,
         Finished,
     }
+
+public class HubButtonActions : MonoBehaviour
+{
 
     #region vars
     //actual buttons
@@ -97,32 +98,20 @@ public class HubButtonActions : MonoBehaviour
         //AnimateDungeonProgress(alreadyPassedTime, maxTime);
     }
 
-    //init
 
     private void UpdateStates()
     {
         tradeState = DatabaseManager.GetTradeState();
         dungeonState = DatabaseManager.GetDungeonRunState();
-        
-        dungeonReadyButton.SetActive(false);
-        dungeonButton.SetActive(false);
-        dungeonSingleTextGroup.SetActive(false);
-        dungeonTextGroup.SetActive(false);
-        dungeonProgressBar.gameObject.SetActive(false);
+
         switch (dungeonState)
         {
-            case ProgressState.Empty:
-                dungeonButton.SetActive(true);
+            case ProgressState.Done:
+                dungeonProgressBar.gameObject.SetActive(false);
+                dungeonTextGroup.SetActive(false);
                 dungeonSingleTextGroup.SetActive(true);
 
-                break;
-            case ProgressState.Pending:
-                dungeonButton.SetActive(true);
-                dungeonTextGroup.SetActive(true);
-                dungeonProgressBar.gameObject.SetActive(true);
-                break;
-            case ProgressState.Done:
-                dungeonReadyButton.SetActive(true);
+                UpdateDungeonButton(ButtonState.Finished);
                 break;
             default:
                 break;
@@ -133,11 +122,17 @@ public class HubButtonActions : MonoBehaviour
     {
         if(DungeonManager._instance.currentCalcRun != null && dungeonState == ProgressState.Pending)
         {
+            //set active progress bar
+            dungeonProgressBar.gameObject.SetActive(true);
+            dungeonTextGroup.SetActive(true);
+            dungeonSingleTextGroup.SetActive(false);
+
             float value = (float)DungeonManager._instance.currentCalcRun.currentStep / (float)DatabaseManager._instance.dungeonData.currentRun.maxSteps;
             dungeonFocusProgressBar.fillAmount = value;
             dungeonProgressBar.fillAmount = value;
             setDungeonText(value, dungeonFocusProgressTime);
             setDungeonText(value, dungeonProgressTime);
+            
         }
     }
 
@@ -154,7 +149,30 @@ public class HubButtonActions : MonoBehaviour
                 //empty
                 //------------------------------------
 
+                //check where you are coming from
+                switch(currentHubFocus)
+                {
+                    case HubState.DungeonHub:
+                        UIEnablerManager.Instance.EnableCanvas();
+                        UIEnablerManager.Instance.SwitchElements("DungeonObserve","HeroHub", true);
+                        UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
+
+                        //button
+                        if (tradeState != ProgressState.Done)
+                            UpdateDungeonButton(ButtonState.Unfocused);
+
+                        break;
+                    case HubState.HeroHub:
+                        UpdateHubButton(ButtonState.Unfocused);
+                        break;
+                    default:
+                        break;
+                }
+
+                //always
                 UIEnablerManager.Instance.SwitchElements("General", "TradeSelect", true);
+                UpdateTradeButton(ButtonState.Focused);
+
 
                 break;
 
@@ -198,19 +216,13 @@ public class HubButtonActions : MonoBehaviour
                 currentHubFocus = HubState.TradeHub;
 
                 break;
-
-            case ProgressState.Done:
-                //pending is done
-                //------------------------------------
-                //do pop up
-
-                break;
-
             default:
                 Debug.Log("no trade state");
                 break;
         }
 
+        //change focus state
+        currentHubFocus = HubState.TradeHub;
     }
 
     private void ClickedDungeon()
@@ -222,12 +234,25 @@ public class HubButtonActions : MonoBehaviour
             case ProgressState.Empty:
                 //empty
                 //------------------------------------
+                //check where you coming from
 
-                UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
+                switch(currentHubFocus)
+                {
+                    case HubState.HeroHub:
+                        UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonMapSelect", true);
+                        UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
+                        break;
+                    case HubState.TradeHub:
+                        UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonMapSelect", true);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                //always
                 UIEnablerManager.Instance.DisableElement("General", true);
-                UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonMapSelect", true);
-
-
+                
                 break;
 
             case ProgressState.Pending:
@@ -258,7 +283,8 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonObserve", true);
 
                         //buttons
-                        UpdateTradeButton(ButtonState.Unfocused);
+                        if(tradeState != ProgressState.Done)
+                            UpdateTradeButton(ButtonState.Unfocused);
 
                         break;
                     default:
@@ -268,21 +294,14 @@ public class HubButtonActions : MonoBehaviour
                 //do always
                 UpdateDungeonButton(ButtonState.Focused);
 
-                //change hub focus state
-                currentHubFocus = HubState.DungeonHub;
-
-                break;
-
-            case ProgressState.Done:
-                //pending is done
-                //------------------------------------
-                //do pop up
                 break;
             default:
                 Debug.Log("no trade state");
                 break;
         }
 
+        //change focus state
+        currentHubFocus = HubState.DungeonHub;
     }
 
     private void ClickedHub()
@@ -300,11 +319,8 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if(dungeonState == ProgressState.Pending)
+                if(dungeonState != ProgressState.Done)
                     UpdateDungeonButton(ButtonState.Unfocused);
-
-                else
-                    UpdateDungeonButton(ButtonState.Finished);
 
 
                 break;
@@ -314,11 +330,8 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if (tradeState == ProgressState.Pending)
+                if (tradeState != ProgressState.Done)
                     UpdateTradeButton(ButtonState.Unfocused);
-
-                else
-                    UpdateTradeButton(ButtonState.Finished);
 
 
                 break;
@@ -328,7 +341,6 @@ public class HubButtonActions : MonoBehaviour
 
         //always do
         currentHubFocus = HubState.HeroHub;
-
         UpdateHubButton(ButtonState.Focused);
     }
 
@@ -352,6 +364,10 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
 
+
+    //rewards or trade done
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     private void ClickedReadyDungeon()
     {
         //split into more steps with pop ups:
@@ -366,6 +382,41 @@ public class HubButtonActions : MonoBehaviour
         {
             DeleventSystem.DungeonRewardFinished();
         }
+
+        //actually do pop up 
+        //
+        ///
+
+
+        //change buttons and hub focus
+        switch (currentHubFocus)
+        {
+            case HubState.HeroHub:
+                break;
+            case HubState.DungeonHub:
+                UIEnablerManager.Instance.EnableCanvas();
+                UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
+
+                UpdateDungeonButton(ButtonState.Unfocused);
+                UpdateHubButton(ButtonState.Focused);
+                break;
+            case HubState.TradeHub:
+                UIEnablerManager.Instance.SwitchElements("TradeObserve", "ShardAndBuff", true);
+                UIEnablerManager.Instance.EnableElement("HeroHub", true);
+
+                //buttons
+                if (tradeState == ProgressState.Pending)
+                    UpdateTradeButton(ButtonState.Unfocused);
+
+                else
+                    UpdateTradeButton(ButtonState.Finished);
+                break;
+            default:
+                break;
+        }
+
+        UpdateDungeonButton(ButtonState.Unfocused);
+        currentHubFocus = HubState.HeroHub;
     }
 
 
@@ -373,6 +424,14 @@ public class HubButtonActions : MonoBehaviour
     //update buttons
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //
+    private void setDungeonText(float value, TextMeshProUGUI textMesh)
+    {
+        int recalcValue = (int)(value * 100f);
+
+        textMesh.text = $"{recalcValue} %";
+    }
+    
+
     public void UpdateTradeButton(ButtonState state)
     {
         switch (state)
@@ -441,12 +500,18 @@ public class HubButtonActions : MonoBehaviour
         }
     }
     
+    public void UpdateHubState(HubState state)
+    {
+        currentHubFocus = state;
+    }
+
+
 
 
     //
     //animation progress
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private void AnimateTradeProgress( float start, float target)
+    /*private void AnimateTradeProgress( float start, float target)
     {
         //activate
         tradeProgressBar.gameObject.SetActive(true);
@@ -481,12 +546,9 @@ public class HubButtonActions : MonoBehaviour
         int recalcValue = (int)(value * maxTime);
 
         textMesh.text = $"{recalcValue} sec";
-    }
+    }*/
 
-
-
-
-    private void AnimateDungeonProgress(float start,float target)
+    /*private void AnimateDungeonProgress(float start,float target)
     {
         //activate
         dungeonProgressBar.gameObject.SetActive(true);
@@ -515,18 +577,9 @@ public class HubButtonActions : MonoBehaviour
                 dungeonFocusProgressBar.fillAmount = value;
                 setDungeonText(value, dungeonFocusProgressTime);
             });
-    }
-
-    private void setDungeonText(float value, TextMeshProUGUI textMesh)
-    {
-        int recalcValue = (int)(value * 100f);
-
-        textMesh.text = $"{recalcValue} %";
-    }
-
-
+    }*/
     //helper coroutines
-    IEnumerator WaitForTradeFinish(float time)
+    /*IEnumerator WaitForTradeFinish(float time)
     {
         yield return new WaitForSeconds(time + bufferTime);
 
@@ -536,9 +589,9 @@ public class HubButtonActions : MonoBehaviour
         tradeFocusProgressBar.gameObject.SetActive(false);
         tradeTextGroup.SetActive(false);
         tradeSungleTextGroup.SetActive(true);
-    }
+    }*/
 
-    IEnumerator WaitForDungeonFinish(float time)
+    /*IEnumerator WaitForDungeonFinish(float time)
     {
         yield return new WaitForSeconds(time + bufferTime);
 
@@ -548,7 +601,7 @@ public class HubButtonActions : MonoBehaviour
         dungeonFocusProgressBar.gameObject.SetActive(false);
         dungeonTextGroup.SetActive(false);
         dungeonSingleTextGroup.SetActive(true);
-    }
+    }*/
 
 }
 

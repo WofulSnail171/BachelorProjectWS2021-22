@@ -10,6 +10,9 @@ public class TradSelectActions : MonoBehaviour
 
     [SerializeField] GameObject cancelButton;
     [SerializeField] GameObject confirmButton;
+
+    [SerializeField] HubButtonActions hub;
+
     #endregion
 
     private void Start()
@@ -26,6 +29,10 @@ public class TradSelectActions : MonoBehaviour
 
         //do actual logic
         tradeInventory.RemoveAllHeroesFromTrade();
+
+        hub.UpdateHubState(HubState.HeroHub);
+        hub.UpdateTradeButton(ButtonState.Unfocused);
+        hub.UpdateHubButton(ButtonState.Focused);
     }
 
     private void ClickedConfirm()

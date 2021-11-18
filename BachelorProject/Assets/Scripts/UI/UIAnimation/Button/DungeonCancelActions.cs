@@ -8,6 +8,9 @@ public class DungeonCancelActions : MonoBehaviour
     [SerializeField] Button yes;
     [SerializeField] Button no;
 
+    [SerializeField] HubButtonActions hub;
+
+
     private void Start()
     {
        yes.GetComponent<Button>().onClick.AddListener(() => { ClickedYes(); });
@@ -16,6 +19,8 @@ public class DungeonCancelActions : MonoBehaviour
 
     private void ClickedYes()
     {
+        //hub.UpdateHubState(HubState.HeroHub);
+
 
     }
 
@@ -23,6 +28,5 @@ public class DungeonCancelActions : MonoBehaviour
     private void ClickedNo()
     {
         UIEnablerManager.Instance.DisableElement("DungeonCancel", true);
-
     }
 }

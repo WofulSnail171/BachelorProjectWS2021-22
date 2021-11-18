@@ -14,6 +14,8 @@ public class DungeonMapActions : MonoBehaviour
     [SerializeField] ScrollSnapRect scrollSnap;
 
     private Button[] mapButtons;
+
+    [SerializeField] HubButtonActions hub;
     #endregion
 
     
@@ -36,6 +38,8 @@ public class DungeonMapActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
         UIEnablerManager.Instance.EnableElement("General", true);
         UIEnablerManager.Instance.SwitchElements( "DungeonMapSelect", "HeroHub", true);
+
+        hub.UpdateHubState(HubState.HeroHub);
     }
 
     private void ClickedSelect()
