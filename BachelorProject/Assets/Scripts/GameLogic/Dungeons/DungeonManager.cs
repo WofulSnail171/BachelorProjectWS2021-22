@@ -522,7 +522,21 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    public void EventRewardHandling()
+    public void EventRewardShardHandling()
+    {
+        if(DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
+        {
+            DatabaseManager._instance.activePlayerData.shards++;
+            if (DatabaseManager._instance.activePlayerData.shards >= 5)
+                DatabaseManager._instance.activePlayerData.shards = 5;
+        }
+        else
+        {
+            //You dont get any shards haha
+        }
+    }
+
+    public void EventRewardHeroHandling()
     {
         int rewardTier = currentCalcRun.rewardHealthBar / 10;
         if(currentCalcRun.rewardHealthBar % 10 != 0)

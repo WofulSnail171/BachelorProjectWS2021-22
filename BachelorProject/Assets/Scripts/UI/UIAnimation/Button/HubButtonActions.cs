@@ -372,7 +372,8 @@ public class HubButtonActions : MonoBehaviour
     {
         //split into more steps with pop ups:
         DungeonManager._instance.ApplyGrowth();
-        DungeonManager._instance.EventRewardHandling();
+        DungeonManager._instance.EventRewardHeroHandling();
+        DungeonManager._instance.EventRewardShardHandling();
         DungeonManager._instance.WrapUpDungeon();
         DatabaseManager._instance.SaveGameDataLocally();
         ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);

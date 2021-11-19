@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class MapClick : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI QuestName;
     [SerializeField] TextMeshProUGUI QuestDescription;
     [SerializeField] TextMeshProUGUI QuestReward;
+    DungeonType QuestType = DungeonType.basic;
 
 
     int DailyDungeonIndex = 0;
@@ -34,10 +36,19 @@ public class MapClick : MonoBehaviour
         {
             case DungeonType.basic:
                 quest = DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.dailyDungeons[DailyDungeonIndex].questName];
+                QuestType = DungeonType.basic;
                 break;
             case DungeonType.doom:
                 quest = DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.dailyDungeons[DailyDungeonIndex].questName];
-
+                QuestType = DungeonType.doom;
+                if (DatabaseManager.DoomDungeonAvailable())
+                {
+                    //Enable
+                }
+                else
+                {
+                    //Disable
+                }
                 break;
             default:
                 quest = DatabaseManager._instance.eventData.basicQuestDeck[0];
@@ -60,13 +71,32 @@ public class MapClick : MonoBehaviour
         //
         //
         //enable dungeon detail select footer
-        
-        DungeonManager._instance.chosenDailyDungeonIndex = DailyDungeonIndex + 1;
-        DungeonManager._instance.ShowDungeonLayout(DailyDungeonIndex);
-        UIEnablerManager.Instance.SwitchElements("DungeonMapSelect", "DungeonDetailSelect", true);
+        if (QuestType == DungeonType.doom)
+        {
+            if (DatabaseManager.DoomDungeonAvailable())
+            {                
+                //Enable
+                DungeonManager._instance.chosenDailyDungeonIndex = DailyDungeonIndex + 1;
+                DungeonManager._instance.ShowDungeonLayout(DailyDungeonIndex);
+                UIEnablerManager.Instance.SwitchElements("DungeonMapSelect", "DungeonDetailSelect", true);
 
-        //disable background
-        UIEnablerManager.Instance.DisableCanvas();
+                //disable background
+                UIEnablerManager.Instance.DisableCanvas();
+            }
+            else
+            {
+                //Disable
+                Debug.LogWarning("Not Enough Shards");
+            }
+        }
+        else
+        {
+            DungeonManager._instance.chosenDailyDungeonIndex = DailyDungeonIndex + 1;
+            DungeonManager._instance.ShowDungeonLayout(DailyDungeonIndex);
+            UIEnablerManager.Instance.SwitchElements("DungeonMapSelect", "DungeonDetailSelect", true);
 
+            //disable background
+            UIEnablerManager.Instance.DisableCanvas();
+        }
     }
 }

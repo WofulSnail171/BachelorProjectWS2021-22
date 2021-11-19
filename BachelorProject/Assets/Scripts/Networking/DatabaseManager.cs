@@ -41,6 +41,21 @@ public class DatabaseManager : MonoBehaviour
         return result;
     }
 
+    public static bool DoomDungeonAvailable()
+    {
+        if(_instance != null && CheckDatabaseValid())
+        {
+            if(_instance.activePlayerData != null)
+            {
+                if(_instance.activePlayerData.shards >= 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
