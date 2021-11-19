@@ -30,6 +30,7 @@ public class GrowthCard : MonoBehaviour
 
 
     private DefaultHero defaultHero;
+    private PlayerHero playerHero;
 
     private string physicalPotential;
     private string magicalPotential;
@@ -40,42 +41,25 @@ public class GrowthCard : MonoBehaviour
 
     #endregion
 
-    public void UpdateGrowth(int physical, int magical, int social)
-    {
-        if (physical < 0)
-            physicalGrowthText.text = $"-{physical}";
 
-        else
-            physicalGrowthText.text = $"+{physical}";
-
-
-
-        if (magical < 0)
-            magicalGrowthText.text = $"-{magical}";
-
-        else
-            magicalGrowthText.text = $"+{magical}";
-
-
-
-        if (social < 0)
-            socialGrowthText.text = $"-{social}";
-
-        else
-            socialGrowthText.text = $"+{social}";
-    }
-
+    // init
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void UpdateHero(PlayerHero hero)
     {
         defaultHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId];
 
+        playerHero = hero;
+
         Name.text = hero.heroId;
 
+        physicalGrowthText.text = "+0";
+        magicalGrowthText.text = "+0";
+        socialGrowthText.text = "+0";
 
 
         //stats
         //check if potential is maxed
-        
+
         CheckPotential(hero);
 
         //text
@@ -84,9 +68,6 @@ public class GrowthCard : MonoBehaviour
         socialStatText.text = $"{hero.sVal} / {hero.sPot} ({socialPotential})";
 
         //set actual stat
-
-
-
         physicalStatBar.fillAmount = hero.pVal / max;
         magicalStatBar.fillAmount = hero.mVal / max;
         socialStatBar.fillAmount = hero.sVal / max;
@@ -165,5 +146,160 @@ public class GrowthCard : MonoBehaviour
         }
     }
 
+
+    //animate
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public void UpdateSocialGrowth(int social)
+    {
+        if (social < 0)
+        {
+            if (playerHero.sVal != defaultHero.sMin)
+            {
+                if (playerHero.sVal - social >= defaultHero.sMin)
+                    socialGrowthText.text = $"{social}";
+
+            }
+
+        }
+
+        else
+        {
+
+            if (playerHero.sPot != playerHero.sVal)
+            {
+                if (playerHero.sVal + social <= playerHero.sPot)
+                    socialGrowthText.text = $"+{social}";
+
+            }
+        }
+    }
+
+    public void UpdateMagicalGrowth(int magical)
+    {
+        if (magical < 0)
+        { 
+            if (playerHero.mVal != defaultHero.mMin)
+            {
+                if(playerHero.mVal - magical >= defaultHero.mMin)
+                    magicalGrowthText.text = $"{magical}";
+               
+            }
+        
+        }
+
+        else
+        {
+
+            if (playerHero.mPot != playerHero.mVal)
+            {
+                if (playerHero.mVal + magical <= playerHero.mPot) 
+                    magicalGrowthText.text = $"+{magical}";
+
+            }
+
+
+
+        }
+    }
+
+    public void UpdatePhysicalGrowth(int physical)
+    {
+        if (physical < 0)
+        {
+            if (playerHero.pVal != defaultHero.pMin)
+            {
+                if (playerHero.pVal - physical >= defaultHero.pMin)
+                    physicalGrowthText.text = $"{physical}";
+
+            }
+
+        }
+
+        else
+        {
+
+            if (playerHero.pPot != playerHero.pVal)
+            {
+                if (playerHero.pVal + physical <= playerHero.pPot)
+                    physicalGrowthText.text = $"+{physical}";
+
+            }
+        }
+    }    
+    
+
+
+    public void UpdateSocialBarGrowth(int social)
+    {
+        if (social < 0)
+        {
+            if (playerHero.sVal != defaultHero.sMin)
+            {
+                if (playerHero.sVal - social >= defaultHero.sMin)
+                    socialStatBar.fillAmount = (playerHero.sVal - social) / max;
+
+            }
+
+        }
+
+        else
+        {
+
+            if (playerHero.sPot != playerHero.sVal)
+            {
+                if (playerHero.sVal + social <= playerHero.sPot)
+                    socialStatBar.fillAmount = (playerHero.sVal + social) / max;
+
+
+            }
+        }
+    }
+
+    public void UpdateMagicalBarGrowth(int magical)
+    {
+        if (magical < 0)
+        { 
+            if (playerHero.mVal != defaultHero.mMin)
+            {
+                if (playerHero.mVal - magical >= defaultHero.mMin)
+                    magicalStatBar.fillAmount = (playerHero.mVal - magical) / max;
+            }
+        
+        }
+
+        else
+        {
+
+            if (playerHero.mPot != playerHero.mVal)
+            {
+                if (playerHero.mVal + magical <= playerHero.mPot)
+                    magicalStatBar.fillAmount = (playerHero.mVal + magical) / max;
+            }
+        }
+    }
+
+    public void UpdatePhysicalBarGrowth(int physical)
+    {
+        if (physical < 0)
+        {
+            if (playerHero.pVal != defaultHero.pMin)
+            {
+                if (playerHero.pVal - physical >= defaultHero.pMin)
+                    physicalStatBar.fillAmount = (playerHero.pVal - physical) / max;
+            }
+
+        }
+
+        else
+        {
+
+            if (playerHero.pPot != playerHero.pVal)
+            {
+                if (playerHero.pVal + physical <= playerHero.pPot)
+                    physicalStatBar.fillAmount = (playerHero.pVal + physical) / max;
+            }
+        }
+    }
 
 }

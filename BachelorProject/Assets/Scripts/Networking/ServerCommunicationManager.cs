@@ -50,8 +50,7 @@ public class ServerCommunicationManager : MonoBehaviour
     {
         if (_webRequest != null && _webRequest.isDone)
         {
-            ExecuteImport();
-            
+            ExecuteImport();        
         }
     }
 

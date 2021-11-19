@@ -55,7 +55,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] TextMeshProUGUI tradeFocusProgressTime;
     [SerializeField] TextMeshProUGUI dungeonFocusProgressTime;
 
-    private HubState currentHubFocus;
+    [HideInInspector]public HubState currentHubFocus;
     [Space]
     [Space]
     [Space]

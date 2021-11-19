@@ -19,6 +19,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
 
     [SerializeField] public GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
+    [SerializeField] private GameObject highlight;
 
     [SerializeField] GameObject rarityGroup;
     [SerializeField] GameObject [] rarityGraphics;
@@ -39,9 +40,13 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     public event Action<HeroSlot> OnDropEvent;
     public event Action<HeroSlot> OnCancelDragEvent;
 
-
+    public event Action<int> OnClickEvent;
     //base funcs
     //------------------------------------------------------------------------------------------------------------------------------------------
+    private void Start()
+    {
+        heroCard.GetComponent<Button>().onClick.AddListener(() => OnClick());
+    }
 
     public void showHero()
     {
@@ -61,6 +66,15 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         playerHero = null;
         tradeReferenceID = -1;
         exploreReferenceID = -1;
+    }
+
+    public void EnableHighlight()
+    {
+        highlight.SetActive(true);
+    }
+    public void DisableHighlight()
+    {
+        highlight.SetActive(false);
     }
 
     public void updateHero(PlayerHero hero, Sprite sprite,int rarity, int tradeID, int exploreID)
@@ -168,4 +182,8 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
         }
     }
 
+    public void OnClick()
+    {
+        OnClickEvent(slotID);
+    }
 }

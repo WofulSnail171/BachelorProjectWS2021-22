@@ -7,9 +7,11 @@ public class HeroGrowthUI : MonoBehaviour
 {
     #region vars
     [SerializeField] Transform HeroAmount;
-
-    [SerializeField] GameObject SkipButton;
     [SerializeField] GameObject ContinueButton;
+
+    [SerializeField] float animSpeed;
+
+    List <GrowthCard> growthCards = new List<GrowthCard> ();
 
     //calc helper
     int child_1;
@@ -20,7 +22,6 @@ public class HeroGrowthUI : MonoBehaviour
     //init
     private void Start()
     {
-        SkipButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSkip(); });
         ContinueButton.GetComponent<Button>().onClick.AddListener(() => { ClickedContinue(); });
     }
 
@@ -29,17 +30,16 @@ public class HeroGrowthUI : MonoBehaviour
         //test
         UpdateHeroGrowthPopUp();
 
-        //initially hidden
-        ContinueButton.SetActive(false);
     }
 
     //update card
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void UpdateHeroGrowthPopUp()
     {
-        //DatabaseManager._instance.dungeonData.currentRun.party
+        //reset
+        growthCards.Clear();
 
-        //DungeonManager._instance.currentCalcRun.
+
 
         //catch
         if (DatabaseManager._instance.dungeonData.currentRun.party.Length < 0)
@@ -66,6 +66,8 @@ public class HeroGrowthUI : MonoBehaviour
             HeroAmount.GetChild(child_1).gameObject.SetActive(true);
             HeroAmount.GetChild(child_1).GetComponent<GrowthCard>().UpdateHero(DatabaseManager._instance.dungeonData.currentRun.party[i]);
 
+            growthCards.Add(HeroAmount.GetChild(child_1).GetComponent<GrowthCard>());
+
             if(child_1 - 1 >= 0)
             {
                 child_2 = child_1 - 1;
@@ -80,7 +82,13 @@ public class HeroGrowthUI : MonoBehaviour
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void ClickedSkip()
     {
+        LeanTween.value(gameObject, 0f, 1f, animSpeed)
+            .setEaseInOutExpo()
+            .setOnUpdate(setGrowth);
 
+        LeanTween.value(gameObject, 0f, 1f, animSpeed)
+            .setEaseInOutExpo()
+            .setOnUpdate(setBarGrowth);
     }    
     
     private void ClickedContinue()
@@ -90,10 +98,27 @@ public class HeroGrowthUI : MonoBehaviour
 
 
 
-
     //do growth animations
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void setGrowth(float i)
+    {
+        //number text
+        foreach (GrowthCard card in growthCards)
+        {
+            card.UpdateMagicalGrowth((int)(DungeonManager._instance.currentCalcRun.mStatGrowth  * i ));
+            card.UpdatePhysicalGrowth((int)(DungeonManager._instance.currentCalcRun.pStatGrowth * i));
+            card.UpdateSocialGrowth((int)(DungeonManager._instance.currentCalcRun.sStatGrowth * i));
+        }
+    }
 
-
+    private void setBarGrowth(float i)
+    {
+        foreach (GrowthCard card in growthCards)
+        {
+            card.UpdateMagicalBarGrowth((int)(DungeonManager._instance.currentCalcRun.mStatGrowth * i));
+            card.UpdatePhysicalBarGrowth((int)(DungeonManager._instance.currentCalcRun.pStatGrowth * i));
+            card.UpdateSocialBarGrowth((int)(DungeonManager._instance.currentCalcRun.sStatGrowth * i));
+        }
+    }
 
 }
