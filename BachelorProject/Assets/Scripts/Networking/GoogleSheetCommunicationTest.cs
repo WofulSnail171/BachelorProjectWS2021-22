@@ -23,9 +23,9 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
         {
             localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
-            //localSaveYes.interactable = true;
-            //localSaveNo.interactable = true;
-            OnLocalSaveYes();
+            localSaveYes.interactable = true;
+            localSaveNo.interactable = true;
+            //OnLocalSaveYes();
         }
         else
         {
@@ -133,9 +133,9 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.activePlayerData = _playerData;
             DeleventSystem.eventDataDownloaded += FirstSignUp;
             DatabaseManager._instance.SaveGameDataLocally();
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData);
-            ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
         }
     }
 
@@ -152,8 +152,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.activePlayerData = _playerData;
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.GetInfo(Request.DownloadEventData, "", FinishedLogIn);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
             //FinishedLogIn();
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
@@ -168,7 +168,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(1));
         
         DatabaseManager._instance.SaveGameDataLocally();
-        ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
         DeleventSystem.eventDataDownloaded -= FirstSignUp;
     }
 
