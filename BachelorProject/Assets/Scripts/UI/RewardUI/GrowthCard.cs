@@ -14,6 +14,10 @@ public class GrowthCard : MonoBehaviour
     [SerializeField] TMP_Text magicalStatText;
     [SerializeField] TMP_Text socialStatText;
     [Space]
+    [SerializeField] TMP_Text physicalGrowthText;
+    [SerializeField] TMP_Text magicalGrowthText;
+    [SerializeField] TMP_Text socialGrowthText;
+    [Space]
     [SerializeField] Image physicalStatBar;
     [SerializeField] Image magicalStatBar;
     [SerializeField] Image socialStatBar;
@@ -35,6 +39,31 @@ public class GrowthCard : MonoBehaviour
     private float max = 999;
 
     #endregion
+
+    public void UpdateGrowth(int physical, int magical, int social)
+    {
+        if (physical < 0)
+            physicalGrowthText.text = $"-{physical}";
+
+        else
+            physicalGrowthText.text = $"+{physical}";
+
+
+
+        if (magical < 0)
+            magicalGrowthText.text = $"-{magical}";
+
+        else
+            magicalGrowthText.text = $"+{magical}";
+
+
+
+        if (social < 0)
+            socialGrowthText.text = $"-{social}";
+
+        else
+            socialGrowthText.text = $"+{social}";
+    }
 
     public void UpdateHero(PlayerHero hero)
     {
@@ -76,7 +105,7 @@ public class GrowthCard : MonoBehaviour
         }
     }
 
-private void CheckPotential(PlayerHero hero)
+    private void CheckPotential(PlayerHero hero)
     {
         //physical
         if (hero.pPot >= defaultHero.pMaxPot)
@@ -135,4 +164,6 @@ private void CheckPotential(PlayerHero hero)
             socialPotentialStatBar.fillAmount = 1 - hero.sPot / max;
         }
     }
+
+
 }

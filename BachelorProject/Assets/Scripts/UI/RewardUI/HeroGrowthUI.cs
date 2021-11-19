@@ -1,23 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeroGrowthUI : MonoBehaviour
 {
     #region vars
     [SerializeField] Transform HeroAmount;
 
+    [SerializeField] GameObject SkipButton;
+    [SerializeField] GameObject ContinueButton;
 
     //calc helper
     int child_1;
     int child_2;
     #endregion
 
-    private void OnEnable()
+
+    //init
+    private void Start()
     {
-        UpdateHeroGrowthPopUp();
+        SkipButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSkip(); });
+        ContinueButton.GetComponent<Button>().onClick.AddListener(() => { ClickedContinue(); });
     }
 
+    private void OnEnable()
+    {
+        //test
+        UpdateHeroGrowthPopUp();
+
+        //initially hidden
+        ContinueButton.SetActive(false);
+    }
+
+    //update card
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void UpdateHeroGrowthPopUp()
     {
         //DatabaseManager._instance.dungeonData.currentRun.party
@@ -57,6 +74,25 @@ public class HeroGrowthUI : MonoBehaviour
         }
 
     }
+
+
+    //buttons
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void ClickedSkip()
+    {
+
+    }    
+    
+    private void ClickedContinue()
+    {
+
+    }
+
+
+
+
+    //do growth animations
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
