@@ -14,6 +14,8 @@ public class ServerCommunicationManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
+            if (CommVis == null && transform.childCount >= 1)
+                CommVis = transform.GetChild(0).gameObject;
             DontDestroyOnLoad(this.gameObject);
         }
         else
@@ -30,6 +32,11 @@ public class ServerCommunicationManager : MonoBehaviour
     public string LastMessage { get { return lastMessage; } }
     private bool Exported = true;
 
+    public GameObject CommVis;
+
+    float waitTimer = 0.0f;
+    float waitTime = 13.0f;
+
     // Update is called once per frame
     void Update()
     {
@@ -42,6 +49,13 @@ public class ServerCommunicationManager : MonoBehaviour
         }
         if(_webRequest == null && webRequestQueue.Count > 0)
         {
+            PopRequestQueue();
+        }
+        waitTimer += Time.deltaTime;
+        if(waitTimer >= waitTime && _webRequest != null && !Imported && webRequestQueue.Count > 0)
+        {
+            //retry last Message
+            Debug.LogWarning("Retry sending message. TimeOut");
             PopRequestQueue();
         }
     }
@@ -118,6 +132,11 @@ public class ServerCommunicationManager : MonoBehaviour
             _temp.simpleEvent();
         if (_temp.messageEvent != null)
             _temp.messageEvent(lastMessage);
+
+        if (webRequestQueue.Count >= 1)
+            CommVis.SetActive(true);
+        else
+            CommVis.SetActive(false);
     }
 
     private void ErrorHandling(string _message)
@@ -160,12 +179,18 @@ public class ServerCommunicationManager : MonoBehaviour
         {
             lastGetInfo = _temp.requestType;
             Imported = false;
+            waitTimer = 0.0f;
         }
         else
         {
             Exported = false;
             webRequestQueue.RemoveAt(0);
         }
+
+        if (webRequestQueue.Count >= 1)
+            CommVis.SetActive(true);
+        else
+            CommVis.SetActive(false);
     }
 
     public void GetInfo(Request _request, string _message = "", DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
