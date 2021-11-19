@@ -383,9 +383,8 @@ public class HubButtonActions : MonoBehaviour
         DungeonManager._instance.EventRewardHandling();
         DungeonManager._instance.WrapUpDungeon();
         DatabaseManager._instance.SaveGameDataLocally();
-        ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
-        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
         if(DeleventSystem.DungeonRewardFinished != null)
         {
             DeleventSystem.DungeonRewardFinished();

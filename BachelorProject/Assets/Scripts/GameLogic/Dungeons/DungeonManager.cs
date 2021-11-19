@@ -99,14 +99,19 @@ public class DungeonManager : MonoBehaviour
             DatabaseManager._instance.dungeonData = new DungeonData();
             DatabaseManager._instance.dungeonData.currentRun = new DungeonRun { valid = false };
         }
+        if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid)
+        {
+            DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();
+            DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(false);
+        }
         if (DatabaseManager._instance.dungeonData.dailyDungeons != null && DatabaseManager._instance.dungeonData.dailyDungeons.Length > 0)
         {
             //check if current daily dungeon data is older than 24 hours
             if (DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).Date == DateTime.Now.Date)
             {
                 Debug.Log("Current daily dungeons are still valid");
-                if (DatabaseManager._instance.dungeonData.dailyDungeons[0].dungeonLayout == null)
-                    InitDungeonLayouts();
+                //if (DatabaseManager._instance.dungeonData.dailyDungeons[0].dungeonLayout == null)
+                InitDungeonLayouts();
                 return;
             }
         }

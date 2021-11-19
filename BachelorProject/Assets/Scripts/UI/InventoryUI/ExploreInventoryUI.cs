@@ -171,9 +171,9 @@ public class ExploreInventoryUI : MonoBehaviour
                     DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(DungeonManager._instance.chosenDailyDungeonIndex);
                     DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
                     DungeonManager._instance.CalculateRun(0);
-                    UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-                    ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
                     DatabaseManager._instance.SaveGameDataLocally();
+                    ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
+                    ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
                     break;
                 case ProgressState.Pending:
                     Debug.Log("Run is still running");

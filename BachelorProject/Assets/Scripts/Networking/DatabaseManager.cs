@@ -272,6 +272,50 @@ public class PlayerData
 }
 
 [System.Serializable]
+public class UploadPlayerData
+{
+    public UploadPlayerData(PlayerData _playerData)
+    {
+        playerId = _playerData.playerId;
+        password = _playerData.password;
+        joinDate = _playerData.joinDate;
+        lastUpdate = _playerData.lastUpdate;
+        profileDescription = _playerData.profileDescription;
+        mtdCounter = _playerData.mtdCounter;
+        tradeCounter = _playerData.tradeCounter;
+        lastDungeonDate = _playerData.lastDungeonDate;
+        currentDungeonRun = _playerData.currentDungeonRun;
+        rewardTierBuff = _playerData.rewardTierBuff;
+        shards = _playerData.shards;
+    }
+    public string playerId;
+    public string password;
+    public string joinDate;
+    public string lastUpdate;
+    public string profileDescription;
+    public int mtdCounter;
+    public int tradeCounter;
+    public string lastDungeonDate;
+    public string currentDungeonRun;
+    public int rewardTierBuff;
+    public int shards;
+}
+
+[System.Serializable]
+public class UploadInventory
+{
+    public LoginInfo loginInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password };
+    public List<UploadInventoryEntry> inventorySegment = new List<UploadInventoryEntry>();
+}
+
+[System.Serializable]
+public class UploadInventoryEntry
+{
+    public int index;
+    public PlayerHero entry;
+}
+
+[System.Serializable]
 public class BlacklistEntry
 {
     public string playerId;
