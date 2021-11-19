@@ -135,6 +135,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
             ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
         }
     }
@@ -153,11 +154,26 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
             //FinishedLogIn();
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
+    }
+
+    public void StooopidTest()
+    {
+        List<PlayerHero> testList = new List<PlayerHero>();
+        for (int i = 0; i < 100; i++)
+        {
+            testList.Add(HeroCreator.GetHeroByRewardTier(6));
+        }
+        foreach (var item in testList)
+        {
+            Debug.Log("Rarity: " + DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[item.heroId].rarity.ToString());
+        }
+        Debug.LogError("Check if verteilung passt");
     }
 
     public void FirstSignUp()

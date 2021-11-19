@@ -123,6 +123,13 @@ public class ServerCommunicationManager : MonoBehaviour
                 Debug.Log(lastMessage);
                 DungeonData newData = JsonUtility.FromJson<DungeonData>(lastMessage);
                 break;
+            case Request.PushInventory:
+                break;
+            case Request.PushBlacklist:
+                break;
+            case Request.PullRewardTable:
+                DatabaseManager._instance.UpdateRewardTableFromServer(lastMessage);
+                break;
             default:
                 break;
         }
@@ -163,6 +170,12 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushDungeonData:
                 break;
             case Request.DownloadDungeonData:
+                break;
+            case Request.PushInventory:
+                break;
+            case Request.PushBlacklist:
+                break;
+            case Request.PullRewardTable:
                 break;
             default:
                 break;
@@ -288,6 +301,10 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushBlacklist:
                 //ToDo: Splitted into multiple Requests
                 break;
+            case Request.PullRewardTable:
+                ServerCommunicationManager._instance.GetInfo(Request.PullRewardTable, "", _simpleEvent, _messageEvent);
+                //ToDo: Splitted into multiple Requests
+                break;
             default:
                 break;
         }
@@ -313,7 +330,8 @@ public enum Request
     PushDungeonData,
     DownloadDungeonData,
     PushInventory,
-    PushBlacklist
+    PushBlacklist,
+    PullRewardTable
 }
 
 //for the request queue:

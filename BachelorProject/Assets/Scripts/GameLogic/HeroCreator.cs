@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class HeroCreator
 {
+    public static PlayerHero GetHeroByRewardTier(int _rewardTier)
+    {
+        if(_rewardTier > DatabaseManager._instance.rewardTable.rewardTiers.Count)
+        {
+            //Fallback
+            return GetrandomHero();
+        }
+        RewardTier currentTier = DatabaseManager._instance.rewardTable.rewardTiers[_rewardTier - 1];
+        int ranNum = UnityEngine.Random.Range(1, 101);
+        int chosenRarity = 0;
+        for (int i = 0; i < currentTier.chances.Count; i++)
+        {
+            ranNum -= currentTier.chances[i];
+            if (ranNum <= 0)
+            {
+                chosenRarity = i + 1;
+                break;
+            }
+        }
+        return GetRandomHeroOfRarity(chosenRarity);
+    }
+
     public static PlayerHero GetHeroById(string _heroId)
     {
         PlayerHero result = null;
