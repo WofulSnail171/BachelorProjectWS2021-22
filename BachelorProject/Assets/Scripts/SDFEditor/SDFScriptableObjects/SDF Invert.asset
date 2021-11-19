@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c585759fc2f3e244a8aa7f7bf612df3, type: 3}
   m_Name: SDF Invert
   m_EditorClassIdentifier: 
+  o: invert_out
   sdfName: invert
-  o: invert192_out
-  inputA: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  variables: []
+  types: []
+  nodes: []
+  nodeType: 7
+  input: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}

@@ -43,10 +43,12 @@ public class SDFOutput : SDFFunction{
             this.ApplyMaterial();
             this.applyMaterial = false;
         }
+        this.UpdateShader(this);
     }
 
     private void Awake() {
         this.OnValueChange += this.UpdateShader;
+        this.UpdateShader(this);
     }
 
     private void ApplyMaterial() {
@@ -257,7 +259,7 @@ CBUFFER_END";
     
     private void ChangeShaderValues(SDFNode node){
         
-        Debug.Log("changing shader variables");
+        Debug.Log("changing shader variables from " + node.sdfName);
         
         switch (node.nodeType) {
             case SDFNode.NodeType.Circle: {
@@ -358,6 +360,7 @@ CBUFFER_END";
         }
         
         //get active nodes
+        this.SDFNodes.Clear();
         if (this.input is SDFFunction) {
             SDFFunction i = (SDFFunction) this.input;
             i.GetActiveNodes(this.SDFNodes);
@@ -369,7 +372,7 @@ CBUFFER_END";
         
         //add actions from active nodes
         foreach (SDFNode s in this.SDFNodes) {
-            ChangeShaderValues(s);
+            this.ChangeShaderValues(s);
             s.OnValueChange += this.ChangeShaderValues;
             Debug.Log("subscribed to value change on " +  s.sdfName);
             if (s is SDFFunction) {

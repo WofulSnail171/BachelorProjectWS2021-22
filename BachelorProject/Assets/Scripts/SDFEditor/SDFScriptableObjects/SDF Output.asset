@@ -31,7 +31,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
   - {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
   nodeType: 0
-  shaderName: test
-  input: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
+  shaderName: test2
+  input: {fileID: 11400000, guid: f1036612b2a2dce46ae5dc13579ab2fe, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0

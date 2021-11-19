@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c133afe84d8de07448db7e615c46a6ff, type: 3}
   m_Name: SDF Line
   m_EditorClassIdentifier: 
-  o: line538_out
-  sdfName: line538
+  o: line914_out
+  sdfName: line914
   variables:
-  - line538_position
-  - line538_a
-  - line538_b
-  - line538_roundness
+  - line914_position
+  - line914_a
+  - line914_b
+  - line914_roundness
   types:
   - float2
   - float2
@@ -27,6 +27,6 @@ MonoBehaviour:
   nodes: []
   nodeType: 3
   position: {x: -0.1, y: 0}
-  a: {x: -0.21, y: -0.12}
-  b: {x: 0.3, y: 0}
-  roundness: 0.08
+  a: {x: -0.12, y: 0.25}
+  b: {x: 0.28, y: -0.19}
+  roundness: 0.06
