@@ -65,13 +65,12 @@ public class DungeonTest : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(dungeonNum);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
         DungeonManager._instance.CalculateRun(0);
-        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon), OnDataPushed);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData, OnDataPushed);
     }
 
     public void OnDataPushed()
     {
-        ServerCommunicationManager._instance.GetInfo(Request.DownloadDungeonData, JsonUtility.ToJson(new LoginInfo { playerId = "Rika", password = "pw" }));
+        ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
     }
 
     public void OnAutoPlayToggle()
@@ -140,10 +139,8 @@ public class DungeonTest : MonoBehaviour
         DungeonManager._instance.ApplyGrowth();
         DungeonManager._instance.EventRewardHandling();
         DungeonManager._instance.WrapUpDungeon();
-        ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData));
-        UploadDungeonData dataDungeon = new UploadDungeonData { dungeonData = DatabaseManager._instance.dungeonData, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-
-        ServerCommunicationManager._instance.GetInfo(Request.PushDungeonData, JsonUtility.ToJson(dataDungeon));
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
         OnSceneInit();
     }
 
