@@ -191,11 +191,6 @@ public class UIEnablerManager : MonoBehaviour
             Debug.Log("trying to enable: " + element + ", but this does not exist in any dict as key");
     }
 
-    public void CloseHeroPopUp()
-    {
-        DisableElement("HeroCard", true);
-    }
-
     public float DisableElement(string element, bool DoAnimation)
     {
 

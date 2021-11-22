@@ -13,7 +13,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] TradeInventoryUI tradeInventory;
     [SerializeField] ExploreInventoryUI exploreInventory;
     [SerializeField] GameObject slotParent;
-    [HideInInspector] HeroSlot[] heroSlots;
+    [HideInInspector] public HeroSlot[] heroSlots;
 
     [Space]
     [SerializeField] DragHero draggableHero;
@@ -32,6 +32,8 @@ public class InventoryUI : MonoBehaviour
     private int amountInTrade = 0;
     private int amountInDungeon = 0;
 
+
+    public bool DoRelease;
     #endregion
 
 
@@ -70,6 +72,8 @@ public class InventoryUI : MonoBehaviour
 
             heroSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
             heroSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
+            heroSlots[i].OnClickEvent += Click; ;
+
         }
     }
 
@@ -261,6 +265,25 @@ public class InventoryUI : MonoBehaviour
         PopUpHeroCard.GetComponent<UpdateHeroCard>().UpdateHero(heroSlots[index].playerHero);
         UIEnablerManager.Instance.EnableElement("HeroCard",true);
     }
+
+    private void Click(int index)
+    {
+        //only do if forced release
+        if (DoRelease && heroSlots[index].playerHero.status == HeroStatus.Idle)
+        {
+            heroSlots[index].EnableHighlight();
+
+            UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseSubmit", false);
+        }
+
+        else if (DoRelease)
+        {
+            heroSlots[index].EnableHighlight();
+
+            UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseBlocked", false);
+        }
+    }
+    
 
     //helper checks
     //------------------------------------------------------------------------------------------------------------------------------------------------------

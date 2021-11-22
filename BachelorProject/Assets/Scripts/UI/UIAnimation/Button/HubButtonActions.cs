@@ -55,7 +55,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] TextMeshProUGUI tradeFocusProgressTime;
     [SerializeField] TextMeshProUGUI dungeonFocusProgressTime;
 
-    private HubState currentHubFocus;
+    [HideInInspector]public HubState currentHubFocus;
     [Space]
     [Space]
     [Space]
@@ -87,9 +87,12 @@ public class HubButtonActions : MonoBehaviour
         DeleventSystem.DungeonEnd += UpdateStates;
         DeleventSystem.DungeonEvent += UpdateStates;
         DeleventSystem.DungeonRewardFinished += UpdateStates;
+        //dungeon cancel? connected to seperate cancel func?
 
         DeleventSystem.TradeStart += UpdateStates;
         DeleventSystem.TradeEnd += UpdateStates;
+
+        //maybe connect to a seperate cancel func?
         DeleventSystem.TradeCancel += UpdateStates;
 
 
@@ -104,17 +107,22 @@ public class HubButtonActions : MonoBehaviour
         tradeState = DatabaseManager.GetTradeState();
         dungeonState = DatabaseManager.GetDungeonRunState();
 
-        switch (dungeonState)
-        {
-            case ProgressState.Done:
-                dungeonProgressBar.gameObject.SetActive(false);
-                dungeonTextGroup.SetActive(false);
-                dungeonSingleTextGroup.SetActive(true);
 
-                UpdateDungeonButton(ButtonState.Finished);
-                break;
-            default:
-                break;
+        //dont need switch
+        if(dungeonState == ProgressState.Done)
+        {
+            dungeonProgressBar.gameObject.SetActive(false);
+            dungeonTextGroup.SetActive(false);
+            dungeonSingleTextGroup.SetActive(true);
+
+            UpdateDungeonButton(ButtonState.Finished);
+        }
+
+        if(tradeState == ProgressState.Done)
+        {
+            //do stuff
+            //
+            //
         }
     }
 
