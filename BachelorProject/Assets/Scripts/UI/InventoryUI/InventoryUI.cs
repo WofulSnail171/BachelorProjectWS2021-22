@@ -32,7 +32,7 @@ public class InventoryUI : MonoBehaviour
     private int amountInTrade = 0;
     private int amountInDungeon = 0;
 
-
+    public PlayerHero releaseHero;
     public bool DoRelease;
     #endregion
 
@@ -129,7 +129,7 @@ public class InventoryUI : MonoBehaviour
         //
         //default assign
         AssignHeroToSlot(hero, hero.invIndex, -1,-1);//default is -1
-
+        
 
         //update tradeing and exploring heroes
         InitUpdateTradeHeroes(hero);
@@ -177,6 +177,63 @@ public class InventoryUI : MonoBehaviour
             tradeInventory.UpdateReference(hero.invIndex, -1);
             exploreInventory.UpdateReference(hero.invIndex, amountInDungeon - 1);
         }
+    }
+
+
+    //update inventory display
+    //------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public void ResetExploring()
+    {
+        exploreInventory.RemoveAllHeroesFromExplore();
+    }
+
+    public void UpdateInventory()
+    {
+        if (DatabaseManager._instance != null && DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.inventory != null && heroSlots != null)
+        {
+            //reset
+            for (int i = 0; i < heroSlots.Length; i++)
+            {
+                heroSlots[i].removeHero();
+                heroSlots[i].hideHero();
+            }
+            //assign
+            foreach (PlayerHero hero in DatabaseManager._instance.activePlayerData.inventory)
+            {
+                UpdateAssignHeroToSlot(hero);
+            }
+            DatabaseManager._instance.SaveGameDataLocally();
+        }
+    }
+
+    private void UpdateAssignHeroToSlot(PlayerHero hero)
+    {
+        //catch exeptions
+        if (hero.invIndex > heroSlots.Length)
+        {
+            Debug.Log("trying to show hero which is in slot that is bigger than the inventory size");
+            return;
+        }
+
+        if (heroSlots[hero.invIndex].playerHero != null)
+        {
+            Debug.Log("trying to show hero which is already shown or assign more heroes to one slot");
+            //return;
+        }
+
+        if (!DatabaseManager._instance.defaultHeroData.defaultHeroDictionary.ContainsKey(hero.heroId))
+        {
+            heroSlots[hero.invIndex].removeHero();
+            heroSlots[hero.invIndex].hideHero();
+            Debug.Log("trying to show hero that does not exist");
+            return;
+        }
+
+
+        //
+        //default assign
+        AssignHeroToSlot(hero, hero.invIndex, -1, -1);//default is -1
     }
 
 
@@ -271,15 +328,31 @@ public class InventoryUI : MonoBehaviour
         //only do if forced release
         if (DoRelease && heroSlots[index].playerHero.status == HeroStatus.Idle)
         {
-            heroSlots[index].EnableHighlight();
+            foreach(HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
 
+            heroSlots[index].EnableHighlight();
+            releaseHero = heroSlots[index].playerHero;
+
+            UIEnablerManager.Instance.DisableElement("ReleaseBlocked", false);
             UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseSubmit", false);
+
         }
 
         else if (DoRelease)
         {
+            foreach (HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
+
             heroSlots[index].EnableHighlight();
 
+            UIEnablerManager.Instance.DisableElement("ReleaseSubmit", false);
             UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseBlocked", false);
         }
     }

@@ -18,6 +18,7 @@ public class UIEnablerManager : MonoBehaviour
     public static UIEnablerManager Instance;
 
     [SerializeField] Canvas canvas;          
+    [SerializeField] GameObject blur;          
     [SerializeField] float canvasAnimTime;          
 
     //dictionaries
@@ -333,6 +334,17 @@ public class UIEnablerManager : MonoBehaviour
             {
                 canvas.GetComponent<Image>().color = new Color(canvas.GetComponent<Image>().color.r, canvas.GetComponent<Image>().color.g, canvas.GetComponent<Image>().color.b, value);
             });
+    }
+
+
+    public void EnableBlur()
+    {
+        blur.SetActive(true);
+    }
+
+    public void DisableBlur()
+    {
+        blur.SetActive(false);
     }
 
 

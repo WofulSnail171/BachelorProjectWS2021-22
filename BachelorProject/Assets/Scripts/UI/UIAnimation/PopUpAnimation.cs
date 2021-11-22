@@ -77,7 +77,7 @@ public class PopUpAnimation : AbstractElementAnimation
 
     IEnumerator Pause()
     {
-        yield return new WaitForSeconds(animSpeed + 1);
+        yield return new WaitForSeconds(animSpeed);
 
         gameObject.SetActive(false);
         Buttons.transform.position = new Vector3(Buttons.transform.position.x, original, Buttons.transform.position.z);

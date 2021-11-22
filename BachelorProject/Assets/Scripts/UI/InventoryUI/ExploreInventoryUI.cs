@@ -40,6 +40,7 @@ public class ExploreInventoryUI : MonoBehaviour
 
                 //update original
                 draggedSlot.changeStatus(HeroStatus.Exploring);
+                var test = DatabaseManager._instance.activePlayerData;
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, -1, exploreSlot.slotID);
 
                 return;

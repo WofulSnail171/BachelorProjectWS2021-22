@@ -53,6 +53,7 @@ public class DungeonHeroActions : MonoBehaviour
             UIEnablerManager.Instance.DisableCanvas();
 
             //go to observation
+            UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
             UIEnablerManager.Instance.DisableElement("HeroHub", true);
             UIEnablerManager.Instance.SwitchElements("DungeonHeroSelect", "General", true);
             UIEnablerManager.Instance.EnableElement("DungeonObserve", true);

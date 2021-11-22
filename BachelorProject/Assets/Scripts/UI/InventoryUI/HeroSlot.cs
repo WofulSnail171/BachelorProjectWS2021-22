@@ -51,6 +51,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     public void showHero()
     {
         disabledCard.SetActive(false);
+        highlight.SetActive(false);
         heroCard.SetActive(true);
     }
 
@@ -58,6 +59,7 @@ public class HeroSlot : MonoBehaviour ,IDragHandler,IBeginDragHandler,IEndDragHa
     public void hideHero()
     {
         heroCard.SetActive(false);
+        highlight.SetActive(false);
         disabledCard.SetActive(true);
     }
 
