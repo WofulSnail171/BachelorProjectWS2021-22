@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,6 +40,8 @@ public class SDFCombine : SDFFunction {
     }
 
     private void Awake() {
+        
+        Debug.Log("started awake for " + this.sdfName);
         this.nodeType = NodeType.Comb;
         
         this.index = (uint)Random.Range(0, 1000);
@@ -47,7 +50,14 @@ public class SDFCombine : SDFFunction {
         this.o = this.sdfName +"_out";
         
         this.OnInputChange += this.GenerateVariables;
-        this.GenerateVariables();
+        if (this._inputA != null || this._inputB != null) {
+            this.GenerateVariables();
+        }
+        else {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
+        }
+        Debug.Log("awake done for " + this.sdfName);
+        
     }
 
     public override string GenerateHlslFunction() {
@@ -80,22 +90,29 @@ public class SDFCombine : SDFFunction {
         else {
             nodes.Add(this.inputB);
         }
+
+
+        string debugNodes = "";
+        foreach (var s in nodes) {
+            if (s != null) {
+                debugNodes += s.sdfName + " - ";
+            }
+            else {
+                Debug.Log("node is null");
+            }
+        }
+        
+        Debug.Log(debugNodes);
     }
     
     public void GenerateVariables() {
         
         Debug.Log("generating new variables");
-        
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
 
-        if (this.inputA == null || this.inputB == null) {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
+        if (this._inputA == null || this._inputB == null) {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
             return;
         }
-
 
         foreach (string s in this.inputA.variables) {
             this.variables.Add(s);
@@ -111,7 +128,7 @@ public class SDFCombine : SDFFunction {
             this.types.Add(s);
         }
         
-        Debug.Log(this.variables);
+        Debug.Log("comb variables: " + this.variables);
     }
 
     private void OnDestroy() {

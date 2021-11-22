@@ -32,6 +32,7 @@ public class SDFCircle : SDFObject {
         this.index = (uint)Random.Range(0, 1000);
 
         this.sdfName = "circle" + this.index;
+        
         this.o = this.sdfName + "_out";
         
         if (this.variables != null) {

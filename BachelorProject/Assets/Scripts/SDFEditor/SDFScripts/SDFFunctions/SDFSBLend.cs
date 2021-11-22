@@ -62,7 +62,9 @@ public class SDFSBLend : SDFFunction
         this.types.Clear();
         
         this.OnInputChange += this.GenerateVariables;
-        GenerateVariables();
+        if (this.inputA != null || this._inputB != null) {
+            this.GenerateVariables();
+        }
     }
     public override string GenerateHlslFunction() {
 

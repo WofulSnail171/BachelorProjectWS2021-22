@@ -58,23 +58,20 @@ public class SDFLine : SDFObject {
         this.sdfName = "line" + this.index;
         this.o = this.sdfName + "_out";
 
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
-        
-        this.variables.Add(this.sdfName + "_position");
-        this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_a");
-        this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_b");
-        this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_roundness");
-        this.types.Add("float");
+        Debug.Log("changed index from line to: " + this.index);
+
+        this.variables[0] = this.sdfName + "_position";
+        this.types[0] = "float2";
+        this.variables[1] = this.sdfName + "_a";
+        this.types[1] = "float2";
+        this.variables[2] = this.sdfName + "_b";
+        this.types[2] = "float2";
+        this.variables[3] = this.sdfName + "_roundness";
+        this.types[3] = "float";
     }
     
     public override string GenerateHlslFunction() {
-
+        
         string hlslString = @"
         float2 pa = uv - " + this.variables[0] + " - " + this.variables[1] + @";
         float2 ba = " + this.variables[2] + " - " + this.variables[1] + @";

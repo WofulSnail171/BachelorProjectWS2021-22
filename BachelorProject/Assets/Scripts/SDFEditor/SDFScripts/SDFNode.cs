@@ -9,8 +9,8 @@ public abstract class SDFNode : ScriptableObject
 
     protected uint index;
 
-    [HideInInspector]public List<string> variables;
-    [HideInInspector]public List<string> types;
+    [HideInInspector]public List<string> variables = new List<string>();
+    [HideInInspector]public List<string> types = new List<string>();
 
     [HideInInspector] public List<ScriptableObject> nodes;
 

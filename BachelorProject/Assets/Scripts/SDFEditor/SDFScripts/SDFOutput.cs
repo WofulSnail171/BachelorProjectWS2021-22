@@ -167,6 +167,8 @@ public class SDFOutput : SDFFunction{
     }
     
     private string GenerateShaderVariables() {
+        
+        
         string variables = "";
 
         for (int i = 0; i < this.input.variables.Count; i++) {
@@ -367,17 +369,18 @@ CBUFFER_END";
         }
         else {
             this.SDFNodes.Add(this.input);
-            Debug.Log("in here");
         }
         
         //add actions from active nodes
         foreach (SDFNode s in this.SDFNodes) {
-            this.ChangeShaderValues(s);
-            s.OnValueChange += this.ChangeShaderValues;
-            Debug.Log("subscribed to value change on " +  s.sdfName);
-            if (s is SDFFunction) {
-                SDFFunction sfunc = (SDFFunction) s;
-                sfunc.OnInputChange += this.UpdateActiveNodes;
+            if (s != null) {
+                this.ChangeShaderValues(s);
+                s.OnValueChange += this.ChangeShaderValues;
+                //Debug.Log("subscribed to value change on " +  s.sdfName);
+                if (s is SDFFunction) {
+                    SDFFunction sfunc = (SDFFunction) s;
+                    sfunc.OnInputChange += this.UpdateActiveNodes;
+                }
             }
         }
     }
