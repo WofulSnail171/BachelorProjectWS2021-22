@@ -397,7 +397,7 @@ public class DungeonManager : MonoBehaviour
                     if (currentCalcRun.currentNode.currentGrowth < -3)
                         currentCalcRun.currentNode.currentGrowth = -3;
                     currentCalcRun.UpdateLog("Party finished their round - growth sunk to " + currentCalcRun.currentNode.currentGrowth.ToString());
-                    currentCalcRun.rewardHealthBar--;
+                    currentCalcRun.AffectRewardHealth(-1);
                 }
                 else
                 {
@@ -470,7 +470,7 @@ public class DungeonManager : MonoBehaviour
         else
         {
             EnterNewActivityState(DungeonActivity.pathHandling);
-            currentCalcRun.rewardHealthBar--;
+            currentCalcRun.AffectRewardHealth(-1);
         }
     }
 

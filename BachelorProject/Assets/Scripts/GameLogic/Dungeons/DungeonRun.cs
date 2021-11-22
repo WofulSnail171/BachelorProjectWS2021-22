@@ -70,6 +70,14 @@ public class CalculatedDungeonRun
         }
     }
 
+    public int AffectRewardHealth(int _amount)
+    {
+        rewardHealthBar += _amount;
+        if (rewardHealthBar < 0)
+            rewardHealthBar = 0;
+        return rewardHealthBar;
+    }
+
     public bool Finished()
     {
         return ended;

@@ -69,7 +69,7 @@ public class DungeonLayOut : MonoBehaviour
         //_node.statType = DatabaseManager._instance.eventData.eventDecks.[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.nodeTypes.Length)];
         _node.nodeEvent  = DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck.Length)];
 
-        _node.maxEventHealth = UnityEngine.Random.Range(10, 20);
+        _node.maxEventHealth = UnityEngine.Random.Range(100, 2000);
         _node.eventHealth = _node.maxEventHealth;
         _node.defaultGrowth = UnityEngine.Random.Range(10, 20);
         _node.currentGrowth = _node.defaultGrowth;
