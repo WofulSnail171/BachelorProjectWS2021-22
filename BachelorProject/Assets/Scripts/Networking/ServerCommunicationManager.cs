@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 
 public class ServerCommunicationManager : MonoBehaviour
@@ -33,6 +34,7 @@ public class ServerCommunicationManager : MonoBehaviour
     private bool Exported = true;
 
     public GameObject CommVis;
+    public TMP_Text errorInfoText; 
 
     float waitTimer = 0.0f;
     float waitTime = 13.0f;
@@ -55,8 +57,8 @@ public class ServerCommunicationManager : MonoBehaviour
         if(waitTimer >= waitTime && _webRequest != null && !Imported && webRequestQueue.Count > 0)
         {
             //retry last Message
-            Debug.LogWarning("Retry sending message. TimeOut");
-            PopRequestQueue();
+            //Debug.LogWarning("Retry sending message. TimeOut");
+            //PopRequestQueue();
         }
     }
 
@@ -64,7 +66,63 @@ public class ServerCommunicationManager : MonoBehaviour
     {
         if (_webRequest != null && _webRequest.isDone)
         {
-            ExecuteImport();        
+            if (errorInfoText != null)
+                errorInfoText.text = "";
+            if (_webRequest.result != UnityWebRequest.Result.Success)
+            {
+                if (errorInfoText != null)
+                    errorInfoText.text = _webRequest.error;
+                Debug.LogWarning(_webRequest.error);
+                switch (_webRequest.result)
+                {
+                    case UnityWebRequest.Result.InProgress:
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        break;
+                    case UnityWebRequest.Result.ConnectionError:
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        break;
+                    case UnityWebRequest.Result.DataProcessingError:
+                        break;
+                    default:
+                        break;
+                }
+                if (_webRequest.error == "Request timeout")
+                {
+                    //Retry operation!
+                    _webRequest = null;
+                    Imported = true;
+                    WebRequestInstance _temp = webRequestQueue[0];
+                    string parameters = "?data=" + _temp.jsonText;
+                    WebRequestInstance _newTemp = new WebRequestInstance { jsonText = _temp.jsonText, request = UnityWebRequest.Get(_URL + parameters), requestType = _temp.requestType, waitForAnswer = _temp.waitForAnswer, simpleEvent = _temp.simpleEvent, messageEvent = _temp.messageEvent };
+                    webRequestQueue[0] = _newTemp;
+                    if (webRequestQueue.Count >= 1)
+                        CommVis.SetActive(true);
+                    else
+                        CommVis.SetActive(false);
+                }
+                else if (_webRequest.error == "Cannot resolve destination host")
+                {
+                    //No Internet Connection!
+                    //Just Retry until its working lol
+                    _webRequest = null;
+                    Imported = true;
+                    WebRequestInstance _temp = webRequestQueue[0];
+                    string parameters = "?data=" + _temp.jsonText;
+                    WebRequestInstance _newTemp = new WebRequestInstance { jsonText = _temp.jsonText, request = UnityWebRequest.Get(_URL + parameters), requestType = _temp.requestType, waitForAnswer = _temp.waitForAnswer, simpleEvent = _temp.simpleEvent, messageEvent = _temp.messageEvent };
+                    webRequestQueue[0] = _newTemp;
+                    if (webRequestQueue.Count >= 1)
+                        CommVis.SetActive(true);
+                    else
+                        CommVis.SetActive(false);
+                }
+            }
+            else
+            {
+                ExecuteImport();
+            }
+            
         }
     }
 
@@ -143,6 +201,8 @@ public class ServerCommunicationManager : MonoBehaviour
             CommVis.SetActive(true);
         else
             CommVis.SetActive(false);
+        if (errorInfoText != null)
+            errorInfoText.text = "Communicating... Do not close app";
     }
 
     private void ErrorHandling(string _message)
@@ -185,6 +245,7 @@ public class ServerCommunicationManager : MonoBehaviour
     {
         WebRequestInstance _temp = webRequestQueue[0];
         _webRequest = _temp.request;
+        _webRequest.timeout = (int)waitTime;
         _webRequest.SendWebRequest();
         Debug.Log(_temp.requestType);
         if (_temp.waitForAnswer)
