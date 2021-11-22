@@ -131,7 +131,7 @@ public class SDFCombine : SDFFunction {
         // Debug.Log("comb variables: " + this.variables);
     }
 
-    private void OnDestroy() {
+    private void OnDisable() {
         this.OnInputChange -= GenerateVariables;
     }
 }

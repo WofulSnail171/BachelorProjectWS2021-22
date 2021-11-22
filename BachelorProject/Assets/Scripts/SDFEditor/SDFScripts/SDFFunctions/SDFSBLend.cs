@@ -76,8 +76,8 @@ public class SDFSBLend : SDFFunction
         
         string hlslString = a +@"
     " + b + @"
-    float h = max( " + this.variables[0] +" - abs(" + this.inputA.o + " - " + this.inputB.o + @"), 0.0 )/" + this.variables[0] + @";
-    float " + this.o + " =  min( " + this.inputA.o + ", " + this.inputB.o + ") - h*h*" + this.variables[0] +"*(1.0/4.0);";
+    float h_" + this.sdfName + " = max( " + this.variables[0] +" - abs(" + this.inputA.o + " - " + this.inputB.o + @"), 0.0 )/" + this.variables[0] + @";
+    float " + this.o + " =  min( " + this.inputA.o + ", " + this.inputB.o + ") - h_" + this.sdfName + "*h_" + this.sdfName + "*" + this.variables[0] +"*(1.0/4.0);";
         
         return hlslString;
     }

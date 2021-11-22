@@ -93,25 +93,25 @@ public class SDFTriangle : SDFObject {
     
     public override string GenerateHlslFunction() {
 
-        string hlslString ="float2 e0 = " + this.variables[2] + " - " + this.variables[1] + @";
-    float2 e1 = " + this.variables[3] + " - " + this.variables[2] + @";
-    float2 e2 = " + this.variables[1] + " - " + this.variables[3] + @";
+        string hlslString ="float2 e0_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
+    float2 e1_" + this.sdfName + " = " + this.variables[3] + " - " + this.variables[2] + @";
+    float2 e2_" + this.sdfName + " = " + this.variables[1] + " - " + this.variables[3] + @";
     
     float2 uv_" + this.sdfName + " = 1/" + this.variables[4] + " * uv - " + this.variables[0] + @";
     
-    float2 v0 = uv_" + this.sdfName + " - " + this.variables[1] + @";
-    float2 v1 = uv_" + this.sdfName + " - " + this.variables[2] + @";
-    float2 v2 = uv_" + this.sdfName + " - " + this.variables[3] + @";
+    float2 v0_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[1] + @";
+    float2 v1_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[2] + @";
+    float2 v2_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[3] + @";
     
-    float2 pq0 = v0 - e0 * clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
-    float2 pq1 = v1 - e1 * clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
-    float2 pq2 = v2 - e2 * clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
+    float2 pq0_" + this.sdfName + " = v0_" + this.sdfName + " - e0_" + this.sdfName + " * clamp( dot(v0_" + this.sdfName + ",e0_" + this.sdfName + ")/dot(e0_" + this.sdfName + ",e0_" + this.sdfName + @"), 0.0, 1.0 );
+    float2 pq1_" + this.sdfName + " = v1_" + this.sdfName + " - e1_" + this.sdfName + " * clamp( dot(v1_" + this.sdfName + ",e1_" + this.sdfName + ")/dot(e1_" + this.sdfName + ",e1_" + this.sdfName + @"), 0.0, 1.0 );
+    float2 pq2_" + this.sdfName + " = v2_" + this.sdfName + " - e2_" + this.sdfName + " * clamp( dot(v2_" + this.sdfName + ",e2_" + this.sdfName + ")/dot(e2_" + this.sdfName + ",e2_" + this.sdfName + @"), 0.0, 1.0 );
     
-    float s = sign( e0.x*e2.y - e0.y*e2.x ) ;
-    float2 d = min(min(float2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
-                       float2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
-                       float2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
-    float "+ this.o + "= -sqrt(d.x) * sign(d.y) * " + this.scale +";";
+    float s_" + this.sdfName + " = sign( e0_" + this.sdfName + ".x*e2_" + this.sdfName + ".y - e0_" + this.sdfName + ".y*e2_" + this.sdfName + @".x ) ;
+    float2 d_" + this.sdfName + " = min(min(float2(dot(pq0_" + this.sdfName + ",pq0_" + this.sdfName + "), s_" + this.sdfName + "*(v0_" + this.sdfName + ".x*e0_" + this.sdfName + ".y-v0_" + this.sdfName + ".y*e0_" + this.sdfName + @".x)),
+                       float2(dot(pq1_" + this.sdfName + ",pq1_" + this.sdfName + "), s_" + this.sdfName + "*(v1_" + this.sdfName + ".x*e1_" + this.sdfName + ".y-v1_" + this.sdfName + ".y*e1_" + this.sdfName + @".x))),
+                       float2(dot(pq2_" + this.sdfName + ",pq2_" + this.sdfName + "), s_" + this.sdfName + "*(v2_" + this.sdfName + ".x*e2_" + this.sdfName + ".y-v2_" + this.sdfName + ".y*e2_" + this.sdfName + @".x)));
+    float "+ this.o + "= -sqrt(d_" + this.sdfName + ".x) * sign(d_" + this.sdfName + ".y) * " + this.scale +";";
         
         return hlslString;
     }

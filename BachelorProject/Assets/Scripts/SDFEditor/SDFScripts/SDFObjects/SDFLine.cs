@@ -73,10 +73,10 @@ public class SDFLine : SDFObject {
     public override string GenerateHlslFunction() {
         
         string hlslString = @"
-        float2 pa = uv - " + this.variables[0] + " - " + this.variables[1] + @";
-        float2 ba = " + this.variables[2] + " - " + this.variables[1] + @";
-        float h = clamp(dot(pa, ba)/dot(ba, ba), 0, 1);
-        float "+ this.o + " = length(pa - ba*h) - " + this.variables[3]+ ";";
+        float2 pa_" + this.sdfName + " = uv - " + this.variables[0] + " - " + this.variables[1] + @";
+        float2 ba_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
+        float h_" + this.sdfName + " = clamp(dot(pa_" + this.sdfName + ", ba_" + this.sdfName + ")/dot(ba_" + this.sdfName + ", ba_" + this.sdfName + @"), 0, 1);
+        float "+ this.o + " = length(pa_" + this.sdfName + " - ba_" + this.sdfName + "*h_" + this.sdfName + ") - " + this.variables[3]+ ";";
         
         return hlslString;
     }

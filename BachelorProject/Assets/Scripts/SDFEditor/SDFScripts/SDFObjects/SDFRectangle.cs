@@ -83,8 +83,8 @@ public class SDFRectangle : SDFObject
 
         string hlslString = this.variables[3] + ".xy = (" + this.variables[0] + ".x - uv.x > 0.0) ? " + this.variables[3] + ".xy : " + this.variables[3] + @".zw;
         " + this.variables[3] + ".x  = (" + this.variables[0] + ".y - uv.y > 0.0) ? " + this.variables[3] + ".x  : " + this.variables[3] + @".y;
-        float2 q = abs(" + this.variables[0] + " - uv) - " + this.variables[1] + " + " + this.variables[3] + @".x;
-        float " + this.o + " = min(max(q.x,q.y),0.0) + length(max(q,0.0)) - " + this.variables[3] + ".x;";
+        float2 q_" + this.sdfName + " = abs(" + this.variables[0] + " - uv) - " + this.variables[1] + " + " + this.variables[3] + @".x;
+        float " + this.o + " = min(max(q_" + this.sdfName + ".x,q_" + this.sdfName + ".y),0.0) + length(max(q_" + this.sdfName + ",0.0)) - " + this.variables[3] + ".x;";
         
         return hlslString;
     }
