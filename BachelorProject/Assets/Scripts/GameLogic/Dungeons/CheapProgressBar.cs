@@ -21,7 +21,6 @@ public class CheapProgressBar : MonoBehaviour
         {
             bar.localScale = new Vector3(currval / maxVal, 1, 1);
         }
-
     }
 
     public void SetVal(float _newVal, bool _interpolate = false)
