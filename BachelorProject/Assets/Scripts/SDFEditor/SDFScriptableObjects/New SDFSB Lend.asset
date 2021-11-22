@@ -9,24 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c133afe84d8de07448db7e615c46a6ff, type: 3}
-  m_Name: SDF Line
+  m_Script: {fileID: 11500000, guid: 5a1dd578e7347014985db9c2acbb3dbb, type: 3}
+  m_Name: New SDFSB Lend
   m_EditorClassIdentifier: 
-  o: line109_out
-  sdfName: line109
+  o: sblend860_out
+  sdfName: sblend860
   variables:
+  - sblend860_k
   - line109_position
   - line109_a
   - line109_b
   - line109_roundness
+  - circle199_position
+  - circle199_radius
   types:
+  - float
   - float2
   - float2
   - float2
   - float
+  - float2
+  - float
   nodes: []
-  nodeType: 3
-  position: {x: -0.01, y: 0}
-  a: {x: -0.22, y: -0.2}
-  b: {x: 0.28, y: 0.24}
-  roundness: 0.01
+  nodeType: 8
+  inputA: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}
+  inputB: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
+  k: 0.19

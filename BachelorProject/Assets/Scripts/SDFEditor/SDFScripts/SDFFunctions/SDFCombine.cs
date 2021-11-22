@@ -41,7 +41,7 @@ public class SDFCombine : SDFFunction {
 
     private void Awake() {
         
-        Debug.Log("started awake for " + this.sdfName);
+        //Debug.Log("started awake for " + this.sdfName);
         this.nodeType = NodeType.Comb;
         
         this.index = (uint)Random.Range(0, 1000);
@@ -56,7 +56,7 @@ public class SDFCombine : SDFFunction {
         else {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
         }
-        Debug.Log("awake done for " + this.sdfName);
+       // Debug.Log("awake done for " + this.sdfName);
         
     }
 
@@ -92,22 +92,22 @@ public class SDFCombine : SDFFunction {
         }
 
 
-        string debugNodes = "";
-        foreach (var s in nodes) {
-            if (s != null) {
-                debugNodes += s.sdfName + " - ";
-            }
-            else {
-                Debug.Log("node is null");
-            }
-        }
-        
-        Debug.Log(debugNodes);
+        //string debugNodes = "";
+        //foreach (var s in nodes) {
+        //    if (s != null) {
+        //        debugNodes += s.sdfName + " - ";
+        //    }
+        //    else {
+        //        Debug.Log("node is null");
+        //    }
+        //}
+        //
+        //Debug.Log(debugNodes);
     }
     
     public void GenerateVariables() {
         
-        Debug.Log("generating new variables");
+        //Debug.Log("generating new variables");
 
         if (this._inputA == null || this._inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
@@ -128,7 +128,7 @@ public class SDFCombine : SDFFunction {
             this.types.Add(s);
         }
         
-        Debug.Log("comb variables: " + this.variables);
+        // Debug.Log("comb variables: " + this.variables);
     }
 
     private void OnDestroy() {

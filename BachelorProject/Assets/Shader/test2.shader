@@ -46,19 +46,20 @@ Shader "SDF/test2"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float2 circle199_position;
-    float circle199_radius;
+   float sblend860_k;
     float2 line109_position;
     float2 line109_a;
     float2 line109_b;
     float line109_roundness;
+    float2 circle199_position;
+    float circle199_radius;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,circle199_position, circle199_radius, line109_position, line109_a, line109_b, line109_roundness);
+            float sdfOut = sdf(i.uv,sblend860_k, line109_position, line109_a, line109_b, line109_roundness, circle199_position, circle199_radius);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }

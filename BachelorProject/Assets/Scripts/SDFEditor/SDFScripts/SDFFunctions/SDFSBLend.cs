@@ -51,7 +51,7 @@ public class SDFSBLend : SDFFunction
     }
 
     private void Awake() {
-        this.nodeType = NodeType.Lerp;
+        this.nodeType = NodeType.SBlend;
         
         this.index = (uint)Random.Range(0, 1000);
        
@@ -65,12 +65,19 @@ public class SDFSBLend : SDFFunction
         if (this.inputA != null || this._inputB != null) {
             this.GenerateVariables();
         }
+        else {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
+        }
     }
     public override string GenerateHlslFunction() {
 
-        string hlslString = @"
-    float h = max( " + this.variables[0] +" - abs(" + this.inputA + " - " + this.inputB + @"), 0.0 )/" + this.variables[0] + @";
-    float this.o =  min( " + this.inputA + ", " + this.inputB + ") - h*h*" + this.variables[0] +"*(1.0/4.0);";
+        string a = this.inputA.GenerateHlslFunction();
+        string b = this.inputB.GenerateHlslFunction();
+        
+        string hlslString = a +@"
+    " + b + @"
+    float h = max( " + this.variables[0] +" - abs(" + this.inputA.o + " - " + this.inputB.o + @"), 0.0 )/" + this.variables[0] + @";
+    float " + this.o + " =  min( " + this.inputA.o + ", " + this.inputB.o + ") - h*h*" + this.variables[0] +"*(1.0/4.0);";
         
         return hlslString;
     }
@@ -103,7 +110,8 @@ public class SDFSBLend : SDFFunction
         
         if (this._inputA == null || this.inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
-            return;}
+            return;
+        }
 
         this.variables.Add(this.sdfName + "_k");
         this.types.Add("float");
