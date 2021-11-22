@@ -26,6 +26,7 @@ public class DungeonManager : MonoBehaviour
 
     public LayoutList layoutList;
     public CalculatedDungeonRun currentCalcRun;
+    public PlayerHero rewardHero;
     public bool CheckCalcRun()
     {
         if (currentCalcRun != null && currentCalcRun.currentNode != null)
@@ -545,7 +546,22 @@ public class DungeonManager : MonoBehaviour
             rewardTier += 1;
         }
         //do something with the reward tier but for now just let it get you a random hero
-        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetrandomHero());
+        rewardHero = HeroCreator.GetrandomHero();
+        
+    }
+
+    public void AddRewardHeroToInventory()
+    {
+        if(rewardHero != null)
+        {
+            DatabaseManager._instance.activePlayerData.inventory.Add(rewardHero);
+            DatabaseManager.ValidateInventory();
+        }
+    }
+
+    public void DiscardRewardHero()
+    {
+        rewardHero = null;
     }
 
     public void WrapUpDungeon()
@@ -555,6 +571,11 @@ public class DungeonManager : MonoBehaviour
         Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(false);
+
+
+        DatabaseManager._instance.SaveGameDataLocally();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
     }
 
 
