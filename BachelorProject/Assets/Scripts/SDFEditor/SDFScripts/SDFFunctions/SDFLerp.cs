@@ -56,7 +56,12 @@ public class SDFLerp : SDFFunction
         this.o = this.sdfName + "_out";
         
         this.OnInputChange += this.GenerateVariables;
-        GenerateVariables();
+        if (this._inputA != null || this._inputB != null) {
+            this.GenerateVariables();
+        }
+        else {
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
+        }
         
     }
     
@@ -91,12 +96,7 @@ public class SDFLerp : SDFFunction
     }
     
     public void GenerateVariables() {
-        
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
-        
+
         if (this._inputA == null || this.inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
             return;}

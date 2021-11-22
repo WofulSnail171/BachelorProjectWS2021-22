@@ -4,17 +4,15 @@
     
     float dot2( in float2 v ) { return dot(v,v); }
 
-    float sdf (float2 uv, float sblend860_k, float2 line109_position, float2 line109_a, float2 line109_b, float line109_roundness, float2 circle199_position, float circle199_radius){ 
-        
-        float2 pa = uv - line109_position - line109_a;
-        float2 ba = line109_b - line109_a;
-        float h1 = clamp(dot(pa, ba)/dot(ba, ba), 0, 1);
-        float line109_out = length(pa - ba*h1) - line109_roundness;
-    float circle199_out = length(circle199_position- uv)- circle199_radius;
-    float h = max( sblend860_k - abs(line109_out - circle199_out), 0.0 )/sblend860_k;
-    float sblend860_out =  min( line109_out, circle199_out) - h*h*sblend860_k*(1.0/4.0);
+    float sdf (float2 uv, float lerp45_t, float2 circle199_position, float circle199_radius, float2 rect773_position, float2 rect773_box, float rect773_scale, float4 rect773_roundness){ 
+        float circle199_out = length(circle199_position- uv)- circle199_radius;
+    rect773_roundness.xy = (rect773_position.x - uv.x > 0.0) ? rect773_roundness.xy : rect773_roundness.zw;
+        rect773_roundness.x  = (rect773_position.y - uv.y > 0.0) ? rect773_roundness.x  : rect773_roundness.y;
+        float2 q = abs(rect773_position - uv) - rect773_box + rect773_roundness.x;
+        float rect773_out = min(max(q.x,q.y),0.0) + length(max(q,0.0)) - rect773_roundness.x;
+    float lerp45_out = lerp(circle199_out,rect773_out, lerp45_t);
 
-         return sblend860_out;
+         return lerp45_out;
         }
         
 #endif
