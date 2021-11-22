@@ -26,7 +26,20 @@ public class CalculatedDungeonRun
         currentActivity = DungeonActivity.startQuest;
         startActivitySteps = 0;
         remainingActivitySteps = 0;
-        rewardHealthBar = dungeonRun.initialRewardTier * 10;
+        int baseReward = 0;
+        if(dungeonRun.dungeon.type == DungeonType.basic)
+        {
+            baseReward = 3 + dungeonRun.initialRewardTier;
+            if (baseReward > 7)
+                baseReward = 7;
+        }
+        else
+        {
+            baseReward = 6 + dungeonRun.initialRewardTier;
+            if (baseReward > 10)
+                baseReward = 10;
+        }
+        rewardHealthBar = (baseReward) * 10;
         currentNode = dungeonRun.dungeon.dungeonLayout.startNode;
 
         pStatGrowth = 0;

@@ -397,6 +397,7 @@ public class DungeonManager : MonoBehaviour
                     if (currentCalcRun.currentNode.currentGrowth < -3)
                         currentCalcRun.currentNode.currentGrowth = -3;
                     currentCalcRun.UpdateLog("Party finished their round - growth sunk to " + currentCalcRun.currentNode.currentGrowth.ToString());
+                    currentCalcRun.rewardHealthBar--;
                 }
                 else
                 {
@@ -469,6 +470,7 @@ public class DungeonManager : MonoBehaviour
         else
         {
             EnterNewActivityState(DungeonActivity.pathHandling);
+            currentCalcRun.rewardHealthBar--;
         }
     }
 
@@ -546,7 +548,7 @@ public class DungeonManager : MonoBehaviour
             rewardTier += 1;
         }
         //do something with the reward tier but for now just let it get you a random hero
-        rewardHero = HeroCreator.GetrandomHero();
+        rewardHero = HeroCreator.GetHeroByRewardTier(rewardTier);
         
     }
 

@@ -6,9 +6,13 @@ public class HeroCreator
 {
     public static PlayerHero GetHeroByRewardTier(int _rewardTier)
     {
-        if(_rewardTier > DatabaseManager._instance.rewardTable.rewardTiers.Count)
+        if (_rewardTier < 1)
+            _rewardTier = 1;
+        else if (_rewardTier > DatabaseManager._instance.rewardTable.rewardTiers.Count)
+            _rewardTier = DatabaseManager._instance.rewardTable.rewardTiers.Count;
+        if (_rewardTier > DatabaseManager._instance.rewardTable.rewardTiers.Count)
         {
-            //Fallback
+            //Fallback will not be hitted anymooooooore
             return GetrandomHero();
         }
         RewardTier currentTier = DatabaseManager._instance.rewardTable.rewardTiers[_rewardTier - 1];
