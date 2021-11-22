@@ -11540,6 +11540,7 @@ GameObject:
   - component: {fileID: 190952926}
   - component: {fileID: 190952925}
   - component: {fileID: 190952924}
+  - component: {fileID: 190952927}
   m_Layer: 5
   m_Name: RewardBar
   m_TagString: Untagged
@@ -11625,6 +11626,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190952922}
   m_CullTransparentMesh: 1
+--- !u!114 &190952927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190952922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bcd58b6ac098da4c8ac240d2fe365fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bar: {fileID: 296161974}
 --- !u!1 &191880567
 GameObject:
   m_ObjectHideFlags: 0
@@ -25318,6 +25332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 446020709}
   - component: {fileID: 446020710}
+  - component: {fileID: 446020711}
   m_Layer: 5
   m_Name: ShardAndBuff_Header
   m_TagString: Untagged
@@ -25360,6 +25375,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animSpeed: 0.5
   animationType: 18
+--- !u!114 &446020711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 446020708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2fe0d7041f6001479bcc57d14a43027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shardText: {fileID: 835020381}
+  buffText: {fileID: 577464709}
 --- !u!1 &448740228
 GameObject:
   m_ObjectHideFlags: 0
@@ -74276,6 +74305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1376860310}
   - component: {fileID: 1376860311}
+  - component: {fileID: 1376860312}
   m_Layer: 5
   m_Name: DungeonObserve_Header
   m_TagString: Untagged
@@ -74318,6 +74348,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animSpeed: 0.5
   animationType: 18
+--- !u!114 &1376860312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376860309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b1b91c1e1a2a043a6785d9841e45a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shardText: {fileID: 2076266700}
+  buffText: {fileID: 1855485592}
+  rewardTierText: {fileID: 801560425}
+  dialogText: {fileID: 2002444155}
+  healthBar: {fileID: 190952927}
 --- !u!1 &1377555063
 GameObject:
   m_ObjectHideFlags: 0

@@ -421,6 +421,7 @@ public class HubButtonActions : MonoBehaviour
                 break;
             case HubState.DungeonHub:
                 UIEnablerManager.Instance.EnableCanvas();
+                UIEnablerManager.Instance.EnableElement("ShardAndBuff",true);
                 UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
 
                 UpdateDungeonButton(ButtonState.Unfocused);
