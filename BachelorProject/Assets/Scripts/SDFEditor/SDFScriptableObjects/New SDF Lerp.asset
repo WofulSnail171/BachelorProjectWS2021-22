@@ -14,10 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   o: lerp45_out
   sdfName: lerp45
-  variables: []
-  types: []
+  variables:
+  - lerp45_t
+  - circle199_position
+  - circle199_radius
+  - rect773_position
+  - rect773_box
+  - rect773_scale
+  - rect773_roundness
+  types:
+  - float
+  - float2
+  - float
+  - float2
+  - float2
+  - float
+  - float4
   nodes: []
   nodeType: 9
-  inputA: {fileID: 0}
-  inputB: {fileID: 0}
-  t: 0
+  inputA: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
+  inputB: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  t: 0.5

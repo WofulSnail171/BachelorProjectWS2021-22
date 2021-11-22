@@ -10,23 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c133afe84d8de07448db7e615c46a6ff, type: 3}
-  m_Name: SDF Line
+  m_Name: Line
   m_EditorClassIdentifier: 
-  o: line109_out
-  sdfName: line109
+  o: line419_out
+  sdfName: line419
   variables:
-  - line109_position
-  - line109_a
-  - line109_b
-  - line109_roundness
+  - line419_position
+  - line419_a
+  - line419_b
+  - line419_roundness
+  - line419_scale
   types:
   - float2
   - float2
   - float2
   - float
+  - float
   nodes: []
   nodeType: 3
-  position: {x: -0.01, y: 0}
-  a: {x: -0.22, y: -0.2}
-  b: {x: 0.28, y: 0.24}
-  roundness: 0.01
+  position: {x: 0, y: 0}
+  a: {x: 0, y: 0}
+  b: {x: 0, y: 0}
+  roundness: 0
+  scale: 0

@@ -111,7 +111,7 @@ public class SDFTriangle : SDFObject {
     float2 d_" + this.sdfName + " = min(min(float2(dot(pq0_" + this.sdfName + ",pq0_" + this.sdfName + "), s_" + this.sdfName + "*(v0_" + this.sdfName + ".x*e0_" + this.sdfName + ".y-v0_" + this.sdfName + ".y*e0_" + this.sdfName + @".x)),
                        float2(dot(pq1_" + this.sdfName + ",pq1_" + this.sdfName + "), s_" + this.sdfName + "*(v1_" + this.sdfName + ".x*e1_" + this.sdfName + ".y-v1_" + this.sdfName + ".y*e1_" + this.sdfName + @".x))),
                        float2(dot(pq2_" + this.sdfName + ",pq2_" + this.sdfName + "), s_" + this.sdfName + "*(v2_" + this.sdfName + ".x*e2_" + this.sdfName + ".y-v2_" + this.sdfName + ".y*e2_" + this.sdfName + @".x)));
-    float "+ this.o + "= -sqrt(d_" + this.sdfName + ".x) * sign(d_" + this.sdfName + ".y) * " + this.scale +";";
+    float "+ this.o + "= -sqrt(d_" + this.sdfName + ".x) * sign(d_" + this.sdfName + ".y) * " + this.variables[4] +";";
         
         return hlslString;
     }

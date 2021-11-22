@@ -296,6 +296,7 @@ CBUFFER_END";
                 this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetFloat(n.sdfName + "_roundness" , n.Roundness);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
                 
                 break;
             }

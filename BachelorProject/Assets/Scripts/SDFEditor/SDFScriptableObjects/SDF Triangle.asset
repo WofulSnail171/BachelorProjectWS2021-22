@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40b8f266ae2ae0642b3eb64a0a12f537, type: 3}
   m_Name: SDF Triangle
   m_EditorClassIdentifier: 
-  o: triangle999_out
-  sdfName: triangle999
+  o: triangle92_out
+  sdfName: triangle92
   variables:
-  - triangle999_position
-  - triangle999_a
-  - triangle999_b
-  - triangle999_c
-  - triangle999_scale
+  - triangle92_position
+  - triangle92_a
+  - triangle92_b
+  - triangle92_c
+  - triangle92_scale
   types:
   - float2
   - float2
@@ -29,7 +29,7 @@ MonoBehaviour:
   nodes: []
   nodeType: 2
   position: {x: 0, y: 0}
-  a: {x: 0, y: -0.25}
+  a: {x: 0, y: -0.4}
   b: {x: -0.4, y: 0.4}
   c: {x: 0.4, y: 0.4}
   scale: 1

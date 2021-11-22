@@ -12,6 +12,10 @@ public class SDFLine : SDFObject {
     [SerializeField] private float roundness;
     private float _roundness;
     
+    [SerializeField] private float scale;
+    private float _scale;
+
+    
     public Vector2 A {
         get => this._a;
         set {
@@ -39,11 +43,21 @@ public class SDFLine : SDFObject {
         }
     }
     
+    public float Scale {
+        get => this._scale;
+        set {
+            if (this._scale == value) return;
+            this._scale = value;
+            this.isDirty = true;
+        }
+    }
+    
     private void OnValidate() {
         this.Position = this.position;
         this.A = this.a;
         this.B = this.b;
         this.Roundness = this.roundness;
+        this.Scale = this.scale;
         if (this.isDirty) {
             this.OnValueChange?.Invoke(this);
             this.isDirty = false;
@@ -60,23 +74,25 @@ public class SDFLine : SDFObject {
 
         Debug.Log("changed index from line to: " + this.index);
 
-        this.variables[0] = this.sdfName + "_position";
-        this.types[0] = "float2";
-        this.variables[1] = this.sdfName + "_a";
-        this.types[1] = "float2";
-        this.variables[2] = this.sdfName + "_b";
-        this.types[2] = "float2";
-        this.variables[3] = this.sdfName + "_roundness";
-        this.types[3] = "float";
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_a");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_b");
+        this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_roundness");
+        this.types.Add("float");
+        this.variables.Add(this.sdfName + "_scale");
+        this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
         
         string hlslString = @"
-        float2 pa_" + this.sdfName + " = uv - " + this.variables[0] + " - " + this.variables[1] + @";
+        float2 pa_" + this.sdfName + " = uv * 1/ " + this.variables[4] + " - " + this.variables[0] + " - " + this.variables[1] + @";
         float2 ba_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
         float h_" + this.sdfName + " = clamp(dot(pa_" + this.sdfName + ", ba_" + this.sdfName + ")/dot(ba_" + this.sdfName + ", ba_" + this.sdfName + @"), 0, 1);
-        float "+ this.o + " = length(pa_" + this.sdfName + " - ba_" + this.sdfName + "*h_" + this.sdfName + ") - " + this.variables[3]+ ";";
+        float "+ this.o + " = (length(pa_" + this.sdfName + " - ba_" + this.sdfName + "*h_" + this.sdfName + ") - " + this.variables[3]+ ") * " + this.variables[4] +";";
         
         return hlslString;
     }
