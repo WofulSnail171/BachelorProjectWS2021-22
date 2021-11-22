@@ -40,6 +40,19 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject hubButton;
     [SerializeField] GameObject hubFocusedButton;//do nothing, just set active
     [Space]
+    [SerializeField] GameObject ContinueHeroPullButton;
+    [SerializeField] GameObject DiscardHeroPullButton;
+    [SerializeField] GameObject ReleaseHeroPullButton;
+    [SerializeField] GameObject ContinueShardButton;
+    [SerializeField] GameObject ContinueHeroGrowthButton;
+    [SerializeField] GameObject CloseWarningButton;
+    [SerializeField] GameObject CancelReleaseButton;
+    [SerializeField] GameObject ConfirmReleaseButton;
+    [SerializeField] GameObject CannotConfirmReleaseButton;
+    [Space]
+    [SerializeField] GameObject Cancel1;
+    [SerializeField] GameObject Cancel2;
+    [Space]
     [SerializeField] GameObject tradeTextGroup;
     [SerializeField] GameObject tradeSungleTextGroup;
     [SerializeField] GameObject dungeonTextGroup;
@@ -58,18 +71,12 @@ public class HubButtonActions : MonoBehaviour
     [HideInInspector]public HubState currentHubFocus;
     [Space]
     [Space]
-    [Space]
-    [SerializeField] private ProgressState tradeState;
-    [SerializeField] private ProgressState dungeonState;//wil be hidden later on
+    [SerializeField] InventoryUI InventoryUI;
 
 
-    [SerializeField] float alreadyPassedTime;
-    [SerializeField] float maxTime;
-    [SerializeField] float bufferTime;//helper for tests
 
-
-    float pausedtime;
-
+    private ProgressState tradeState;
+    private ProgressState dungeonState;
     #endregion
 
 
@@ -81,6 +88,21 @@ public class HubButtonActions : MonoBehaviour
         tradeFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedTrade(); });
         dungeonFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickedFocusedDungeon(); });
         dungeonReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickedReadyDungeon(); });
+
+        ContinueHeroGrowthButton.GetComponent<Button>().onClick.AddListener(() => { ContinueHeroGrowth(); }); 
+        ContinueShardButton.GetComponent<Button>().onClick.AddListener(() => { ContinueShards(); });
+        ReleaseHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ReleaseHeroReward(); });
+        DiscardHeroPullButton.GetComponent<Button>().onClick.AddListener(() => {DiscardHeroReward(); });
+        ContinueHeroPullButton.GetComponent<Button>().onClick.AddListener(() => {ContinueHeroReward(); });
+
+        CancelReleaseButton.GetComponent<Button>().onClick.AddListener(() => {CancelRelease(); });
+        Cancel1.GetComponent<Button>().onClick.AddListener(() => {CancelRelease(); });
+        Cancel2.GetComponent<Button>().onClick.AddListener(() => {CancelRelease(); });
+
+
+        ConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => {ConfirmRelease(); });
+        CloseWarningButton.GetComponent<Button>().onClick.AddListener(() => {CloseWarningPopUp(); });
+        CannotConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => {CannotConfirmRelease(); });
 
         DeleventSystem.DungeonStep += UpdateStates;
         DeleventSystem.DungeonStart += UpdateStates;
@@ -94,11 +116,6 @@ public class HubButtonActions : MonoBehaviour
 
         //maybe connect to a seperate cancel func?
         DeleventSystem.TradeCancel += UpdateStates;
-
-
-        //animation test
-        //AnimateTradeProgress(alreadyPassedTime,maxTime);
-        //AnimateDungeonProgress(alreadyPassedTime, maxTime);
     }
 
 
@@ -314,6 +331,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void ClickedHub()
     {
+        InventoryUI.UpdateInventory();
+
+
         //check where you are coming from
         switch (currentHubFocus)
         {
@@ -373,7 +393,7 @@ public class HubButtonActions : MonoBehaviour
     }
 
 
-    //rewards or trade done
+    //rewards done
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     private void ClickedReadyDungeon()
@@ -382,21 +402,18 @@ public class HubButtonActions : MonoBehaviour
         DungeonManager._instance.ApplyGrowth();
         DungeonManager._instance.EventRewardHeroHandling();
         DungeonManager._instance.EventRewardShardHandling();
-        DungeonManager._instance.WrapUpDungeon();
-        DatabaseManager._instance.SaveGameDataLocally();
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
-        if(DeleventSystem.DungeonRewardFinished != null)
-        {
-            DeleventSystem.DungeonRewardFinished();
-        }
-
-        //actually do pop up 
-        //
-        ///
 
 
-        //change buttons and hub focus
+        //actually start pop up flow 
+        if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
+            UIEnablerManager.Instance.EnableElement("ShardReward", true);
+
+        else
+            UIEnablerManager.Instance.EnableElement("HeroGrowth", true);
+
+
+
+        //change buttons and hub focus in bg
         switch (currentHubFocus)
         {
             case HubState.HeroHub:
@@ -425,6 +442,109 @@ public class HubButtonActions : MonoBehaviour
 
         UpdateDungeonButton(ButtonState.Unfocused);
         currentHubFocus = HubState.HeroHub;
+    }
+
+
+    //
+    //reward flow pop ups
+    private void ContinueShards()
+    {
+        UIEnablerManager.Instance.SwitchElements("ShardReward","HeroGrowth", true);
+    }
+
+    private void ContinueHeroGrowth()
+    {
+        UIEnablerManager.Instance.SwitchElements( "HeroGrowth","HeroPull", true);
+    }
+
+    private void ContinueHeroReward()
+    {
+        DungeonManager._instance.AddRewardHeroToInventory();
+
+        //update inventory UI
+        InventoryUI.ResetExploring();
+        InventoryUI.UpdateInventory();
+
+        //close pop up flow
+        UIEnablerManager.Instance.DisableElement("HeroPull", true);
+
+        //wrap up
+        DungeonManager._instance.WrapUpDungeon();
+        if (DeleventSystem.DungeonRewardFinished != null)
+        {
+            DeleventSystem.DungeonRewardFinished();
+        }
+    }
+
+    private void ReleaseHeroReward()
+    {
+        InventoryUI.DoRelease = true;
+
+        UIEnablerManager.Instance.DisableElement("HeroPull", true);
+        UIEnablerManager.Instance.SwitchElements("General","ReleaseCancel", false);   
+    }  
+
+    private void DiscardHeroReward()
+    {
+        DungeonManager._instance.DiscardRewardHero();
+        UIEnablerManager.Instance.DisableElement("HeroPull", true);
+
+        //update inventory UI
+        InventoryUI.ResetExploring();
+        InventoryUI.UpdateInventory();
+
+        //wrap up
+        DungeonManager._instance.WrapUpDungeon();
+        if (DeleventSystem.DungeonRewardFinished != null)
+        {
+            DeleventSystem.DungeonRewardFinished();
+        }
+    }
+
+
+    //
+    //release flow pop ups
+    private void CancelRelease()
+    {
+        InventoryUI.DoRelease = false;
+
+
+        UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "General",  true);
+        UIEnablerManager.Instance.EnableElement("HeroPull", true);
+    }
+
+    private void ConfirmRelease()
+    {
+        InventoryUI.DoRelease = false;     
+
+        //switch old hero with pulled hero
+        DatabaseManager._instance.activePlayerData.ReleaseHero(InventoryUI.releaseHero.uniqueId, false);
+        DungeonManager._instance.AddRewardHeroToInventory();
+
+
+        //update inventory UI
+        InventoryUI.ResetExploring();
+        InventoryUI.UpdateInventory();
+
+
+        UIEnablerManager.Instance.SwitchElements("ReleaseSubmit", "General", true);
+
+        //wrap up
+        DungeonManager._instance.WrapUpDungeon();
+        if (DeleventSystem.DungeonRewardFinished != null)
+        {
+            DeleventSystem.DungeonRewardFinished();
+        }
+    }
+
+    private void CannotConfirmRelease()
+    {
+        UIEnablerManager.Instance.EnableElement("ReleaseWarning", true);
+    }
+
+    private void CloseWarningPopUp()
+    {
+        UIEnablerManager.Instance.DisableElement("ReleaseWarning", true);
     }
 
 
@@ -512,104 +632,6 @@ public class HubButtonActions : MonoBehaviour
     {
         currentHubFocus = state;
     }
-
-
-
-
-    //
-    //animation progress
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    /*private void AnimateTradeProgress( float start, float target)
-    {
-        //activate
-        tradeProgressBar.gameObject.SetActive(true);
-        tradeFocusProgressBar.gameObject.SetActive(true);
-        tradeTextGroup.SetActive(true);
-        tradeSungleTextGroup.SetActive(false);
-
-        //calc
-        float tweenTime = target - start;
-        float progressStart = start / target;
-
-        //animate
-        StartCoroutine(WaitForTradeFinish(tweenTime));
-
-        LeanTween.value(tradeProgressBar.gameObject, progressStart, 1f, tweenTime)
-            .setOnUpdate((value) =>
-            {
-                tradeProgressBar.fillAmount = value;
-                setTradeText(value,tradeProgressTime);
-            });
-
-        LeanTween.value(tradeFocusProgressBar.gameObject, progressStart, 1f, tweenTime)
-            .setOnUpdate((value) =>
-            {
-                tradeFocusProgressBar.fillAmount = value;
-                setTradeText(value, tradeFocusProgressTime);
-            });
-    }
-
-    private void setTradeText(float value, TextMeshProUGUI textMesh)
-    {
-        int recalcValue = (int)(value * maxTime);
-
-        textMesh.text = $"{recalcValue} sec";
-    }*/
-
-    /*private void AnimateDungeonProgress(float start,float target)
-    {
-        //activate
-        dungeonProgressBar.gameObject.SetActive(true);
-        dungeonFocusProgressBar.gameObject.SetActive(true);
-        dungeonTextGroup.SetActive(true);
-        dungeonSingleTextGroup.SetActive(false);
-
-        //calc
-        float tweenTime = target - start;
-        float progressStart = start / target;
-
-
-        //animate
-        StartCoroutine(WaitForDungeonFinish(tweenTime));
-
-        LeanTween.value(dungeonProgressBar.gameObject, progressStart, 1f, tweenTime)
-            .setOnUpdate((value) =>
-            {
-                dungeonProgressBar.fillAmount = value;
-                setDungeonText(value, dungeonProgressTime);
-            });
-
-        LeanTween.value(dungeonFocusProgressBar.gameObject, progressStart, 1f, tweenTime)
-            .setOnUpdate((value) =>
-            {
-                dungeonFocusProgressBar.fillAmount = value;
-                setDungeonText(value, dungeonFocusProgressTime);
-            });
-    }*/
-    //helper coroutines
-    /*IEnumerator WaitForTradeFinish(float time)
-    {
-        yield return new WaitForSeconds(time + bufferTime);
-
-        UpdateTradeButton(ButtonState.Finished);
-
-        tradeProgressBar.gameObject.SetActive(false);
-        tradeFocusProgressBar.gameObject.SetActive(false);
-        tradeTextGroup.SetActive(false);
-        tradeSungleTextGroup.SetActive(true);
-    }*/
-
-    /*IEnumerator WaitForDungeonFinish(float time)
-    {
-        yield return new WaitForSeconds(time + bufferTime);
-
-        UpdateDungeonButton(ButtonState.Finished);
-
-        dungeonProgressBar.gameObject.SetActive(false);
-        dungeonFocusProgressBar.gameObject.SetActive(false);
-        dungeonTextGroup.SetActive(false);
-        dungeonSingleTextGroup.SetActive(true);
-    }*/
 
 }
 

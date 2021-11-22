@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HeroPullUI : MonoBehaviour
 {
+    #region vars
     [SerializeField] GameObject ReleaseButton;
     [SerializeField] GameObject DiscardButton;
     [SerializeField] GameObject ContinueButton;
@@ -14,9 +15,16 @@ public class HeroPullUI : MonoBehaviour
     [SerializeField] InventoryUI inventory;
     [SerializeField] float animSpeed;
 
+    //for update
+
+
+    #endregion
 
     private void OnEnable()
     {
+        UpdatePulledHero();
+
+
         if (DatabaseManager._instance.activePlayerData.inventory.Count <= inventory.heroSlots.Length)
         {
             UIEnablerManager.Instance.EnableElement("HeroPullRelease", false);
@@ -34,5 +42,10 @@ public class HeroPullUI : MonoBehaviour
             ReleaseText.SetActive(false);
             UIEnablerManager.Instance.EnableElement("HeroPullContinue", false);
         }
+    }
+
+    private void UpdatePulledHero()
+    {
+
     }
 }

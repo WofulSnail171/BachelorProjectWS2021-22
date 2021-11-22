@@ -127,8 +127,7 @@ public class DatabaseManager : MonoBehaviour
             {
                 _hero.invIndex++;
             }
-        }
-            
+        }            
     }
 
     private static bool CheckUniqueId(PlayerHero _hero, int _uniqueId)
@@ -294,6 +293,23 @@ public class PlayerData
 
     public BlacklistEntry[] blacklist;
     public List<PlayerHero> inventory;
+
+    public void ReleaseHero(int _uniqueId, bool _syncOnline = true)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if(inventory[i].uniqueId == _uniqueId)
+            {
+                inventory.RemoveAt(i);
+                break;
+            }
+        }
+        DatabaseManager.ValidateInventory();
+        DatabaseManager._instance.SaveGameDataLocally();
+        if (_syncOnline){
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        }
+    }
 }
 
 [System.Serializable]
