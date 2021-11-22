@@ -169,6 +169,12 @@ public class ExploreInventoryUI : MonoBehaviour
             {
                 case ProgressState.Empty:
                     DatabaseManager._instance.dungeonData.currentRun = DungeonManager._instance.CreateDungeonRun(DungeonManager._instance.chosenDailyDungeonIndex);
+                    if(DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.doom)
+                    {
+                        DatabaseManager._instance.activePlayerData.shards -= 3;
+                        if (DatabaseManager._instance.activePlayerData.shards < 0)
+                            DatabaseManager._instance.activePlayerData.shards = 0;
+                    }
                     DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
                     DungeonManager._instance.CalculateRun(0);
                     DatabaseManager._instance.SaveGameDataLocally();

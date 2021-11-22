@@ -41,6 +41,21 @@ public class DatabaseManager : MonoBehaviour
         return result;
     }
 
+    public static bool DoomDungeonAvailable()
+    {
+        if(_instance != null && CheckDatabaseValid())
+        {
+            if(_instance.activePlayerData != null)
+            {
+                if(_instance.activePlayerData.shards >= 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -86,6 +101,7 @@ public class DatabaseManager : MonoBehaviour
                 activePlayerData = localSave.activePlayerData;
                 ValidateInventory();
                 dungeonData = localSave.dungeonData;
+                rewardTable = localSave.rewardTable;
             }
         }
     }
@@ -174,6 +190,13 @@ public class DatabaseManager : MonoBehaviour
         LocalSaveSystem.SaveLocaldata();
     }
 
+    public RewardTable rewardTable;
+    public void UpdateRewardTableFromServer(string _message)
+    {
+        rewardTable = JsonUtility.FromJson<RewardTable>(_message);
+        LocalSaveSystem.SaveLocaldata();
+    }
+
     public DungeonData dungeonData;
     public void UpdateDungeonDataFromServer(string _message)
     {
@@ -219,11 +242,13 @@ public class GameData
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
         dungeonData = _manager.dungeonData;
+        rewardTable = _manager.rewardTable;
     }
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
     public DungeonData dungeonData;
+    public RewardTable rewardTable;
 
 
 
@@ -410,4 +435,15 @@ public class UploadDungeonData
 {
     public LoginInfo playerInfo;
     public DungeonData dungeonData;
+}
+
+[System.Serializable]
+public class RewardTable
+{
+    public List<RewardTier> rewardTiers = new List<RewardTier>();
+}
+[System.Serializable]
+public class RewardTier
+{
+    public List<int> chances = new List<int>();
 }

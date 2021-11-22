@@ -137,7 +137,8 @@ public class DungeonTest : MonoBehaviour
     public void OnDungeonFinished()
     {
         DungeonManager._instance.ApplyGrowth();
-        DungeonManager._instance.EventRewardHandling();
+        DungeonManager._instance.EventRewardHeroHandling();
+        DungeonManager._instance.EventRewardShardHandling();
         DungeonManager._instance.WrapUpDungeon();
         ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
         ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
