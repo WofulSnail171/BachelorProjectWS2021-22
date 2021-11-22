@@ -337,6 +337,7 @@ public class InventoryUI : MonoBehaviour
             heroSlots[index].EnableHighlight();
             releaseHero = heroSlots[index].playerHero;
 
+            UIEnablerManager.Instance.DisableElement("ReleaseBlocked", false);
             UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseSubmit", false);
 
         }
@@ -351,6 +352,7 @@ public class InventoryUI : MonoBehaviour
 
             heroSlots[index].EnableHighlight();
 
+            UIEnablerManager.Instance.DisableElement("ReleaseSubmit", false);
             UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseBlocked", false);
         }
     }

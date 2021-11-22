@@ -54,6 +54,9 @@ public class UpdateHeroCard : MonoBehaviour
     private string magicalPotential;
     private string socialPotential;
 
+    private string physicalStat;
+    private string magicalStat;
+    private string socialStat;
 
     private float max = 999;
     #endregion
@@ -72,11 +75,12 @@ public class UpdateHeroCard : MonoBehaviour
         //check if potential is maxed
         
         CheckPotential(hero);
+        CheckStats(hero);
 
         //text
-        physicalStatText.text = $"{hero.pVal} / {hero.pPot} ({physicalPotential})";
-        magicalStatText.text = $"{hero.mVal} / {hero.mPot} ({magicalPotential})";
-        socialStatText.text = $"{hero.sVal} / {hero.sPot} ({socialPotential})";
+        physicalStatText.text = $"{physicalStat} / {physicalPotential}";
+        magicalStatText.text = $"{magicalStat} / {magicalPotential}";
+        socialStatText.text = $"{socialStat} / {socialPotential}";
 
         //set actual stat
 
@@ -209,7 +213,7 @@ public class UpdateHeroCard : MonoBehaviour
         if (hero.pPot >= defaultHero.pMaxPot)
         {
             hero.pPot = defaultHero.pMaxPot;
-            physicalPotential = "max";
+            physicalPotential = $"{hero.pPot} (max)";
 
             //bar
             physicalPotentialStatBar.fillAmount = 1 - defaultHero.pMaxPot / max;
@@ -229,7 +233,7 @@ public class UpdateHeroCard : MonoBehaviour
         if (hero.mPot >= defaultHero.mMaxPot)
         {
             hero.mPot = defaultHero.mMaxPot;
-            magicalPotential = "max";
+            magicalPotential = $"{hero.mPot} (max)";
 
             //bar
             magicalPotentialStatBar.fillAmount = 1 - defaultHero.mMaxPot/ max;
@@ -248,7 +252,7 @@ public class UpdateHeroCard : MonoBehaviour
         if (hero.sPot >= defaultHero.sMaxPot)
         {
             hero.sPot = defaultHero.sMaxPot;
-            socialPotential = "max";
+            socialPotential = $"{hero.sPot} (max)";
 
             //bar
             socialPotentialStatBar.fillAmount = 1 - defaultHero.sMaxPot/max;
@@ -262,4 +266,31 @@ public class UpdateHeroCard : MonoBehaviour
             socialPotentialStatBar.fillAmount = 1 - hero.sPot/ max;
         }
     }
+
+    private void CheckStats(PlayerHero hero)
+    {
+        //physical
+        if (hero.pPot == hero.pVal)
+            physicalStat = $"{hero.pVal} (max)";
+
+        else
+            physicalStat = $"{hero.pVal}";
+
+
+        //magical
+        if (hero.mPot == hero.mVal)
+            magicalStat = $"{hero.mVal} (max)";
+
+        else
+            magicalStat = $"{hero.mVal}";
+
+
+        //physical
+        if (hero.sPot == hero.sVal)
+            socialStat = $"{hero.sVal} (max)";
+
+        else
+            socialStat = $"{hero.sVal}";
+    }
+
 }

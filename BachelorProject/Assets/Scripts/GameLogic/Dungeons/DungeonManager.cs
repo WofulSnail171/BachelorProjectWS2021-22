@@ -554,6 +554,7 @@ public class DungeonManager : MonoBehaviour
     {
         if(rewardHero != null)
         {
+            rewardHero.invIndex = -1;
             DatabaseManager._instance.activePlayerData.inventory.Add(rewardHero);
             DatabaseManager.ValidateInventory();
         }
@@ -567,6 +568,8 @@ public class DungeonManager : MonoBehaviour
     public void WrapUpDungeon()
     {
         currentCalcRun = null;
+
+        ApplyGrowth();
         DatabaseManager._instance.dungeonData.currentRun.valid = false;
         Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();

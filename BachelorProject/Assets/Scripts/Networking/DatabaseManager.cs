@@ -146,7 +146,7 @@ public class DatabaseManager : MonoBehaviour
     {
         foreach (var item in DatabaseManager._instance.activePlayerData.inventory)
         {
-            if (item != _hero && item.invIndex == _uniqueInvIndex)
+            if (item != _hero && item.invIndex == _uniqueInvIndex || _uniqueInvIndex < 0)
             {
                 return false;
             }

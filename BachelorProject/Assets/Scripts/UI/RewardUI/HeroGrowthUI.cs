@@ -19,23 +19,21 @@ public class HeroGrowthUI : MonoBehaviour
     #endregion
 
 
-    //init
-    private void Start()
-    {
-        ContinueButton.GetComponent<Button>().onClick.AddListener(() => { ClickedContinue(); });
-    }
 
     private void OnEnable()
     {
         //test
         UpdateHeroGrowthPopUp();
-
     }
 
     //update card
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void UpdateHeroGrowthPopUp()
     {
+        ContinueButton.SetActive(false);
+
+        StartCoroutine(Anim());
+
         //reset
         growthCards.Clear();
 
@@ -80,7 +78,7 @@ public class HeroGrowthUI : MonoBehaviour
 
     //buttons
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private void ClickedSkip()
+    private void DoAnim()
     {
         LeanTween.value(gameObject, 0f, 1f, animSpeed)
             .setEaseInOutExpo()
@@ -90,11 +88,7 @@ public class HeroGrowthUI : MonoBehaviour
             .setEaseInOutExpo()
             .setOnUpdate(setBarGrowth);
     }    
-    
-    private void ClickedContinue()
-    {
 
-    }
 
 
 
@@ -121,4 +115,15 @@ public class HeroGrowthUI : MonoBehaviour
         }
     }
 
+
+    IEnumerator  Anim()
+    {
+        yield return new WaitForSeconds(0.5f);
+        DoAnim();
+        yield return new WaitForSeconds(animSpeed);
+
+
+        ContinueButton.SetActive(true);
+
+    }
 }

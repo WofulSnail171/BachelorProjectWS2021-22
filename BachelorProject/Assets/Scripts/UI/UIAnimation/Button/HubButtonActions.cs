@@ -73,7 +73,7 @@ public class HubButtonActions : MonoBehaviour
     [Space]
     [SerializeField] InventoryUI InventoryUI;
 
-
+    public bool isRewarding = false;
 
     private ProgressState tradeState;
     private ProgressState dungeonState;
@@ -398,8 +398,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void ClickedReadyDungeon()
     {
+        isRewarding = true;
+
         //split into more steps with pop ups:
-        DungeonManager._instance.ApplyGrowth();
         DungeonManager._instance.EventRewardHeroHandling();
         DungeonManager._instance.EventRewardShardHandling();
 
@@ -440,8 +441,8 @@ public class HubButtonActions : MonoBehaviour
                 break;
         }
 
-        UpdateDungeonButton(ButtonState.Unfocused);
-        currentHubFocus = HubState.HeroHub;
+        
+        
     }
 
 
@@ -449,11 +450,14 @@ public class HubButtonActions : MonoBehaviour
     //reward flow pop ups
     private void ContinueShards()
     {
+        UIEnablerManager.Instance.EnableBlur();
         UIEnablerManager.Instance.SwitchElements("ShardReward","HeroGrowth", true);
     }
 
     private void ContinueHeroGrowth()
     {
+        UIEnablerManager.Instance.EnableBlur();
+
         UIEnablerManager.Instance.SwitchElements( "HeroGrowth","HeroPull", true);
     }
 
@@ -469,17 +473,25 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("HeroPull", true);
 
         //wrap up
+        UIEnablerManager.Instance.DisableBlur();
+
         DungeonManager._instance.WrapUpDungeon();
         if (DeleventSystem.DungeonRewardFinished != null)
         {
             DeleventSystem.DungeonRewardFinished();
         }
+
+        UpdateDungeonButton(ButtonState.Unfocused);
+        currentHubFocus = HubState.HeroHub;
+
+        isRewarding = false;
     }
 
     private void ReleaseHeroReward()
     {
         InventoryUI.DoRelease = true;
 
+        UIEnablerManager.Instance.DisableBlur();
         UIEnablerManager.Instance.DisableElement("HeroPull", true);
         UIEnablerManager.Instance.SwitchElements("General","ReleaseCancel", false);   
     }  
@@ -494,11 +506,20 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.UpdateInventory();
 
         //wrap up
+        UIEnablerManager.Instance.DisableBlur();
+
+
         DungeonManager._instance.WrapUpDungeon();
         if (DeleventSystem.DungeonRewardFinished != null)
         {
             DeleventSystem.DungeonRewardFinished();
         }
+
+        UpdateDungeonButton(ButtonState.Unfocused);
+        currentHubFocus = HubState.HeroHub;
+
+        isRewarding = false;
+
     }
 
 
@@ -506,6 +527,8 @@ public class HubButtonActions : MonoBehaviour
     //release flow pop ups
     private void CancelRelease()
     {
+        UIEnablerManager.Instance.EnableBlur();
+
         InventoryUI.DoRelease = false;
 
 
@@ -530,11 +553,20 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.SwitchElements("ReleaseSubmit", "General", true);
 
         //wrap up
+        UIEnablerManager.Instance.DisableBlur();
+
+
         DungeonManager._instance.WrapUpDungeon();
         if (DeleventSystem.DungeonRewardFinished != null)
         {
             DeleventSystem.DungeonRewardFinished();
         }
+
+        UpdateDungeonButton(ButtonState.Unfocused);
+        currentHubFocus = HubState.HeroHub;
+
+        isRewarding = false;
+
     }
 
     private void CannotConfirmRelease()

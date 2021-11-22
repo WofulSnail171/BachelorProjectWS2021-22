@@ -12,7 +12,7 @@ public class HeroPopUpActions : MonoBehaviour
 
     private void OnEnable()
     {
-        if (hub.currentHubFocus == HubState.HeroHub)
+        if (hub.currentHubFocus == HubState.HeroHub && !hub.isRewarding)
             ReleaseButton.SetActive(true);
 
         else
