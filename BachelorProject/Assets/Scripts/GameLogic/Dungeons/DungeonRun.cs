@@ -75,6 +75,7 @@ public class CalculatedDungeonRun
         rewardHealthBar += _amount;
         if (rewardHealthBar < 0)
             rewardHealthBar = 0;
+        DeleventSystem.RewardHealthChanged?.Invoke();
         return rewardHealthBar;
     }
 
