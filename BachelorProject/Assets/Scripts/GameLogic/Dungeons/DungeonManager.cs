@@ -7,6 +7,9 @@ using System;
 public class DungeonManager : MonoBehaviour
 {
     public static DungeonManager _instance;
+    public static int PityGrowth = 3;
+    public static int MaxGrowth = 8;
+
     private void Awake()
     {
         if(_instance == null)
@@ -108,7 +111,7 @@ public class DungeonManager : MonoBehaviour
         if (DatabaseManager._instance.dungeonData.dailyDungeons != null && DatabaseManager._instance.dungeonData.dailyDungeons.Length > 0)
         {
             //check if current daily dungeon data is older than 24 hours
-            if (DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).Date == DateTime.Now.Date)
+            if (false )//DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).Date == DateTime.Now.Date)
             {
                 Debug.Log("Current daily dungeons are still valid");
                 //if (DatabaseManager._instance.dungeonData.dailyDungeons[0].dungeonLayout == null)
@@ -126,7 +129,8 @@ public class DungeonManager : MonoBehaviour
                 layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
                 date = DateTime.Now.ToString("o"),
                 questName = DatabaseManager._instance.eventData.basicQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.basicQuestDeck.Length)].eventName,
-                type = DungeonType.basic
+                type = DungeonType.basic,
+                difficutlyIndex = i
             };
             tempList.Add(tempDungeon);
         }
@@ -136,7 +140,8 @@ public class DungeonManager : MonoBehaviour
             layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
             date = DateTime.Now.ToString("o"),
             questName = DatabaseManager._instance.eventData.doomQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.doomQuestDeck.Length)].eventName,
-            type = DungeonType.doom
+            type = DungeonType.doom,
+            difficutlyIndex = DatabaseManager._instance.rewardTable.dungeonDifficulties.Count - 1
         };
         tempList.Add(tempDoomDungeon);
         DatabaseManager._instance.dungeonData.dailyDungeons = tempList.ToArray();
@@ -513,15 +518,9 @@ public class DungeonManager : MonoBehaviour
         foreach (var hero in DatabaseManager._instance.dungeonData.currentRun.party)
         {
             //hero.ApplyGrowth(currentCalcRun.pStatGrowth, currentCalcRun.mStatGrowth, currentCalcRun.sStatGrowth);
-        }
-        foreach (var hero in DatabaseManager._instance.activePlayerData.inventory)
-        {
-            if(hero.status == HeroStatus.Exploring)
-            {
-                hero.ApplyGrowth(currentCalcRun.pStatGrowth, currentCalcRun.mStatGrowth, currentCalcRun.sStatGrowth);
-                hero.runs += 1;
-                hero.status = HeroStatus.Idle;
-            }
+            hero.ApplyGrowth(currentCalcRun.pStatGrowth, currentCalcRun.mStatGrowth, currentCalcRun.sStatGrowth);
+            hero.runs += 1;
+            hero.status = HeroStatus.Idle;
         }
     }
 
@@ -569,9 +568,9 @@ public class DungeonManager : MonoBehaviour
 
     public void WrapUpDungeon()
     {
+        ApplyGrowth();
         currentCalcRun = null;
 
-        ApplyGrowth();
         DatabaseManager._instance.dungeonData.currentRun.valid = false;
         Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();

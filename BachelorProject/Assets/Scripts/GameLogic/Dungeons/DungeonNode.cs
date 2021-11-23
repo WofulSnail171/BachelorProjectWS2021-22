@@ -12,6 +12,7 @@ public class DungeonNode : MonoBehaviour
     //gets calculated with daily seed
     public List<string> nextPaths;
     public string nodeType;
+    public int level;
 
     //gets calculated with run seed
     public Event nodeEvent;
@@ -35,6 +36,13 @@ public class DungeonNode : MonoBehaviour
             result = transform.position + 0.5f * (nextNodes[_pathIndex].transform.position - transform.position);
         }
         return result;
+    }
+
+    public void AffectCurrentGrowth(int _amount)
+    {
+        currentGrowth += _amount;
+        if (currentGrowth < -2 * level)
+            currentGrowth = -2 * level;
     }
 
     private void Update()

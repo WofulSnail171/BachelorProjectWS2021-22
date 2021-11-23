@@ -59,7 +59,7 @@ public class DungeonNodeVisual : MonoBehaviour
 
     void UpdateVisuals()
     {
-        nodeType.text = dungeonNode.nodeType;
+        nodeType.text = "Lvl" + dungeonNode.level.ToString() + " " + dungeonNode.nodeType;
         pgBar.SetVal(dungeonNode.eventHealth, dungeonNode.maxEventHealth);
         if (dungeonNode.eventHealth != dungeonNode.maxEventHealth)
         {

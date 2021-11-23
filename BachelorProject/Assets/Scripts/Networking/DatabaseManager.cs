@@ -457,9 +457,18 @@ public class UploadDungeonData
 public class RewardTable
 {
     public List<RewardTier> rewardTiers = new List<RewardTier>();
+    public List<DungeonDifficulty> dungeonDifficulties = new List<DungeonDifficulty>();
 }
 [System.Serializable]
 public class RewardTier
 {
     public List<int> chances = new List<int>();
+}
+
+[System.Serializable]
+public class DungeonDifficulty
+{
+    public int minLvl;
+    public int maxLvl;
+    public int medianLvl;
 }

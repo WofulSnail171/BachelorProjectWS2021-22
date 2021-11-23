@@ -23,39 +23,77 @@ public class PlayerHero
     public int traded;
     public int runs;
 
-    public void ApplyGrowth(int _pGrowth, int _mGrowth, int _sGrowth, DungeonType dType = DungeonType.basic)
+    public int CalcGrowth(int _amount, StatType _statType, DungeonType _dType = DungeonType.basic)
     {
-        switch (dType)
+        int result = _amount;
+        switch (_dType)
         {
             case DungeonType.basic:
-                _pGrowth = (int)((float)_pGrowth * 2.0f);
-                _mGrowth = (int)((float)_pGrowth * 2.0f);
-                _sGrowth = (int)((float)_pGrowth * 2.0f);
+                result = (int)((float)result * 2.0f);
                 break;
             case DungeonType.doom:
-                _pGrowth = (int)((float)_pGrowth * 3.0f);
-                _mGrowth = (int)((float)_pGrowth * 3.0f);
-                _sGrowth = (int)((float)_pGrowth * 3.0f);
+                result = (int)((float)result * 3.0f);
                 break;
             default:
                 break;
         }
-        if (_pGrowth < -10)
-            _pGrowth = -10;
-        if (_mGrowth < -10)
-            _mGrowth = -10;
-        if (_sGrowth < -10)
-            _sGrowth = -10;
-        pVal += _pGrowth;
-        if(pVal >= pPot)
+        if (result < DungeonManager.PityGrowth)
+            result = DungeonManager.PityGrowth;
+        switch (_statType)
         {
-            pVal = pPot;
+            case StatType.physical:
+                if (result > pPot / DungeonManager.MaxGrowth)
+                    result = pPot / DungeonManager.MaxGrowth;
+
+                if (pVal + result >= pPot)
+                {
+                    result = pPot - pVal;
+                }
+                else if (pVal + result <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin)
+                {
+                    result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin - pVal;
+                }
+                break;
+            case StatType.magical:
+                if (result > mPot / DungeonManager.MaxGrowth)
+                    result = mPot / DungeonManager.MaxGrowth;
+
+                if (mVal + result >= mPot)
+                {
+                    result = mPot - mVal;
+                }
+                else if (mVal + result <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].mMin)
+                {
+                    result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].mMin - mVal;
+                }
+                break;
+            case StatType.social:
+                if (result > sPot / DungeonManager.MaxGrowth)
+                    result = sPot / DungeonManager.MaxGrowth;
+
+                if (sVal + result >= sPot)
+                {
+                    result = sPot - sVal;
+                }
+                else if (sVal + result <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].sMin)
+                {
+                    result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].sMin - sVal;
+                }
+                break;
+            default:
+                break;
         }
-        else if(pVal <= DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin)
-        {
-            pVal = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].pMin;
-        }
-        mVal += _mGrowth;
+
+        
+
+        return result;
+    }
+
+    public void ApplyGrowth(int _pGrowth, int _mGrowth, int _sGrowth, DungeonType dType = DungeonType.basic)
+    {
+        pVal += CalcGrowth( _pGrowth, StatType.physical, dType);
+        
+        mVal += CalcGrowth(_mGrowth, StatType.magical, dType);
         if (mVal >= mPot)
         {
             mVal = mPot;
@@ -64,7 +102,7 @@ public class PlayerHero
         {
             mVal = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[heroId].mMin;
         }
-        sVal += _sGrowth;
+        sVal += CalcGrowth(_sGrowth, StatType.social, dType);
         if (sVal >= sPot)
         {
             sVal = sPot;
@@ -123,6 +161,13 @@ public class DefaultHero
     public string nodeBuff;
     public string nodeDebuff;
     public string pathAff;
+}
+
+public enum StatType
+{
+    physical,
+    magical,
+    social
 }
 
 public enum HeroRace
