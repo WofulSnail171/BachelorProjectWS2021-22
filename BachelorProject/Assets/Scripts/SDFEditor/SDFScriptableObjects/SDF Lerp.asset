@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eec3a03eeeaa1394b8c1b5b657d2e7ae, type: 3}
-  m_Name: New SDF Lerp
+  m_Name: SDF Lerp
   m_EditorClassIdentifier: 
-  o: lerp45_out
-  sdfName: lerp45
+  o: lerp771_out
+  sdfName: lerp771
   variables:
   - lerp45_t
   - circle199_position
@@ -22,7 +22,21 @@ MonoBehaviour:
   - rect773_box
   - rect773_scale
   - rect773_roundness
+  - lerp771_t
+  - circle429_position
+  - circle429_radius
+  - rect983_position
+  - rect983_box
+  - rect983_scale
+  - rect983_roundness
   types:
+  - float
+  - float2
+  - float
+  - float2
+  - float2
+  - float
+  - float4
   - float
   - float2
   - float
@@ -34,4 +48,4 @@ MonoBehaviour:
   nodeType: 9
   inputA: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
   inputB: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
-  t: 0.5
+  t: 0.08

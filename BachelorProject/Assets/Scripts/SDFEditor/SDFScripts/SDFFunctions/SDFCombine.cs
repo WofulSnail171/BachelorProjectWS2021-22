@@ -67,6 +67,7 @@ public class SDFCombine : SDFFunction {
 
         string hlslString = a +@"
     " + b + @"
+
     " + "float " + this.o + " = min(" + this.inputA.o + "," + this.inputB.o + @");
 ";
         

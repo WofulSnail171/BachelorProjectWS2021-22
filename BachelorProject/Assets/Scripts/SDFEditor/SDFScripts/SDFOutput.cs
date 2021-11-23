@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteAlways][CreateAssetMenu(menuName = "SDF Output/Output")]
@@ -110,9 +111,103 @@ public class SDFOutput : SDFFunction{
     }
     
     string GenerateShaderProperties() {
+
+        string properties = "";
+
+        foreach (SDFNode node in this.SDFNodes) {
+            switch (node.nodeType) {
+                case SDFNode.NodeType.Circle: {
+                    var n = (SDFCircle) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_radius (""" + n.sdfName + @"_radius"", Float) = 0
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.Rect: {
+                    var n = (SDFRectangle) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_box (""" + n.sdfName + @"_box"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Vector) = (0,0,0,0)
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.Triangle: {
+                    var n = (SDFTriangle) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_c (""" + n.sdfName + @"_c"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.Line: {
+                    var n = (SDFLine) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Float) = 0
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.BezierCurve: {
+
+                    var n = (SDFBezier) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_c (""" + n.sdfName + @"_c"", Vector) = (0,0,0,0)
+                ";
+
+                    break;
+                }
+                case SDFNode.NodeType.Texture: {
+                    var n = (SDFTexture) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", Sampler2D) = ""white""{}
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.Comb: {
+
+                    break;
+                }
+                case SDFNode.NodeType.Invert: {
+
+                    break;
+                }
+                case SDFNode.NodeType.SBlend: {
+                    var n = (SDFSBLend) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_k (""" + n.sdfName + @"_k"", Float) = 0
+                ";
+                    break;
+                }
+                case SDFNode.NodeType.Lerp: {
+                    var n = (SDFLerp) node;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_t (""" + n.sdfName + @"_t"", Float) = 0
+                ";
+                    break;
+                }
+                default: {
+                    Debug.LogWarning("unknow node");
+                    break;
+                }
+            }
+        }
+
         return @"
             Properties
             {
+                " + properties + @"
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend (""Source Blend mode"", Float) = 1
                 [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend (""Destination Blend mode"", Float) = 1
@@ -257,12 +352,15 @@ CBUFFER_END";
             }
             sw.Close();
         }
+        AssetDatabase.Refresh();
     }
     
     private void ChangeShaderValues(SDFNode node){
         
         Debug.Log("changing shader variables from " + node.sdfName);
-        
+
+        Undo.RecordObject(this.sdfMaterial, "changed Material");        
+
         switch (node.nodeType) {
             case SDFNode.NodeType.Circle: {
                 var n = (SDFCircle) node;
@@ -339,6 +437,7 @@ CBUFFER_END";
                 break;
             }
         }
+        EditorUtility.SetDirty(this.sdfMaterial);
     }
 
     public override string GenerateHlslFunction() {

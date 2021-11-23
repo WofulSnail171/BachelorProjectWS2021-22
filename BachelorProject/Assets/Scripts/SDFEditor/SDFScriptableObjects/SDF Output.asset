@@ -7,10 +7,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
-  m_Name: New SDF Output
+  m_Name: SDF Output
   m_EditorClassIdentifier: 
   o: 
   sdfName: newSDF
@@ -19,6 +19,6 @@ MonoBehaviour:
   nodes: []
   nodeType: 0
   shaderName: test2
-  input: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}
+  input: {fileID: 11400000, guid: 60e0484de02956c499f510ae0774c639, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0

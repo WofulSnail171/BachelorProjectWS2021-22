@@ -48,7 +48,8 @@ public class SDFCircle : SDFObject {
     
     public override string GenerateHlslFunction() {
         
-        string hlslString = "float " + this.o + " = length(" + this.variables[0] + "- uv)- " + this.variables[1] + ";" ;
+        string hlslString = @"
+        float " + this.o + " = length(" + this.variables[0] + "- uv)- " + this.variables[1] + ";" ;
         return hlslString;
     }
     

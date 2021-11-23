@@ -71,8 +71,9 @@ public class SDFLerp : SDFFunction
         string b = this.inputB.GenerateHlslFunction();
 
         string hlslString = a +@"
-    " + b + @"
-    " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
+        " + b + @"
+
+        " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
         return hlslString;
     }
     

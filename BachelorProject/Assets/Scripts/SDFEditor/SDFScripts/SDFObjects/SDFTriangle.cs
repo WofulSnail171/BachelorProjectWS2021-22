@@ -93,7 +93,8 @@ public class SDFTriangle : SDFObject {
     
     public override string GenerateHlslFunction() {
 
-        string hlslString ="float2 e0_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
+        string hlslString =@"
+    float2 e0_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
     float2 e1_" + this.sdfName + " = " + this.variables[3] + " - " + this.variables[2] + @";
     float2 e2_" + this.sdfName + " = " + this.variables[1] + " - " + this.variables[3] + @";
     
