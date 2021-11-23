@@ -114,7 +114,12 @@ public class SDFCombine : SDFFunction {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
             return;
         }
-
+        
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
+        
         foreach (string s in this.inputA.variables) {
             this.variables.Add(s);
         }

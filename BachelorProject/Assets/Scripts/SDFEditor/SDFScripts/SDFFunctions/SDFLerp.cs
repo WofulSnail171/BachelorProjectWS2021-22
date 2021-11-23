@@ -98,10 +98,16 @@ public class SDFLerp : SDFFunction
     
     public void GenerateVariables() {
 
+        Debug.Log("generated new variables");
         if (this._inputA == null || this.inputB == null) {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
+            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
             return;}
 
+        if (this.variables != null) {
+            this.variables.Clear();
+            this.types.Clear();
+        }
+        
         this.variables.Add(this.sdfName + "_t");
         this.types.Add("float");
 
@@ -118,6 +124,13 @@ public class SDFLerp : SDFFunction
         foreach (string s in this.inputB.types) {
             this.types.Add(s);
         }
+
+
+        string debug = "";
+        foreach (string s in this.variables) {
+            debug += s;
+        }
+        Debug.Log(debug);
     }
 
     private void OnDisable() {

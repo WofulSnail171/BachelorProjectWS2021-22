@@ -4,15 +4,22 @@ Shader "SDF/test2"
             Properties
             {
                 
-                [HideInInspector] lerp771_t ("lerp771_t", Float) = 0
+                [HideInInspector] sblend571_k ("sblend571_k", Float) = 0
                 
-                [HideInInspector] circle429_position ("circle429_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle429_radius ("circle429_radius", Float) = 0
+                [HideInInspector] lerp305_t ("lerp305_t", Float) = 0
                 
                 [HideInInspector] rect983_position ("rect983_position", Vector) = (0,0,0,0)
                 [HideInInspector] rect983_box ("rect983_box", Vector) = (0,0,0,0)
                 [HideInInspector] rect983_scale ("rect983_scale", Float) = 0
                 [HideInInspector] rect983_roundness ("rect983_roundness", Vector) = (0,0,0,0)
+                
+                [HideInInspector] bezier796_position ("bezier796_position", Vector) = (0,0,0,0)
+                [HideInInspector] bezier796_a ("bezier796_a", Vector) = (0,0,0,0)
+                [HideInInspector] bezier796_b ("bezier796_b", Vector) = (0,0,0,0)
+                [HideInInspector] bezier796_c ("bezier796_c", Vector) = (0,0,0,0)
+                
+                [HideInInspector] circle429_position ("circle429_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle429_radius ("circle429_radius", Float) = 0
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -57,27 +64,25 @@ Shader "SDF/test2"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float lerp45_t;
-    float2 circle199_position;
-    float circle199_radius;
-    float2 rect773_position;
-    float2 rect773_box;
-    float rect773_scale;
-    float4 rect773_roundness;
-    float lerp771_t;
-    float2 circle429_position;
-    float circle429_radius;
+   float sblend571_k;
+    float lerp305_t;
     float2 rect983_position;
     float2 rect983_box;
     float rect983_scale;
     float4 rect983_roundness;
+    float2 bezier796_position;
+    float2 bezier796_a;
+    float2 bezier796_b;
+    float2 bezier796_c;
+    float2 circle429_position;
+    float circle429_radius;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,lerp45_t, circle199_position, circle199_radius, rect773_position, rect773_box, rect773_scale, rect773_roundness, lerp771_t, circle429_position, circle429_radius, rect983_position, rect983_box, rect983_scale, rect983_roundness);
+            float sdfOut = sdf(i.uv,sblend571_k, lerp305_t, rect983_position, rect983_box, rect983_scale, rect983_roundness, bezier796_position, bezier796_a, bezier796_b, bezier796_c, circle429_position, circle429_radius);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }
