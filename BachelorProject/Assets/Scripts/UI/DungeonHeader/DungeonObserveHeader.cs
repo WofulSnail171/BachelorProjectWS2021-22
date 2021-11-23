@@ -36,7 +36,6 @@ public class DungeonObserveHeader : MonoBehaviour
     private string oldText;
     private int formerHealth;
 
-    private bool dungeonWasStarted;
     #endregion
 
     //init
@@ -47,7 +46,7 @@ public class DungeonObserveHeader : MonoBehaviour
         DeleventSystem.DungeonStep += UpdateAfterStep;
         DeleventSystem.DungeonStart += InitVisuals;
         DeleventSystem.DungeonEvent += UpdateEvent;
-        DeleventSystem.DungeonEnd += EndEvent;
+        
         DeleventSystem.DungeonEventStart += EventStart;
         DeleventSystem.DungeonEventEnd += EventEnd;
         DeleventSystem.RewardHealthChanged += UpdateRewardHealth;
@@ -67,8 +66,6 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void CatchUpVisuals()
     {
-        if(dungeonWasStarted)
-        {
             //stop animations
             LeanTween.cancelAll();
 
@@ -104,30 +101,14 @@ public class DungeonObserveHeader : MonoBehaviour
             else
                 EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
 
-        }
-
-        else
-        {
-            DialogText.text = "";
-
-            EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
-
-            rewardBar.fillAmount = 1;
-
-        }
     }
 
-    private void EndEvent()
-    {
-        dungeonWasStarted = false;
-    }
+
 
     //connected funcs to delevents
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void InitVisuals()
     {
-        dungeonWasStarted = true;
-
         if(gameObject.activeSelf)
         {
             //reward health
@@ -138,9 +119,6 @@ public class DungeonObserveHeader : MonoBehaviour
 
             //event info and health
             EventInfoGroup.transform.localScale = new Vector3(0, 0, 0);
-
-
-            //
         }
     }
 
@@ -302,6 +280,9 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void setEventHealthText(float value)
     {
+        if (value < 0)
+            value = 0;
+
         EventValue.text = $"{(int)value} / {DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth}";
     }
 
@@ -358,7 +339,8 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void setRewardFillAmount(float value)
     {
-        rewardBar.fillAmount = value;    
+        if(value >= 0)
+            rewardBar.fillAmount = value;    
     }
 
 

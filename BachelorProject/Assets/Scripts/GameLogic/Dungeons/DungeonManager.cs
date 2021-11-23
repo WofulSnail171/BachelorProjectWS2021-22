@@ -436,6 +436,8 @@ public class DungeonManager : MonoBehaviour
                     }
                     currentCalcRun.nextHero++;
 
+                    if (events)
+                        DeleventSystem.DungeonEvent?.Invoke();
                 }
                 if (currentCalcRun.currentNode.eventHealth < 0)
                 {
@@ -447,8 +449,7 @@ public class DungeonManager : MonoBehaviour
             {
                 EnterNewActivityState(DungeonActivity.eventEnd);
             }
-            if (events)
-                DeleventSystem.DungeonEvent?.Invoke();
+            
         }
     }
 
