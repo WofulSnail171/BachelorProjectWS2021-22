@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 [ExecuteAlways][CreateAssetMenu(menuName = "SDF Output/Output")]
-public class SDFOutput : SDFFunction{
+public class SDFOutput : SDFNode{
 
     [SerializeField] private string shaderName; 
         
@@ -79,6 +79,12 @@ public class SDFOutput : SDFFunction{
         if (this.Input != null) {
             
             this.UpdateActiveNodes();
+            foreach (SDFNode s in this.SDFNodes) {
+                if (s is SDFFunction) {
+                    SDFFunction f = (SDFFunction) s;
+                    f.GenerateVariables();
+                }
+            }
             this.AddHlslString(this.Input);
         }
     }
@@ -447,10 +453,6 @@ CBUFFER_END";
     }
 
     public override string GenerateHlslFunction() {
-        throw new NotImplementedException();
-    }
-
-    public override void GetActiveNodes(List<SDFNode> nodes) {
         throw new NotImplementedException();
     }
 

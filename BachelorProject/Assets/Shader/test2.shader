@@ -4,8 +4,13 @@ Shader "SDF/test2"
             Properties
             {
                 
+                [HideInInspector] lerp305_t ("lerp305_t", Float) = 0
+                
                 [HideInInspector] tex829_position ("tex829_position", Vector) = (0,0,0,0)
                 [HideInInspector] tex829_tex ("tex829_tex", 2D) = "white"{}
+                
+                [HideInInspector] circle429_position ("circle429_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle429_radius ("circle429_radius", Float) = 0
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -50,15 +55,18 @@ Shader "SDF/test2"
         }
 
 CBUFFER_START(UnityPerMaterial)
-   float2 tex829_position;
+   float lerp305_t;
+    float2 tex829_position;
     sampler2D tex829_tex;
+    float2 circle429_position;
+    float circle429_radius;
     
 CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,tex829_position, tex829_tex);
+            float sdfOut = sdf(i.uv,lerp305_t, tex829_position, tex829_tex, circle429_position, circle429_radius);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }

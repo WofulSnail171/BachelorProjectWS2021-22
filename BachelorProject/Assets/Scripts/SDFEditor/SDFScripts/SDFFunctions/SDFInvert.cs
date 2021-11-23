@@ -58,7 +58,7 @@ public class SDFInvert : SDFFunction
         }
     }
 
-    public void GenerateVariables() {
+    public override void GenerateVariables() {
         
         if (this.variables != null) {
             this.variables.Clear();

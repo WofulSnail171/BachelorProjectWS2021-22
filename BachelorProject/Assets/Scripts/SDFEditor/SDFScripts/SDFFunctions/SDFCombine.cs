@@ -106,9 +106,9 @@ public class SDFCombine : SDFFunction {
         //Debug.Log(debugNodes);
     }
     
-    public void GenerateVariables() {
+    public override void GenerateVariables() {
         
-        //Debug.Log("generating new variables");
+        Debug.Log("generating new variables");
 
         if (this._inputA == null || this._inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
@@ -133,8 +133,6 @@ public class SDFCombine : SDFFunction {
         foreach (string s in this.inputB.types) {
             this.types.Add(s);
         }
-        
-        // Debug.Log("comb variables: " + this.variables);
     }
 
     private void OnDisable() {

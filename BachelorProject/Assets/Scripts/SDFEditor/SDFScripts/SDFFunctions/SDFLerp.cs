@@ -96,7 +96,7 @@ public class SDFLerp : SDFFunction
         }
     }
     
-    public void GenerateVariables() {
+    public override void GenerateVariables() {
 
         Debug.Log("generated new variables");
         if (this._inputA == null || this.inputB == null) {

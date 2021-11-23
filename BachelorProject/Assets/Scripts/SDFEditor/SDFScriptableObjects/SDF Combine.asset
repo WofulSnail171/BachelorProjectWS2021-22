@@ -14,21 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   o: comb_out
   sdfName: comb
-  variables:
-  - circle199_position
-  - circle199_radius
-  - line109_position
-  - line109_a
-  - line109_b
-  - line109_roundness
-  types:
-  - float2
-  - float
-  - float2
-  - float2
-  - float2
-  - float
+  variables: []
+  types: []
   nodes: []
   nodeType: 6
-  inputA: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
-  inputB: {fileID: 11400000, guid: 1dd44d2a2ea64fb45a36f3376cb25078, type: 2}
+  inputA: {fileID: 0}
+  inputB: {fileID: 0}
