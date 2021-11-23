@@ -75,7 +75,8 @@ public class CalculatedDungeonRun
         rewardHealthBar += _amount;
         if (rewardHealthBar < 0)
             rewardHealthBar = 0;
-        DeleventSystem.RewardHealthChanged?.Invoke();
+        if(DungeonManager.events)
+            DeleventSystem.RewardHealthChanged?.Invoke();
         return rewardHealthBar;
     }
 
@@ -108,8 +109,8 @@ public class CalculatedDungeonRun
             dungeonLog = new List<LogEntry>();
         dungeonLog.Add(new LogEntry {step = currentStep, entry = _newEntry });
         dungeonLogArr = dungeonLog.ToArray();
-        if(DeleventSystem.DungeonLog != null)
-            DeleventSystem.DungeonLog();
+        if (DungeonManager.events)
+            DeleventSystem.DungeonLog?.Invoke();
     }
     public void SetActivitySteps(int _newSteps)
     {

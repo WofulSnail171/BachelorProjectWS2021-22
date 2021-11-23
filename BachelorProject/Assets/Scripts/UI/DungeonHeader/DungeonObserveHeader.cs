@@ -36,6 +36,7 @@ public class DungeonObserveHeader : MonoBehaviour
     private string oldText;
     private int formerHealth;
 
+    private bool dungeonWasStarted;
     #endregion
 
     //init
@@ -46,6 +47,7 @@ public class DungeonObserveHeader : MonoBehaviour
         DeleventSystem.DungeonStep += UpdateAfterStep;
         DeleventSystem.DungeonStart += InitVisuals;
         DeleventSystem.DungeonEvent += UpdateEvent;
+        DeleventSystem.DungeonEnd += EndEvent;
         DeleventSystem.DungeonEventStart += EventStart;
         DeleventSystem.DungeonEventEnd += EventEnd;
         DeleventSystem.RewardHealthChanged += UpdateRewardHealth;
@@ -65,48 +67,67 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void CatchUpVisuals()
     {
-        //stop animations
-        LeanTween.cancelAll();
-
-        rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;
-
-        //bar
-        if (rewardTier != 1)
+        if(dungeonWasStarted)
         {
-            if (DungeonManager._instance.currentCalcRun.rewardHealthBar % 10 != 0)
-                rewardBar.fillAmount = (DungeonManager._instance.currentCalcRun.rewardHealthBar % 10) / 10f;
+            //stop animations
+            LeanTween.cancelAll();
+
+            rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;
+
+            //bar
+            if (rewardTier != 1)
+            {
+                if (DungeonManager._instance.currentCalcRun.rewardHealthBar % 10 != 0)
+                    rewardBar.fillAmount = (DungeonManager._instance.currentCalcRun.rewardHealthBar % 10) / 10f;
+
+                else
+                    rewardBar.fillAmount = 1;
+            }
+
+            //text
+            rewardTierText.text = $"Lvl {rewardTier}";
+
+
+            DialogText.text = DungeonManager._instance.currentCalcRun.dungeonLogArr[DungeonManager._instance.currentCalcRun.dungeonLogArr.Length - 1].entry;
+
+            if(DungeonManager._instance.currentCalcRun.currentActivity == DungeonActivity.eventHandling || DungeonManager._instance.currentCalcRun.currentActivity == DungeonActivity.eventStart)
+            {
+                EventInfoGroup.transform.localScale = new Vector3(1, 1, 1);//enable
+
+                EventTitle.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.eventName;
+                EventType.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType;
+                EventValue.text = $"{DungeonManager._instance.currentCalcRun.currentNode.eventHealth} / {DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth}";
+
+                eventBar.fillAmount = (float)DungeonManager._instance.currentCalcRun.currentNode.eventHealth / (float) DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth;
+            }
 
             else
-                rewardBar.fillAmount = 1;
-        }
+                EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
 
-        //text
-        rewardTierText.text = $"Lvl {rewardTier}";
-
-
-        DialogText.text = DungeonManager._instance.currentCalcRun.dungeonLogArr[DungeonManager._instance.currentCalcRun.dungeonLogArr.Length - 1].entry;
-
-        if(DungeonManager._instance.currentCalcRun.currentActivity == DungeonActivity.eventHandling || DungeonManager._instance.currentCalcRun.currentActivity == DungeonActivity.eventStart)
-        {
-            EventInfoGroup.transform.localScale = new Vector3(1, 1, 1);//enable
-
-            EventTitle.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.eventName;
-            EventType.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType;
-            EventValue.text = $"{DungeonManager._instance.currentCalcRun.currentNode.eventHealth} / {DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth}";
-
-            eventBar.fillAmount = (float)DungeonManager._instance.currentCalcRun.currentNode.eventHealth / (float) DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth;
         }
 
         else
+        {
+            DialogText.text = "";
+
             EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
 
+            rewardBar.fillAmount = 1;
+
+        }
     }
 
+    private void EndEvent()
+    {
+        dungeonWasStarted = false;
+    }
 
     //connected funcs to delevents
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void InitVisuals()
     {
+        dungeonWasStarted = true;
+
         if(gameObject.activeSelf)
         {
             //reward health
@@ -131,7 +152,7 @@ public class DungeonObserveHeader : MonoBehaviour
             oldRewardTier = rewardTier;
             rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;//--> lowest lvl 1
 
-
+            Debug.Log(rewardTier);
 
             //animate if active and not lowest tier
             if (rewardTier != 1 && this.gameObject.activeSelf)
@@ -148,6 +169,13 @@ public class DungeonObserveHeader : MonoBehaviour
                     StartCoroutine(AnimateOne(animSpeed, start, end));
                 }
 
+            }
+
+            if(rewardTier == 1)
+            {
+                rewardBar.fillAmount = 1;
+
+                rewardTierText.text = $"Lvl {rewardTier}";
             }
         }
     }
