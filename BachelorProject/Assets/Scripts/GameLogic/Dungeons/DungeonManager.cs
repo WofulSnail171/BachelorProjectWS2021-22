@@ -307,6 +307,7 @@ public class DungeonManager : MonoBehaviour
         {
             case DungeonActivity.eventStart:
                 currentCalcRun.UpdateLog("the party encountered " + currentCalcRun.currentNode.nodeEvent.eventName);
+                DeleventSystem.DungeonEventStart?.Invoke();
                 EnterNewActivityState(DungeonActivity.eventHandling);
                 break;
             case DungeonActivity.eventEnd:
@@ -325,6 +326,7 @@ public class DungeonManager : MonoBehaviour
                         break;
                 }
                 currentCalcRun.UpdateLog("the party finished " + currentCalcRun.currentNode.nodeEvent.eventName);
+                DeleventSystem.DungeonEventEnd?.Invoke();
                 break;
             case DungeonActivity.eventHandling:
 
@@ -434,6 +436,7 @@ public class DungeonManager : MonoBehaviour
             {
                 EnterNewActivityState(DungeonActivity.eventEnd);
             }
+            DeleventSystem.DungeonEvent?.Invoke();
         }
     }
 

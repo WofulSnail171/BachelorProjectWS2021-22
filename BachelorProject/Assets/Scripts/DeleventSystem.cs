@@ -12,8 +12,11 @@ public class DeleventSystem
     public static SimpleEvent DungeonStart; //When the dungeon is started
     public static SimpleEvent DungeonEnd; //when the final step of the dungeon is reached
     public static SimpleEvent DungeonEvent; //When an event or similar action in the dungeon is finished
+    public static SimpleEvent DungeonEventStart; //When an event or similar action in the dungeon is finished
+    public static SimpleEvent DungeonEventEnd; //When an event or similar action in the dungeon is finished
     public static SimpleEvent DungeonLog; //When an event or similar action in the dungeon is finished
     public static SimpleEvent DungeonRewardFinished;
+    public static SimpleEvent RewardHealthChanged;
 
     public static SimpleEvent TradeStart;
     public static SimpleEvent TradeEnd;
