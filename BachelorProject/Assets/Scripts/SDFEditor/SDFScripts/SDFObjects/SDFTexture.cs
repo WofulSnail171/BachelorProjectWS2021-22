@@ -17,6 +17,7 @@ public class SDFTexture : SDFObject {
 
     private void OnValidate() {
         this.SdfTexture = this.sdfTexture;
+        this.Position = this.position;
         if (this.isDirty) {
             this.OnValueChange?.Invoke(this);
             this.isDirty = false;
@@ -36,15 +37,15 @@ public class SDFTexture : SDFObject {
             this.types.Clear();
         }
         
+        this.variables.Add(this.sdfName + "_position");
+        this.types.Add("float2");
         this.variables.Add(this.sdfName + "_tex");
-        this.types.Add("UnityTexture2D");
-        this.variables.Add(this.sdfName + "_sampleState");
-        this.types.Add("UnitySamplerState");
+        this.types.Add("sampler2D");
     }
     
     public override string GenerateHlslFunction() {
 
-        string hlslString =  "float " + this.o + " = SAMPLE_TEXTURE2D(" + this.variables[0] + ", " + this.variables[1] + ", uv).r;";
+        string hlslString =  "float " + this.o + " = tex2D(" + this.variables[1] + ", uv + " + this.variables[0] + " + float2(0.5, 0.5)).r;";
         return hlslString;
     }
 }

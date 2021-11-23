@@ -175,7 +175,8 @@ public class SDFOutput : SDFFunction{
                 case SDFNode.NodeType.Texture: {
                     var n = (SDFTexture) node;
                     properties += @"
-                [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", Sampler2D) = ""white""{}
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", 2D) = ""white""{}
                 ";
                     break;
                 }
@@ -414,6 +415,7 @@ CBUFFER_END";
             }
             case NodeType.Texture: {
                 var n = (SDFTexture) node;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
                 this.sdfMaterial.SetTexture(n.sdfName + "_tex" , n.SdfTexture);
                 
                 break;
