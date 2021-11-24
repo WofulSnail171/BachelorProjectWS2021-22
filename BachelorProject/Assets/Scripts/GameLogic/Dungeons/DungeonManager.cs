@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Globalization;
 
 public class DungeonManager : MonoBehaviour
 {
@@ -86,6 +86,7 @@ public class DungeonManager : MonoBehaviour
         double elapsedSeconds = 0;
         if (DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.date != null)
         {
+            var bla = DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date);
             elapsedSeconds = DateTime.Now.Subtract(DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date)).TotalSeconds;
             if(AutoPlayWaitTimeSec != 0)
             {
@@ -127,10 +128,10 @@ public class DungeonManager : MonoBehaviour
             {
                 dailySeed = UnityEngine.Random.Range(1, 3000),
                 layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-                date = DateTime.Now.ToString("o"),
+                date = DateTime.Now.ToString("u"),
                 questName = DatabaseManager._instance.eventData.basicQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.basicQuestDeck.Length)].eventName,
                 type = DungeonType.basic,
-                difficutlyIndex = i
+                difficultyIndex = i
             };
             tempList.Add(tempDungeon);
         }
@@ -138,10 +139,10 @@ public class DungeonManager : MonoBehaviour
         {
             dailySeed = UnityEngine.Random.Range(1, 3000),
             layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-            date = DateTime.Now.ToString("o"),
+            date = DateTime.Now.ToString("u"),
             questName = DatabaseManager._instance.eventData.doomQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.doomQuestDeck.Length)].eventName,
             type = DungeonType.doom,
-            difficutlyIndex = DatabaseManager._instance.rewardTable.dungeonDifficulties.Count - 1
+            difficultyIndex = DatabaseManager._instance.rewardTable.dungeonDifficulties.Count - 1
         };
         tempList.Add(tempDoomDungeon);
         DatabaseManager._instance.dungeonData.dailyDungeons = tempList.ToArray();
@@ -174,14 +175,14 @@ public class DungeonManager : MonoBehaviour
             result = new DungeonRun
             {
                 dungeon = chosenDungeon,
-                date = DateTime.Now.ToString("o"),
+                date = DateTime.Now.ToString("u"),
                 valid = false,
                 dungeonSeed = UnityEngine.Random.Range(0, 500),
                 initialRewardTier = DatabaseManager._instance.activePlayerData.rewardTierBuff,
                 randomNums = new List<RandomNum>()
             };
             DatabaseManager._instance.activePlayerData.rewardTierBuff = 0;
-            result.party = chosenParty.ToArray();
+            result.party = chosenParty;
             result.valid = true;
             DatabaseManager._instance.dungeonData.currentRun = result;
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
@@ -393,7 +394,7 @@ public class DungeonManager : MonoBehaviour
             if (currentCalcRun.currentNode.eventHealth > 0)
             {
 
-                if (currentCalcRun.nextHero >= DatabaseManager._instance.dungeonData.currentRun.party.Length)
+                if (currentCalcRun.nextHero >= DatabaseManager._instance.dungeonData.currentRun.party.Count)
                 {
                     //fineished a round
                     currentCalcRun.nextHero = 0;

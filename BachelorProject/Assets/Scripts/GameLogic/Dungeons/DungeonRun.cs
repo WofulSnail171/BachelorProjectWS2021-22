@@ -6,7 +6,7 @@ using UnityEngine;
 public class DungeonRun
 {
     public bool valid = false; //gets set by DungeonManager when starting or proceeding a run
-    public PlayerHero[] party;
+    public List<PlayerHero> party;
     public string date;
     public int dungeonSeed;
     public DailyDungeon dungeon;

@@ -70,6 +70,7 @@ public class DatabaseManager : MonoBehaviour
     //some logic to compare local and online data and do something according
     public void SaveGameDataLocally()
     {
+        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
         LocalSaveSystem.SaveLocaldata();
         //Push to server?
     }
@@ -83,8 +84,8 @@ public class DatabaseManager : MonoBehaviour
             //perform no local load event
         }
         else
-        {
-            if(activePlayerData.lastUpdate != "" && DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+        {            
+            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate)) < 0)
             {
                 //online save is younger the local one -> played on an other device -> need to fire special event
 
@@ -168,14 +169,20 @@ public class DatabaseManager : MonoBehaviour
     {
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
         //check for dates lol
-        if(localSave == null || DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate));
+        if (localSave == null || bla > 0)
         {
             //online save is younger the local one -> played on an other device -> need to fire special event
+            SaveGameDataLocally();
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
             Debug.Log("online save is younger than the local one");
+            //ToDo maybe Also Pull DungeonData and investigate it
+            //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
         }
         else
         {
             //online save is older -> probably need to update online savefile
+            LoadLocalSave();
             Debug.Log("online save is older than the local one");
         }
         return;
@@ -200,6 +207,44 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateDungeonDataFromServer(string _message)
     {
         dungeonData = JsonUtility.FromJson<DungeonData>(_message);
+        DungeonManager._instance.CreateDailyDungeons();
+
+        if (DatabaseManager._instance.dungeonData.currentRun != null && (DatabaseManager._instance.dungeonData.currentRun.valid))
+        {
+            //this run should be getting continued
+            //Probelm: Party is not there!
+            DatabaseManager._instance.dungeonData.currentRun.party = new List<PlayerHero>();
+            foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+            {
+                if(heroUnit.status == HeroStatus.Exploring)
+                {
+                    DatabaseManager._instance.dungeonData.currentRun.party.Add(heroUnit);
+                }
+            }
+            if(DatabaseManager._instance.dungeonData.currentRun.party.Count == 0)
+            {
+                //Fallback: Get the first idling heroes to continue dungeon Run
+                foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+                {
+                    if (heroUnit.status == HeroStatus.Idle)
+                    {
+                        heroUnit.status = HeroStatus.Exploring;
+                        DatabaseManager._instance.dungeonData.currentRun.party.Add(heroUnit);
+                    }
+                    if (DatabaseManager._instance.dungeonData.currentRun.party.Count == 4)
+                        break;
+                }
+            }
+            if (DatabaseManager._instance.dungeonData.currentRun.party.Count == 0)
+            {
+                DatabaseManager._instance.dungeonData.currentRun = null;
+                foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+                {
+                    if (heroUnit.status == HeroStatus.Exploring)
+                        heroUnit.status = HeroStatus.Idle;
+                }
+            }
+        }
         LocalSaveSystem.SaveLocaldata();
     }
 
@@ -273,8 +318,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString("o"),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("o")),
+//date = System.DateTime.Now.ToString("u"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("u")),
 
 [System.Serializable]
 public class PlayerData

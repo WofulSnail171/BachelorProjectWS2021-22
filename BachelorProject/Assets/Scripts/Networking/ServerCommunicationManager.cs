@@ -152,12 +152,10 @@ public class ServerCommunicationManager : MonoBehaviour
                 //create new userprofil with data given
                 //tutorials + first hero
                 //DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
-                DeleventSystem.trySignUp(JsonUtility.FromJson<PlayerData>(lastMessage));
                 break;
             case Request.SignIn:
                 //get user profil
-                //if time stamp on online profile is newer than local discard local data and reapply online data
-                DeleventSystem.trySignIn(JsonUtility.FromJson<PlayerData>(lastMessage));
+                //if time stamp on online profile is newer than local discard local data and reapply online data                
                 break;
             case Request.GetPlayerData:
                 // generically download a specified user profile for diverse use cases
@@ -177,8 +175,7 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushDungeonData:
                 break;
             case Request.DownloadDungeonData:
-                Debug.Log(lastMessage);
-                DungeonData newData = JsonUtility.FromJson<DungeonData>(lastMessage);
+                DatabaseManager._instance.UpdateDungeonDataFromServer(LastMessage);
                 break;
             case Request.PushInventory:
                 break;
@@ -326,6 +323,8 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushPlayerData:
                 //ToDO: Decouple PlayerData from Inventory
                 DoServerRequest(Request.PushInventory);
+                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+                DatabaseManager._instance.SaveGameDataLocally();
                 ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(new UploadPlayerData( DatabaseManager._instance.activePlayerData)), _simpleEvent, _messageEvent);
                 break;
             case Request.PushDungeonData:

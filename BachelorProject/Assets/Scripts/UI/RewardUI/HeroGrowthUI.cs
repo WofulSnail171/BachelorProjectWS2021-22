@@ -40,7 +40,7 @@ public class HeroGrowthUI : MonoBehaviour
 
 
         //catch
-        if (DatabaseManager._instance.dungeonData.currentRun.party.Length < 0)
+        if (DatabaseManager._instance.dungeonData.currentRun.party.Count < 0)
             Debug.LogWarning("Party is empty");
 
         //hide all
@@ -51,7 +51,7 @@ public class HeroGrowthUI : MonoBehaviour
 
 
         //set active due to party size
-        for (int i = 0; i < DatabaseManager._instance.dungeonData.currentRun.party.Length; i++)
+        for (int i = 0; i < DatabaseManager._instance.dungeonData.currentRun.party.Count; i++)
         {
             if(i >= 4)
             {
