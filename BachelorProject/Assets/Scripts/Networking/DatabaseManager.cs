@@ -6,6 +6,56 @@ using System;
 public class DatabaseManager : MonoBehaviour
 {
     public static DatabaseManager _instance;
+    public static int maxInventorySize;
+    public static bool CheckDatabaseValid()
+    {
+        if (_instance == null 
+            || DatabaseManager._instance.dungeonData == null 
+            || DatabaseManager._instance.defaultHeroData == null
+            || DatabaseManager._instance.eventData == null)
+            return false;
+        return true;
+    }
+
+    public static ProgressState GetDungeonRunState()
+    {
+        ProgressState result = ProgressState.Empty;
+        if(DatabaseManager.CheckDatabaseValid() && DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
+        {
+            if(DungeonManager._instance.CheckCalcRun())
+            {
+                if (DungeonManager._instance.currentCalcRun.Finished())
+                {
+                    result = ProgressState.Done;
+                }
+                else
+                    result = ProgressState.Pending;
+            }
+        }
+        return result;
+    }
+
+    public static ProgressState GetTradeState()
+    {
+        ProgressState result = ProgressState.Empty;
+        return result;
+    }
+
+    public static bool DoomDungeonAvailable()
+    {
+        if(_instance != null && CheckDatabaseValid())
+        {
+            if(_instance.activePlayerData != null)
+            {
+                if(_instance.activePlayerData.shards >= 3)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,6 +71,7 @@ public class DatabaseManager : MonoBehaviour
     public void SaveGameDataLocally()
     {
         LocalSaveSystem.SaveLocaldata();
+        //Push to server?
     }
     private GameData localSave;
     public void LoadLocalSave()
@@ -46,9 +97,61 @@ public class DatabaseManager : MonoBehaviour
                 //but we can savely apply the local savefile to the active data
                 defaultHeroData = localSave.defaultHeroData;
                 eventData = localSave.eventData;
+                eventData.CreateDictionaries();
                 activePlayerData = localSave.activePlayerData;
+                ValidateInventory();
+                dungeonData = localSave.dungeonData;
+                rewardTable = localSave.rewardTable;
             }
         }
+    }
+
+    public static void ValidateInventory()
+    {
+        foreach (var item in _instance.activePlayerData.inventory)
+        {
+            ValidatePlayerHero(item);
+        }
+    }
+
+    public static void ValidatePlayerHero(PlayerHero _hero)
+    {        
+        while (!CheckUniqueId(_hero, _hero.uniqueId) || _hero.uniqueId < 1000)
+        {
+            _hero.uniqueId = UnityEngine.Random.Range(1000, 10000);
+        }
+        if (!CheckUniqueInvIndex(_hero, _hero.invIndex))
+        {
+            _hero.invIndex = -1;
+            while (!CheckUniqueInvIndex(_hero, _hero.invIndex) || _hero.invIndex < 0)
+            {
+                _hero.invIndex++;
+            }
+        }            
+    }
+
+    private static bool CheckUniqueId(PlayerHero _hero, int _uniqueId)
+    {
+        foreach (var item in DatabaseManager._instance.activePlayerData.inventory)
+        {
+            if (item != _hero && item.uniqueId == _uniqueId)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static bool CheckUniqueInvIndex(PlayerHero _hero, int _uniqueInvIndex)
+    {
+        foreach (var item in DatabaseManager._instance.activePlayerData.inventory)
+        {
+            if (item != _hero && item.invIndex == _uniqueInvIndex || _uniqueInvIndex < 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public IncomingHeroData defaultHeroData;
@@ -82,6 +185,21 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateEventDataFromServer(string _message)
     {
         eventData = JsonUtility.FromJson<EventData>(_message);
+        eventData.CreateDictionaries();
+        LocalSaveSystem.SaveLocaldata();
+    }
+
+    public RewardTable rewardTable;
+    public void UpdateRewardTableFromServer(string _message)
+    {
+        rewardTable = JsonUtility.FromJson<RewardTable>(_message);
+        LocalSaveSystem.SaveLocaldata();
+    }
+
+    public DungeonData dungeonData;
+    public void UpdateDungeonDataFromServer(string _message)
+    {
+        dungeonData = JsonUtility.FromJson<DungeonData>(_message);
         LocalSaveSystem.SaveLocaldata();
     }
 
@@ -122,10 +240,14 @@ public class GameData
         defaultHeroData = _manager.defaultHeroData;
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
+        dungeonData = _manager.dungeonData;
+        rewardTable = _manager.rewardTable;
     }
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
+    public DungeonData dungeonData;
+    public RewardTable rewardTable;
 
 
 
@@ -151,8 +273,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString(),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString()),
+//date = System.DateTime.Now.ToString("o"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("o")),
 
 [System.Serializable]
 public class PlayerData
@@ -166,9 +288,72 @@ public class PlayerData
     public int tradeCounter;
     public string lastDungeonDate;
     public string currentDungeonRun;
+    public int rewardTierBuff;
+    public int shards;
 
     public BlacklistEntry[] blacklist;
-    public PlayerHero[] inventory;
+    public List<PlayerHero> inventory;
+
+    public void ReleaseHero(int _uniqueId, bool _syncOnline = true)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if(inventory[i].uniqueId == _uniqueId)
+            {
+                inventory.RemoveAt(i);
+                break;
+            }
+        }
+        DatabaseManager.ValidateInventory();
+        DatabaseManager._instance.SaveGameDataLocally();
+        if (_syncOnline){
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        }
+    }
+}
+
+[System.Serializable]
+public class UploadPlayerData
+{
+    public UploadPlayerData(PlayerData _playerData)
+    {
+        playerId = _playerData.playerId;
+        password = _playerData.password;
+        joinDate = _playerData.joinDate;
+        lastUpdate = _playerData.lastUpdate;
+        profileDescription = _playerData.profileDescription;
+        mtdCounter = _playerData.mtdCounter;
+        tradeCounter = _playerData.tradeCounter;
+        lastDungeonDate = _playerData.lastDungeonDate;
+        currentDungeonRun = _playerData.currentDungeonRun;
+        rewardTierBuff = _playerData.rewardTierBuff;
+        shards = _playerData.shards;
+    }
+    public string playerId;
+    public string password;
+    public string joinDate;
+    public string lastUpdate;
+    public string profileDescription;
+    public int mtdCounter;
+    public int tradeCounter;
+    public string lastDungeonDate;
+    public string currentDungeonRun;
+    public int rewardTierBuff;
+    public int shards;
+}
+
+[System.Serializable]
+public class UploadInventory
+{
+    public LoginInfo loginInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password };
+    public List<UploadInventoryEntry> inventorySegment = new List<UploadInventoryEntry>();
+}
+
+[System.Serializable]
+public class UploadInventoryEntry
+{
+    public int index;
+    public PlayerHero entry;
 }
 
 [System.Serializable]
@@ -181,7 +366,43 @@ public class BlacklistEntry
 [System.Serializable]
 public class EventData
 {
-    public DungeonEvent[] dungeonDeck;
+    public void CreateDictionaries()
+    {
+        basicQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
+        foreach (var item in basicQuestDeck)
+        {
+            if (!basicQuestDict.ContainsKey(item.eventName))
+            {
+                basicQuestDict.Add(item.eventName, item);
+            }
+        }
+        doomQuestDict = new Dictionary<string, DungeonEvent>();
+        if (basicQuestDeck == null)
+            return;
+        foreach (var item in doomQuestDeck)
+        {
+            if (!doomQuestDict.ContainsKey(item.eventName))
+            {
+                doomQuestDict.Add(item.eventName, item);
+            }
+        }
+    }
+
+    public int GetNodeTypeIndex(string nodeType)
+    {
+        for (int i = 0; i < nodeTypes.Length; i++)
+        {
+            if (nodeType == nodeTypes[i])
+                return i;
+        }
+        return -1;
+    }
+    public DungeonEvent[] basicQuestDeck;
+    public Dictionary<string, DungeonEvent> basicQuestDict;
+    public DungeonEvent[] doomQuestDeck;
+    public Dictionary<string, DungeonEvent> doomQuestDict;
     public EventDeck[] eventDecks;
     public string[] nodeTypes;
     public string[] pathTypes;
@@ -209,4 +430,45 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+    public string description;
+}
+
+public enum DungeonType
+{
+    basic,
+    doom
+}
+
+[System.Serializable]
+public class LoginInfo
+{
+    public string playerId = "name";
+    public string password = "pw";
+}
+
+[System.Serializable]
+public class UploadDungeonData
+{
+    public LoginInfo playerInfo;
+    public DungeonData dungeonData;
+}
+
+[System.Serializable]
+public class RewardTable
+{
+    public List<RewardTier> rewardTiers = new List<RewardTier>();
+    public List<DungeonDifficulty> dungeonDifficulties = new List<DungeonDifficulty>();
+}
+[System.Serializable]
+public class RewardTier
+{
+    public List<int> chances = new List<int>();
+}
+
+[System.Serializable]
+public class DungeonDifficulty
+{
+    public int minLvl;
+    public int maxLvl;
+    public int medianLvl;
 }

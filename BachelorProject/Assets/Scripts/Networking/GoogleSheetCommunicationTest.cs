@@ -4,18 +4,219 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 using System;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GoogleSheetCommunicationTest : MonoBehaviour
 {
+    public GameObject localSaveScreen;
+    public TMP_Text localSaveTextfield;
+    public Button localSaveYes;
+    public Button localSaveNo;
+    public void LocalSaveScreenInit()
+    {
+        localSaveScreen.SetActive(true);
+        localSaveYes.interactable = false;
+        localSaveNo.interactable = false;
+
+        DatabaseManager._instance.LoadLocalSave();
+        if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
+        {
+            localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
+            localSaveYes.interactable = true;
+            localSaveNo.interactable = true;
+            //OnLocalSaveYes();
+        }
+        else
+        {
+            localSaveTextfield.text = "No Savefile found! Continue with signUp or signIn";
+            //signupin screen init
+            LocalSaveScreenExit();
+            SignUpInScreenInit();
+        }
+    }
+
+    public void LocalSaveScreenExit()
+    {
+        localSaveScreen.SetActive(false);
+    }
+
+    public void OnLocalSaveYes()
+    {
+        //automatically proceed to signIn up with local save data
+        LocalSaveScreenExit();
+        SignUpInScreenInit();
+        nameTextField.text = DatabaseManager._instance.activePlayerData.playerId;
+        pwTextField.text = DatabaseManager._instance.activePlayerData.password;
+        OnSignInButton();
+    }
+    public void OnLocalSaveNo()
+    {
+        //signUpIn init
+        LocalSaveScreenExit();
+        SignUpInScreenInit();
+    }
+
+    public GameObject signUpInScreen;
     public TMP_Text outputTextfield;
     public TMP_InputField nameTextField;
     public TMP_InputField pwTextField;
     public TMP_InputField requestTextField;
 
-    // Start is called before the first frame update
+    public Button signInButton;
+    public Button signUpButton;
+
+    string PasswordSend;
+    string PlayerIdSend;
+
+    public void SignUpInScreenInit()
+    {
+        signUpInScreen.SetActive(true);
+        nameTextField.interactable = true;
+        pwTextField.interactable = true;
+        signInButton.interactable = true;
+        signUpButton.interactable = true;
+    }
+
+    public void OnSignUpButton()
+    {
+        if(nameTextField.text == "" || pwTextField.text == "")
+        {
+            outputTextfield.text = "Enter Username and Password";
+            return;
+        }
+        PlayerIdSend = nameTextField.text;
+        PasswordSend = pwTextField.text;
+        nameTextField.interactable = false;
+        pwTextField.interactable = false;
+        signInButton.interactable = false;
+        signUpButton.interactable = false;
+
+        outputTextfield.text = "Getting Data from Server...";
+        Request requestType = Request.SignUp;
+        LoginInfo playerLogin = new LoginInfo { playerId = PlayerIdSend, password = PasswordSend };
+        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin));
+    }
+
+    public void OnSignInButton()
+    {
+        if (nameTextField.text == "" || pwTextField.text == "" || nameTextField.text == "Error")
+        {
+            outputTextfield.text = "Enter Username and Password";
+            return;
+        }
+        PlayerIdSend = nameTextField.text;
+        PasswordSend = pwTextField.text;
+        nameTextField.interactable = false;
+        pwTextField.interactable = false;
+        signInButton.interactable = false;
+        signUpButton.interactable = false;
+
+        outputTextfield.text = "Getting Data from Server...";
+        Request requestType = Request.SignIn;
+        LoginInfo playerLogin = new LoginInfo { playerId = PlayerIdSend, password = PasswordSend };
+        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin));
+    }
+
+
+
+    public void OnTrySignUp(PlayerData _playerData)
+    {
+        if(_playerData.playerId == "Error")
+        {
+            outputTextfield.text = "Username already Taken";
+            SignUpInScreenInit();
+        }
+        else
+        {
+            outputTextfield.text = "SignUp successful";
+            DatabaseManager._instance.activePlayerData = _playerData;
+            DeleventSystem.eventDataDownloaded += FirstSignUp;
+            DatabaseManager._instance.SaveGameDataLocally();
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
+        }
+    }
+
+    public void OnTrySignIn(PlayerData _playerData)
+    {
+        if (_playerData.playerId == "Error")
+        {
+            outputTextfield.text = "Username or password incorrect";
+            SignUpInScreenInit();
+        }
+        else
+        {
+            outputTextfield.text = "SignIn successful";
+            DatabaseManager._instance.activePlayerData = _playerData;
+            DatabaseManager.ValidateInventory();
+            DatabaseManager._instance.SaveGameDataLocally();
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
+            //FinishedLogIn();
+            //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
+
+        }
+    }
+
+    public void StooopidTest()
+    {
+        List<PlayerHero> testList = new List<PlayerHero>();
+        for (int i = 0; i < 100; i++)
+        {
+            testList.Add(HeroCreator.GetHeroByRewardTier(6));
+        }
+        foreach (var item in testList)
+        {
+            Debug.Log("Rarity: " + DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[item.heroId].rarity.ToString());
+        }
+        Debug.LogError("Check if verteilung passt");
+    }
+
+    public void FirstSignUp()
+    {
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(3));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(1));
+        
+        DatabaseManager._instance.SaveGameDataLocally();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        DeleventSystem.eventDataDownloaded -= FirstSignUp;
+    }
+
+    private void OnEnable()
+    {
+        DeleventSystem.trySignIn += OnTrySignIn;
+        DeleventSystem.trySignUp += OnTrySignUp;
+        
+    }
+
+    private void OnDisable()
+    {
+        DeleventSystem.trySignIn -= OnTrySignIn;
+        DeleventSystem.trySignUp -= OnTrySignUp;
+    }
+
+    public void FinishedLogIn()
+    {
+        Debug.Log("Finished Login");
+        DungeonManager._instance.CreateDailyDungeons();
+        if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
+        {
+            DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
+            DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
+            //DungeonManager._instance.CalculateRun(0);
+        }
+
+        SceneManager.LoadScene(1);
+    }
     void Start()
     {
-        
+        LocalSaveScreenInit();
         //PostInfos();
 
 
@@ -214,8 +415,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             name = "Benedikt",
             password = "321",
-            date = System.DateTime.Now.ToString(),
-            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString()),
+            date = System.DateTime.Now.ToString("o"),
+            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString("o")),
             profileDescription = "",
             mtDoomCounter = 0,
             tradeCounter = 0,
