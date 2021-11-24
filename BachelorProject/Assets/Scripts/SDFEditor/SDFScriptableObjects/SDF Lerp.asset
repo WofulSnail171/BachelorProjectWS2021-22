@@ -12,12 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec3a03eeeaa1394b8c1b5b657d2e7ae, type: 3}
   m_Name: SDF Lerp
   m_EditorClassIdentifier: 
-  o: lerp305_out
-  sdfName: lerp305
-  variables: []
-  types: []
+  o: lerp96_out
+  sdfName: lerp96
+  variables:
+  - lerp96_t
+  - rect550_position
+  - rect550_box
+  - rect550_scale
+  - rect550_roundness
+  - circle686_position
+  - circle686_radius
+  types:
+  - float
+  - float2
+  - float2
+  - float
+  - float4
+  - float2
+  - float
   nodes: []
   nodeType: 9
-  inputA: {fileID: 0}
-  inputB: {fileID: 0}
-  t: 0
+  inputA: {fileID: 11400000, guid: b7ae566ccb16f1f41b42bf6f72c1e54b, type: 2}
+  inputB: {fileID: 11400000, guid: 508c0e7041af99d49aa57b7deede4218, type: 2}
+  t: 0.1

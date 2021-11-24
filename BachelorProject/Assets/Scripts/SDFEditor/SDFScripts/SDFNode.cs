@@ -16,6 +16,7 @@ public abstract class SDFNode : ScriptableObject
 
     protected bool isDirty;
     public Action<SDFNode> OnValueChange;
+    public Action OnInputChange;
 
     public enum NodeType {
         Circle,

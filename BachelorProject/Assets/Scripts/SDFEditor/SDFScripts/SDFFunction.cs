@@ -5,7 +5,6 @@ using UnityEngine;
 
 public abstract class SDFFunction : SDFNode {
     
-    public Action OnInputChange;
 
     public abstract void GetActiveNodes(List<SDFNode> nodes);
     public abstract void GenerateVariables();

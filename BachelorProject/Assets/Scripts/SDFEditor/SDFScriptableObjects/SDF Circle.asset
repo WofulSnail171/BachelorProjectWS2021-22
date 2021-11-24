@@ -22,5 +22,5 @@ MonoBehaviour:
   - float
   nodes: []
   nodeType: 0
-  position: {x: -0.02, y: 0}
-  radius: 0.12
+  position: {x: -0.13, y: -0.36}
+  radius: 0.13

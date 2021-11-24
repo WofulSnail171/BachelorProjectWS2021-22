@@ -26,7 +26,7 @@ MonoBehaviour:
   - float4
   nodes: []
   nodeType: 1
-  position: {x: 0.21, y: 0}
-  box: {x: 0.11, y: 0.2}
-  scale: 0.67
-  roundness: {x: 0, y: 0.1, z: 0.1, w: 0.02}
+  position: {x: 0.25, y: 0}
+  box: {x: 0.11, y: 0.23}
+  scale: 2
+  roundness: {x: 0, y: 0, z: 0.1, w: 0.1}

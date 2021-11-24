@@ -20,7 +20,7 @@ public class SDFOutput : SDFNode{
         set {
             if (this._input == value) return;
             this._input = value;
-            this.OnValueChange?.Invoke(this);
+            this.OnInputChange?.Invoke();
         }
     }
     
@@ -44,12 +44,11 @@ public class SDFOutput : SDFNode{
             this.ApplyMaterial();
             this.applyMaterial = false;
         }
-        this.UpdateShader(this);
     }
 
     private void Awake() {
-        this.OnValueChange += this.UpdateShader;
-        this.UpdateShader(this);
+        this.OnInputChange += this.UpdateShader;
+        this.UpdateShader();
     }
 
     private void ApplyMaterial() {
@@ -57,7 +56,7 @@ public class SDFOutput : SDFNode{
         this.pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
         this.pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
 
-        this.UpdateShader(this);
+        this.UpdateShader();
 
         if (this.sdfMaterial == null){
             this.sdfShader = Shader.Find("SDF/" + this.shaderName);
@@ -75,8 +74,8 @@ public class SDFOutput : SDFNode{
         }
     }
 
-    private void UpdateShader(SDFNode sdfNode) {
-        if (this.Input != null) {
+    private void UpdateShader() {
+        if (this.Input != null || this.sdfMaterial != null) {
             
             this.UpdateActiveNodes();
             foreach (SDFNode s in this.SDFNodes) {
@@ -86,6 +85,10 @@ public class SDFOutput : SDFNode{
                 }
             }
             this.AddHlslString(this.Input);
+            Debug.Log("updated shader");
+        }
+        else {
+            Debug.LogWarning("forgot to assign Input or Material in output node");
         }
     }
 
@@ -367,6 +370,11 @@ CBUFFER_END";
     }
     
     private void ChangeShaderValues(SDFNode node){
+
+        if (this.sdfMaterial == null) {
+            Debug.LogWarning("material has not been assigned yet");
+            return;
+        }
         
         Debug.Log("changing shader variables from " + node.sdfName);
 
@@ -377,7 +385,6 @@ CBUFFER_END";
                 var n = (SDFCircle) node;
                 this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
                 this.sdfMaterial.SetFloat(n.sdfName + "_radius" , n.Radius);
-                Debug.Log("updated shader variables");
                 break;
             }
             case NodeType.Rect: {
@@ -464,7 +471,7 @@ CBUFFER_END";
 
                 if (s is SDFFunction) {
                     SDFFunction sfunc = (SDFFunction) s;
-                    sfunc.OnInputChange -= this.UpdateActiveNodes;
+                    sfunc.OnInputChange -= this.UpdateShader;
                 }
             }
         }
@@ -487,7 +494,7 @@ CBUFFER_END";
                 //Debug.Log("subscribed to value change on " +  s.sdfName);
                 if (s is SDFFunction) {
                     SDFFunction sfunc = (SDFFunction) s;
-                    sfunc.OnInputChange += this.UpdateActiveNodes;
+                    sfunc.OnInputChange += this.UpdateShader;
                 }
             }
         }

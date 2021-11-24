@@ -98,7 +98,7 @@ public class SDFLerp : SDFFunction
     
     public override void GenerateVariables() {
 
-        Debug.Log("generated new variables");
+        //Debug.Log("generated new variables");
         if (this._inputA == null || this.inputB == null) {
             Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
             return;}
