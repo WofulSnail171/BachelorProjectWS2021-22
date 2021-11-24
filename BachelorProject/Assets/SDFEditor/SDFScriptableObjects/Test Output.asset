@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
-  m_Name: New SDF Output
+  m_Name: Test Output
   m_EditorClassIdentifier: 
   o: 
   sdfName: newSDF
@@ -18,7 +18,7 @@ MonoBehaviour:
   types: []
   nodes: []
   nodeType: 0
-  shaderName: test2
-  input: {fileID: 11400000, guid: 60e0484de02956c499f510ae0774c639, type: 2}
+  shaderName: test
+  input: {fileID: 11400000, guid: 720382bcd72aa4241bdf3cdd90ee9bea, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0

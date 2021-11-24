@@ -53,8 +53,8 @@ public class SDFOutput : SDFNode{
 
     private void ApplyMaterial() {
 
-        this.pathShaderFile = "Assets/Shader/" + this.shaderName + ".shader";
-        this.pathIncludeFile = "Assets/Shader/" + this.shaderName + ".hlsl";
+        this.pathShaderFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".shader";
+        this.pathIncludeFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".hlsl";
 
         this.UpdateShader();
 
@@ -85,6 +85,10 @@ public class SDFOutput : SDFNode{
                 }
             }
             this.AddHlslString(this.Input);
+            foreach (SDFNode s in this.SDFNodes) {
+                this.ChangeShaderValues(s);
+            }
+
             Debug.Log("updated shader");
         }
         else {
@@ -372,7 +376,7 @@ CBUFFER_END";
     private void ChangeShaderValues(SDFNode node){
 
         if (this.sdfMaterial == null) {
-            Debug.LogWarning("material has not been assigned yet");
+            Debug.LogWarning("material has not been applied or assigned");
             return;
         }
         
