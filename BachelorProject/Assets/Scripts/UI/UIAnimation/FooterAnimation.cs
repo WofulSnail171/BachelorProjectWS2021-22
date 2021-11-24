@@ -14,7 +14,7 @@ public class FooterAnimation : AbstractElementAnimation
         StopAllCoroutines();
 
         original = gameObject.GetComponent<RectTransform>().rect.y;
-        float removed = -gameObject.GetComponent<RectTransform>().rect.height;
+        float removed = -gameObject.GetComponent<RectTransform>().rect.height *2;
 
 
         LeanTween.moveY(gameObject, removed, animSpeed).setEase(animationType);
@@ -30,7 +30,7 @@ public class FooterAnimation : AbstractElementAnimation
 
         float original = gameObject.GetComponent<RectTransform>().rect.y;
 
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, - gameObject.GetComponent<RectTransform>().rect.height, gameObject.transform.position.z);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, - gameObject.GetComponent<RectTransform>().rect.height*2, gameObject.transform.position.z);
         gameObject.SetActive(true);
 
         LeanTween.moveY(gameObject, original, animSpeed).setEase(animationType);

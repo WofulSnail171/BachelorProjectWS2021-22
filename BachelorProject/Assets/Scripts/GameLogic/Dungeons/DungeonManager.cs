@@ -9,6 +9,7 @@ public class DungeonManager : MonoBehaviour
     public static DungeonManager _instance;
     public static int PityGrowth = 3;
     public static int MaxGrowth = 8;
+    public static bool events = true;
 
     private void Awake()
     {
@@ -202,6 +203,7 @@ public class DungeonManager : MonoBehaviour
     //refresh Run and calc until step
     public void CalculateRun(int _targetStep)
     {
+        events = false;
         currentCalcRun = null;
         //UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         StartCalcRun();
@@ -212,13 +214,14 @@ public class DungeonManager : MonoBehaviour
         {
             NextStepRun();
         }
-
+        events = true;
         //UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
     }
 
     //calculate until max step for setup purposes
     void CalculateMaxStep(DungeonRun _dungeonRun)
     {
+        events = false;
         currentCalcRun = null;
         UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
 
@@ -234,6 +237,7 @@ public class DungeonManager : MonoBehaviour
 
         UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
         currentCalcRun = null;
+        events = true;
     }
 
     void StartCalcRun()
@@ -248,8 +252,8 @@ public class DungeonManager : MonoBehaviour
     void StepCalcRun()
     {
         currentCalcRun.currentStep++;
-        if(DeleventSystem.DungeonStep != null)
-            DeleventSystem.DungeonStep();
+        if(events)
+            DeleventSystem.DungeonStep?.Invoke();
         switch (currentCalcRun.currentActivity)
         {
             case DungeonActivity.eventStart:
@@ -313,6 +317,8 @@ public class DungeonManager : MonoBehaviour
         {
             case DungeonActivity.eventStart:
                 currentCalcRun.UpdateLog("the party encountered " + currentCalcRun.currentNode.nodeEvent.eventName);
+                if (events)
+                    DeleventSystem.DungeonEventStart?.Invoke();
                 EnterNewActivityState(DungeonActivity.eventHandling);
                 break;
             case DungeonActivity.eventEnd:
@@ -331,6 +337,8 @@ public class DungeonManager : MonoBehaviour
                         break;
                 }
                 currentCalcRun.UpdateLog("the party finished " + currentCalcRun.currentNode.nodeEvent.eventName);
+                if (events)
+                    DeleventSystem.DungeonEventEnd?.Invoke();
                 break;
             case DungeonActivity.eventHandling:
 
@@ -440,6 +448,8 @@ public class DungeonManager : MonoBehaviour
             {
                 EnterNewActivityState(DungeonActivity.eventEnd);
             }
+            if (events)
+                DeleventSystem.DungeonEvent?.Invoke();
         }
     }
 
@@ -504,10 +514,9 @@ public class DungeonManager : MonoBehaviour
             //DatabaseManager._instance.dungeonData.currentRun.valid = false;
             DatabaseManager._instance.SaveGameDataLocally();
             Debug.Log("Run Ended");
-            if (DeleventSystem.dungeonRunFinished != null)
-            {
-                DeleventSystem.dungeonRunFinished();
-            }
+            if (events)
+                DeleventSystem.dungeonRunFinished?.Invoke();
+            
             //Debug.LogError("Finished Boiiii");
         }
     }
