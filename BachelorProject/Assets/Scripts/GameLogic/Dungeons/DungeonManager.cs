@@ -7,7 +7,7 @@ using System;
 public class DungeonManager : MonoBehaviour
 {
     public static DungeonManager _instance;
-    public static int PityGrowth = 3;
+    public static int PityGrowth = 2;
     public static int MaxGrowth = 8;
     public static bool events = true;
 
