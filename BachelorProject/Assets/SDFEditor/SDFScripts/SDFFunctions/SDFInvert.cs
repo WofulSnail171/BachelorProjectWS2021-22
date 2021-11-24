@@ -30,23 +30,17 @@ public class SDFInvert : SDFFunction
 
         this.sdfName = "invert";
         this.o = this.sdfName +"_out";
-
-        this.OnInputChange += this.GenerateVariables;
-        GenerateVariables();
-
     }
     public override string GenerateHlslFunction() {
         
-        string a = this.input.GenerateHlslFunction();
+        string hlslString = @"
 
-        string hlslString = a +@"
     " + "float " + this.o + " = -" + this.input.o + ";";
         
         return hlslString;
     }
     
     public override void GetActiveNodes(List<SDFNode> nodes) {
-        
         nodes.Add(this);
         
         if (this.input is SDFFunction) {
@@ -54,31 +48,15 @@ public class SDFInvert : SDFFunction
             i.GetActiveNodes(nodes);
         }
         else {
+            bool d;
+            foreach (SDFNode s in nodes) {
+                if (s.sdfName == this.input.sdfName) {
+                    Debug.Log("found double in input");
+                    return;
+                }
+            }
             nodes.Add(this.input);
+            Debug.Log("found no double in input");
         }
-    }
-
-    public override void GenerateVariables() {
-        
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
-        
-        if (this.input == null) {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.name);
-            return;
-        }
-
-        foreach (string s in this.input.variables) {
-            this.variables.Add(s);
-        }
-        foreach (string s in this.input.types) {
-            this.types.Add(s);
-        }
-    }
-
-    private void OnDisable() {
-        this.OnInputChange -= GenerateVariables;
     }
 }

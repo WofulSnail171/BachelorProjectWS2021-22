@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 936f2e0c406190e40b680e6f1214acad, type: 3}
-  m_Name: Test Circle
+  m_Name: SDF Circle
   m_EditorClassIdentifier: 
-  o: circle167_out
-  sdfName: circle167
+  o: circle283_out
+  sdfName: circle283
   variables:
-  - circle167_position
-  - circle167_radius
+  - circle283_position
+  - circle283_radius
   types:
   - float2
   - float
   nodes: []
   nodeType: 0
   position: {x: 0, y: 0}
-  radius: 0.2
+  radius: 0.25

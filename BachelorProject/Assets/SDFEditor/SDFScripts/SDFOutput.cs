@@ -78,12 +78,7 @@ public class SDFOutput : SDFNode{
         if (this.Input != null || this.sdfMaterial != null) {
             
             this.UpdateActiveNodes();
-            foreach (SDFNode s in this.SDFNodes) {
-                if (s is SDFFunction) {
-                    SDFFunction f = (SDFFunction) s;
-                    f.GenerateVariables();
-                }
-            }
+            
             this.AddHlslString(this.Input);
             foreach (SDFNode s in this.SDFNodes) {
                 this.ChangeShaderValues(s);
@@ -281,31 +276,41 @@ public class SDFOutput : SDFNode{
     
     private string GenerateShaderVariables() {
         
-        
-        string variables = "";
+        string variables = "   ";
 
-        for (int i = 0; i < this.input.variables.Count; i++) {
-            variables += this.input.types[i] + " " + this.input.variables[i] + @";
-    ";
+        foreach (SDFNode s in this.SDFNodes) {
+            if (s.variables != null && s.variables.Count > 0) {
+                for (int i = 0; i < s.variables.Count; i++) {
+                    variables += ""+ s.types[i] + " " + s.variables[i] + @";
+        ";
+                }
+            }
+            else {
+                Debug.Log(s.sdfName + " has no valid variables");
+            }
         }
-        Debug.Log(variables);
+
         return @"
-CBUFFER_START(UnityPerMaterial)
-   " + variables + @"
-CBUFFER_END";
+     CBUFFER_START(UnityPerMaterial)
+     " + variables + @"
+     CBUFFER_END";
     }
 
     private string GenerateShaderFrag() {
 
         string variables = "";
-        
-        for (int i = 0; i < this.input.variables.Count; i++) {
-            variables += this.input.variables[i];
-            if (i != this.input.variables.Count - 1) {
-                variables += ", ";
+
+        for (int j = this.SDFNodes.Count -1; j >= 0; j--) {
+            if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
+                for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
+                    variables += this.SDFNodes[j].variables[i];
+                    if (j != 0 && i < this.SDFNodes[j].variables.Count) {
+                        variables += ", ";
+                    }
+                }
             }
         }
-        
+        Debug.Log(variables);
         return @"
         float4 frag (v2f i) : SV_Target
         {
@@ -333,25 +338,34 @@ CBUFFER_END";
     
     private string GenerateShaderSdfFunction(SDFNode node) {
         string variables = "";
-
-        for (int i = 0; i < this.input.variables.Count; i++) {
-            variables += this.input.types[i] + " " + this.input.variables[i];
-            if (i != this.input.variables.Count - 1) {
-                variables += ", ";
+        string sdfFunction = "";
+        
+        for(int j = this.SDFNodes.Count-1; j >= 0; j--){
+            if (this.SDFNodes[j] != null) {
+                sdfFunction += this.SDFNodes[j].GenerateHlslFunction();
             }
+
+            if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
+                for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
+                    variables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
+                    if (j != 0 && i < this.SDFNodes[j].variables.Count) {
+                        variables += ", ";
+                    }
+                }
+            }
+                        
         }
-        string sdfFunction = @"
+
+        return @"
     
     float dot2( in float2 v ) { return dot(v,v); }
 
     float sdf (float2 uv, " + variables + @"){ 
-        " + node.GenerateHlslFunction() + @"
+        " + sdfFunction + @"
 
-         return " + node.o + @";
-        }
+        return " + node.o + @";
+    }
         ";
-        
-        return sdfFunction;
     }
 
     private void WriteHlslToText() {
@@ -486,7 +500,7 @@ CBUFFER_END";
             SDFFunction i = (SDFFunction) this.input;
             i.GetActiveNodes(this.SDFNodes);
         }
-        else {
+        else if(!this.SDFNodes.Contains(this.input)){
             this.SDFNodes.Add(this.input);
         }
         

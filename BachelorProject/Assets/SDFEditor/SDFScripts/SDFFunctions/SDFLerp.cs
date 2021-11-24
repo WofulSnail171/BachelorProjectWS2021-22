@@ -55,23 +55,14 @@ public class SDFLerp : SDFFunction
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";
         
-        this.OnInputChange += this.GenerateVariables;
-        if (this._inputA != null || this._inputB != null) {
-            this.GenerateVariables();
-        }
-        else {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
-        }
-        
+        this.variables.Add(this.sdfName + "_t");
+        this.types.Add("float");
+
     }
     
     public override string GenerateHlslFunction() {
 
-        string a = this.inputA.GenerateHlslFunction();
-        string b = this.inputB.GenerateHlslFunction();
-
-        string hlslString = a +@"
-        " + b + @"
+        string hlslString = @"
 
         " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
         return hlslString;
@@ -85,55 +76,31 @@ public class SDFLerp : SDFFunction
             i.GetActiveNodes(nodes);
         }
         else {
+            bool d;
+            foreach (SDFNode s in nodes) {
+                if (s.sdfName == this.inputA.sdfName) {
+                    Debug.Log("found double in inputA");
+                    return;
+                }
+            }
             nodes.Add(this.inputA);
+            Debug.Log("found no double in inputA");
         }
+        
         if (this.inputB is SDFFunction) {
             SDFFunction i = (SDFFunction) this.inputB;
             i.GetActiveNodes(nodes);
         }
         else {
+            bool d;
+            foreach (SDFNode s in nodes) {
+                if (s.sdfName == this.inputB.sdfName) {
+                    Debug.Log("found double in inputB");
+                    return;
+                }
+            }
             nodes.Add(this.inputB);
+            Debug.Log("found no double in inputB");
         }
-    }
-    
-    public override void GenerateVariables() {
-
-        //Debug.Log("generated new variables");
-        if (this._inputA == null || this.inputB == null) {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
-            return;}
-
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
-        
-        this.variables.Add(this.sdfName + "_t");
-        this.types.Add("float");
-
-        foreach (string s in this.inputA.variables) {
-            this.variables.Add(s);
-        }
-        foreach (string s in this.inputB.variables) {
-            this.variables.Add(s);
-        }
-        foreach (string s in this.inputA.types) {
-            this.types.Add(s);
-        }
-
-        foreach (string s in this.inputB.types) {
-            this.types.Add(s);
-        }
-
-
-        string debug = "";
-        foreach (string s in this.variables) {
-            debug += s;
-        }
-        Debug.Log(debug);
-    }
-
-    private void OnDisable() {
-        this.OnInputChange -= GenerateVariables;
     }
 }

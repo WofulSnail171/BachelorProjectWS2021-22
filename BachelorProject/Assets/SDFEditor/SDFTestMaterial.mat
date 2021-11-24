@@ -54,12 +54,17 @@ Material:
     - _ZTest: 0
     - circle114_radius: 0.21
     - circle167_radius: 0.2
+    - circle283_radius: 0.25
     - circle429_radius: 0.13
+    - circle477_radius: 0.2
     - circle479_radius: 0.2
     - circle686_radius: 0.13
+    - circle780_radius: 0
+    - lerp189_t: 0
     - lerp305_t: 1
     - lerp498_t: 0.39
     - lerp771_t: 0.17
+    - lerp929_t: -4.33
     - lerp96_t: 0.1
     - line330_roundness: 0.16
     - line330_scale: 1
@@ -68,10 +73,12 @@ Material:
     - line962_roundness: 0.05
     - line962_scale: 0.96
     - rect271_scale: 1
+    - rect2_scale: 1
     - rect517_scale: 1
     - rect550_scale: 2
     - rect761_scale: 1
     - rect853_scale: 1
+    - rect85_scale: 1
     - rect983_scale: 2
     - sblend571_k: 0.29
     - triangle106_scale: 1
@@ -86,9 +93,12 @@ Material:
     - bezier796_position: {r: 0.05, g: 0.02, b: 0, a: 0}
     - circle114_position: {r: 0, g: 0, b: 0, a: 0}
     - circle167_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle283_position: {r: 0, g: 0, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
+    - circle477_position: {r: 0, g: 0, b: 0, a: 0}
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
     - circle686_position: {r: -0.13, g: -0.36, b: 0, a: 0}
+    - circle780_position: {r: 0, g: 0, b: 0, a: 0}
     - line330_a: {r: -0.04, g: -0.25, b: 0, a: 0}
     - line330_b: {r: 0.39, g: 0.18, b: 0, a: 0}
     - line330_position: {r: 0, g: 0, b: 0, a: 0}
@@ -101,6 +111,9 @@ Material:
     - rect271_box: {r: 0.5, g: 0.2, b: 0, a: 0}
     - rect271_position: {r: 0, g: 0, b: 0, a: 0}
     - rect271_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect2_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect2_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect2_roundness: {r: -0.05, g: 0, b: 0.01, a: 0.03}
     - rect517_box: {r: 0.31, g: 0.16, b: 0, a: 0}
     - rect517_position: {r: 0, g: 0, b: 0, a: 0}
     - rect517_roundness: {r: 0, g: 0, b: 0, a: 0}
@@ -113,6 +126,9 @@ Material:
     - rect853_box: {r: 0.4, g: 0.2, b: 0, a: 0}
     - rect853_position: {r: 0, g: 0, b: 0, a: 0}
     - rect853_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect85_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect85_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect85_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect983_box: {r: 0.11, g: 0.23, b: 0, a: 0}
     - rect983_position: {r: 0.25, g: 0, b: 0, a: 0}
     - rect983_roundness: {r: 0, g: 0, b: 0.1, a: 0.1}

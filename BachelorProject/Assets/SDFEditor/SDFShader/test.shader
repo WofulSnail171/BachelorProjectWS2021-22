@@ -4,8 +4,15 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] circle167_position ("circle167_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle167_radius ("circle167_radius", Float) = 0
+                [HideInInspector] lerp929_t ("lerp929_t", Float) = 0
+                
+                [HideInInspector] circle283_position ("circle283_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle283_radius ("circle283_radius", Float) = 0
+                
+                [HideInInspector] rect2_position ("rect2_position", Vector) = (0,0,0,0)
+                [HideInInspector] rect2_box ("rect2_box", Vector) = (0,0,0,0)
+                [HideInInspector] rect2_scale ("rect2_scale", Float) = 0
+                [HideInInspector] rect2_roundness ("rect2_roundness", Vector) = (0,0,0,0)
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -49,16 +56,21 @@ Shader "SDF/test"
             return o;
         }
 
-CBUFFER_START(UnityPerMaterial)
-   float2 circle167_position;
-    float circle167_radius;
-    
-CBUFFER_END
+     CBUFFER_START(UnityPerMaterial)
+        float lerp929_t;
+        float2 circle283_position;
+        float circle283_radius;
+        float2 rect2_position;
+        float2 rect2_box;
+        float rect2_scale;
+        float4 rect2_roundness;
+        
+     CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,circle167_position, circle167_radius);
+            float sdfOut = sdf(i.uv,rect2_position, rect2_box, rect2_scale, rect2_roundness, circle283_position, circle283_radius, lerp929_t);
             float4 col = smoothstep(0, 0.01, abs(sdfOut));
             return col;
         }
