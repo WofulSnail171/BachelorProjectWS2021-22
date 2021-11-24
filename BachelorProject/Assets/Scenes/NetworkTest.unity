@@ -1425,6 +1425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CommVis: {fileID: 0}
+  errorInfoText: {fileID: 0}
 --- !u!114 &413296324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1461,6 +1462,7 @@ MonoBehaviour:
     pathTypes: []
   rewardTable:
     rewardTiers: []
+    dungeonDifficulties: []
   dungeonData:
     dailyDungeons: []
     currentRun:
@@ -1474,6 +1476,7 @@ MonoBehaviour:
         date: 
         questName: 
         type: 0
+        difficultyIndex: 0
       initialRewardTier: 0
       maxSteps: 0
       randomNums: []
@@ -2225,7 +2228,22 @@ MonoBehaviour:
     sStatGrowth: 0
     nextHero: 0
     dungeonLogArr: []
-  AutoPlayWaitTimeSec: 1
+  rewardHero:
+    heroId: 
+    status: 0
+    uniqueId: 0
+    pVal: 0
+    pPot: 0
+    mVal: 0
+    mPot: 0
+    sVal: 0
+    sPot: 0
+    lastOwner: 
+    origOwner: 
+    invIndex: 0
+    traded: 0
+    runs: 0
+  AutoPlayWaitTimeSec: 0.02
 --- !u!4 &668027270
 Transform:
   m_ObjectHideFlags: 0
