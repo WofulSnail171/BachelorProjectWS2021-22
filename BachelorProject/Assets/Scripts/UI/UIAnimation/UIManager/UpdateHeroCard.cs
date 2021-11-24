@@ -62,6 +62,7 @@ public class UpdateHeroCard : MonoBehaviour
     #endregion
 
 
+
     public void UpdateHero(PlayerHero hero)
     {
         defaultHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId];
@@ -82,13 +83,6 @@ public class UpdateHeroCard : MonoBehaviour
         magicalStatText.text = $"{magicalStat} / {magicalPotential}";
         socialStatText.text = $"{socialStat} / {socialPotential}";
 
-        //set actual stat
-
-
-
-        physicalStatBar.fillAmount = hero.pVal / max;
-        magicalStatBar.fillAmount = hero.mVal / max;
-        socialStatBar.fillAmount = hero.sVal / max;
 
 
 
@@ -277,6 +271,19 @@ public class UpdateHeroCard : MonoBehaviour
             physicalStat = $"{hero.pVal}";
 
 
+        if (hero.pVal != hero.pPot)
+        {
+            physicalStatBar.fillAmount = hero.pVal / max;
+            targetFillP = hero.pVal / max;
+
+        }
+
+        else
+        {
+            physicalStatBar.fillAmount = 1;
+            targetFillP = 1;
+        }
+
         //magical
         if (hero.mPot == hero.mVal)
             magicalStat = $"{hero.mVal} (max)";
@@ -285,12 +292,59 @@ public class UpdateHeroCard : MonoBehaviour
             magicalStat = $"{hero.mVal}";
 
 
+        if (hero.mPot != hero.mVal)
+        {
+            magicalStatBar.fillAmount = hero.mVal / max;
+            targetFillM = hero.mVal / max;
+        }
+
+        else
+        {
+            magicalStatBar.fillAmount = 1;
+            targetFillM = 1;
+        }
+
         //physical
         if (hero.sPot == hero.sVal)
             socialStat = $"{hero.sVal} (max)";
 
         else
             socialStat = $"{hero.sVal}";
+
+        if(hero.sPot != hero.sVal)
+        {
+            socialStatBar.fillAmount = hero.sVal / max;
+            targetFillS = hero.sVal / max;
+        }
+
+        else
+        {
+            socialStatBar.fillAmount = 1;
+            targetFillS = 1;
+        }
+    }
+
+    private void OnEnable()
+    {
+        magicalStatBar.fillAmount = targetFillM;
+        physicalStatBar.fillAmount = targetFillP;
+        socialStatBar.fillAmount = targetFillS;
+    }
+
+    float targetFillM;
+    float targetFillP;
+    float targetFillS;
+
+    private void Update()
+    {
+       if(magicalStatBar.fillAmount != targetFillM)
+            magicalStatBar.fillAmount = targetFillM;
+
+       if(physicalStatBar.fillAmount != targetFillP)
+           physicalStatBar.fillAmount = targetFillP;
+
+       if(socialStatBar.fillAmount != targetFillS)
+           socialStatBar.fillAmount = targetFillS;
     }
 
 }

@@ -10,6 +10,9 @@ public class MapClick : MonoBehaviour
     [SerializeField] TextMeshProUGUI QuestName;
     [SerializeField] TextMeshProUGUI QuestDescription;
     [SerializeField] TextMeshProUGUI QuestReward;
+    [SerializeField] GameObject DisablePanel;
+
+
     DungeonType QuestType = DungeonType.basic;
 
 
@@ -37,17 +40,23 @@ public class MapClick : MonoBehaviour
             case DungeonType.basic:
                 quest = DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.dailyDungeons[DailyDungeonIndex].questName];
                 QuestType = DungeonType.basic;
+                DisablePanel.SetActive(false);
+
                 break;
             case DungeonType.doom:
                 quest = DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.dailyDungeons[DailyDungeonIndex].questName];
                 QuestType = DungeonType.doom;
                 if (DatabaseManager.DoomDungeonAvailable())
                 {
-                    //Enable
+                    DisablePanel.SetActive(false);
+                    gameObject.GetComponent<Button>().interactable = true;
                 }
                 else
                 {
                     //Disable
+                    DisablePanel.SetActive(true);
+                    gameObject.GetComponent<Button>().interactable = false;
+
                 }
                 break;
             default:
@@ -58,6 +67,7 @@ public class MapClick : MonoBehaviour
         QuestName.text = quest.eventName;
         QuestDescription.text = quest.description;
         QuestReward.text = quest.endText;
+
     }
 
     private void OnDisable()
