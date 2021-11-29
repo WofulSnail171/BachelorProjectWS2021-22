@@ -14218,14 +14218,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WorkAroundList:
-  - name: Peter
+  - name: Agnus
     sprite: {fileID: 21300000, guid: 2235664c273539b41a94be5d53783335, type: 3}
-  - name: Anti-Phil
+  - name: Aqua
+    sprite: {fileID: 21300000, guid: a26a6d800904375448699b46b841afe5, type: 3}
+  - name: Astra
     sprite: {fileID: 21300000, guid: dd76f89bf3336094db18048b4c8c4af6, type: 3}
-  - name: Axel
+  - name: Birb
     sprite: {fileID: 21300000, guid: bab61212657c4b44ca4eb06954223e4e, type: 3}
   - name: Brooke
     sprite: {fileID: 21300000, guid: 914e5abd81f9a25478208b87ddc4a2d2, type: 3}
+  - name: Cordelia
+    sprite: {fileID: 21300000, guid: 78317b25e8fe1a84eadfa2d50c693f5f, type: 3}
+  - name: Fink
+    sprite: {fileID: 21300000, guid: 1ca0fc1df593b834790a9b6046fd05f9, type: 3}
+  - name: Geraldine
+    sprite: {fileID: 21300000, guid: 96905a3ea1e8e6045a3cdb1704820fbe, type: 3}
+  - name: Hans
+    sprite: {fileID: 21300000, guid: 16bb3f4960fca5644872088e9c1b077d, type: 3}
   - name: Hardy
     sprite: {fileID: 21300000, guid: 78a3f3ae1b1899c43a39aa0316fb0a05, type: 3}
   - name: Hastur
@@ -14236,12 +14246,16 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6c65cd9a2b93ea0438d4d659d727b026, type: 3}
   - name: Jimmy
     sprite: {fileID: 21300000, guid: dc77038142a079e488430ab4e96c7cf4, type: 3}
+  - name: Kin
+    sprite: {fileID: 21300000, guid: 0babf03d16c699a4ca8268c24a32eeca, type: 3}
   - name: Kurt
     sprite: {fileID: 21300000, guid: 597422dcbea064449b7055d6aa271548, type: 3}
   - name: Ludolf
     sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
   - name: Mocka
     sprite: {fileID: 21300000, guid: 41d9f7939055db14c8903c5aff93f812, type: 3}
+  - name: Mort
+    sprite: {fileID: 21300000, guid: 56e9e4aaba64f0b4da846510abad6256, type: 3}
   - name: Nephila
     sprite: {fileID: 21300000, guid: c31788832a3bb6d4a9b8339829708c1e, type: 3}
   - name: Noir
@@ -14250,6 +14264,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 063a7b3536113f74cb04c33eba7aa446, type: 3}
   - name: Ouy
     sprite: {fileID: 21300000, guid: 3b74e5cbe1c037e4a87ee5c115a68eef, type: 3}
+  - name: Ridley
+    sprite: {fileID: 21300000, guid: e6a7c603e72b55345a8fb13b8775d050, type: 3}
   - name: Rock
     sprite: {fileID: 21300000, guid: 4e0d48a49ccb4914b8e07aea6096a4ed, type: 3}
   - name: Sheep
@@ -14258,8 +14274,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: be093700906ae6f4985dd38806635be5, type: 3}
   - name: The Hand
     sprite: {fileID: 21300000, guid: 0ef838b8a7b70f249a69e7a4779bbf70, type: 3}
-  - name: Togaru
+  - name: Togarus
     sprite: {fileID: 21300000, guid: 7d55234914694c143a3f2d6c16c3f5f2, type: 3}
+  - name: Ulf
+    sprite: {fileID: 21300000, guid: 326a8e2e25dd4084ea16d0d95d81c32a, type: 3}
   - name: Victoria
     sprite: {fileID: 21300000, guid: fb10b2c4e0dfd0848a8bf433266af5c8, type: 3}
 --- !u!1 &250211646
