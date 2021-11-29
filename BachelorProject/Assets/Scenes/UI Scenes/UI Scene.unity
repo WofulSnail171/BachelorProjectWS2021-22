@@ -14168,6 +14168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 249821543}
   - component: {fileID: 249821542}
+  - component: {fileID: 249821544}
   m_Layer: 0
   m_Name: UIEnablerManger
   m_TagString: Untagged
@@ -14204,6 +14205,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &249821544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249821541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7090fd01c3869849a2927fc645b3852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WorkAroundList:
+  - name: Peter
+    sprite: {fileID: 21300000, guid: 2235664c273539b41a94be5d53783335, type: 3}
+  - name: Anti-Phil
+    sprite: {fileID: 21300000, guid: dd76f89bf3336094db18048b4c8c4af6, type: 3}
+  - name: Axel
+    sprite: {fileID: 21300000, guid: bab61212657c4b44ca4eb06954223e4e, type: 3}
+  - name: Brooke
+    sprite: {fileID: 21300000, guid: 914e5abd81f9a25478208b87ddc4a2d2, type: 3}
+  - name: Hardy
+    sprite: {fileID: 21300000, guid: 78a3f3ae1b1899c43a39aa0316fb0a05, type: 3}
+  - name: Hastur
+    sprite: {fileID: 21300000, guid: 3377b8d148c8fb543aff811788c3529b, type: 3}
+  - name: Helia
+    sprite: {fileID: 21300000, guid: 0251be618938b214aa931fb4d1d66e06, type: 3}
+  - name: Jasper
+    sprite: {fileID: 21300000, guid: 6c65cd9a2b93ea0438d4d659d727b026, type: 3}
+  - name: Jimmy
+    sprite: {fileID: 21300000, guid: dc77038142a079e488430ab4e96c7cf4, type: 3}
+  - name: Kurt
+    sprite: {fileID: 21300000, guid: 597422dcbea064449b7055d6aa271548, type: 3}
+  - name: Ludolf
+    sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
+  - name: Mocka
+    sprite: {fileID: 21300000, guid: 41d9f7939055db14c8903c5aff93f812, type: 3}
+  - name: Nephila
+    sprite: {fileID: 21300000, guid: c31788832a3bb6d4a9b8339829708c1e, type: 3}
+  - name: Noir
+    sprite: {fileID: 21300000, guid: 5dcd759d8cb345449808dc3d54749550, type: 3}
+  - name: Nova
+    sprite: {fileID: 21300000, guid: 063a7b3536113f74cb04c33eba7aa446, type: 3}
+  - name: Ouy
+    sprite: {fileID: 21300000, guid: 3b74e5cbe1c037e4a87ee5c115a68eef, type: 3}
+  - name: Rock
+    sprite: {fileID: 21300000, guid: 4e0d48a49ccb4914b8e07aea6096a4ed, type: 3}
+  - name: Sheep
+    sprite: {fileID: 21300000, guid: 07303a6abff00bc4d9d90806939ab7c8, type: 3}
+  - name: Sir Mauz
+    sprite: {fileID: 21300000, guid: be093700906ae6f4985dd38806635be5, type: 3}
+  - name: The Hand
+    sprite: {fileID: 21300000, guid: 0ef838b8a7b70f249a69e7a4779bbf70, type: 3}
+  - name: Togaru
+    sprite: {fileID: 21300000, guid: 7d55234914694c143a3f2d6c16c3f5f2, type: 3}
+  - name: Victoria
+    sprite: {fileID: 21300000, guid: fb10b2c4e0dfd0848a8bf433266af5c8, type: 3}
 --- !u!1 &250211646
 GameObject:
   m_ObjectHideFlags: 0
