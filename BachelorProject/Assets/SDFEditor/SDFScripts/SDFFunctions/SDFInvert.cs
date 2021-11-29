@@ -20,10 +20,17 @@ public class SDFInvert : SDFFunction
     }
 
     private void OnValidate() {
+        if (this.input != null && this.sdfName == this.input.sdfName) {
+            Debug.LogWarning("invalid node in Input");
+            this.input = null;
+            return;
+        }
+        
         this.Input = this.input;
     }
 
     private void Awake() {
+        
         this.nodeType = NodeType.Invert;
         
         this.index = (uint)Random.Range(0, 1000);

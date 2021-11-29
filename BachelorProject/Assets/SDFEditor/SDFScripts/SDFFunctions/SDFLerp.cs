@@ -42,6 +42,18 @@ public class SDFLerp : SDFFunction
     }
 
     private void OnValidate() {
+        if (this.inputA != null && this.sdfName == this.inputA.sdfName) {
+            Debug.LogWarning("invalid node in Input A");
+            this.inputA = null;
+            return;
+        }
+
+        if (this.inputB != null && this.sdfName == this.inputB.sdfName) {
+            Debug.LogWarning("invalid node in Input B");
+            this.inputB = null;
+            return;
+        }
+
         this.InputA = this.inputA;
         this.InputB = this.inputB;
         this.T = this.t;
