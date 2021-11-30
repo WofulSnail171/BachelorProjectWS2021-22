@@ -39,7 +39,7 @@ public abstract class SDFNode : ScriptableObject
 
         if (input is SDFFunction) {
             SDFFunction i = (SDFFunction) input;
-            i.GetActiveNodes(nodes, input);
+            i.GetActiveNodes(nodes);
         }
         else {
             bool d;
