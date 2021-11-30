@@ -4,16 +4,8 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] lerp979_t ("lerp979_t", Float) = 0
-                
-                [HideInInspector] circle125_position ("circle125_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle125_radius ("circle125_radius", Float) = 0.2
-                
-                [HideInInspector] rect121_position ("rect121_position", Vector) = (0,0,0,0)
-                [HideInInspector] rect121_box ("rect121_box", Vector) = (0,0,0,0)
-                [HideInInspector] rect121_scale ("rect121_scale", Float) = 1
-                [HideInInspector] rect121_roundness ("rect121_roundness", Vector) = (0,0,0,0)
-                [HideInInspector] rect121_rotation ("rect121_rotation", Float) = 0
+                [HideInInspector] tex434_position ("tex434_position", Vector) = (0,0,0,0)
+                [HideInInspector] tex434_tex ("tex434_tex", 2D) = "white"{}
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -58,21 +50,17 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float lerp979_t;
-        float2 circle125_position;
-        float circle125_radius;
-        float2 rect121_position;
-        float2 rect121_box;
-        float rect121_scale;
-        float4 rect121_roundness;
-        float rect121_rotation;
+        float2 tex434_position;
+        sampler2D tex434_tex;
+        float tex434_scale;
+        float tex434_rotation;
         
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, rect121_position, rect121_box, rect121_scale, rect121_roundness, rect121_rotation, circle125_position, circle125_radius, lerp979_t);
+            float sdfOut = sdf(i.uv, tex434_position, tex434_tex, tex434_scale, tex434_rotation);
             
             float4 col = smoothstep(0, 0.01, sdfOut);
             return col;

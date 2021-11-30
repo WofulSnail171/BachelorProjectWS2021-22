@@ -11,20 +11,10 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 rect121_position, float2 rect121_box, float rect121_scale, float4 rect121_roundness, float rect121_rotation, float2 circle125_position, float circle125_radius, float lerp979_t){ 
-        
-        float2 t_rect121 = transform(rect121_position, rect121_rotation, rect121_scale, uv);
-        rect121_roundness.xy = (t_rect121.x > 0.0) ? rect121_roundness.xy : rect121_roundness.zw;
-        rect121_roundness.x  = (t_rect121.y  > 0.0) ? rect121_roundness.x  : rect121_roundness.y;
-        float2 q_rect121 = abs(t_rect121) - rect121_box + rect121_roundness.x;
-        float rect121_out = (min(max(q_rect121.x,q_rect121.y),0.0) + length(max(q_rect121,0.0)) - rect121_roundness.x) * rect121_scale;
-        float circle125_out = length(circle125_position- uv)- circle125_radius;
+    float sdf (float2 uv, float2 tex434_position, sampler2D tex434_tex, float tex434_scale, float tex434_rotation){ 
+        float tex434_out = tex2D(tex434_tex, transform(tex434_position, tex434_rotation, tex434_scale, uv) + tex434_position + float2(0.5, 0.5)).r;
 
-        float comb0_out = min(circle125_out,rect121_out);
-
-        float lerp979_out = lerp(comb0_out,circle125_out, lerp979_t);
-
-        return lerp979_out;
+        return tex434_out;
     }
         
 #endif

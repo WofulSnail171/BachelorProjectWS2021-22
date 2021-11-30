@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07fef9d6fb277be4081f81da0e574a28, type: 3}
   m_Name: SDF Bezier
   m_EditorClassIdentifier: 
-  o: bezier675_out
-  sdfName: bezier675
+  o: bezier578_out
+  sdfName: bezier578
   variables:
-  - bezier675_position
-  - bezier675_a
-  - bezier675_b
-  - bezier675_c
-  - bezier675_scale
-  - bezier675_rotation
+  - bezier578_position
+  - bezier578_a
+  - bezier578_b
+  - bezier578_c
+  - bezier578_scale
+  - bezier578_rotation
+  - bezier578_roundness
   types:
   - float2
   - float2
@@ -28,11 +29,13 @@ MonoBehaviour:
   - float2
   - float
   - float
+  - float
   nodes: []
   nodeType: 4
-  position: {x: -0.16, y: -0.42}
-  scale: 1.26
-  rotation: -26.6
-  a: {x: 0.18, y: 0.27}
-  b: {x: 0.43, y: 0.25}
-  c: {x: 0, y: 0}
+  position: {x: 0, y: 0}
+  scale: 0.48
+  rotation: 0
+  a: {x: 0.31, y: 0}
+  b: {x: 0, y: 0.43}
+  c: {x: -0.27, y: 0}
+  roundness: 6.15

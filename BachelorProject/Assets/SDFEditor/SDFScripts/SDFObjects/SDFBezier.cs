@@ -20,6 +20,9 @@ public class SDFBezier : SDFObject
     
     [SerializeField] private Vector2 c;
     private Vector2 _c;
+    
+    [SerializeField] private float roundness;
+    private float _roundness = 1;
 
     public Vector2 A {
         get => this._a;
@@ -65,6 +68,14 @@ public class SDFBezier : SDFObject
             this.isDirty = true;
         }
     }
+    public float Roundness {
+        get => this._roundness;
+        set {
+            if (this._roundness == value) return;
+            this._roundness = value;
+            this.isDirty = true;
+        }
+    }
     
     void OnValidate() {
         this.Position = this.position;
@@ -73,6 +84,7 @@ public class SDFBezier : SDFObject
         this.A = this.a;
         this.B = this.b;
         this.C = this.c;
+        this.Roundness = this.roundness;
         if (this.isDirty) {
             this.OnValueChange?.Invoke(this);
             this.isDirty = false;
@@ -104,12 +116,15 @@ public class SDFBezier : SDFObject
         this.types.Add("float");
         this.variables.Add(this.sdfName + "_rotation");       
         this.types.Add("float");
+        this.variables.Add(this.sdfName + "_roundness");     
+        this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
         
         string hlslString = @"
         float2 t_" + this.sdfName + " = transform(" + this.variables[0] + ", " + this.variables[5] + ", " + this.variables[4] + @", uv);
+
         float2 A_" + this.sdfName +" = " + this.variables[2] + " - " + this.variables[1] + @";
         float2 B_" + this.sdfName + " = " + this.variables[1] + " - 2.0 * " + this.variables[2] + " + " + this.variables[3] + @";
         float2 C_" + this.sdfName + " =  A_" + this.sdfName + @" * 2.0;
@@ -142,7 +157,7 @@ public class SDFBezier : SDFObject
             res_" + this.sdfName + " = min( dot2(D_" + this.sdfName + " + (C_" + this.sdfName + " + B_" + this.sdfName + " * t_" + this.sdfName + ".x) * t_" + this.sdfName + @".x),
                 dot2(D_" + this.sdfName + " + (C_" + this.sdfName + " + B_" + this.sdfName + " * t_" + this.sdfName + ".y) * t_" + this.sdfName + @".y) );
         }
-        float " + this.o + " = sqrt(res_" + this.sdfName + ")* " + this.variables[4] + ";";
+        float " + this.o + " = (sqrt(res_" + this.sdfName + ") - (0.01 * " + this.variables[6]+ ")) * " + this.variables[4] + ";";
     
         return hlslString;
     }

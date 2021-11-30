@@ -43,6 +43,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - tex434_tex:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - tex829_tex:
         m_Texture: {fileID: 2800000, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -52,6 +56,9 @@ Material:
     - _EnableExternalAlpha: 0
     - _SrcBlend: 1
     - _ZTest: 0
+    - bezier578_rotation: 0
+    - bezier578_roundness: 6.15
+    - bezier578_scale: 0.48
     - bezier675_rotation: -26.6
     - bezier675_scale: 1.26
     - circle114_radius: 0.21
@@ -107,6 +114,10 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - bezier578_a: {r: 0.31, g: 0, b: 0, a: 0}
+    - bezier578_b: {r: 0, g: 0.43, b: 0, a: 0}
+    - bezier578_c: {r: -0.27, g: 0, b: 0, a: 0}
+    - bezier578_position: {r: 0, g: 0, b: 0, a: 0}
     - bezier675_a: {r: 0.18, g: 0.27, b: 0, a: 0}
     - bezier675_b: {r: 0.43, g: 0.25, b: 0, a: 0}
     - bezier675_c: {r: 0, g: 0, b: 0, a: 0}
@@ -175,6 +186,7 @@ Material:
     - rect983_position: {r: 0.25, g: 0, b: 0, a: 0}
     - rect983_roundness: {r: 0, g: 0, b: 0.1, a: 0.1}
     - tex394_position: {r: 0, g: 0, b: 0, a: 0}
+    - tex434_position: {r: -2.36, g: 3.96, b: 0, a: 0}
     - tex829_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle106_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle106_b: {r: -0.4, g: 0.4, b: 0, a: 0}

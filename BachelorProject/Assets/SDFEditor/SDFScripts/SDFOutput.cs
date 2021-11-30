@@ -181,6 +181,7 @@ public class SDFOutput : SDFNode{
                 [HideInInspector] " + n.sdfName + @"_c (""" + n.sdfName + @"_c"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
                 [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Float) = 1
                 ";
 
                     break;
@@ -460,12 +461,15 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
                 this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
                 this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
+                this.sdfMaterial.SetFloat(n.sdfName + "_roundness" , n.Roundness);
 
                 break;
             }
             case NodeType.Texture: {
                 var n = (SDFTexture) node;
                 this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
                 this.sdfMaterial.SetTexture(n.sdfName + "_tex" , n.SdfTexture);
                 
                 break;

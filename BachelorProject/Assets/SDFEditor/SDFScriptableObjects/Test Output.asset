@@ -19,6 +19,6 @@ MonoBehaviour:
   nodes: []
   nodeType: 0
   shaderName: test
-  input: {fileID: 11400000, guid: 7827015bb3f143144ac101d0b0a73d39, type: 2}
+  input: {fileID: 11400000, guid: aa3ad07766d9ff74bb5c7ddef62ee2a5, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
