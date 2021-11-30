@@ -71,39 +71,11 @@ public class SDFCombine : SDFFunction {
         return hlslString;
     }
 
-    public override void GetActiveNodes(List<SDFNode> nodes) {
-        nodes.Add(this);
+    public override void GetActiveNodes(List<SDFNode> activeNodes) {
+        activeNodes.Add(this);
         
-        if (this.inputA is SDFFunction) {
-            SDFFunction i = (SDFFunction) this.inputA;
-            i.GetActiveNodes(nodes);
-        }
-        else {
-            bool d;
-            foreach (SDFNode s in nodes) {
-                if (s.sdfName == this.inputA.sdfName) {
-                    Debug.Log("found double in inputA");
-                    return;
-                }
-            }
-            nodes.Add(this.inputA);
-            Debug.Log("found no double in inputA");
-        }
+        this.GetActiveNodes(activeNodes, this.InputA);
+        this.GetActiveNodes(activeNodes, this.InputB);
         
-        if (this.inputB is SDFFunction) {
-            SDFFunction i = (SDFFunction) this.inputB;
-            i.GetActiveNodes(nodes);
-        }
-        else {
-            bool d;
-            foreach (SDFNode s in nodes) {
-                if (s.sdfName == this.inputB.sdfName) {
-                    Debug.Log("found double in inputB");
-                    return;
-                }
-            }
-            nodes.Add(this.inputB);
-            Debug.Log("found no double in inputB");
-        }
     }
 }

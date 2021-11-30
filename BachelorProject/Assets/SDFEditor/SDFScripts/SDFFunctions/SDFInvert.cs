@@ -47,23 +47,10 @@ public class SDFInvert : SDFFunction
         return hlslString;
     }
     
-    public override void GetActiveNodes(List<SDFNode> nodes) {
-        nodes.Add(this);
+    public override void GetActiveNodes(List<SDFNode> activeNodes) {
+        activeNodes.Add(this);
         
-        if (this.input is SDFFunction) {
-            SDFFunction i = (SDFFunction) this.input;
-            i.GetActiveNodes(nodes);
-        }
-        else {
-            bool d;
-            foreach (SDFNode s in nodes) {
-                if (s.sdfName == this.input.sdfName) {
-                    Debug.Log("found double in input");
-                    return;
-                }
-            }
-            nodes.Add(this.input);
-            Debug.Log("found no double in input");
-        }
+        this.GetActiveNodes(activeNodes, this.Input);
+
     }
 }

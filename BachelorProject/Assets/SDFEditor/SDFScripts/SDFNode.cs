@@ -34,4 +34,24 @@ public abstract class SDFNode : ScriptableObject
     [HideInInspector]public NodeType nodeType;
 
     public abstract string GenerateHlslFunction();
+
+    public void GetActiveNodes(List<SDFNode> nodes, SDFNode input) {
+
+        if (input is SDFFunction) {
+            SDFFunction i = (SDFFunction) input;
+            i.GetActiveNodes(nodes, input);
+        }
+        else {
+            bool d;
+            foreach (SDFNode s in nodes) {
+                if (s.sdfName == input.sdfName) {
+                    Debug.Log("found double in inputA");
+                    return;
+                }
+            }
+
+            nodes.Add(input);
+            Debug.Log("found no double in inputA");
+        }
+    }
 }
