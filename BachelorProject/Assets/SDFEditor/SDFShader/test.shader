@@ -7,12 +7,13 @@ Shader "SDF/test"
                 [HideInInspector] lerp979_t ("lerp979_t", Float) = 0
                 
                 [HideInInspector] circle125_position ("circle125_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle125_radius ("circle125_radius", Float) = 0
+                [HideInInspector] circle125_radius ("circle125_radius", Float) = 0.2
                 
-                [HideInInspector] rect766_position ("rect766_position", Vector) = (0,0,0,0)
-                [HideInInspector] rect766_box ("rect766_box", Vector) = (0,0,0,0)
-                [HideInInspector] rect766_scale ("rect766_scale", Float) = 0
-                [HideInInspector] rect766_roundness ("rect766_roundness", Vector) = (0,0,0,0)
+                [HideInInspector] rect121_position ("rect121_position", Vector) = (0,0,0,0)
+                [HideInInspector] rect121_box ("rect121_box", Vector) = (0,0,0,0)
+                [HideInInspector] rect121_scale ("rect121_scale", Float) = 1
+                [HideInInspector] rect121_roundness ("rect121_roundness", Vector) = (0,0,0,0)
+                [HideInInspector] rect121_rotation ("rect121_rotation", Float) = 0
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -60,17 +61,18 @@ Shader "SDF/test"
         float lerp979_t;
         float2 circle125_position;
         float circle125_radius;
-        float2 rect766_position;
-        float2 rect766_box;
-        float rect766_scale;
-        float4 rect766_roundness;
+        float2 rect121_position;
+        float2 rect121_box;
+        float rect121_scale;
+        float4 rect121_roundness;
+        float rect121_rotation;
         
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, rect766_position, rect766_box, rect766_scale, rect766_roundness, circle125_position, circle125_radius, lerp979_t);
+            float sdfOut = sdf(i.uv, rect121_position, rect121_box, rect121_scale, rect121_roundness, rect121_rotation, circle125_position, circle125_radius, lerp979_t);
             
             float4 col = smoothstep(0, 0.01, sdfOut);
             return col;

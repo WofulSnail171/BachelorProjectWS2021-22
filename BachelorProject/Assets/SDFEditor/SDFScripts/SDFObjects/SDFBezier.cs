@@ -6,6 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Bezier")]
 public class SDFBezier : SDFObject
 {
+    [SerializeField] private float scale;
+    private float _scale = 1;
+    
+    [SerializeField] private float rotation;
+    private float _rotation;
+    
     [SerializeField] private Vector2 a;
     private Vector2 _a;
     
@@ -42,8 +48,28 @@ public class SDFBezier : SDFObject
         }
     }
     
+    public float Scale {
+        get => this._scale;
+        set {
+            if (this._scale == value) return;
+            this._scale = value;
+            this.isDirty = true;
+        }
+    }
+    
+    public float Rotation {
+        get => this._rotation;
+        set {
+            if (this._rotation == value) return;
+            this._rotation = value;
+            this.isDirty = true;
+        }
+    }
+    
     void OnValidate() {
         this.Position = this.position;
+        this.Scale = this.scale;
+        this.Rotation = this.rotation;
         this.A = this.a;
         this.B = this.b;
         this.C = this.c;
@@ -74,16 +100,20 @@ public class SDFBezier : SDFObject
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_c");
         this.types.Add("float2");
+        this.variables.Add(this.sdfName + "_scale");          
+        this.types.Add("float");
+        this.variables.Add(this.sdfName + "_rotation");       
+        this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
         
         string hlslString = @"
-        float2 pos_" + this.sdfName + " = uv - " + this.variables[0] + @";
+        float2 t_" + this.sdfName + " = transform(" + this.variables[0] + ", " + this.variables[5] + ", " + this.variables[4] + @", uv);
         float2 A_" + this.sdfName +" = " + this.variables[2] + " - " + this.variables[1] + @";
         float2 B_" + this.sdfName + " = " + this.variables[1] + " - 2.0 * " + this.variables[2] + " + " + this.variables[3] + @";
         float2 C_" + this.sdfName + " =  A_" + this.sdfName + @" * 2.0;
-        float2 D_" + this.sdfName + " =  " + this.variables[1] + @" - pos_" + this.sdfName + @";
+        float2 D_" + this.sdfName + " =  " + this.variables[1] + @" - t_" + this.sdfName + @";
         float kk_" + this.sdfName + " = 1.0/dot(B_" + this.sdfName + ", B_" + this.sdfName + @");
         float kx_" + this.sdfName + " = kk_" + this.sdfName + " * dot(A_" + this.sdfName + @", B_" + this.sdfName + @");
         float ky_" + this.sdfName + " = kk_" + this.sdfName + " * (2.0*dot(A_" + this.sdfName + ", A_" + this.sdfName + @")+dot(D_" + this.sdfName + ", B_" + this.sdfName + @")) / 3.0;
@@ -112,7 +142,7 @@ public class SDFBezier : SDFObject
             res_" + this.sdfName + " = min( dot2(D_" + this.sdfName + " + (C_" + this.sdfName + " + B_" + this.sdfName + " * t_" + this.sdfName + ".x) * t_" + this.sdfName + @".x),
                 dot2(D_" + this.sdfName + " + (C_" + this.sdfName + " + B_" + this.sdfName + " * t_" + this.sdfName + ".y) * t_" + this.sdfName + @".y) );
         }
-        float " + this.o + " = sqrt(res_" + this.sdfName + ");";
+        float " + this.o + " = sqrt(res_" + this.sdfName + ")* " + this.variables[4] + ";";
     
         return hlslString;
     }

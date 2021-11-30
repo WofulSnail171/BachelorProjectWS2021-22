@@ -4,15 +4,23 @@
     
     float dot2( in float2 v ) { return dot(v,v); }
 
-    float sdf (float2 uv, float2 rect766_position, float2 rect766_box, float rect766_scale, float4 rect766_roundness, float2 circle125_position, float circle125_radius, float lerp979_t){ 
+    float2 transform (float2 p, float r, float s, float2 uv){
+        float2x2 rot = {cos(r), -sin(r),
+                      sin(r), cos(r)};
+        float2 t = mul(rot, (uv-p) * 1/ s);
+        return t;
+    }
+
+    float sdf (float2 uv, float2 rect121_position, float2 rect121_box, float rect121_scale, float4 rect121_roundness, float rect121_rotation, float2 circle125_position, float circle125_radius, float lerp979_t){ 
         
-        rect766_roundness.xy = (rect766_position.x - uv.x > 0.0) ? rect766_roundness.xy : rect766_roundness.zw;
-        rect766_roundness.x  = (rect766_position.y - uv.y > 0.0) ? rect766_roundness.x  : rect766_roundness.y;
-        float2 q_rect766 = abs((rect766_position - uv)*1/rect766_scale) - rect766_box + rect766_roundness.x;
-        float rect766_out = (min(max(q_rect766.x,q_rect766.y),0.0) + length(max(q_rect766,0.0)) - rect766_roundness.x) * rect766_scale;
+        float2 t_rect121 = transform(rect121_position, rect121_rotation, rect121_scale, uv);
+        rect121_roundness.xy = (t_rect121.x > 0.0) ? rect121_roundness.xy : rect121_roundness.zw;
+        rect121_roundness.x  = (t_rect121.y  > 0.0) ? rect121_roundness.x  : rect121_roundness.y;
+        float2 q_rect121 = abs(t_rect121) - rect121_box + rect121_roundness.x;
+        float rect121_out = (min(max(q_rect121.x,q_rect121.y),0.0) + length(max(q_rect121,0.0)) - rect121_roundness.x) * rect121_scale;
         float circle125_out = length(circle125_position- uv)- circle125_radius;
 
-        float comb0_out = min(circle125_out,rect766_out);
+        float comb0_out = min(circle125_out,rect121_out);
 
         float lerp979_out = lerp(comb0_out,circle125_out, lerp979_t);
 

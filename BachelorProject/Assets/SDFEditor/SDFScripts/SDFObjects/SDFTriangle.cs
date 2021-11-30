@@ -6,6 +6,13 @@ using Random = UnityEngine.Random;
 
 [CreateAssetMenu(menuName = "SDF/Triangle")]
 public class SDFTriangle : SDFObject {
+    
+    [SerializeField] private float rotation;
+    private float _rotation;
+    
+    [SerializeField] private float scale;
+    private float _scale;
+    
     [SerializeField] private Vector2 a;
     private Vector2 _a;
     
@@ -15,8 +22,6 @@ public class SDFTriangle : SDFObject {
     [SerializeField] private Vector2 c;
     private Vector2 _c;
     
-    [SerializeField] private float scale;
-    private float _scale;
     
     public Vector2 A {
         get => this._a;
@@ -53,6 +58,15 @@ public class SDFTriangle : SDFObject {
             this.isDirty = true;
         }
     }
+    
+    public float Rotation {
+        get => this._rotation;
+        set {
+            if (this._rotation == value) return;
+            this._rotation = value;
+            this.isDirty = true;
+        }
+    }
 
     private void OnValidate() {
         this.Position = this.position;
@@ -60,6 +74,7 @@ public class SDFTriangle : SDFObject {
         this.B = this.b;
         this.C = this.c;
         this.Scale = this.scale;
+        this.Rotation = this.rotation;
         if (this.isDirty) {
             this.OnValueChange?.Invoke(this);
             this.isDirty = false;
@@ -89,6 +104,8 @@ public class SDFTriangle : SDFObject {
         this.types.Add("float2");
         this.variables.Add(this.sdfName + "_scale");
         this.types.Add("float");
+        this.variables.Add(this.sdfName + "_rotation");
+        this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
@@ -98,11 +115,11 @@ public class SDFTriangle : SDFObject {
     float2 e1_" + this.sdfName + " = " + this.variables[3] + " - " + this.variables[2] + @";
     float2 e2_" + this.sdfName + " = " + this.variables[1] + " - " + this.variables[3] + @";
     
-    float2 uv_" + this.sdfName + " = 1/" + this.variables[4] + " * uv - " + this.variables[0] + @";
+    float2 t_" + this.sdfName + " = transform(" + this.variables[0] + ", " + this.variables[5] + ", " + this.variables[4] + @", uv);
     
-    float2 v0_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[1] + @";
-    float2 v1_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[2] + @";
-    float2 v2_" + this.sdfName + " = uv_" + this.sdfName + " - " + this.variables[3] + @";
+    float2 v0_" + this.sdfName + " = t_" + this.sdfName + " - " + this.variables[1] + @";
+    float2 v1_" + this.sdfName + " = t_" + this.sdfName + " - " + this.variables[2] + @";
+    float2 v2_" + this.sdfName + " = t_" + this.sdfName + " - " + this.variables[3] + @";
     
     float2 pq0_" + this.sdfName + " = v0_" + this.sdfName + " - e0_" + this.sdfName + " * clamp( dot(v0_" + this.sdfName + ",e0_" + this.sdfName + ")/dot(e0_" + this.sdfName + ",e0_" + this.sdfName + @"), 0.0, 1.0 );
     float2 pq1_" + this.sdfName + " = v1_" + this.sdfName + " - e1_" + this.sdfName + " * clamp( dot(v1_" + this.sdfName + ",e1_" + this.sdfName + ")/dot(e1_" + this.sdfName + ",e1_" + this.sdfName + @"), 0.0, 1.0 );

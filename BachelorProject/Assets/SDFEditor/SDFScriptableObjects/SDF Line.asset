@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c133afe84d8de07448db7e615c46a6ff, type: 3}
+  m_Name: SDF Line
+  m_EditorClassIdentifier: 
+  o: line804_out
+  sdfName: line804
+  variables:
+  - line804_position
+  - line804_a
+  - line804_b
+  - line804_roundness
+  - line804_scale
+  - line804_rotation
+  types:
+  - float2
+  - float2
+  - float2
+  - float
+  - float
+  - float
+  nodes: []
+  nodeType: 3
+  position: {x: 0.13, y: -0.15}
+  a: {x: 0.27, y: -0.18}
+  b: {x: -0.24, y: 0.23}
+  roundness: 3
+  scale: 0.36
+  rotation: -3.62

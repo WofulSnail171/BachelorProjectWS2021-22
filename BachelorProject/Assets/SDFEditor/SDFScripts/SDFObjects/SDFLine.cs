@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Line")]
 public class SDFLine : SDFObject {
+    [SerializeField] private float scale;
+    private float _scale = 1;
+    
+    [SerializeField] private float rotation;
+    private float _rotation;
+    
     [SerializeField] private Vector2 a;
     private Vector2 _a;
     
@@ -10,11 +16,7 @@ public class SDFLine : SDFObject {
     private Vector2 _b;
     
     [SerializeField] private float roundness;
-    private float _roundness;
-    
-    [SerializeField] private float scale;
-    private float _scale;
-
+    private float _roundness = 1;
     
     public Vector2 A {
         get => this._a;
@@ -52,12 +54,22 @@ public class SDFLine : SDFObject {
         }
     }
     
+    public float Rotation {
+        get => this._rotation;
+        set {
+            if (this._rotation == value) return;
+            this._rotation = value;
+            this.isDirty = true;
+        }
+    }
+    
     private void OnValidate() {
         this.Position = this.position;
         this.A = this.a;
         this.B = this.b;
         this.Roundness = this.roundness;
         this.Scale = this.scale;
+        this.Rotation = this.rotation;
         if (this.isDirty) {
             this.OnValueChange?.Invoke(this);
             this.isDirty = false;
@@ -74,25 +86,28 @@ public class SDFLine : SDFObject {
 
         Debug.Log("changed index from line to: " + this.index);
 
-        this.variables.Add(this.sdfName + "_position");
+        this.variables.Add(this.sdfName + "_position");       //0
         this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_a");
+        this.variables.Add(this.sdfName + "_a");              //1
         this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_b");
+        this.variables.Add(this.sdfName + "_b");              //2
         this.types.Add("float2");
-        this.variables.Add(this.sdfName + "_roundness");
+        this.variables.Add(this.sdfName + "_roundness");      //3
         this.types.Add("float");
-        this.variables.Add(this.sdfName + "_scale");
+        this.variables.Add(this.sdfName + "_scale");          //4
+        this.types.Add("float");
+        this.variables.Add(this.sdfName + "_rotation");       //5
         this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
         
         string hlslString = @"
-        float2 pa_" + this.sdfName + " = uv * 1/ " + this.variables[4] + " - " + this.variables[0] + " - " + this.variables[1] + @";
+        
+        float2 pa_" + this.sdfName + " = transform("+ this.variables[0] + ", "+ this.variables[5] + ", "+ this.variables[4] + ", uv) - " + this.variables[1] + @";
         float2 ba_" + this.sdfName + " = " + this.variables[2] + " - " + this.variables[1] + @";
         float h_" + this.sdfName + " = clamp(dot(pa_" + this.sdfName + ", ba_" + this.sdfName + ")/dot(ba_" + this.sdfName + ", ba_" + this.sdfName + @"), 0, 1);
-        float "+ this.o + " = (length(pa_" + this.sdfName + " - ba_" + this.sdfName + "*h_" + this.sdfName + ") - " + this.variables[3]+ ") * " + this.variables[4] +";";
+        float "+ this.o + " = (length(pa_" + this.sdfName + " - ba_" + this.sdfName + "*h_" + this.sdfName + ") - (0.01 * " + this.variables[3]+ ")) * " + this.variables[4] +";";
         
         return hlslString;
     }

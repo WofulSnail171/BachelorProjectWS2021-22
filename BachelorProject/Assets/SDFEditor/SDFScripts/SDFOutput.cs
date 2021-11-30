@@ -132,7 +132,7 @@ public class SDFOutput : SDFNode{
                     var n = (SDFCircle) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
-                [HideInInspector] " + n.sdfName + @"_radius (""" + n.sdfName + @"_radius"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_radius (""" + n.sdfName + @"_radius"", Float) = 0.2
                 ";
                     break;
                 }
@@ -141,8 +141,9 @@ public class SDFOutput : SDFNode{
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_box (""" + n.sdfName + @"_box"", Vector) = (0,0,0,0)
-                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
                 [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
                 ";
                     break;
                 }
@@ -153,7 +154,8 @@ public class SDFOutput : SDFNode{
                 [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_c (""" + n.sdfName + @"_c"", Vector) = (0,0,0,0)
-                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
                 ";
                     break;
                 }
@@ -163,8 +165,9 @@ public class SDFOutput : SDFNode{
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
-                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 0
-                [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_roundness (""" + n.sdfName + @"_roundness"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
                 ";
                     break;
                 }
@@ -176,6 +179,8 @@ public class SDFOutput : SDFNode{
                 [HideInInspector] " + n.sdfName + @"_a (""" + n.sdfName + @"_a"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_b (""" + n.sdfName + @"_b"", Vector) = (0,0,0,0)
                 [HideInInspector] " + n.sdfName + @"_c (""" + n.sdfName + @"_c"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
                 ";
 
                     break;
@@ -362,6 +367,13 @@ public class SDFOutput : SDFNode{
     
     float dot2( in float2 v ) { return dot(v,v); }
 
+    float2 transform (float2 p, float r, float s, float2 uv){
+        float2x2 rot = {cos(r), -sin(r),
+                      sin(r), cos(r)};
+        float2 t = mul(rot, (uv-p) * 1/ s);
+        return t;
+    }
+
     float sdf (float2 uv, " + variables + @"){ 
         " + sdfFunction + @"
 
@@ -413,6 +425,7 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector(n.sdfName + "_box" , n.Box);
                 this.sdfMaterial.SetFloat(n.sdfName + "_scale" , n.Scale);
                 this.sdfMaterial.SetVector(n.sdfName + "_roundness" , n.Roundness);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
 
                 break;
             }
@@ -423,6 +436,7 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
                 this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
 
                 break;
             }
@@ -433,6 +447,7 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetFloat(n.sdfName + "_roundness" , n.Roundness);
                 this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
                 
                 break;
             }
@@ -443,7 +458,9 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector(n.sdfName + "_a" , n.A);
                 this.sdfMaterial.SetVector(n.sdfName + "_b" , n.B);
                 this.sdfMaterial.SetVector(n.sdfName + "_c" , n.C);
-                
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
+
                 break;
             }
             case NodeType.Texture: {

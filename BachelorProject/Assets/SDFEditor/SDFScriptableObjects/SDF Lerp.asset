@@ -20,6 +20,6 @@ MonoBehaviour:
   - float
   nodes: []
   nodeType: 9
-  inputA: {fileID: 0}
-  inputB: {fileID: 0}
-  t: 0
+  inputA: {fileID: 11400000, guid: 42bbe8d41ce5b7b43bc5c946d062ff3f, type: 2}
+  inputB: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
+  t: -9.14

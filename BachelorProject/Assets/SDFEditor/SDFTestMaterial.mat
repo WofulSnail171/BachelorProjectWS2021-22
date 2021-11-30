@@ -52,8 +52,10 @@ Material:
     - _EnableExternalAlpha: 0
     - _SrcBlend: 1
     - _ZTest: 0
+    - bezier675_rotation: -26.6
+    - bezier675_scale: 1.26
     - circle114_radius: 0.21
-    - circle125_radius: 0.33
+    - circle125_radius: 0.12
     - circle167_radius: 0.2
     - circle283_radius: 0.25
     - circle429_radius: 0.13
@@ -73,12 +75,18 @@ Material:
     - lerp813_t: -5.54
     - lerp929_t: -4.33
     - lerp96_t: 0.1
+    - lerp979_t: -9.14
     - line330_roundness: 0.16
     - line330_scale: 1
     - line358_roundness: 0.19
     - line358_scale: 0.5
+    - line804_rotation: -3.62
+    - line804_roundness: 3
+    - line804_scale: 0.36
     - line962_roundness: 0.05
     - line962_scale: 0.96
+    - rect121_rotation: 39.44
+    - rect121_scale: 0.59
     - rect271_scale: 1
     - rect2_scale: 1
     - rect494_scale: 1.45
@@ -86,17 +94,23 @@ Material:
     - rect530_scale: 1.45
     - rect550_scale: 2
     - rect761_scale: 1
-    - rect766_scale: 1.45
+    - rect766_scale: 0.63
     - rect853_scale: 1
     - rect85_scale: 1
     - rect983_scale: 2
     - sblend571_k: 0.29
     - triangle106_scale: 1
+    - triangle274_rotation: 2.79
+    - triangle274_scale: 2.35
     - triangle826_scale: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - bezier675_a: {r: 0.18, g: 0.27, b: 0, a: 0}
+    - bezier675_b: {r: 0.43, g: 0.25, b: 0, a: 0}
+    - bezier675_c: {r: 0, g: 0, b: 0, a: 0}
+    - bezier675_position: {r: -0.16, g: -0.42, b: 0, a: 0}
     - bezier796_a: {r: 0.11, g: 0.01, b: 0, a: 0}
     - bezier796_b: {r: 0, g: -0.16, b: 0, a: 0}
     - bezier796_c: {r: -0.25, g: -0.24, b: 0, a: 0}
@@ -118,9 +132,15 @@ Material:
     - line358_a: {r: 0.27, g: 0.04, b: 0, a: 0}
     - line358_b: {r: 0.58, g: -0.39, b: 0, a: 0}
     - line358_position: {r: -0.45, g: 0.21, b: 0, a: 0}
+    - line804_a: {r: 0.27, g: -0.18, b: 0, a: 0}
+    - line804_b: {r: -0.24, g: 0.23, b: 0, a: 0}
+    - line804_position: {r: 0.13, g: -0.15, b: 0, a: 0}
     - line962_a: {r: 0.44, g: -0.24, b: 0, a: 0}
     - line962_b: {r: -0.14, g: -0.01, b: 0, a: 0}
     - line962_position: {r: -0.12, g: 0.15, b: 0, a: 0}
+    - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
+    - rect121_position: {r: 0.02, g: 0, b: 0, a: 0}
+    - rect121_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
     - rect271_box: {r: 0.5, g: 0.2, b: 0, a: 0}
     - rect271_position: {r: 0, g: 0, b: 0, a: 0}
     - rect271_roundness: {r: 0, g: 0, b: 0, a: 0}
@@ -144,7 +164,7 @@ Material:
     - rect761_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect766_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect766_position: {r: 0, g: 0, b: 0, a: 0}
-    - rect766_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}
+    - rect766_roundness: {r: -0.02, g: -0.23, b: 0.2, a: 0.19}
     - rect853_box: {r: 0.4, g: 0.2, b: 0, a: 0}
     - rect853_position: {r: 0, g: 0, b: 0, a: 0}
     - rect853_roundness: {r: 0, g: 0, b: 0, a: 0}
@@ -160,6 +180,10 @@ Material:
     - triangle106_b: {r: -0.4, g: 0.4, b: 0, a: 0}
     - triangle106_c: {r: 0.4, g: 0.4, b: 0, a: 0}
     - triangle106_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle274_a: {r: 0.09, g: 0.09, b: 0, a: 0}
+    - triangle274_b: {r: -0.07, g: 0.02, b: 0, a: 0}
+    - triangle274_c: {r: 0.12, g: -0.13, b: 0, a: 0}
+    - triangle274_position: {r: 0.25, g: 0, b: 0, a: 0}
     - triangle826_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle826_b: {r: -0.4, g: 0.4, b: 0, a: 0}
     - triangle826_c: {r: 0.4, g: 0.4, b: 0, a: 0}
