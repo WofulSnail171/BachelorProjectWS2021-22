@@ -67,9 +67,11 @@ public class SDFLerp : SDFFunction
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";
         
+        this.variables.Clear();
+        this.types.Clear();
+        
         this.variables.Add(this.sdfName + "_t");
         this.types.Add("float");
-
     }
     
     public override string GenerateHlslFunction() {

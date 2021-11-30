@@ -4,15 +4,15 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] lerp385_t ("lerp385_t", Float) = 0
+                [HideInInspector] lerp979_t ("lerp979_t", Float) = 0
                 
-                [HideInInspector] circle959_position ("circle959_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle959_radius ("circle959_radius", Float) = 0
+                [HideInInspector] circle125_position ("circle125_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle125_radius ("circle125_radius", Float) = 0
                 
-                [HideInInspector] rect494_position ("rect494_position", Vector) = (0,0,0,0)
-                [HideInInspector] rect494_box ("rect494_box", Vector) = (0,0,0,0)
-                [HideInInspector] rect494_scale ("rect494_scale", Float) = 0
-                [HideInInspector] rect494_roundness ("rect494_roundness", Vector) = (0,0,0,0)
+                [HideInInspector] rect766_position ("rect766_position", Vector) = (0,0,0,0)
+                [HideInInspector] rect766_box ("rect766_box", Vector) = (0,0,0,0)
+                [HideInInspector] rect766_scale ("rect766_scale", Float) = 0
+                [HideInInspector] rect766_roundness ("rect766_roundness", Vector) = (0,0,0,0)
                 
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
@@ -57,21 +57,22 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float lerp385_t;
-        float2 circle959_position;
-        float circle959_radius;
-        float2 rect494_position;
-        float2 rect494_box;
-        float rect494_scale;
-        float4 rect494_roundness;
+        float lerp979_t;
+        float2 circle125_position;
+        float circle125_radius;
+        float2 rect766_position;
+        float2 rect766_box;
+        float rect766_scale;
+        float4 rect766_roundness;
         
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv,rect494_position, rect494_box, rect494_scale, rect494_roundness, circle959_position, circle959_radius, lerp385_t);
-            float4 col = smoothstep(0, 0.01, abs(sdfOut));
+            float sdfOut = sdf(i.uv, rect766_position, rect766_box, rect766_scale, rect766_roundness, circle125_position, circle125_radius, lerp979_t);
+            
+            float4 col = smoothstep(0, 0.01, sdfOut);
             return col;
         }
 

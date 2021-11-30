@@ -69,6 +69,9 @@ public class SDFSBLend : SDFFunction
         this.sdfName = "sblend" + this.index;
         this.o = this.sdfName + "_out";
         
+        this.variables.Clear();
+        this.types.Clear();
+        
         this.variables.Add(this.sdfName + "_k");
         this.types.Add("float");
     }

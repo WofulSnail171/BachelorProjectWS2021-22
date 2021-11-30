@@ -57,7 +57,7 @@ public class SDFCombine : SDFFunction {
         
         this.index = (uint)Random.Range(0, 1000);
 
-        this.sdfName = "comb";
+        this.sdfName = "comb" + this.index;
         this.o = this.sdfName +"_out";
 
     }

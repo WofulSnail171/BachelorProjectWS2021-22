@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc6db39e8ee8bb459e53c718edd5f2e, type: 3}
   m_Name: SDF Combine
   m_EditorClassIdentifier: 
-  o: comb_out
-  sdfName: comb
+  o: comb554_out
+  sdfName: comb554
   variables: []
   types: []
   nodes: []

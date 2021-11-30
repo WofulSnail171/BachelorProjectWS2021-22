@@ -304,19 +304,22 @@ public class SDFOutput : SDFNode{
             if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
                 for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
                     variables += this.SDFNodes[j].variables[i];
-                    if (j != 0 && i < this.SDFNodes[j].variables.Count) {
-                        variables += ", ";
-                    }
+                    variables += ", ";
                 }
             }
+                        
         }
+        variables = variables.Substring(0, variables.Length - 2);
+        
+        
         Debug.Log(variables);
         return @"
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv," + variables + @");
-            float4 col = smoothstep(0, 0.01, abs(sdfOut));
+            float sdfOut = sdf(i.uv, " + variables + @");
+            
+            float4 col = smoothstep(0, 0.01, sdfOut);
             return col;
         }
 ";
@@ -348,13 +351,12 @@ public class SDFOutput : SDFNode{
             if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
                 for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
                     variables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
-                    if (j != 0 && i < this.SDFNodes[j].variables.Count) {
-                        variables += ", ";
-                    }
+                    variables += ", ";
                 }
             }
                         
         }
+        variables = variables.Substring(0, variables.Length - 2);
 
         return @"
     

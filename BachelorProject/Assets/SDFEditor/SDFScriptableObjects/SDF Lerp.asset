@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec3a03eeeaa1394b8c1b5b657d2e7ae, type: 3}
   m_Name: SDF Lerp
   m_EditorClassIdentifier: 
-  o: lerp385_out
-  sdfName: lerp385
+  o: lerp979_out
+  sdfName: lerp979
   variables:
-  - lerp385_t
+  - lerp979_t
   types:
   - float
   nodes: []
