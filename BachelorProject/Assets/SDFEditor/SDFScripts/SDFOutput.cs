@@ -15,8 +15,8 @@ public class SDFOutput : SDFNode{
     [SerializeField]private SDFNode input;
     private SDFNode _input;
     
-    //[SerializeField]private SDFColorNode inputColor;
-    //private SDFNode _inputColor;
+    [SerializeField]private SDFColorNode inputColor;
+    private SDFColorNode _inputColor;
 
     public SDFNode Input {
         get => this._input;
@@ -27,14 +27,14 @@ public class SDFOutput : SDFNode{
         }
     }
     
-    //public SDFColorNode InputColor {
-    //    get => this._inputColor;
-    //    set {
-    //        if (this._inputColor == value) return;
-    //        this._inputColor = value;
-    //        this.OnInputChange?.Invoke();
-    //    }
-    //}
+    public SDFColorNode InputColor {
+        get => this._inputColor;
+        set {
+            if (this._inputColor == value) return;
+            this._inputColor = value;
+            this.OnInputChange?.Invoke();
+        }
+    }
     
     public Material sdfMaterial;
     private Shader sdfShader;
@@ -94,7 +94,7 @@ public class SDFOutput : SDFNode{
 
         this.UpdateActiveNodes();
         
-        this.AddHlslString(this.Input);
+        this.AddHlslString();
         foreach (SDFNode s in this.SDFNodes) {
             this.ChangeShaderValues(s);
         }
@@ -102,7 +102,7 @@ public class SDFOutput : SDFNode{
         Debug.Log("updated shader");
     }
 
-    private void AddHlslString(SDFNode node) {
+    private void AddHlslString() {
         
         //////////// Generate Shader File //////////////
         this.shaderStrings.Clear();
@@ -119,7 +119,8 @@ public class SDFOutput : SDFNode{
         //////////// Generate Include File /////////////
         this.includeStrings.Clear();
         this.includeStrings.Add(this.GenerateIncludeIfdef());
-        this.includeStrings.Add(this.GenerateShaderSdfFunction(node));
+        this.includeStrings.Add(this.GenerateShaderSdfFunction(this.Input));
+        this.includeStrings.Add(this.GenerateIncludeSdfColor(this.InputColor));
         
         this.WriteHlslToText();
     }
@@ -392,6 +393,36 @@ public class SDFOutput : SDFNode{
         return " + node.o + @";
     }
         ";
+    }
+
+    private string GenerateIncludeSdfColor(SDFColorNode colorNode) {
+    
+        string shaderVariables = "";
+        string colorFunction = "";
+        
+        for(int j = this.SDFNodes.Count-1; j >= 0; j--){
+            if (this.SDFNodes[j] != null) {
+                colorFunction += this.SDFNodes[j].GenerateHlslFunction();
+            }
+
+            if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
+                for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
+                    shaderVariables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
+                    shaderVariables += ", ";
+                }
+            }
+                        
+        }
+        shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
+        
+        return @"
+    float4 sdfColor (float2 uv, " + shaderVariables + @"){
+        " + colorFunction + @"
+
+        return " + colorNode.o + @";
+    }
+
+";
     }
 
     private void WriteHlslToText() {

@@ -14,6 +14,15 @@ Shader "SDF/test"
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
                 [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend mode", Float) = 1
+                
+                insideColor ("inside Color", Color) = (1,1,1,1)
+                outsideColor ("outside Color", Color) = (1,1,1,1)
+                outlineColor ("outline Color", Color) = (1,1,1,1)
+                
+                thickness ("thickness", Float) = 0
+                repetition ("repetition", Float) = 2
+                lineDistance ("line distance", Float) = 0
+                
             }
 
             SubShader
@@ -61,6 +70,14 @@ Shader "SDF/test"
         float line59_scale;
         float line59_rotation;
         
+        float4 insideColor;
+        float4 outsideColor;
+        float4 outlineColor;
+        
+        float thickness;
+        float repetition;
+        float lineDistance;
+        
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
@@ -68,7 +85,12 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
             float sdfOut = sdf(i.uv, line59_position, line59_a, line59_b, line59_roundness, line59_scale, line59_rotation);
             
-            float4 col = smoothstep(0, 0.01, sdfOut);
+            float sdf = smoothstep(0,thickness*0.01 - thickness*0.005 ,sdfOut);
+            float4 col = lerp(insideColor, outsideColor, sdf);
+            float outline = 1-smoothstep(0,thickness*0.01 ,abs(frac(sdfOut / (lineDistance*0.1) + 0.5) - 0.5) * (lineDistance*0.1));
+            outline *= step(sdfOut-repetition *0.01, 0);
+            col = lerp(col, outlineColor, outline);
+            
             return col;
         }
 

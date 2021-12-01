@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-[ExecuteAlways]
-public abstract class SDFNode : ScriptableObject
+
+public abstract class SDFColorNode :ScriptableObject
 {
     [HideInInspector] public string o;
     [HideInInspector] public string sdfName = "newSDF";
@@ -13,35 +13,28 @@ public abstract class SDFNode : ScriptableObject
     [HideInInspector]public List<string> types = new List<string>();
 
     protected bool isDirty;
-    public Action<SDFNode> OnValueChange;
+    public Action<SDFColorNode> OnValueChange;
     public Action OnInputChange;
 
     public enum NodeType {
-        Circle,
-        Rect,
-        Triangle, 
-        Line,
-        BezierCurve,
-        Texture,
-        Comb,
-        Invert,
-        SBlend,
-        Lerp
+        ColorOutput,
+        ColorInput,
+        TextureInput
     }
 
     [HideInInspector]public NodeType nodeType;
 
     public abstract string GenerateHlslFunction();
 
-    public void GetActiveNodes(List<SDFNode> nodes, SDFNode input) {
+    public void GetActiveNodes(List<SDFColorNode> nodes, SDFColorNode input) {
 
-        if (input is SDFFunction) {
-            SDFFunction i = (SDFFunction) input;
+        if (input is SDFColorOutput) {
+            SDFColorOutput i = (SDFColorOutput) input;
             i.GetActiveNodes(nodes);
         }
         else {
             bool d;
-            foreach (SDFNode s in nodes) {
+            foreach (SDFColorNode s in nodes) {
                 if (s.sdfName == input.sdfName) {
                     Debug.Log("found double in inputA");
                     return;

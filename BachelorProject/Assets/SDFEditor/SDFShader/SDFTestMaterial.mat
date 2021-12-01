@@ -47,6 +47,10 @@ Material:
         m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - tex733_tex:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - tex829_tex:
         m_Texture: {fileID: 2800000, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -64,6 +68,7 @@ Material:
     - circle114_radius: 0.21
     - circle125_radius: 0.12
     - circle167_radius: 0.2
+    - circle258_radius: 0.12
     - circle283_radius: 0.25
     - circle429_radius: 0.13
     - circle477_radius: 0.2
@@ -87,15 +92,24 @@ Material:
     - line330_scale: 1
     - line358_roundness: 0.19
     - line358_scale: 0.5
+    - line59_rotation: 7.28
+    - line59_roundness: 2.37
+    - line59_scale: 1
+    - line702_rotation: 0
+    - line702_roundness: 0.79
+    - line702_scale: 0.18
     - line804_rotation: -3.62
     - line804_roundness: 3
     - line804_scale: 0.36
     - line962_roundness: 0.05
     - line962_scale: 0.96
+    - lineDistance: 0
     - rect121_rotation: 39.44
     - rect121_scale: 0.59
     - rect271_scale: 1
     - rect2_scale: 1
+    - rect354_rotation: 39.44
+    - rect354_scale: 0.59
     - rect494_scale: 1.45
     - rect517_scale: 1
     - rect530_scale: 1.45
@@ -105,7 +119,9 @@ Material:
     - rect853_scale: 1
     - rect85_scale: 1
     - rect983_scale: 2
+    - repetition: 2
     - sblend571_k: 0.29
+    - thickness: 0
     - triangle106_scale: 1
     - triangle274_rotation: 2.79
     - triangle274_scale: 2.35
@@ -129,6 +145,7 @@ Material:
     - circle114_position: {r: 0, g: 0, b: 0, a: 0}
     - circle125_position: {r: 0, g: 0, b: 0, a: 0}
     - circle167_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle258_position: {r: 0, g: 0, b: 0, a: 0}
     - circle283_position: {r: 0, g: 0, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle477_position: {r: 0, g: 0, b: 0, a: 0}
@@ -137,18 +154,27 @@ Material:
     - circle780_position: {r: 0, g: 0, b: 0, a: 0}
     - circle891_position: {r: 0, g: 0, b: 0, a: 0}
     - circle959_position: {r: 0, g: 0, b: 0, a: 0}
+    - insideColor: {r: 1, g: 0, b: 0, a: 1}
     - line330_a: {r: -0.04, g: -0.25, b: 0, a: 0}
     - line330_b: {r: 0.39, g: 0.18, b: 0, a: 0}
     - line330_position: {r: 0, g: 0, b: 0, a: 0}
     - line358_a: {r: 0.27, g: 0.04, b: 0, a: 0}
     - line358_b: {r: 0.58, g: -0.39, b: 0, a: 0}
     - line358_position: {r: -0.45, g: 0.21, b: 0, a: 0}
+    - line59_a: {r: 0.34, g: 0, b: 0, a: 0}
+    - line59_b: {r: 0, g: 0, b: 0, a: 0}
+    - line59_position: {r: 0, g: 0, b: 0, a: 0}
+    - line702_a: {r: 0.14, g: -0.3, b: 0, a: 0}
+    - line702_b: {r: -0.39, g: 0.23, b: 0, a: 0}
+    - line702_position: {r: 0, g: 0, b: 0, a: 0}
     - line804_a: {r: 0.27, g: -0.18, b: 0, a: 0}
     - line804_b: {r: -0.24, g: 0.23, b: 0, a: 0}
     - line804_position: {r: 0.13, g: -0.15, b: 0, a: 0}
     - line962_a: {r: 0.44, g: -0.24, b: 0, a: 0}
     - line962_b: {r: -0.14, g: -0.01, b: 0, a: 0}
     - line962_position: {r: -0.12, g: 0.15, b: 0, a: 0}
+    - outlineColor: {r: 0, g: 0.0940752, b: 1, a: 1}
+    - outsideColor: {r: 0, g: 0, b: 0, a: 1}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect121_position: {r: 0.02, g: 0, b: 0, a: 0}
     - rect121_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
@@ -158,6 +184,9 @@ Material:
     - rect2_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect2_position: {r: 0, g: 0, b: 0, a: 0}
     - rect2_roundness: {r: -0.05, g: 0, b: 0.01, a: 0.03}
+    - rect354_box: {r: 0.2, g: 0.09, b: 0, a: 0}
+    - rect354_position: {r: 0.02, g: 0, b: 0, a: 0}
+    - rect354_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
     - rect494_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect494_position: {r: 0, g: 0, b: 0, a: 0}
     - rect494_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}
@@ -187,6 +216,7 @@ Material:
     - rect983_roundness: {r: 0, g: 0, b: 0.1, a: 0.1}
     - tex394_position: {r: 0, g: 0, b: 0, a: 0}
     - tex434_position: {r: -2.36, g: 3.96, b: 0, a: 0}
+    - tex733_position: {r: -2.36, g: 3.96, b: 0, a: 0}
     - tex829_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle106_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle106_b: {r: -0.4, g: 0.4, b: 0, a: 0}
