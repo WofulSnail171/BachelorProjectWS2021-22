@@ -14,6 +14,9 @@ public class SDFOutput : SDFNode{
 
     [SerializeField]private SDFNode input;
     private SDFNode _input;
+    
+    //[SerializeField]private SDFColorNode inputColor;
+    //private SDFNode _inputColor;
 
     public SDFNode Input {
         get => this._input;
@@ -23,6 +26,15 @@ public class SDFOutput : SDFNode{
             this.OnInputChange?.Invoke();
         }
     }
+    
+    //public SDFColorNode InputColor {
+    //    get => this._inputColor;
+    //    set {
+    //        if (this._inputColor == value) return;
+    //        this._inputColor = value;
+    //        this.OnInputChange?.Invoke();
+    //    }
+    //}
     
     public Material sdfMaterial;
     private Shader sdfShader;
@@ -48,13 +60,9 @@ public class SDFOutput : SDFNode{
 
     private void Awake() {
         this.OnInputChange += this.UpdateShader;
-        this.UpdateShader();
     }
 
     private void ApplyMaterial() {
-
-        this.pathShaderFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".shader";
-        this.pathIncludeFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".hlsl";
 
         this.UpdateShader();
 
@@ -75,20 +83,23 @@ public class SDFOutput : SDFNode{
     }
 
     private void UpdateShader() {
-        if (this.Input != null || this.sdfMaterial != null) {
-            
-            this.UpdateActiveNodes();
-            
-            this.AddHlslString(this.Input);
-            foreach (SDFNode s in this.SDFNodes) {
-                this.ChangeShaderValues(s);
-            }
+        if (!this.Input) {
+            Debug.LogWarning("forgot to assign Input in Output Node");
+            return;
+        }
+        if (!this.sdfMaterial) {
+            Debug.LogWarning("forgot to assign Material in Output Node");
+            return; 
+        }
 
-            Debug.Log("updated shader");
+        this.UpdateActiveNodes();
+        
+        this.AddHlslString(this.Input);
+        foreach (SDFNode s in this.SDFNodes) {
+            this.ChangeShaderValues(s);
         }
-        else {
-            Debug.LogWarning("forgot to assign Input or Material in output node");
-        }
+
+        Debug.Log("updated shader");
     }
 
     private void AddHlslString(SDFNode node) {
@@ -128,7 +139,7 @@ public class SDFOutput : SDFNode{
                 break;
             }
             switch (node.nodeType) {
-                case SDFNode.NodeType.Circle: {
+                case NodeType.Circle: {
                     var n = (SDFCircle) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
@@ -136,7 +147,7 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case SDFNode.NodeType.Rect: {
+                case NodeType.Rect: {
                     var n = (SDFRectangle) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
@@ -147,7 +158,7 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case SDFNode.NodeType.Triangle: {
+                case NodeType.Triangle: {
                     var n = (SDFTriangle) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
@@ -159,7 +170,7 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case SDFNode.NodeType.Line: {
+                case NodeType.Line: {
                     var n = (SDFLine) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
@@ -171,7 +182,7 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case SDFNode.NodeType.BezierCurve: {
+                case NodeType.BezierCurve: {
 
                     var n = (SDFBezier) node;
                     properties += @"
@@ -186,7 +197,7 @@ public class SDFOutput : SDFNode{
 
                     break;
                 }
-                case SDFNode.NodeType.Texture: {
+                case NodeType.Texture: {
                     var n = (SDFTexture) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
@@ -194,22 +205,22 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case SDFNode.NodeType.Comb: {
+                case NodeType.Comb: {
 
                     break;
                 }
-                case SDFNode.NodeType.Invert: {
+                case NodeType.Invert: {
 
                     break;
                 }
-                case SDFNode.NodeType.SBlend: {
+                case NodeType.SBlend: {
                     var n = (SDFSBLend) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_k (""" + n.sdfName + @"_k"", Float) = 0
                 ";
                     break;
                 }
-                case SDFNode.NodeType.Lerp: {
+                case NodeType.Lerp: {
                     var n = (SDFLerp) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_t (""" + n.sdfName + @"_t"", Float) = 0
@@ -282,12 +293,12 @@ public class SDFOutput : SDFNode{
     
     private string GenerateShaderVariables() {
         
-        string variables = "   ";
+        string shaderVariables = "   ";
 
         foreach (SDFNode s in this.SDFNodes) {
             if (s.variables != null && s.variables.Count > 0) {
                 for (int i = 0; i < s.variables.Count; i++) {
-                    variables += ""+ s.types[i] + " " + s.variables[i] + @";
+                    shaderVariables += ""+ s.types[i] + " " + s.variables[i] + @";
         ";
                 }
             }
@@ -298,24 +309,24 @@ public class SDFOutput : SDFNode{
 
         return @"
      CBUFFER_START(UnityPerMaterial)
-     " + variables + @"
+     " + shaderVariables + @"
      CBUFFER_END";
     }
 
     private string GenerateShaderFrag() {
 
-        string variables = "";
+        string shaderVariables = "";
 
         for (int j = this.SDFNodes.Count -1; j >= 0; j--) {
             if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
                 for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
-                    variables += this.SDFNodes[j].variables[i];
-                    variables += ", ";
+                    shaderVariables += this.SDFNodes[j].variables[i];
+                    shaderVariables += ", ";
                 }
             }
                         
         }
-        variables = variables.Substring(0, variables.Length - 2);
+        shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
         
         
         Debug.Log(variables);
@@ -323,7 +334,7 @@ public class SDFOutput : SDFNode{
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, " + variables + @");
+            float sdfOut = sdf(i.uv, " + shaderVariables + @");
             
             float4 col = smoothstep(0, 0.01, sdfOut);
             return col;
@@ -346,7 +357,7 @@ public class SDFOutput : SDFNode{
     }
     
     private string GenerateShaderSdfFunction(SDFNode node) {
-        string variables = "";
+        string shaderVariables = "";
         string sdfFunction = "";
         
         for(int j = this.SDFNodes.Count-1; j >= 0; j--){
@@ -356,13 +367,13 @@ public class SDFOutput : SDFNode{
 
             if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
                 for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
-                    variables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
-                    variables += ", ";
+                    shaderVariables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
+                    shaderVariables += ", ";
                 }
             }
                         
         }
-        variables = variables.Substring(0, variables.Length - 2);
+        shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
 
         return @"
     
@@ -375,7 +386,7 @@ public class SDFOutput : SDFNode{
         return t;
     }
 
-    float sdf (float2 uv, " + variables + @"){ 
+    float sdf (float2 uv, " + shaderVariables + @"){ 
         " + sdfFunction + @"
 
         return " + node.o + @";
@@ -384,6 +395,12 @@ public class SDFOutput : SDFNode{
     }
 
     private void WriteHlslToText() {
+        
+        if (this.shaderName == null) {
+            this.shaderName = "defaultSDFShader";
+        }
+        this.pathShaderFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".shader";
+        this.pathIncludeFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".hlsl";
         
         using (StreamWriter sw = File.CreateText(this.pathIncludeFile)) {
             foreach (string s in this.includeStrings) {

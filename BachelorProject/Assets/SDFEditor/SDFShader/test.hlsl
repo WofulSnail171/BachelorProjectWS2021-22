@@ -11,10 +11,15 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 tex434_position, sampler2D tex434_tex, float tex434_scale, float tex434_rotation){ 
-        float tex434_out = tex2D(tex434_tex, transform(tex434_position, tex434_rotation, tex434_scale, uv) + tex434_position + float2(0.5, 0.5)).r;
+    float sdf (float2 uv, float2 line59_position, float2 line59_a, float2 line59_b, float line59_roundness, float line59_scale, float line59_rotation){ 
+        
+        
+        float2 pa_line59 = transform(line59_position, line59_rotation, line59_scale, uv) - line59_a;
+        float2 ba_line59 = line59_b - line59_a;
+        float h_line59 = clamp(dot(pa_line59, ba_line59)/dot(ba_line59, ba_line59), 0, 1);
+        float line59_out = (length(pa_line59 - ba_line59*h_line59) - (0.01 * line59_roundness)) * line59_scale;
 
-        return tex434_out;
+        return line59_out;
     }
         
 #endif

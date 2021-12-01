@@ -85,6 +85,9 @@ public class SDFLine : SDFObject {
         this.o = this.sdfName + "_out";
 
         Debug.Log("changed index from line to: " + this.index);
+        
+        this.variables.Clear();
+        this.types.Clear();
 
         this.variables.Add(this.sdfName + "_position");       //0
         this.types.Add("float2");
