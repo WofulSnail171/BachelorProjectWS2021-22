@@ -22,6 +22,7 @@ public class SwipeSlot : MonoBehaviour
 
 
     [SerializeField] GameObject matched;
+    [SerializeField] GameObject highlight;
     [SerializeField] public bool IsMatched;
     #endregion
 
@@ -48,10 +49,15 @@ public class SwipeSlot : MonoBehaviour
         }
 
         rarityGroup.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
+
+        if (SpriteStruct.SpriteDictionary.ContainsKey(playerHero.heroId))
+            portrait.sprite = SpriteStruct.SpriteDictionary[playerHero.heroId];
     }
 
     public void showHero()
     {
+        matched.SetActive(false);
+        highlight.SetActive(false);
         disabledCard.SetActive(false);
         heroCard.SetActive(true);
     }
@@ -80,6 +86,14 @@ public class SwipeSlot : MonoBehaviour
         IsMatched = false;
     }
 
-
+    public void enableHighlight()
+    {
+        highlight.SetActive(true);
+    }    
+    
+    public void disableHighlight()
+    {
+        highlight.SetActive(false);
+    }
     //drag
 }

@@ -59,6 +59,8 @@ public class UpdateHeroCard : MonoBehaviour
     private string socialStat;
 
     private float max = 999;
+
+    [SerializeField] ScrollSnapButton scroll;
     #endregion
 
 
@@ -77,6 +79,10 @@ public class UpdateHeroCard : MonoBehaviour
         
         CheckPotential(hero);
         CheckStats(hero);
+
+        //adjust buttons
+        UpdateScrollSnap();
+
 
         //text
         physicalStatText.text = $"{physicalStat} / {physicalPotential}";
@@ -199,6 +205,14 @@ public class UpdateHeroCard : MonoBehaviour
 
         else
             dungeonAmount.text = "0";
+
+
+    }
+
+    private void UpdateScrollSnap()
+    {
+        if (scroll.prevButton.activeSelf)
+            scroll.prevButton.GetComponent<Button>().onClick.Invoke();
     }
 
     private void CheckPotential(PlayerHero hero)

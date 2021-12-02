@@ -17,6 +17,8 @@ public class HeroPopUpActions : MonoBehaviour
 
         else
             ReleaseButton.SetActive(false);
+
+        
     }
 
     private void Start()

@@ -535,6 +535,13 @@ public class TradeData
     public List<TradeOffer> ownOffers;
     public List<TradeOffer> tradeOffers;
 
+    //
+    //TODO
+    public int GetNumberOFOpenOffers()
+    {
+        return 12;
+    }
+
     public void UpdateOwnOffers()
     {
         ownOffers = new List<TradeOffer>();

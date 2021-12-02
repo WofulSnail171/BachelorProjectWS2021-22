@@ -27,7 +27,7 @@ public class GrowthCard : MonoBehaviour
     [SerializeField] Image socialPotentialStatBar;
     [Space]
     [SerializeField] GameObject[] Rarity;
-
+    [SerializeField] Image pic;
 
     private DefaultHero defaultHero;
     public PlayerHero playerHero;
@@ -84,6 +84,9 @@ public class GrowthCard : MonoBehaviour
         {
             Rarity[i].SetActive(true);
         }
+
+        if (SpriteStruct.SpriteDictionary.ContainsKey(playerHero.heroId))
+            pic.sprite = SpriteStruct.SpriteDictionary[playerHero.heroId];
     }
 
     private void CheckPotential(PlayerHero hero)

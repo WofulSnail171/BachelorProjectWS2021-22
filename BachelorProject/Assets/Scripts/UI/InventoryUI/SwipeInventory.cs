@@ -6,8 +6,18 @@ public class SwipeInventory : MonoBehaviour
 {
     #region vars
     [SerializeField] TradeInventoryUI tradeInventory;
-    [HideInInspector] public SwipeSlot[] swipeSlots { get; private set; }
+    [SerializeField] GameObject slotParent;
+    [HideInInspector] public SwipeSlot[] swipeSlots;
+
+    private PlayerHero matchHero;
+
     #endregion
+
+
+    private void Awake()
+    {
+        swipeSlots = slotParent.GetComponentsInChildren<SwipeSlot>();
+    }
 
     private void OnEnable()
     {
@@ -23,6 +33,7 @@ public class SwipeInventory : MonoBehaviour
             {
                 swipeSlots[slot.slotID].updateHero(slot.playerHero, slot.portrait.sprite, slot.slotrarity,slot.originalSlotReferenceID);
                 swipeSlots[slot.slotID].slotID = slot.slotID;
+                swipeSlots[slot.slotID].showHero();
             }
         }
     }
@@ -32,10 +43,26 @@ public class SwipeInventory : MonoBehaviour
          foreach (SwipeSlot slot in swipeSlots)
         {
             slot.hideHero();
-            slot.IsMatched = false;
+            slot.unmatchHero();
         }    
     }
 
 
     //drag
+
+
+    //highlight
+    private void Click(int index)
+    {
+        foreach (SwipeSlot heroSlot in swipeSlots)
+        {
+            if (heroSlot.playerHero != null)
+                heroSlot.disableHighlight();
+        }
+
+        swipeSlots[index].enableHighlight();
+        matchHero = swipeSlots[index].playerHero;
+
+    
+    }
 }

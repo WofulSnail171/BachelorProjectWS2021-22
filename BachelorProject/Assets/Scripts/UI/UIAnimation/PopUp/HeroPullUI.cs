@@ -44,6 +44,8 @@ public class HeroPullUI : MonoBehaviour
 
     private void OnEnable()
     {
+        blackCard.SetActive(true);
+
         blink.SetActive(false);
         ReleaseText.SetActive(false);
         ContinueButton.SetActive(false);
