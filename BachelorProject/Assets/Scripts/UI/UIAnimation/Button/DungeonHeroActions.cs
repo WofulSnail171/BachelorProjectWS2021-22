@@ -50,13 +50,15 @@ public class DungeonHeroActions : MonoBehaviour
             HubFooter.UpdateDungeonButton(ButtonState.Focused);
 
             //disable background
-            UIEnablerManager.Instance.DisableCanvas();
 
             //go to observation
+            UIEnablerManager.Instance.SwitchElements("DungeonHeroSelect", "General", true);
             UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
             UIEnablerManager.Instance.DisableElement("HeroHub", true);
-            UIEnablerManager.Instance.SwitchElements("DungeonHeroSelect", "General", true);
             UIEnablerManager.Instance.EnableElement("DungeonObserve", true);
+
+            UIEnablerManager.Instance.DisableCanvas();
+
 
             HubFooter.UpdateHubState(HubState.DungeonHub);
         }

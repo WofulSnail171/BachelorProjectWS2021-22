@@ -36,7 +36,6 @@ public class DungeonObserveHeader : MonoBehaviour
     private string oldText;
     private int formerHealth;
 
-    private bool dungeonWasStarted;
     #endregion
 
     //init
@@ -47,7 +46,7 @@ public class DungeonObserveHeader : MonoBehaviour
         DeleventSystem.DungeonStep += UpdateAfterStep;
         DeleventSystem.DungeonStart += InitVisuals;
         DeleventSystem.DungeonEvent += UpdateEvent;
-        DeleventSystem.DungeonEnd += EndEvent;
+        
         DeleventSystem.DungeonEventStart += EventStart;
         DeleventSystem.DungeonEventEnd += EventEnd;
         DeleventSystem.RewardHealthChanged += UpdateRewardHealth;
@@ -67,8 +66,6 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void CatchUpVisuals()
     {
-        if(dungeonWasStarted)
-        {
             //stop animations
             LeanTween.cancelAll();
 
@@ -104,43 +101,24 @@ public class DungeonObserveHeader : MonoBehaviour
             else
                 EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
 
-        }
-
-        else
-        {
-            DialogText.text = "";
-
-            EventInfoGroup.transform.localScale = new Vector3(1, 0, 1);
-
-            rewardBar.fillAmount = 1;
-
-        }
     }
 
-    private void EndEvent()
-    {
-        dungeonWasStarted = false;
-    }
+
 
     //connected funcs to delevents
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void InitVisuals()
     {
-        dungeonWasStarted = true;
-
         if(gameObject.activeSelf)
         {
             //reward health
             rewardBar.fillAmount = 1;
-            rewardTier = DatabaseManager._instance.dungeonData.currentRun.initialRewardTier + 1;
+            rewardTier = DatabaseManager._instance.dungeonData.currentRun.initialRewardTier;
 
             rewardTierText.text = $" {rewardTier} Lvl";
 
             //event info and health
             EventInfoGroup.transform.localScale = new Vector3(0, 0, 0);
-
-
-            //
         }
     }
 
@@ -150,9 +128,16 @@ public class DungeonObserveHeader : MonoBehaviour
         {
             //set tier
             oldRewardTier = rewardTier;
-            rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;//--> lowest lvl 1
 
-            Debug.Log(rewardTier);
+            if (DungeonManager._instance.currentCalcRun.rewardHealthBar % 10 != 0)
+                rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;//--> lowest lvl 1
+
+            else if(DungeonManager._instance.currentCalcRun.rewardHealthBar % 10 == 0 && DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 == 0)
+                rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;//--> lowest lvl 1
+
+            else
+                rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10;
+
 
             //animate if active and not lowest tier
             if (rewardTier != 1 && this.gameObject.activeSelf)
@@ -229,7 +214,7 @@ public class DungeonObserveHeader : MonoBehaviour
 
             LeanTween.value(EventInfoGroup, 0, 1, animSpeed).
                 setOnUpdate(setEventGroup)
-                .setEaseInOutBounce();
+                .setEaseOutElastic();
 
             // set title text
             EventTitle.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.eventName;
@@ -260,7 +245,8 @@ public class DungeonObserveHeader : MonoBehaviour
 
             LeanTween.value(EventInfoGroup, 1, 0, animSpeed).
                 setOnUpdate(setEventGroup)
-                .setEaseInOutBounce();
+                .setEaseOutElastic();
+
         }
     }
 
@@ -302,6 +288,9 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void setEventHealthText(float value)
     {
+        if (value < 0)
+            value = 0;
+
         EventValue.text = $"{(int)value} / {DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth}";
     }
 
@@ -309,7 +298,7 @@ public class DungeonObserveHeader : MonoBehaviour
     {
         EventInfoGroup.transform.localScale = new Vector3 (val,val,val);
     }
-    
+
     private void setTextGroup(float val)
     {
         DialogGroup.GetComponent<CanvasGroup>().alpha = val;
@@ -358,7 +347,8 @@ public class DungeonObserveHeader : MonoBehaviour
 
     private void setRewardFillAmount(float value)
     {
-        rewardBar.fillAmount = value;    
+        if(value >= 0)
+            rewardBar.fillAmount = value;    
     }
 
 

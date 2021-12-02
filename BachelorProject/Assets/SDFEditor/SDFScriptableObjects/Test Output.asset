@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
+  m_Name: Test Output
+  m_EditorClassIdentifier: 
+  o: 
+  sdfName: newSDF
+  variables: []
+  types: []
+  nodes: []
+  nodeType: 0
+  shaderName: test
+  input: {fileID: 11400000, guid: 720382bcd72aa4241bdf3cdd90ee9bea, type: 2}
+  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
+  applyMaterial: 0

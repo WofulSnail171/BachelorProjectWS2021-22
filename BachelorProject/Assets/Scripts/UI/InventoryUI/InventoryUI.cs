@@ -7,6 +7,9 @@ using System;
 
 public class InventoryUI : MonoBehaviour
 {
+
+    
+
     #region vars
     [SerializeField] GameObject PopUpHeroCard;
     
@@ -75,6 +78,8 @@ public class InventoryUI : MonoBehaviour
             heroSlots[i].OnClickEvent += Click; ;
 
         }
+
+        defaultImageDict = SpriteStruct.SpriteDictionary;
     }
 
     private void Start()

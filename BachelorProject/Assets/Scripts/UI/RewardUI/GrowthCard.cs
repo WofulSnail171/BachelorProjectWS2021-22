@@ -30,7 +30,7 @@ public class GrowthCard : MonoBehaviour
 
 
     private DefaultHero defaultHero;
-    private PlayerHero playerHero;
+    public PlayerHero playerHero;
 
     private string physicalPotential;
     private string magicalPotential;

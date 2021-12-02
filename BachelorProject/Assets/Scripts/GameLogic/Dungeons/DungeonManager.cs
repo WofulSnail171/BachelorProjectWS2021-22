@@ -7,7 +7,7 @@ using System.Globalization;
 public class DungeonManager : MonoBehaviour
 {
     public static DungeonManager _instance;
-    public static int PityGrowth = 3;
+    public static int PityGrowth = 2;
     public static int MaxGrowth = 8;
     public static bool events = true;
 
@@ -437,6 +437,8 @@ public class DungeonManager : MonoBehaviour
                     }
                     currentCalcRun.nextHero++;
 
+                    if (events)
+                        DeleventSystem.DungeonEvent?.Invoke();
                 }
                 if (currentCalcRun.currentNode.eventHealth < 0)
                 {
@@ -448,8 +450,7 @@ public class DungeonManager : MonoBehaviour
             {
                 EnterNewActivityState(DungeonActivity.eventEnd);
             }
-            if (events)
-                DeleventSystem.DungeonEvent?.Invoke();
+            
         }
     }
 

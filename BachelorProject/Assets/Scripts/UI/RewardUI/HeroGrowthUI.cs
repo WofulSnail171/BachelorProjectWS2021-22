@@ -32,7 +32,6 @@ public class HeroGrowthUI : MonoBehaviour
     {
         ContinueButton.SetActive(false);
 
-        StartCoroutine(Anim());
 
         //reset
         growthCards.Clear();
@@ -73,6 +72,7 @@ public class HeroGrowthUI : MonoBehaviour
             }
         }
 
+        StartCoroutine(Anim());
     }
 
 
@@ -99,9 +99,9 @@ public class HeroGrowthUI : MonoBehaviour
         //number text
         foreach (GrowthCard card in growthCards)
         {
-            card.UpdateMagicalGrowth((int)(DungeonManager._instance.currentCalcRun.mStatGrowth  * i ));
-            card.UpdatePhysicalGrowth((int)(DungeonManager._instance.currentCalcRun.pStatGrowth * i));
-            card.UpdateSocialGrowth((int)(DungeonManager._instance.currentCalcRun.sStatGrowth * i));
+            card.UpdatePhysicalGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.pStatGrowth, StatType.physical, DatabaseManager._instance.dungeonData.currentRun.dungeon.type) * i));
+            card.UpdateMagicalGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.mStatGrowth, StatType.magical, DatabaseManager._instance.dungeonData.currentRun.dungeon.type)  * i ));
+            card.UpdateSocialGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.sStatGrowth, StatType.social, DatabaseManager._instance.dungeonData.currentRun.dungeon.type) * i));
         }
     }
 
@@ -109,9 +109,9 @@ public class HeroGrowthUI : MonoBehaviour
     {
         foreach (GrowthCard card in growthCards)
         {
-            card.UpdateMagicalBarGrowth((int)(DungeonManager._instance.currentCalcRun.mStatGrowth * i));
-            card.UpdatePhysicalBarGrowth((int)(DungeonManager._instance.currentCalcRun.pStatGrowth * i));
-            card.UpdateSocialBarGrowth((int)(DungeonManager._instance.currentCalcRun.sStatGrowth * i));
+            card.UpdateMagicalBarGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.pStatGrowth, StatType.physical, DatabaseManager._instance.dungeonData.currentRun.dungeon.type) * i));
+            card.UpdatePhysicalBarGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.mStatGrowth, StatType.magical, DatabaseManager._instance.dungeonData.currentRun.dungeon.type) * i));
+            card.UpdateSocialBarGrowth((int)(card.playerHero.CalcGrowth(DungeonManager._instance.currentCalcRun.sStatGrowth, StatType.social, DatabaseManager._instance.dungeonData.currentRun.dungeon.type) * i));
         }
     }
 
