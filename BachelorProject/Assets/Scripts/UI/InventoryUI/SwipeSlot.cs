@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class SwipeSlot : MonoBehaviour
 {
@@ -24,8 +25,16 @@ public class SwipeSlot : MonoBehaviour
     [SerializeField] GameObject matched;
     [SerializeField] GameObject highlight;
     [SerializeField] public bool IsMatched;
+
+
+    public event Action <int> OnClickEvent;
+
     #endregion
 
+    private void Start()
+    {
+        heroCard.GetComponent<Button>().onClick.AddListener(() => OnClick());
+    }
 
     public void updateHero(PlayerHero hero, Sprite sprite, int rarity, int referenceID)
     {
@@ -69,11 +78,6 @@ public class SwipeSlot : MonoBehaviour
         disabledCard.SetActive(true);
     }
 
-    public void focusHero()
-    {
-
-    }
-
     public void matchHero()
     {
         matched.SetActive(true);
@@ -96,4 +100,14 @@ public class SwipeSlot : MonoBehaviour
         highlight.SetActive(false);
     }
     //drag
+
+
+
+
+
+    //click
+    public void OnClick()
+    {
+        OnClickEvent(slotID);
+    }
 }

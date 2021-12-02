@@ -41,11 +41,11 @@ public class TradSelectActions : MonoBehaviour
 
         if(confirmed)
         {
-            //update the cards of the swipe offer
-            //update the swipe buttons
 
             //go to swipe
             UIEnablerManager.Instance.SwitchElements("TradeSelect","TradeSwipe",true);
+            UIEnablerManager.Instance.DisableElement("HeroHub", true);
+            UIEnablerManager.Instance.DisableElement("ShardsAndBuff", true);
 
         }
 

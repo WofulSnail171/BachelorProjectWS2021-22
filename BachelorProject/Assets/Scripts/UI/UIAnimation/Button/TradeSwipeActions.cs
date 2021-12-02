@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TradeSwipeActions : MonoBehaviour
 {
@@ -10,10 +11,8 @@ public class TradeSwipeActions : MonoBehaviour
     [SerializeField] GameObject sendButton;
     [SerializeField] GameObject matchButton;
     [SerializeField] GameObject unmatchButton;
-    [SerializeField] GameObject detailButton;
 
-    //swipeslot focused
-    int swipeIndex;
+
 
     [SerializeField]SwipeInventory swipeInventory;
 
@@ -22,10 +21,45 @@ public class TradeSwipeActions : MonoBehaviour
     #endregion
 
 
+    private void Awake()
+    {
+        cancelButton.GetComponent<Button>().onClick.AddListener(() => { ClickedCancel(); });
+        matchButton.GetComponent<Button>().onClick.AddListener(() => { ClickedMatch(); });
+        unmatchButton.GetComponent<Button>().onClick.AddListener(() => { ClickedUnmatch(); });
+        sendButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSend(); });
+        nextButton.GetComponent<Button>().onClick.AddListener(() => { ClickedNext(); });
+    }
+
+    private void Start()
+    {
+        foreach (SwipeSlot swipeSlot in swipeInventory.swipeSlots)
+            swipeSlot.OnClickEvent += Click; ;
+    }
+
+    private void OnEnable()
+    {
+        if(DatabaseManager._instance.tradeData.GetNumberOFOpenOffers() > 1)
+        {
+            nextButton.SetActive(true);
+            sendButton.SetActive(false);
+        }
+
+        else
+        {
+            sendButton.SetActive(true);
+            nextButton.SetActive(false);
+        }
+
+        matchButton.SetActive(false);
+        unmatchButton.SetActive(false);
+        cancelButton.SetActive(true);
+    }
+
     //all heroes unfocused
     private void ClickedCancel()
     {
         UIEnablerManager.Instance.SwitchElements( "TradeSwipe", "TradeSelect", true);
+        UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
     }
 
     private void ClickedNext()
@@ -58,51 +92,52 @@ public class TradeSwipeActions : MonoBehaviour
     //hero focused
     private void ClickedMatch()
     {
-        matchButton.SetActive(false);
-        unmatchButton.SetActive(true);
+        if(swipeInventory.swipeIndex != -1)
+        {
+            matchButton.SetActive(false);
+            unmatchButton.SetActive(true);
 
-        //visuals
-        swipeInventory.swipeSlots[swipeIndex].matchHero();
+            //visuals
+            swipeInventory.swipeSlots[swipeInventory.swipeIndex].matchHero();
 
-        //
-        //actual logic
-        //
-        //
+            matchButton.SetActive(false);
+            unmatchButton.SetActive(true);
+
+
+            //
+            //actual logic
+            //
+            //
+
+
+        }
     }
 
     private void ClickedUnmatch()
     {
-        matchButton.SetActive(true);
-        unmatchButton.SetActive(false);
+        if (swipeInventory.swipeIndex != -1)
+        {
+            matchButton.SetActive(true);
+            unmatchButton.SetActive(false);
 
-        //visuals
-        swipeInventory.swipeSlots[swipeIndex].unmatchHero();
+            //visuals
+            swipeInventory.swipeSlots[swipeInventory.swipeIndex].unmatchHero();
 
-        //
-        //actual logic
-        //
-        //
+            //
+            //actual logic
+            //
+            //
+        }
     }
-
-
-    private void ClickedDetail()
-    {
-        //do pop up
-        //
-        //
-    }
-
 
     //focus hero
     private void FocuseHero(int index)
     {
         //assign hero
-        swipeIndex = index;
+        swipeInventory.swipeIndex = index;
 
         //set focused
         cancelButton.SetActive(false);
-
-        detailButton.SetActive(true);
 
         //check hero state
         if(swipeInventory.swipeSlots[index].IsMatched)
@@ -123,14 +158,20 @@ public class TradeSwipeActions : MonoBehaviour
     private void UnfocusHero(int index)
     {
         //unassign hero
-        swipeIndex = -1;
+        swipeInventory.swipeIndex = -1;
 
         //set unfocused
         cancelButton.SetActive(true);
 
         //does not matter
-        detailButton.SetActive(false);
         matchButton.SetActive(false);
         unmatchButton.SetActive(false);
+    }
+
+    private void Click(int i)
+    {
+        //check if already matched
+
+        matchButton.SetActive(true);
     }
 }

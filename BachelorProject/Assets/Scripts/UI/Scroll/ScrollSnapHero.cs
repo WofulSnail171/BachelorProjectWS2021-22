@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Mask))]
 [RequireComponent(typeof(ScrollRect))]
-public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
+public class ScrollSnapHero : MonoBehaviour{
 
+    #region vars
     [Tooltip("Set starting page index - starting from 0")]
     public int startingPage = 0;
     [Tooltip("Threshold time for fast swipe in seconds")]
@@ -17,16 +19,11 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     public int fastSwipeThresholdDistance = 100;
     [Tooltip("How fast will page lerp to target position")]
     public float decelerationRate = 10f;
-    [Tooltip("Button to go to the previous page (optional)")]
-    public GameObject prevButton;
     [Tooltip("Button to go to the next page (optional)")]
     public GameObject nextButton;
-    [Tooltip("Sprite for unselected page (optional)")]
-    public Sprite unselectedPage;
-    [Tooltip("Sprite for selected page (optional)")]
-    public Sprite selectedPage;
-    [Tooltip("Container with page images (optional)")]
-    public Transform pageSelectionIcons;
+
+    [SerializeField] TextMeshProUGUI headerText;
+
 
     // fast swipes should be fast and short. If too long, then it is not fast swipe
     private int _fastSwipeThresholdMaxLimit;
@@ -58,8 +55,16 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     private int _previousPageSelectionIndex;
     // container with Image components - one Image for each page
     private List<Image> _pageSelectionImages;
+    #endregion
 
     //------------------------------------------------------------------------
+
+    private void Awake()
+    {
+        // prev and next buttons
+        if (nextButton)
+            nextButton.GetComponent<Button>().onClick.AddListener(() => { NextScreen(); });
+    }
 
     private void OnEnable()
     {
@@ -99,20 +104,9 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
             return;
         _pageCount = DatabaseManager._instance.tradeData.GetNumberOFOpenOffers();
 
-        // is it horizontal or vertical scrollrect
-        if (_scrollRectComponent.horizontal && !_scrollRectComponent.vertical)
-        {
-            _horizontal = true;
-        }
-        else if (!_scrollRectComponent.horizontal && _scrollRectComponent.vertical)
-        {
-            _horizontal = false;
-        }
-        else
-        {
-            Debug.LogWarning("Confusing setting of horizontal/vertical direction. Default set to horizontal.");
-            _horizontal = true;
-        }
+
+        _horizontal = true;
+
 
         _lerp = false;
 
@@ -122,12 +116,6 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         InitPageSelection();
         SetPageSelection(startingPage);
 
-        // prev and next buttons
-        if (nextButton)
-            nextButton.GetComponent<Button>().onClick.AddListener(() => { NextScreen(); });
-
-        if (prevButton)
-            prevButton.GetComponent<Button>().onClick.AddListener(() => { PreviousScreen(); });
     }
     
     private void SetPagePositions() {
@@ -201,64 +189,30 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 
     //------------------------------------------------------------------------
     private void InitPageSelection() {
-        // page selection - only if defined sprites for selection icons
-        _showPageSelection = unselectedPage != null && selectedPage != null;
-        if (_showPageSelection) {
-            // also container with selection images must be defined and must have exatly the same amount of items as pages container
-            if (pageSelectionIcons == null || pageSelectionIcons.childCount < _pageCount) {
-                Debug.LogWarning("Different count of pages and selection icons - will not show page selection");
-                _showPageSelection = false;
-            } else {
-                _previousPageSelectionIndex = -1;
-                _pageSelectionImages = new List<Image>();
+        //init change header
 
-                // cache all Image components into list
-                for (int i = 0; i < pageSelectionIcons.childCount; i++) {
-                    if(i >= _pageCount)
-                    {
-                        pageSelectionIcons.GetChild(i).gameObject.SetActive(false);
-                        continue;
-                    }
-                    pageSelectionIcons.GetChild(i).gameObject.SetActive(true);
-                    Image image = pageSelectionIcons.GetChild(i).GetComponent<Image>();
-                    if (image == null) {
-                        Debug.LogWarning("Page selection icon at position " + i + " is missing Image component");
-                    }
-                    _pageSelectionImages.Add(image);
-                }
-            }
-        }
+        headerText.text = $"1/{_pageCount} Trade Offer";
     }
 
     //------------------------------------------------------------------------
     private void SetPageSelection(int aPageIndex) {
         // nothing to change
-        if (_previousPageSelectionIndex == aPageIndex) {
+        if (_previousPageSelectionIndex == aPageIndex || aPageIndex > _pageCount) {
             return;
         }
-        
-        // unselect old
-        if (_previousPageSelectionIndex >= 0) {
-            _pageSelectionImages[_previousPageSelectionIndex].sprite = unselectedPage;
-            //_pageSelectionImages[_previousPageSelectionIndex].SetNativeSize();
-        }
 
-        // select new
-        _pageSelectionImages[aPageIndex].sprite = selectedPage;
-        //_pageSelectionImages[aPageIndex].SetNativeSize();
-
+        // change header text
+        headerText.text = $"{aPageIndex}/{_pageCount} Trade Offer";
         _previousPageSelectionIndex = aPageIndex;
     }
 
     //------------------------------------------------------------------------
     private void NextScreen() {
         LerpToPage(_currentPage + 1);
+        SetPageSelection(_currentPage + 1);
     }
 
-    //------------------------------------------------------------------------
-    private void PreviousScreen() {
-        LerpToPage(_currentPage - 1);
-    }
+
 
     //------------------------------------------------------------------------
     public int GetNearestPage() {
@@ -279,60 +233,11 @@ public class ScrollSnapHero : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         return nearestPage;
     }
 
-    //------------------------------------------------------------------------
-    public void OnBeginDrag(PointerEventData aEventData) {
-        // if currently lerping, then stop it as user is draging
-        _lerp = false;
-        // not dragging yet
-        _dragging = false;
-    }
-
-    //------------------------------------------------------------------------
-    public void OnEndDrag(PointerEventData aEventData) {
-        // how much was container's content dragged
-        float difference;
-        if (_horizontal) {
-            difference = _startPosition.x - _container.anchoredPosition.x;
-        } else {
-            difference = - (_startPosition.y - _container.anchoredPosition.y);
-        }
-
-        // test for fast swipe - swipe that moves only +/-1 item
-        if (Time.unscaledTime - _timeStamp < fastSwipeThresholdTime &&
-            Mathf.Abs(difference) > fastSwipeThresholdDistance &&
-            Mathf.Abs(difference) < _fastSwipeThresholdMaxLimit) {
-            if (difference > 0) {
-                NextScreen();
-            } else {
-                PreviousScreen();
-            }
-        } else {
-            // if not fast time, look to which page we got to
-            LerpToPage(GetNearestPage());
-        }
-
-        _dragging = false;
-    }
-
-    //------------------------------------------------------------------------
-    public void OnDrag(PointerEventData aEventData) {
-        if (!_dragging) {
-            // dragging started
-            _dragging = true;
-            // save time - unscaled so pausing with Time.scale should not affect it
-            _timeStamp = Time.unscaledTime;
-            // save current position of cointainer
-            _startPosition = _container.anchoredPosition;
-        } else {
-            if (_showPageSelection) {
-                SetPageSelection(GetNearestPage());
-            }
-        }
-    }
-
     private void OnRectTransformDimensionsChange()
     {
         InitSetUp();
     }
+
+
 }
 

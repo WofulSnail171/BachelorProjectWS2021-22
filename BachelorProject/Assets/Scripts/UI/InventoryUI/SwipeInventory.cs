@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwipeInventory : MonoBehaviour
 {
@@ -9,14 +10,19 @@ public class SwipeInventory : MonoBehaviour
     [SerializeField] GameObject slotParent;
     [HideInInspector] public SwipeSlot[] swipeSlots;
 
+    //swipeslot focused
     private PlayerHero matchHero;
-
+    public int swipeIndex = -1;
     #endregion
 
 
     private void Awake()
     {
         swipeSlots = slotParent.GetComponentsInChildren<SwipeSlot>();
+
+
+        foreach (SwipeSlot swipeSlot in swipeSlots)
+            swipeSlot.OnClickEvent += Click; ;
     }
 
     private void OnEnable()
@@ -63,6 +69,6 @@ public class SwipeInventory : MonoBehaviour
         swipeSlots[index].enableHighlight();
         matchHero = swipeSlots[index].playerHero;
 
-    
+        swipeIndex = index;
     }
 }
