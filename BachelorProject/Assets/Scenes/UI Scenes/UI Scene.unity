@@ -14374,6 +14374,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: a26a6d800904375448699b46b841afe5, type: 3}
   - name: Astra
     sprite: {fileID: 21300000, guid: dd76f89bf3336094db18048b4c8c4af6, type: 3}
+  - name: Axel
+    sprite: {fileID: 21300000, guid: 9c3bf8d5c8730d3449439bfab5cd3ef9, type: 3}
+  - name: Beisal
+    sprite: {fileID: 21300000, guid: e38da50a15b069e4d81081089eb7af8b, type: 3}
   - name: Birb
     sprite: {fileID: 21300000, guid: bab61212657c4b44ca4eb06954223e4e, type: 3}
   - name: Brooke
@@ -14384,12 +14388,18 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1ca0fc1df593b834790a9b6046fd05f9, type: 3}
   - name: Geraldine
     sprite: {fileID: 21300000, guid: 96905a3ea1e8e6045a3cdb1704820fbe, type: 3}
-  - name: Hans
+  - name: Gigar
+    sprite: {fileID: 21300000, guid: 808f18240e58f3e489f3df9d5834a627, type: 3}
+  - name: Goms
+    sprite: {fileID: 21300000, guid: 9dbb89fc9b0f9904b98f362042a52646, type: 3}
+  - name: Hansi
     sprite: {fileID: 21300000, guid: 16bb3f4960fca5644872088e9c1b077d, type: 3}
   - name: Hardy
     sprite: {fileID: 21300000, guid: 78a3f3ae1b1899c43a39aa0316fb0a05, type: 3}
   - name: Hastur
     sprite: {fileID: 21300000, guid: 3377b8d148c8fb543aff811788c3529b, type: 3}
+  - name: Hector
+    sprite: {fileID: 21300000, guid: 266919e05f7ba824ab1118d0b1be527e, type: 3}
   - name: Helia
     sprite: {fileID: 21300000, guid: 0251be618938b214aa931fb4d1d66e06, type: 3}
   - name: Jasper
@@ -14400,10 +14410,18 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0babf03d16c699a4ca8268c24a32eeca, type: 3}
   - name: Kurt
     sprite: {fileID: 21300000, guid: 597422dcbea064449b7055d6aa271548, type: 3}
+  - name: Lorenzo
+    sprite: {fileID: 21300000, guid: f230bb80c68ffe443a2fada402c34f92, type: 3}
+  - name: Luca
+    sprite: {fileID: 21300000, guid: d22c25f721a6abc458d7cf150eb6e83b, type: 3}
   - name: Ludolf
     sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
+  - name: Mia
+    sprite: {fileID: 21300000, guid: cce6667c055017344beb2381981e0afd, type: 3}
   - name: Mocka
     sprite: {fileID: 21300000, guid: 41d9f7939055db14c8903c5aff93f812, type: 3}
+  - name: Moh
+    sprite: {fileID: 21300000, guid: c5e7176748fc4eb4c9433ba8d8cb03c0, type: 3}
   - name: Mort
     sprite: {fileID: 21300000, guid: 56e9e4aaba64f0b4da846510abad6256, type: 3}
   - name: Nephila
@@ -14414,6 +14432,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 483d622a2e7065f4593256b3f3f45aad, type: 3}
   - name: Nova
     sprite: {fileID: 21300000, guid: 063a7b3536113f74cb04c33eba7aa446, type: 3}
+  - name: Nox
+    sprite: {fileID: 21300000, guid: 22a32ff079cc5bf48a06aa35ffadcd52, type: 3}
   - name: Ouy
     sprite: {fileID: 21300000, guid: 3b74e5cbe1c037e4a87ee5c115a68eef, type: 3}
   - name: Ridley
@@ -14424,6 +14444,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 07303a6abff00bc4d9d90806939ab7c8, type: 3}
   - name: Sir Mauz
     sprite: {fileID: 21300000, guid: be093700906ae6f4985dd38806635be5, type: 3}
+  - name: Ted
+    sprite: {fileID: 21300000, guid: 5a0b308453bb6cb43a98dd999545ef71, type: 3}
+  - name: Telex
+    sprite: {fileID: 21300000, guid: eea680d494d9780478ad73a1b0a57869, type: 3}
   - name: The Hand
     sprite: {fileID: 21300000, guid: 0ef838b8a7b70f249a69e7a4779bbf70, type: 3}
   - name: Togarus
@@ -14432,6 +14456,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 326a8e2e25dd4084ea16d0d95d81c32a, type: 3}
   - name: Victoria
     sprite: {fileID: 21300000, guid: fb10b2c4e0dfd0848a8bf433266af5c8, type: 3}
+  - name: Winfred
+    sprite: {fileID: 21300000, guid: 2c0e97931baf5e54591612930a374189, type: 3}
 --- !u!1 &250211646
 GameObject:
   m_ObjectHideFlags: 0
@@ -45967,6 +45993,7 @@ MonoBehaviour:
   ReleaseText: {fileID: 1365773750}
   ReleaseButton: {fileID: 2004196327}
   ContinueButton: {fileID: 1210670169}
+  doublecard: {fileID: 2032755740}
   card: {fileID: 573836392}
   blackCard: {fileID: 232714284}
   blink: {fileID: 28989701}

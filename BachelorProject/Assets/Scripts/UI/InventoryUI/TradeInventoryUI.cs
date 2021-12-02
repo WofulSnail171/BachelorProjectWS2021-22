@@ -56,7 +56,7 @@ public class TradeInventoryUI : MonoBehaviour
                 draggedSlot.changeStatus(HeroStatus.Trading);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
-                heroSlots[originalID].changeStatus(HeroStatus.Idle);
+                heroSlots[originalID].changeStatus(temphero.status);
             }
 
         }
@@ -97,6 +97,8 @@ public class TradeInventoryUI : MonoBehaviour
             tradeSlots[i].OnRemoveEvent += RemoveHeroFromSlot;
 
             tradeSlots[i].slotID = i;
+            tradeSlots[i].originalSlotReferenceID = -1;
+            
 
             tradeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
             tradeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
@@ -137,10 +139,9 @@ public class TradeInventoryUI : MonoBehaviour
 
         foreach (TradeSlot slot in tradeSlots)
         {
+            RemoveHeroFromSlot(slot);
             slot.hideHero();
             slot.removeHero();
-
-            RemoveHeroFromSlot(slot);
         }
 
         UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", true); //hide UI

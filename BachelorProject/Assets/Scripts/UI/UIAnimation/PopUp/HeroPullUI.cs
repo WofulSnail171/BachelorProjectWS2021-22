@@ -12,6 +12,10 @@ public class HeroPullUI : MonoBehaviour
 
     [SerializeField] GameObject ReleaseButton;
     [SerializeField] GameObject ContinueButton;
+
+    [SerializeField] GameObject doublecard;
+
+
     [SerializeField] GameObject card;
     [SerializeField] GameObject blackCard;
     [SerializeField] GameObject blink;
@@ -35,7 +39,7 @@ public class HeroPullUI : MonoBehaviour
     #endregion
     private void Start()
     {
-        card.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
+        doublecard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
     }
 
     private void OnEnable()

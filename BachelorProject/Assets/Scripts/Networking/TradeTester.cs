@@ -15,7 +15,7 @@ public class TradeTester : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -56,5 +56,5 @@ public class TradeTester : MonoBehaviour
                 TradeManager._instance.DeleteOffers(list.ToArray());
             }
         }
-    }
+    }*/
 }
