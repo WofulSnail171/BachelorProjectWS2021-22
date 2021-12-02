@@ -248,6 +248,14 @@ public class DatabaseManager : MonoBehaviour
         LocalSaveSystem.SaveLocaldata();
     }
 
+    public TradeData tradeData;
+    public void UpdateTradeDataFromServer(string _message)
+    {
+        tradeData = JsonUtility.FromJson<TradeData>(_message);
+        tradeData.UpdateOwnOffers();
+        LocalSaveSystem.SaveLocaldata();
+    }
+
     // data synced with online or fetched regularly
     //player daten
     //   ->stammdaten (pw, username, etc.)
@@ -335,6 +343,7 @@ public class PlayerData
     public string currentDungeonRun;
     public int rewardTierBuff;
     public int shards;
+    public string tradeStartDate;
 
     public BlacklistEntry[] blacklist;
     public List<PlayerHero> inventory;
@@ -373,6 +382,7 @@ public class UploadPlayerData
         currentDungeonRun = _playerData.currentDungeonRun;
         rewardTierBuff = _playerData.rewardTierBuff;
         shards = _playerData.shards;
+        tradeStartDate = _playerData.tradeStartDate;
     }
     public string playerId;
     public string password;
@@ -385,6 +395,7 @@ public class UploadPlayerData
     public string currentDungeonRun;
     public int rewardTierBuff;
     public int shards;
+    public string tradeStartDate;
 }
 
 [System.Serializable]
@@ -516,4 +527,69 @@ public class DungeonDifficulty
     public int minLvl;
     public int maxLvl;
     public int medianLvl;
+}
+
+[System.Serializable]
+public class TradeData
+{
+    public List<TradeOffer> ownOffers;
+    public List<TradeOffer> tradeOffers;
+
+    public void UpdateOwnOffers()
+    {
+        ownOffers = new List<TradeOffer>();
+        if (tradeOffers == null)
+            return;
+        foreach (var item in tradeOffers)
+        {
+            if(item.heroId == DatabaseManager._instance.activePlayerData.playerId || item.available == DatabaseManager._instance.activePlayerData.playerId)
+            {
+                ownOffers.Add(item);
+            }
+        }
+
+        bool valid = false;
+        List<TradeOffer> tradeOffersToDelete = new List<TradeOffer>();
+        foreach (var offer in ownOffers)
+        {
+            valid = false;
+            foreach (var plHero in DatabaseManager._instance.activePlayerData.inventory)
+            {
+                if(plHero.uniqueId == offer.uniqueId)
+                {
+                    valid = true; //hero connected to offer still exists
+                    if (plHero.status != HeroStatus.Trading)
+                    {
+                        Debug.LogError("Hero is not in trading status but is referenced by tradeoffer");
+                    }
+                    break;                    
+                }
+            }
+            if(valid == false)
+            {
+                tradeOffersToDelete.Add(offer);
+            }
+        }
+        if(tradeOffersToDelete.Count > 0)
+        {
+            TradeManager._instance.DeleteOffers(tradeOffersToDelete.ToArray());
+        }
+    }
+}
+
+[System.Serializable]
+public class TradeOffer
+{
+    public string available;
+    public int offerId;
+    public string date;
+    public int playerId;
+    public string heroId;
+    public int uniqueId;
+    public string lastOwner;
+    public string origOwner;
+    public int traded;
+    public int runs;
+
+    public List<int> interestedOffers;
 }

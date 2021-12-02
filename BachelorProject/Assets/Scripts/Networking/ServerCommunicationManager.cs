@@ -184,6 +184,16 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PullRewardTable:
                 DatabaseManager._instance.UpdateRewardTableFromServer(lastMessage);
                 break;
+            case Request.UploadOffer:
+                break;
+            case Request.UpdateOffer:
+                break;
+            case Request.PullTradeOffers:
+                DatabaseManager._instance.UpdateTradeDataFromServer(lastMessage);
+                break;
+            case Request.DeleteOffers:
+                //ToDo
+                break;
             default:
                 break;
         }
@@ -210,10 +220,10 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.Error:
                 break;
             case Request.SignUp:
-                DeleventSystem.trySignUp(new PlayerData { playerId = "Error", password = _message});
+                lastMessage = JsonUtility.ToJson(new PlayerData { playerId = "Error", password = _message });
                 break;
             case Request.SignIn:
-                DeleventSystem.trySignIn(new PlayerData { playerId = "Error", password = _message});
+                lastMessage = JsonUtility.ToJson(new PlayerData { playerId = "Error", password = _message });
                 break;
             case Request.GetPlayerData:
                 break;
@@ -232,6 +242,15 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushBlacklist:
                 break;
             case Request.PullRewardTable:
+                break;
+            case Request.UploadOffer:
+                break;
+            case Request.UpdateOffer:
+                break;
+            case Request.PullTradeOffers:
+                break;
+            case Request.DeleteOffers:
+                //ToDo
                 break;
             default:
                 break;
@@ -364,6 +383,19 @@ public class ServerCommunicationManager : MonoBehaviour
                 ServerCommunicationManager._instance.GetInfo(Request.PullRewardTable, "", _simpleEvent, _messageEvent);
                 //ToDo: Splitted into multiple Requests
                 break;
+            case Request.UploadOffer:
+                //ToDo
+                break;
+            case Request.UpdateOffer:
+                //ToDo
+                break;
+            case Request.PullTradeOffers:
+                //ToDo
+                ServerCommunicationManager._instance.GetInfo(Request.PullTradeOffers, "", _simpleEvent, _messageEvent);
+                break;
+            case Request.DeleteOffers:
+                //ToDo
+                break;
             default:
                 break;
         }
@@ -390,7 +422,11 @@ public enum Request
     DownloadDungeonData,
     PushInventory,
     PushBlacklist,
-    PullRewardTable
+    PullRewardTable,
+    UploadOffer,
+    UpdateOffer,
+    PullTradeOffers,
+    DeleteOffers
 }
 
 //for the request queue:
