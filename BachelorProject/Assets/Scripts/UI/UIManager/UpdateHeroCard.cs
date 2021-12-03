@@ -105,6 +105,26 @@ public class UpdateHeroCard : MonoBehaviour
 
 
         //Buff Debuff Path
+        //images
+        if (IconStruct.IconDictionary.ContainsKey(defaultHero.nodeBuff))
+        {
+            BuffImage.sprite = IconStruct.IconDictionary[defaultHero.nodeBuff].sprite;
+            BuffImage.color = IconStruct.IconDictionary[defaultHero.nodeBuff].color;
+        }
+
+        if (IconStruct.IconDictionary.ContainsKey(defaultHero.nodeDebuff))
+        {
+            DebuffImage.sprite = IconStruct.IconDictionary[defaultHero.nodeDebuff].sprite;
+            DebuffImage.color = IconStruct.IconDictionary[defaultHero.nodeDebuff].color;
+        }
+
+        if (IconStruct.IconDictionary.ContainsKey(defaultHero.pathAff))
+        {
+            PathImage.sprite = IconStruct.IconDictionary[defaultHero.pathAff].sprite;
+            PathImage.color = IconStruct.IconDictionary[defaultHero.pathAff].color;
+        }
+
+        //text
         switch (defaultHero.nodeBuff)
         {
             case "seaside":
