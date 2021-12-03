@@ -14353,6 +14353,8 @@ MonoBehaviour:
   WorkAroundList:
   - name: Agnus
     sprite: {fileID: 21300000, guid: 2235664c273539b41a94be5d53783335, type: 3}
+  - name: Ann
+    sprite: {fileID: 21300000, guid: 6b6d2ddc4c38d6b44bc825b120c9bf70, type: 3}
   - name: Aqua
     sprite: {fileID: 21300000, guid: a26a6d800904375448699b46b841afe5, type: 3}
   - name: Astra
@@ -14367,8 +14369,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: bab61212657c4b44ca4eb06954223e4e, type: 3}
   - name: Bones
     sprite: {fileID: 21300000, guid: 6ba71d1bee22b9a4382d67be5b4e9e2c, type: 3}
+  - name: Brad
+    sprite: {fileID: 21300000, guid: f69e18cdc99b79d498fb1faaae987862, type: 3}
   - name: Brooke
     sprite: {fileID: 21300000, guid: 914e5abd81f9a25478208b87ddc4a2d2, type: 3}
+  - name: Cinder
+    sprite: {fileID: 21300000, guid: 006de6c3b21607243b93c6fce660279b, type: 3}
   - name: Cordelia
     sprite: {fileID: 21300000, guid: 78317b25e8fe1a84eadfa2d50c693f5f, type: 3}
   - name: Fink
@@ -14405,6 +14411,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d22c25f721a6abc458d7cf150eb6e83b, type: 3}
   - name: Ludolf
     sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
+  - name: Manny
+    sprite: {fileID: 21300000, guid: 3e842cbb14419a94dbf295ff237e938e, type: 3}
   - name: Mia
     sprite: {fileID: 21300000, guid: cce6667c055017344beb2381981e0afd, type: 3}
   - name: Mocka
@@ -14425,8 +14433,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 22a32ff079cc5bf48a06aa35ffadcd52, type: 3}
   - name: Oak
     sprite: {fileID: 21300000, guid: 3a1bfda755441044bb603e659dec089f, type: 3}
+  - name: Ora
+    sprite: {fileID: 21300000, guid: 109d1e0d5b98d78419e8e2ce554ba1eb, type: 3}
   - name: Ouy
     sprite: {fileID: 21300000, guid: 3b74e5cbe1c037e4a87ee5c115a68eef, type: 3}
+  - name: Peter
+    sprite: {fileID: 21300000, guid: d8fdc63edab63d847b66040d0eb90383, type: 3}
   - name: Ridley
     sprite: {fileID: 21300000, guid: e6a7c603e72b55345a8fb13b8775d050, type: 3}
   - name: Rock
@@ -14435,6 +14447,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 07303a6abff00bc4d9d90806939ab7c8, type: 3}
   - name: Sir Mauz
     sprite: {fileID: 21300000, guid: be093700906ae6f4985dd38806635be5, type: 3}
+  - name: Squamata
+    sprite: {fileID: 21300000, guid: b2be01b8690ba1a46a058552b0120113, type: 3}
   - name: Ted
     sprite: {fileID: 21300000, guid: 5a0b308453bb6cb43a98dd999545ef71, type: 3}
   - name: Telex
@@ -14451,6 +14465,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6b8d505bb07b17b4e9b932cc57065ce7, type: 3}
   - name: Winfred
     sprite: {fileID: 21300000, guid: 2c0e97931baf5e54591612930a374189, type: 3}
+  - name: Zenia
+    sprite: {fileID: 21300000, guid: 901a68f0898334948a8c861f588cf994, type: 3}
 --- !u!1 &250211646
 GameObject:
   m_ObjectHideFlags: 0
