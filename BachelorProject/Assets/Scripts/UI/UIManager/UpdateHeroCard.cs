@@ -13,6 +13,9 @@ public class UpdateHeroCard : MonoBehaviour
     [SerializeField] TMP_Text Name;
     [SerializeField] TMP_Text Race;
     [SerializeField] TMP_Text Job;
+    [SerializeField] TMP_Text BackName;
+    [SerializeField] TMP_Text BackRace;
+    [SerializeField] TMP_Text BackJob;
     [Space]
     [SerializeField] TMP_Text physicalStatText;
     [SerializeField] TMP_Text magicalStatText;
@@ -72,6 +75,9 @@ public class UpdateHeroCard : MonoBehaviour
         Name.text = hero.heroId;
         Race.text = defaultHero.race;
         Job.text = defaultHero.job;
+        BackName.text = hero.heroId;
+        BackRace.text = defaultHero.race;
+        BackJob.text = defaultHero.job;
 
 
         //stats
@@ -140,7 +146,7 @@ public class UpdateHeroCard : MonoBehaviour
                 BuffText.text = "I want to travel plains.";
                 break;
             case "settlement":
-                BuffText.text = "I like visiting settlments.";
+                BuffText.text = "I like visiting settlements.";
                 break;
             case "forest":
                 BuffText.text = "I long for nature.";
@@ -200,25 +206,25 @@ public class UpdateHeroCard : MonoBehaviour
         //card detail
         descriptionContent.text = defaultHero.description;
 
-        if (hero.lastOwner != "")
-            formerOwner.text = hero.lastOwner;
-
-        else
-            formerOwner.text = "-";
-
 
         if (hero.origOwner != "")
-            formerOwner.text = hero.lastOwner;
+            originalOwner.text = hero.origOwner;
 
         else
-            formerOwner.text = DatabaseManager._instance.activePlayerData.playerId;
+            originalOwner.text = DatabaseManager._instance.activePlayerData.playerId;
 
 
         if (hero.traded > 0)
+        {
             tradeAmount.text = hero.traded.ToString();
+            formerOwner.text = hero.lastOwner;
+        }
 
         else
+        {
             tradeAmount.text = "0";
+            formerOwner.text = "-";
+        }
 
         if (hero.runs > 0)
             dungeonAmount.text = hero.traded.ToString();
