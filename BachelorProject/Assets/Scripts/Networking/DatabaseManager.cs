@@ -490,6 +490,7 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+    public string shortEndText;
     public string description;
 }
 
