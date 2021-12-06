@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class DungeonNodeVisual : MonoBehaviour
 {
     DungeonNode dungeonNode;
-    LineRenderer lineRenderer;
+
+    //LineRenderer lineRenderer;
+
     public TMP_Text nodeType;
     public TMP_Text eventName;
     [SerializeField] Image nodeImage;
@@ -16,25 +18,26 @@ public class DungeonNodeVisual : MonoBehaviour
     //public CheapProgressBar pgBar;
 
     public GameObject pathVisualPrefab;
-    public List<LineRenderer> pathVisualizer;
+    public List<Image> pathVisualizer;
 
-    public PathGradient[] pathGradients;
-    Dictionary<string, Gradient> pathGradientDict;
+    [SerializeField] Color clearColor;
+    //public PathGradient[] pathGradients;
+    //Dictionary<string, Gradient> pathGradientDict;
 
     // Start is called before the first frame update
     void Awake()
     {
         if (dungeonNode == null)
             dungeonNode = gameObject.GetComponent<DungeonNode>();
-        if (lineRenderer == null)
-            lineRenderer = gameObject.GetComponent<LineRenderer>();
+       // if (lineRenderer == null)
+            //lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
 
     private void Start()
     {
         foreach (var node in dungeonNode.nextNodes)
         {
-            GameObject go = Instantiate(pathVisualPrefab, transform.position, transform.rotation);
+            /*GameObject go = Instantiate(pathVisualPrefab, transform.position, transform.rotation);
             LineRenderer lr = go.GetComponent<LineRenderer>();
             Vector3[] positions = new Vector3[]
             {
@@ -43,16 +46,27 @@ public class DungeonNodeVisual : MonoBehaviour
             };
             lr.positionCount = 2;
             lr.SetPositions(positions);
+
+            
             pathVisualizer.Add(lr);
-            go.transform.SetParent(this.transform);
-        }
-        pathGradientDict = new Dictionary<string, Gradient>();
-        foreach (var item in pathGradients)
-        {
-            if (!pathGradientDict.ContainsKey(item.pathId))
-            {
-                pathGradientDict.Add(item.pathId, item.gradient);
-            }
+            go.transform.SetParent(this.transform);*/
+
+
+            Vector3 start = dungeonNode.transform.position;
+            Vector3 end = node.transform.position;
+
+            var direction = end - start;
+
+            GameObject go = Instantiate(pathVisualPrefab, transform.position, transform.rotation);
+
+            Image image = go.GetComponent<PathPrefabWorkAround>().path;
+            
+            image.transform.SetPositionAndRotation(dungeonNode.transform.position, Quaternion.FromToRotation(Vector3.up, direction));
+            image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Vector3.Distance(start, end));
+            image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0.2f);
+
+            pathVisualizer.Add(image);
+
         }
     }
 
@@ -86,16 +100,14 @@ public class DungeonNodeVisual : MonoBehaviour
 
         for (int i = 0; i < pathVisualizer.Count; i++)
         {
-            pathVisualizer[i].colorGradient = pathGradientDict[dungeonNode.nextPaths[i]];
+            pathVisualizer[i].color = IconStruct.IconDictionary[dungeonNode.nextPaths[i]].color;
+            pathVisualizer[i].sprite = IconStruct.IconDictionary[dungeonNode.nextPaths[i]].sprite;
+
         }
         if(dungeonNode.chosenPathIndex != -1 && DungeonManager._instance.CheckCalcRun() && DungeonManager._instance.currentCalcRun.currentNode != dungeonNode)
         {
-            pathVisualizer[dungeonNode.chosenPathIndex].colorGradient = pathGradientDict["cleared"];
+            pathVisualizer[dungeonNode.chosenPathIndex].color = clearColor;
         }
-
-        //icon
-
-
     }
 
     [System.Serializable]
@@ -103,5 +115,34 @@ public class DungeonNodeVisual : MonoBehaviour
     {
         public string pathId;
         public Gradient gradient;
+    }
+
+    private void OnDisable()
+    {
+        if(pathVisualizer != null && pathVisualizer.Count != 0)
+        { 
+            foreach(var image in pathVisualizer)
+            {
+                if(image != null)
+                    image.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (pathVisualizer != null && pathVisualizer.Count != 0)
+        {
+            foreach (var image in pathVisualizer)
+            {
+                if (image != null)
+                    image.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        pathVisualizer.Clear();
     }
 }
