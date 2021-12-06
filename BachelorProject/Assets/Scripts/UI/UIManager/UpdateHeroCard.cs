@@ -51,6 +51,8 @@ public class UpdateHeroCard : MonoBehaviour
     [SerializeField] TMP_Text dungeonAmount;
     [SerializeField] TMP_Text tradeAmount;
 
+    public PlayerHero publicHero;
+
     private DefaultHero defaultHero;
 
     private string physicalPotential;
@@ -70,6 +72,7 @@ public class UpdateHeroCard : MonoBehaviour
 
     public void UpdateHero(PlayerHero hero)
     {
+        publicHero = hero;
         defaultHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[hero.heroId];
 
         Name.text = hero.heroId;
