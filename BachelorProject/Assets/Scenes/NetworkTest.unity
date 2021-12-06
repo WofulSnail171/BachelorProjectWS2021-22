@@ -1657,6 +1657,12 @@ MonoBehaviour:
     eventDecks: []
     nodeTypes: []
     pathTypes: []
+    textFlavours:
+      textsEnemyName: []
+      textsPathChoosing: []
+      textsPathHandling: []
+      textsEnemyTurn: []
+      textsHeroTurn: []
   rewardTable:
     rewardTiers: []
     dungeonDifficulties: []

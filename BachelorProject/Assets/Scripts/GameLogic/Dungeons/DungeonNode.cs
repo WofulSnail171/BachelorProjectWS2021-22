@@ -16,6 +16,7 @@ public class DungeonNode : MonoBehaviour
 
     //gets calculated with run seed
     public Event nodeEvent;
+    public string eventEnemy;
     //public string statType;
     //public string eventName;
     public int maxEventHealth;
@@ -78,19 +79,19 @@ public class DungeonNode : MonoBehaviour
 
         if (nodeEvent != null)
             Handles.Label(transform.position + Vector3.up * .4f + Vector3.left * .75f, nodeEvent.eventName);
-        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 0 && nodeType == DatabaseManager._instance.eventData.nodeTypes[0])
+        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 1 && nodeType == DatabaseManager._instance.eventData.nodeTypes[1])
             Gizmos.color = Color.yellow;
-        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 1 && nodeType == DatabaseManager._instance.eventData.nodeTypes[1])
-            Gizmos.color = Color.red;
         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 2 && nodeType == DatabaseManager._instance.eventData.nodeTypes[2])
-            Gizmos.color = Color.blue;
+            Gizmos.color = Color.red;
         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 3 && nodeType == DatabaseManager._instance.eventData.nodeTypes[3])
-            Gizmos.color = Color.green;
+            Gizmos.color = Color.blue;
         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 4 && nodeType == DatabaseManager._instance.eventData.nodeTypes[4])
-            Gizmos.color = Color.cyan;
+            Gizmos.color = Color.green;
         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 5 && nodeType == DatabaseManager._instance.eventData.nodeTypes[5])
-            Gizmos.color = Color.black;
+            Gizmos.color = Color.cyan;
         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 6 && nodeType == DatabaseManager._instance.eventData.nodeTypes[6])
+            Gizmos.color = Color.black;
+        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.nodeTypes.Length > 7 && nodeType == DatabaseManager._instance.eventData.nodeTypes[7])
             Gizmos.color = Color.magenta;
         else
             Gizmos.color = Color.grey;
@@ -110,19 +111,19 @@ public class DungeonNode : MonoBehaviour
                 {
                     for (int i = 0; i < nextPaths.Count; i++)
                     {
-                        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 0 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[0])
+                        if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 1 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[1])
                             Gizmos.color = Color.yellow;
-                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 1 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[1])
-                            Gizmos.color = Color.red;
                         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 2 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[2])
-                            Gizmos.color = Color.blue;
+                            Gizmos.color = Color.red;
                         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 3 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[3])
-                            Gizmos.color = Color.green;
+                            Gizmos.color = Color.blue;
                         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 4 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[4])
-                            Gizmos.color = Color.cyan;
+                            Gizmos.color = Color.green;
                         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 5 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[5])
-                            Gizmos.color = Color.black;
+                            Gizmos.color = Color.cyan;
                         else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 6 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[6])
+                            Gizmos.color = Color.black;
+                        else if (DatabaseManager._instance != null && DatabaseManager._instance.eventData.pathTypes.Length > 7 && nextPaths[i] == DatabaseManager._instance.eventData.pathTypes[7])
                             Gizmos.color = Color.magenta;
                         else
                             Gizmos.color = Color.grey;

@@ -462,6 +462,9 @@ public class EventData
     public EventDeck[] eventDecks;
     public string[] nodeTypes;
     public string[] pathTypes;
+
+    //FlavourTexts
+    public TextFlavours textFlavours;
 }
 
 [System.Serializable]
@@ -479,6 +482,7 @@ public class Event
     public string startText;
     public string endText;
 }
+
 [System.Serializable]
 public class DungeonEvent
 {

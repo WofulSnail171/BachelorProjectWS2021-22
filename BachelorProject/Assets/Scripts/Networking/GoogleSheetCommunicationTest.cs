@@ -210,6 +210,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         DungeonManager._instance.CreateDailyDungeons();
         if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
         {
+            DungeonManager._instance.RevalidateMaxStepsAndRandomNums();
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
             DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
             //DungeonManager._instance.CalculateRun(0);

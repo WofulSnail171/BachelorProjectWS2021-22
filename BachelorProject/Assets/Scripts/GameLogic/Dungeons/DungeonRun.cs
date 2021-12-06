@@ -13,6 +13,7 @@ public class DungeonRun
     public int initialRewardTier; //dungeon assigned rt + rewardbuff
     public int maxSteps;
     public List<RandomNum> randomNums;
+    public List<int>  otherRandNums;
 }
 
 [System.Serializable]
@@ -54,8 +55,34 @@ public class CalculatedDungeonRun
         }
     }
 
+    public int otherRandCounter = 0;
+    public int OtherRandomNum(int min, int max)
+    {
+        int result = 0;
+        if (DatabaseManager._instance.dungeonData.currentRun.otherRandNums == null)
+            DatabaseManager._instance.dungeonData.currentRun.otherRandNums = new List<int>();
+        if (DatabaseManager._instance.dungeonData.currentRun.otherRandNums.Count > otherRandCounter)
+        {
+            result = DatabaseManager._instance.dungeonData.currentRun.otherRandNums[otherRandCounter];
+            if (result < min)
+                result = min;
+            if (result > max)
+                result = max;
+            otherRandCounter++;
+        }
+        else
+        {
+            result = UnityEngine.Random.Range(min, max);
+            DatabaseManager._instance.dungeonData.currentRun.otherRandNums.Add(result);
+            otherRandCounter = DatabaseManager._instance.dungeonData.currentRun.otherRandNums.Count;
+        }           
+        return result;
+    }
+
     public int RandomNum(int min, int max)
     {
+        return OtherRandomNum(min, max);
+        /*
         if (randomNums.ContainsKey(currentStep))
         {
             return randomNums[currentStep];
@@ -68,6 +95,7 @@ public class CalculatedDungeonRun
             DatabaseManager._instance.dungeonData.currentRun.randomNums.Add(new RandomNum { num = randomNum, step = currentStep });
             return randomNum;
         }
+        */
     }
 
     public int AffectRewardHealth(int _amount)
@@ -105,9 +133,10 @@ public class CalculatedDungeonRun
     public LogEntry[] dungeonLogArr;
     public void UpdateLog(string _newEntry)
     {
+        string replacedText = TextReplacer.ReplaceWordsBulk(_newEntry);
         if (dungeonLog == null)
             dungeonLog = new List<LogEntry>();
-        dungeonLog.Add(new LogEntry {step = currentStep, entry = _newEntry });
+        dungeonLog.Add(new LogEntry {step = currentStep, entry = replacedText });
         dungeonLogArr = dungeonLog.ToArray();
         if (DungeonManager.events)
             DeleventSystem.DungeonLog?.Invoke();
