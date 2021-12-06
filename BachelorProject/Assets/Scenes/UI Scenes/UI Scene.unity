@@ -14755,10 +14755,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 2c4802e5f58a1914ebce93ce9f97a584, type: 3}
     color: {r: 0.13171624, g: 0.099368095, b: 0.2735849, a: 1}
   - name: plain
-    sprite: {fileID: 21300000, guid: 4bc3901cfc6d02443b7bf03e9e2f3e0f, type: 3}
+    sprite: {fileID: 21300000, guid: 74cbba53dbd383149b8847d124759baf, type: 3}
     color: {r: 0.6226415, g: 0.5421681, b: 0.22027412, a: 1}
   - name: ruins
-    sprite: {fileID: 21300000, guid: 6dc9c8a3602ebf34d8cf25737fb24a06, type: 3}
+    sprite: {fileID: 21300000, guid: a14658192b5e7344f83266631a46030a, type: 3}
     color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   - name: seaside
     sprite: {fileID: 21300000, guid: 2a5bff3115b3550499f08ee8150cc54a, type: 3}
@@ -20045,7 +20045,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endText: {fileID: 612984630}
-  continueButton: {fileID: 1856899898}
 --- !u!1 &363786748
 GameObject:
   m_ObjectHideFlags: 0

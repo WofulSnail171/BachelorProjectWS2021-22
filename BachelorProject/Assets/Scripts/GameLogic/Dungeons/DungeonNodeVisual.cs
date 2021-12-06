@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DungeonNodeVisual : MonoBehaviour
 {
@@ -9,8 +10,11 @@ public class DungeonNodeVisual : MonoBehaviour
     LineRenderer lineRenderer;
     public TMP_Text nodeType;
     public TMP_Text eventName;
-    public TMP_Text eventGrowth;
-    public CheapProgressBar pgBar;
+    [SerializeField] Image nodeImage;
+
+    //public TMP_Text eventGrowth;
+    //public CheapProgressBar pgBar;
+
     public GameObject pathVisualPrefab;
     public List<LineRenderer> pathVisualizer;
 
@@ -25,6 +29,7 @@ public class DungeonNodeVisual : MonoBehaviour
         if (lineRenderer == null)
             lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
+
     private void Start()
     {
         foreach (var node in dungeonNode.nextNodes)
@@ -60,11 +65,19 @@ public class DungeonNodeVisual : MonoBehaviour
     void UpdateVisuals()
     {
         nodeType.text = "Lvl" + dungeonNode.level.ToString() + " " + dungeonNode.nodeType;
-        pgBar.SetVal(dungeonNode.eventHealth, dungeonNode.maxEventHealth);
+
+        if(IconStruct.IconDictionary.ContainsKey(dungeonNode.nodeType))
+        {
+            nodeImage.sprite = IconStruct.IconDictionary[dungeonNode.nodeType].sprite;
+            nodeImage.color = IconStruct.IconDictionary[dungeonNode.nodeType].color;
+        }
+
+        //pgBar.SetVal(dungeonNode.eventHealth, dungeonNode.maxEventHealth);
+        
         if (dungeonNode.eventHealth != dungeonNode.maxEventHealth)
         {
             eventName.text = dungeonNode.nodeEvent.eventName;
-            eventGrowth.text = "Growth: " + dungeonNode.currentGrowth.ToString();
+            //eventGrowth.text = "Growth: " + dungeonNode.currentGrowth.ToString();
         }
         else
         {

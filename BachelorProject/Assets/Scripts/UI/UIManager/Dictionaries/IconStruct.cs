@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class IconStruct : MonoBehaviour
 {
+    public static IconStruct Instance;
+
+
     [System.Serializable]
     [HideInInspector]public struct IconDict
     {
@@ -20,6 +23,15 @@ public class IconStruct : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+            Destroy(this);
+
+
+
         //init dict
         foreach (IconDict icon in WorkAroundIconList)
         {
