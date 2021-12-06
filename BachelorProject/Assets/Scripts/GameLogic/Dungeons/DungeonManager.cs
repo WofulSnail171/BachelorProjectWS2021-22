@@ -291,7 +291,7 @@ public class DungeonManager : MonoBehaviour
 
     void EnterNewActivityState(DungeonActivity _newActivity, bool _doExit = true)
     {
-        Debug.Log(_newActivity.ToString() + " | Step: " + currentCalcRun.currentStep.ToString());
+        //Debug.Log(_newActivity.ToString() + " | Step: " + currentCalcRun.currentStep.ToString());
         if (_doExit)
         {
             //Exit behavior if necessary
@@ -419,6 +419,7 @@ public class DungeonManager : MonoBehaviour
                 if (currentCalcRun.nextHero >= DatabaseManager._instance.dungeonData.currentRun.party.Count)
                 {
                     //fineished a round
+                    currentCalcRun.remainingActivitySteps = 20;
                     currentCalcRun.nextHero = 0;
                     //display end round text for event
                     currentCalcRun.currentNode.currentGrowth--;
