@@ -56,7 +56,8 @@ public class TradeInventoryUI : MonoBehaviour
                 draggedSlot.changeStatus(HeroStatus.Trading);
                 draggedSlot.updateHero(draggedSlot.playerHero, inventory.CheckForSprite(draggedSlot.playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[draggedSlot.playerHero.heroId].rarity, tradeSlot.slotID, -1);
 
-                heroSlots[originalID].changeStatus(temphero.status);
+
+                heroSlots[originalID].changeStatus(HeroStatus.Idle);
             }
 
         }
