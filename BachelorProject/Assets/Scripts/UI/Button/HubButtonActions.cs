@@ -40,6 +40,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject hubButton;
     [SerializeField] GameObject hubFocusedButton;//do nothing, just set active
     [Space]
+    [SerializeField] GameObject ContinueEndTextButton;
     [SerializeField] GameObject ContinueHeroPullButton;
     [SerializeField] GameObject DiscardHeroPullButton;
     [SerializeField] GameObject ReleaseHeroPullButton;
@@ -90,6 +91,7 @@ public class HubButtonActions : MonoBehaviour
         dungeonReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickedReadyDungeon(); });
 
         ContinueHeroGrowthButton.GetComponent<Button>().onClick.AddListener(() => { ContinueHeroGrowth(); }); 
+        ContinueEndTextButton.GetComponent<Button>().onClick.AddListener(() => { ContinueEndText(); }); 
         ContinueShardButton.GetComponent<Button>().onClick.AddListener(() => { ContinueShards(); });
         ReleaseHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ReleaseHeroReward(); });
         DiscardHeroPullButton.GetComponent<Button>().onClick.AddListener(() => {DiscardHeroReward(); });
@@ -405,13 +407,9 @@ public class HubButtonActions : MonoBehaviour
         DungeonManager._instance.EventRewardShardHandling();
 
 
-        //actually start pop up flow 
-        if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
-            UIEnablerManager.Instance.EnableElement("ShardReward", true);
 
-        else
-            UIEnablerManager.Instance.EnableElement("HeroGrowth", true);
-
+        //actually start pop up flow
+        UIEnablerManager.Instance.EnableElement("DungeonEnd", true);
 
 
         //change buttons and hub focus in bg
@@ -441,14 +439,21 @@ public class HubButtonActions : MonoBehaviour
             default:
                 break;
         }
-
-        
-        
+       
     }
 
 
     //
     //reward flow pop ups
+    private void ContinueEndText()
+    {
+        if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
+            UIEnablerManager.Instance.EnableElement("ShardReward", true);
+
+        else
+            UIEnablerManager.Instance.EnableElement("HeroGrowth", true);
+    }
+
     private void ContinueShards()
     {
         UIEnablerManager.Instance.EnableBlur();
