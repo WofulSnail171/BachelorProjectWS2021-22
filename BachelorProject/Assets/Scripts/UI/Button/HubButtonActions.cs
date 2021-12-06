@@ -447,6 +447,8 @@ public class HubButtonActions : MonoBehaviour
     //reward flow pop ups
     private void ContinueEndText()
     {
+        UIEnablerManager.Instance.DisableElement("DungeonEnd", true);
+
         if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
             UIEnablerManager.Instance.EnableElement("ShardReward", true);
 
@@ -527,6 +529,8 @@ public class HubButtonActions : MonoBehaviour
         isRewarding = false;
 
     }
+
+
 
 
     //
