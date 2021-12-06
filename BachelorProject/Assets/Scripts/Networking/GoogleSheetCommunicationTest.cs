@@ -137,6 +137,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
             ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
         }
     }
@@ -158,6 +159,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
             
             // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply

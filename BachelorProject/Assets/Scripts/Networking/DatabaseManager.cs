@@ -364,6 +364,31 @@ public class PlayerData
             ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
         }
     }
+
+
+    public bool BlackListContainsOffer(TradeOffer _offer)
+    {
+        foreach (var item in blacklist)
+        {
+            if(item.heroId == _offer.heroId && item.playerId == _offer.playerId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool PlayerIsInterestedInOffer(TradeOffer _offer)
+    {
+        foreach (var item in DatabaseManager._instance.tradeData.ownOffers)
+        {
+            if (_offer.interestedOffers.Contains(item.offerId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 [System.Serializable]
@@ -539,12 +564,37 @@ public class TradeData
 {
     public List<TradeOffer> ownOffers;
     public List<TradeOffer> tradeOffers;
+    public List<TradeOffer> openOffers;
 
     //
     //TODO
     public int GetNumberOFOpenOffers()
     {
-        return 12;
+        return openOffers.Count;
+    }
+
+    public TradeOffer GetOfferById(int _tradeId)
+    {
+        foreach (var item in tradeOffers)
+        {
+            if (item.offerId == _tradeId)
+                return item;
+        }
+        return null;
+    }
+
+    void UpdateOpenOffers()
+    {
+        openOffers = new List<TradeOffer>();
+        if (tradeOffers == null)
+            return;
+        foreach (var item in tradeOffers)
+        {
+            if (!ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item) && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
+            {
+                openOffers.Add(item);
+            }
+        }
     }
 
     public void UpdateOwnOffers()
@@ -554,7 +604,7 @@ public class TradeData
             return;
         foreach (var item in tradeOffers)
         {
-            if(item.heroId == DatabaseManager._instance.activePlayerData.playerId || item.available == DatabaseManager._instance.activePlayerData.playerId)
+            if(item.playerId == DatabaseManager._instance.activePlayerData.playerId || item.available == DatabaseManager._instance.activePlayerData.playerId)
             {
                 ownOffers.Add(item);
             }
@@ -572,7 +622,7 @@ public class TradeData
                     valid = true; //hero connected to offer still exists
                     if (plHero.status != HeroStatus.Trading)
                     {
-                        Debug.LogError("Hero is not in trading status but is referenced by tradeoffer");
+                        Debug.LogWarning("Hero is not in trading status but is referenced by tradeoffer");
                     }
                     break;                    
                 }
@@ -586,6 +636,8 @@ public class TradeData
         {
             TradeManager._instance.DeleteOffers(tradeOffersToDelete.ToArray());
         }
+        //
+        UpdateOpenOffers();
     }
 }
 
@@ -595,7 +647,7 @@ public class TradeOffer
     public string available;
     public int offerId;
     public string date;
-    public int playerId;
+    public string playerId;
     public string heroId;
     public int uniqueId;
     public string lastOwner;

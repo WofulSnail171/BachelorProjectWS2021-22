@@ -159,4 +159,6 @@ public class TradeManager : MonoBehaviour
             yield return new WaitForSeconds(AutoPlayWaitTimeSec);
         }
     }
+
+
 }
