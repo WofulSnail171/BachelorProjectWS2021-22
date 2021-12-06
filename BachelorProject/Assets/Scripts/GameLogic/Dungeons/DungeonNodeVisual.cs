@@ -79,6 +79,10 @@ public class DungeonNodeVisual : MonoBehaviour
         {
             pathVisualizer[dungeonNode.chosenPathIndex].colorGradient = pathGradientDict["cleared"];
         }
+
+        //icon
+
+
     }
 
     [System.Serializable]
