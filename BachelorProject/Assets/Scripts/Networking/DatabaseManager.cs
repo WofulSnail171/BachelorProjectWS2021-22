@@ -604,7 +604,7 @@ public class TradeData
             return;
         foreach (var item in tradeOffers)
         {
-            if (!ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item) && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
+            if (item.available == "" && !ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item) && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
             {
                 openOffers.Add(item);
             }
