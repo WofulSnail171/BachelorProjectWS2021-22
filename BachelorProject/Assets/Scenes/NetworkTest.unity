@@ -1658,7 +1658,7 @@ MonoBehaviour:
     nodeTypes: []
     pathTypes: []
     textFlavours:
-      textsEnemyName: []
+      textsEnemyNames: []
       textsPathChoosing: []
       textsPathHandling: []
       textsEnemyTurn: []
@@ -1683,9 +1683,11 @@ MonoBehaviour:
       initialRewardTier: 0
       maxSteps: 0
       randomNums: []
+      otherRandNums: 
   tradeData:
     ownOffers: []
     tradeOffers: []
+    openOffers: []
 --- !u!4 &413296325
 Transform:
   m_ObjectHideFlags: 0
@@ -2165,8 +2167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invIndexToAdd: 000000000100000002000000
-  ownOfferId: 00000000010000000200000003000000
-  interestId: 0
+  ownOfferId: 01000000
+  interestId: 4
   idToDelete: 0000000001000000
 --- !u!4 &552644759
 Transform:
@@ -2482,6 +2484,7 @@ MonoBehaviour:
   chosenDailyDungeonIndex: 0
   layoutList: {fileID: 0}
   currentCalcRun:
+    otherRandCounter: 0
     ended: 0
     currentStep: 0
     currentActivity: 0

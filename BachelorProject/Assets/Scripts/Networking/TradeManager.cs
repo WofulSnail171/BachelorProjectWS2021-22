@@ -28,7 +28,7 @@ public class TradeManager : MonoBehaviour
             DatabaseManager._instance.tradeData.UpdateOwnOffers();
             foreach (var item in DatabaseManager._instance.tradeData.ownOffers)
             {
-                if (item.available == DatabaseManager._instance.activePlayerData.playerId)
+                if (item.available != "" && item.playerId == DatabaseManager._instance.activePlayerData.playerId)
                     return true;
             }
         }
@@ -134,6 +134,16 @@ public class TradeManager : MonoBehaviour
         {
             uploadData.offersToDelete.Add(item);
             DatabaseManager._instance.tradeData.tradeOffers.Remove(item);
+            if(item.available != DatabaseManager._instance.activePlayerData.playerId && item.playerId == DatabaseManager._instance.activePlayerData.playerId)
+            {
+                foreach (var hero in DatabaseManager._instance.activePlayerData.inventory)
+                {
+                    if(hero.uniqueId == item.uniqueId)
+                    {
+                        hero.status = HeroStatus.Idle;
+                    }
+                }
+            }
         }
         DatabaseManager._instance.tradeData.UpdateOwnOffers();
         string message = JsonUtility.ToJson(uploadData);
@@ -172,5 +182,78 @@ public class TradeManager : MonoBehaviour
             }
         }
         return result;
+    }
+
+    public void ApplySuccessfulTrades()
+    {
+        //foreach sucessful trade find own hero that got traded -> replace hero in inventory with new hero -> delete successful offers -> upload player data
+        DatabaseManager._instance.tradeData.UpdateOwnOffers();
+        List<TradeOffer> toDelete = new List<TradeOffer>();
+        foreach (var trade in DatabaseManager._instance.tradeData.ownOffers)
+        {
+            if (trade.available != "" && trade.playerId == DatabaseManager._instance.activePlayerData.playerId)
+            {
+                SwapHeros(trade);
+                toDelete.Add(trade);
+            }
+        }
+        DeleteOffers(toDelete.ToArray());
+
+        //Then clear all other own trades
+        //CancelOwnTrades();
+    }
+
+    public void SwapHeros(TradeOffer _incoming)
+    {
+        //the unique ID still refers to the old hero
+        PlayerHero newHero = HeroCreator.GetHeroById(_incoming.heroId);
+        newHero.lastOwner = _incoming.lastOwner;
+        newHero.origOwner = _incoming.origOwner;
+        newHero.traded = _incoming.traded + 1;
+        newHero.runs = _incoming.runs;
+        PlayerHero oldHero = null;
+        foreach (var hero in DatabaseManager._instance.activePlayerData.inventory)
+        {
+            if (hero.uniqueId == _incoming.uniqueId)
+            {
+                oldHero = hero;
+            }
+            if (oldHero != null)
+                break;
+        }
+        if(oldHero != null)
+        {
+            DatabaseManager._instance.activePlayerData.inventory.Remove(oldHero);
+            newHero.invIndex = oldHero.invIndex;
+            newHero = ApplyTradePotentialBuffs(newHero, oldHero.heroId);
+        }
+        newHero.uniqueId = -1;
+        newHero.status = HeroStatus.Idle;
+        DatabaseManager._instance.activePlayerData.inventory.Add(newHero);
+        DatabaseManager.ValidateInventory();
+    }
+    PlayerHero ApplyTradePotentialBuffs(PlayerHero _hero, string _oldHeroId)
+    {
+        DefaultHero newHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[_hero.heroId];
+        DefaultHero oldHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[_oldHeroId];
+
+        int rarityDiff = oldHero.rarity - newHero.rarity;
+        if (newHero.rarity != 5 && rarityDiff > 0)
+        {
+            float potentialStep = (float)(newHero.pMaxPot - newHero.pDefPot) / (float)(5 - newHero.rarity);
+            _hero.pPot += (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.mMaxPot - newHero.mDefPot) / (float)(5 - newHero.rarity);
+            _hero.mPot += (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.sMaxPot - newHero.sDefPot) / (float)(5 - newHero.rarity);
+            _hero.sPot += (int)(potentialStep * rarityDiff);
+        }
+        return _hero;
+    }
+
+    public void CancelOwnTrades()
+    {
+        DeleteOffers(DatabaseManager._instance.tradeData.ownOffers.ToArray());
     }
 }

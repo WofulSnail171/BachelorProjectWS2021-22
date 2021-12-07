@@ -113,6 +113,7 @@ public class DatabaseManager : MonoBehaviour
         {
             ValidatePlayerHero(item);
         }
+        DatabaseManager._instance.SaveGameDataLocally();
     }
 
     public static void ValidatePlayerHero(PlayerHero _hero)
@@ -347,6 +348,19 @@ public class PlayerData
 
     public BlacklistEntry[] blacklist;
     public List<PlayerHero> inventory;
+
+    public PlayerHero GetHeroByUniqueId(int _uniqueId)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].uniqueId == _uniqueId)
+            {
+                return inventory[i];
+            }
+        }
+        return null;
+    }
+
 
     public void ReleaseHero(int _uniqueId, bool _syncOnline = true)
     {
@@ -604,7 +618,7 @@ public class TradeData
             return;
         foreach (var item in tradeOffers)
         {
-            if(item.playerId == DatabaseManager._instance.activePlayerData.playerId || item.available == DatabaseManager._instance.activePlayerData.playerId)
+            if(item.playerId == DatabaseManager._instance.activePlayerData.playerId)
             {
                 ownOffers.Add(item);
             }

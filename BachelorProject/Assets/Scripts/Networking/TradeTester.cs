@@ -22,7 +22,7 @@ public class TradeTester : MonoBehaviour
             //List<TradeOffer> temp = TradeManager._instance.GetSwipeBatch();
         }
 
-        /*
+        
         if (Input.GetKeyDown(KeyCode.Q))
         {
             List<PlayerHero> list = new List<PlayerHero>();
@@ -62,6 +62,9 @@ public class TradeTester : MonoBehaviour
                 TradeManager._instance.DeleteOffers(list.ToArray());
             }
         }
-        */
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TradeManager._instance.ApplySuccessfulTrades();
+        }
     }
 }
