@@ -37,7 +37,7 @@ public class DatabaseManager : MonoBehaviour
 
     public static ProgressState GetTradeState()
     {
-        ProgressState result = ProgressState.Empty;
+        ProgressState result = TradeManager._instance.GetProgressState();       
         return result;
     }
 

@@ -13430,6 +13430,7 @@ MonoBehaviour:
   matchButton: {fileID: 403470739}
   unmatchButton: {fileID: 1415370898}
   cancelFetchDataButton: {fileID: 2023052177}
+  noMatchButton: {fileID: 1041622309}
   swipeInventory: {fileID: 157347098}
   tradeInventory: {fileID: 1782747286}
   snapHero: {fileID: 1392598847}
@@ -61422,8 +61423,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -200}
-  m_SizeDelta: {x: 1080, y: 200}
+  m_AnchoredPosition: {x: 1889.3445, y: -200}
+  m_SizeDelta: {x: 3778.689, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1041622311
 MonoBehaviour:
@@ -63138,7 +63139,7 @@ MonoBehaviour:
   selectButton: {fileID: 1413990121}
   detailButton: {fileID: 2031645792}
   mapContainer: {fileID: 1862372179}
-  scrollSnap: {fileID: 0}
+  scrollSnap: {fileID: 1792773938}
   hub: {fileID: 250211648}
 --- !u!1 &1064582338
 GameObject:

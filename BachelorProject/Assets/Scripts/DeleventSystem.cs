@@ -21,6 +21,7 @@ public class DeleventSystem
     public static SimpleEvent TradeStart;
     public static SimpleEvent TradeEnd;
     public static SimpleEvent TradeCancel;
+    public static SimpleEvent TradeStep;
 
     public delegate void MessageEvent(string _message);
 

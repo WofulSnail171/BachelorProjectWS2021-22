@@ -131,14 +131,14 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignUp successful";
-            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
-            DeleventSystem.eventDataDownloaded += FirstSignUp;
-            DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
+            DeleventSystem.eventDataDownloaded += FirstSignUp;
+            DatabaseManager._instance.SaveGameDataLocally();            
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
         }
     }
 
@@ -153,14 +153,15 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignIn successful";
+
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             DatabaseManager._instance.UpdateActivePlayerFromServer(_lastMessage);
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
 
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
             
             // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply
             //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);

@@ -13,6 +13,7 @@ public class TradeManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(this);
+            StartCoroutine(AutoplayRoutine());
         }
         else
         {
@@ -37,6 +38,58 @@ public class TradeManager : MonoBehaviour
 
     private bool AutoPLay = true;
     public float AutoPlayWaitTimeSec = 1.0f;
+
+    public int TargetStep = 100;
+    public int CurrentStep = 0;
+    bool done = false;
+
+    public ProgressState GetProgressState()
+    {
+        ProgressState result = ProgressState.Empty;
+        if(DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            result = ProgressState.Pending;
+            if(CurrentStep >= TargetStep)
+            {
+                result = ProgressState.Done;
+            }
+        }
+        return result;
+    }
+
+    private void NextStepTrade()
+    {
+        if(CurrentStep < TargetStep)
+        {
+            CurrentStep++;
+            DeleventSystem.TradeStep?.Invoke();
+        }
+        else if (done == false)
+        {
+            done = true;
+            DeleventSystem.TradeEnd?.Invoke();
+        }
+    }
+
+    public void StartTrade(int _targetStep = 20)
+    {
+        done = false;
+        TargetStep = _targetStep;
+        CurrentStep = 0;
+        DeleventSystem.TradeStart?.Invoke();
+    }
+    IEnumerator AutoplayRoutine()
+    {
+        while (AutoPLay)
+        {
+            //Update Loop for dungeonRun
+            if (DatabaseManager._instance.tradeData != null)
+            {
+                NextStepTrade();
+            }
+            yield return new WaitForSeconds(AutoPlayWaitTimeSec);
+        }
+    }
 
     public void UploadOffer(PlayerHero heroOne, PlayerHero heroTwo = null, PlayerHero heroThree = null, PlayerHero heroFour = null)
     {
@@ -121,12 +174,6 @@ public class TradeManager : MonoBehaviour
         //Analyze and check for trades that have potentially happened
     }
 
-
-    private void NextStepTrade()
-    {
-
-    }
-
     public void DeleteOffers(TradeOffer[] _tradeOffers, DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         UploadDeleteOffers uploadData = new UploadDeleteOffers { offersToDelete = new List<TradeOffer>(), playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
@@ -155,19 +202,6 @@ public class TradeManager : MonoBehaviour
     {
         public LoginInfo playerInfo;
         public List<TradeOffer> offersToDelete;
-    }
-
-    IEnumerator AutoplayRoutine()
-    {
-        while (AutoPLay)
-        {
-            //Update Loop for dungeonRun
-            if (DatabaseManager._instance.tradeData != null)
-            {
-                NextStepTrade();
-            }
-            yield return new WaitForSeconds(AutoPlayWaitTimeSec);
-        }
     }
 
     public List<TradeOffer> GetSwipeBatch(int _maxCountOffers = 12)

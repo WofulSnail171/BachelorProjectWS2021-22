@@ -116,9 +116,13 @@ public class HubButtonActions : MonoBehaviour
 
         DeleventSystem.TradeStart += UpdateStates;
         DeleventSystem.TradeEnd += UpdateStates;
+        DeleventSystem.TradeStep += UpdateStates;
 
         //maybe connect to a seperate cancel func?
         //DeleventSystem.TradeCancel += UpdateStates;
+
+
+        UpdateStates();
     }
 
 
@@ -171,13 +175,16 @@ public class HubButtonActions : MonoBehaviour
             tradeProgressBar.gameObject.SetActive(true);
             tradeTextGroup.SetActive(true);
             tradeSungleTextGroup.SetActive(false);
+            float value = 0;
+            if (TradeManager._instance.TargetStep != 0)
+            {
+                value = (float)TradeManager._instance.CurrentStep / (float)TradeManager._instance.TargetStep;
 
-            //float value = some value
-            /*tradeFocusProgressBar.fillAmount = value;
+            }
+            tradeFocusProgressBar.fillAmount = value;
             tradeProgressBar.fillAmount = value;
             setTradeText(value, tradeFocusProgressTime);
-            setTradeText(value, dungeonProgressTime);
-            */
+            setTradeText(value, tradeProgressTime);
         }
     }
 
