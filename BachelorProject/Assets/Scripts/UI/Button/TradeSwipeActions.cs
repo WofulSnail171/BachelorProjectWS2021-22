@@ -18,6 +18,8 @@ public class TradeSwipeActions : MonoBehaviour
     [SerializeField]SwipeInventory swipeInventory;
     [SerializeField]TradeInventoryUI tradeInventory;
 
+    [SerializeField] ScrollSnapHero snapHero;
+
     //hero list of trades
 
     #endregion
@@ -30,13 +32,17 @@ public class TradeSwipeActions : MonoBehaviour
         unmatchButton.GetComponent<Button>().onClick.AddListener(() => { ClickedUnmatch(); });
         sendButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSend(); });
         nextButton.GetComponent<Button>().onClick.AddListener(() => { ClickedNext(); });
-        cancelFetchDataButton.GetComponent<Button>().onClick.AddListener(() => { ClickedCancel(); });
+        cancelFetchDataButton.GetComponent<Button>().onClick.AddListener(() => { ClickedWaitCancel(); });
     }
 
     private void Start()
     {
         foreach (SwipeSlot swipeSlot in swipeInventory.swipeSlots)
-            swipeSlot.OnClickEvent += Click; ;
+        {
+            swipeSlot.OnClickEvent += FocuseHero;
+            swipeSlot.OnDoubleClickEvent += UnfocusHero;
+        }
+
     }
 
     private void OnPullTradeOffers()
@@ -80,7 +86,7 @@ public class TradeSwipeActions : MonoBehaviour
     }
 
     //all heroes unfocused
-    private void ClickedCancel()
+    private void ClickedWaitCancel()
     {
         UIEnablerManager.Instance.SwitchElements( "TradeSwipe", "TradeSelect", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
@@ -88,33 +94,64 @@ public class TradeSwipeActions : MonoBehaviour
 
         UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
     }
+    private void ClickedCancel()
+    {
+        UIEnablerManager.Instance.EnableElement("TradeCancel", true);
+    }
 
     private void ClickedNext()
     {
-        //if hero list is last --> change next inactive and last to active
-        //
-        //
+        List<PlayerHero> playerHeroesToMatch = new List<PlayerHero>();
 
+        foreach (SwipeSlot slot in swipeInventory.swipeSlots)
+        {
+            if(slot.IsMatched)
+            {
+                playerHeroesToMatch.Add(slot.playerHero);
+            }
+        }
 
+        //update blacklist
+        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
+        
+        if(playerHeroesToMatch.Count > 0)
+        {
+            TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
+        }
+
+        swipeInventory.UnmatchAll();
+        if(snapHero.GetNearestPage() == snapHero._pageCount)
+        {
+            nextButton.SetActive(false);
+            sendButton.SetActive(true);
+        }
     }
 
     //final
     private void ClickedSend()
     {
+        List<PlayerHero> playerHeroesToMatch = new List<PlayerHero>();
+
+        foreach (SwipeSlot slot in swipeInventory.swipeSlots)
+        {
+            if (slot.IsMatched)
+            {
+                playerHeroesToMatch.Add(slot.playerHero);
+            }
+        }
+
+        //update blacklist
+        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
+
+        if (playerHeroesToMatch.Count > 0)
+        {
+            TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
+        }
+
         //go to observe
         UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", true);
         UIEnablerManager.Instance.EnableElement("General", true);
-
-        //update the buttons and start trading time animation
-        //
-        //
-        //
-
-
-        //send data, fetch data and match
-        //
-        //
-
+        UIEnablerManager.Instance.EnableElement("HeroHub", true);
     }
 
 
@@ -131,9 +168,6 @@ public class TradeSwipeActions : MonoBehaviour
 
             matchButton.SetActive(false);
             unmatchButton.SetActive(true);
-
-
-
         }
     }
 
@@ -146,8 +180,6 @@ public class TradeSwipeActions : MonoBehaviour
 
             //visuals
             swipeInventory.swipeSlots[swipeInventory.swipeIndex].unmatchHero();
-
-
         }
     }
 
@@ -163,14 +195,14 @@ public class TradeSwipeActions : MonoBehaviour
         //check hero state
         if(swipeInventory.swipeSlots[index].IsMatched)
         {
-            matchButton.SetActive(true);
-            unmatchButton.SetActive(false);
+            matchButton.SetActive(false);
+            unmatchButton.SetActive(true);
         }
 
         else
         {
-            matchButton.SetActive(false);
-            unmatchButton.SetActive(true);
+            matchButton.SetActive(true);
+            unmatchButton.SetActive(false);
         }
         
     }
@@ -189,11 +221,5 @@ public class TradeSwipeActions : MonoBehaviour
         unmatchButton.SetActive(false);
     }
 
-    private void Click(int i)
-    {
-        //check if already matched
-
-        matchButton.SetActive(true);
-    }
 
 }

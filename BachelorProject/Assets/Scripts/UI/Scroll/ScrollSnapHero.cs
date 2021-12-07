@@ -35,7 +35,7 @@ public class ScrollSnapHero : MonoBehaviour{
     private bool _horizontal;
     
     // number of pages in container
-    private int _pageCount;
+    [HideInInspector] public int _pageCount;
     private int _currentPage;
 
     // whether lerping is in progress and target lerp position
@@ -55,6 +55,8 @@ public class ScrollSnapHero : MonoBehaviour{
     private int _previousPageSelectionIndex;
     // container with Image components - one Image for each page
     private List<Image> _pageSelectionImages;
+
+    public List<TradeOffer> _tradeOffers;
     #endregion
 
     //------------------------------------------------------------------------
@@ -102,7 +104,9 @@ public class ScrollSnapHero : MonoBehaviour{
         _container = _scrollRectComponent.content;
         if (!DatabaseManager.CheckDatabaseValid())
             return;
-        _pageCount = DatabaseManager._instance.tradeData.GetNumberOFOpenOffers();
+
+        _tradeOffers = TradeManager._instance.GetSwipeBatch();
+        _pageCount = _tradeOffers.Count;
 
 
         _horizontal = true;
@@ -192,6 +196,11 @@ public class ScrollSnapHero : MonoBehaviour{
         //init change header
 
         headerText.text = $"1/{_pageCount} Trade Offer";
+
+        for(int i = 0; i< _pageCount; i++)
+        {
+            _container.GetChild(i).GetComponent<MatchHero>().UpdateMatchHero(_tradeOffers[i]);
+        }
     }
 
     //------------------------------------------------------------------------

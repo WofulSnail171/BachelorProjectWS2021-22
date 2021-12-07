@@ -345,7 +345,7 @@ public class PlayerData
     public int shards;
     public string tradeStartDate;
 
-    public BlacklistEntry[] blacklist;
+    public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
 
     public void ReleaseHero(int _uniqueId, bool _syncOnline = true)
