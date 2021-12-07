@@ -24,8 +24,8 @@ MonoBehaviour:
   - float
   colorNodeType: 0
   insideColor: {fileID: 11400000, guid: 18eb2ae3bc5bb7f409c0ace8cccaa120, type: 2}
-  outsideColor: {fileID: 11400000, guid: becca107a80389a489dd220f1136f4c3, type: 2}
-  outlineColor: {fileID: 0}
+  outsideColor: {fileID: 11400000, guid: 18eb2ae3bc5bb7f409c0ace8cccaa120, type: 2}
+  outlineColor: {fileID: 11400000, guid: 2b55cf11d7d2cb24d8ba95479f879dcf, type: 2}
   thickness: 0.56
   repetition: 5
   lineDistance: 0.3

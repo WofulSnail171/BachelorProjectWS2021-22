@@ -26,7 +26,9 @@ public abstract class SDFNode : ScriptableObject
         Comb,
         Invert,
         SBlend,
-        Lerp
+        Lerp,
+        Subtract,
+        Intersect
     }
 
     [HideInInspector]public NodeType nodeType;

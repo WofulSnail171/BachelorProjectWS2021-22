@@ -28,7 +28,7 @@ MonoBehaviour:
   - float4
   colorNodeType: 2
   sdfTexture: {fileID: 2800000, guid: 4d2322a723caa334d80e6eaf2263af79, type: 3}
-  position: {x: 0, y: 0}
-  scale: 1
-  rotation: 0
-  color: {r: 0.990566, g: 0.8291245, b: 0.5747152, a: 1}
+  position: {x: 0.22, y: -0.7}
+  scale: 0.93
+  rotation: -0.26
+  color: {r: 1, g: 1, b: 1, a: 1}

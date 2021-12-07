@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -143,8 +143,8 @@ Material:
     - rect983_scale: 2
     - repetition: 17.09
     - sblend571_k: 0.29
-    - tex649_rotation: 0
-    - tex649_scale: 1
+    - tex649_rotation: -0.26
+    - tex649_scale: 0.93
     - thickness: 0.88
     - triangle106_scale: 1
     - triangle274_rotation: 2.79
@@ -181,7 +181,8 @@ Material:
     - circle936_position: {r: 0, g: 0, b: 0, a: 0}
     - circle959_position: {r: 0, g: 0, b: 0, a: 0}
     - color560: {r: 0.5636104, g: 0.8962264, b: 0.18178178, a: 1}
-    - color665: {r: 0.2078433, g: 1, b: 0, a: 1}
+    - color566: {r: 0.8207547, g: 0.15546861, b: 0, a: 1}
+    - color665: {r: 0.3066038, g: 1, b: 0.64235353, a: 1}
     - insideColor: {r: 1, g: 0.400387, b: 0, a: 1}
     - line265_a: {r: 0, g: 0, b: 0, a: 0}
     - line265_b: {r: -0.8, g: 0.59, b: 0, a: 0}
@@ -257,8 +258,8 @@ Material:
     - tex394_position: {r: 0, g: 0, b: 0, a: 0}
     - tex434_position: {r: -2.36, g: 3.96, b: 0, a: 0}
     - tex649: {r: 1, g: 1, b: 1, a: 1}
-    - tex649_color: {r: 0.990566, g: 0.8291245, b: 0.5747152, a: 1}
-    - tex649_position: {r: 0, g: 0, b: 0, a: 0}
+    - tex649_color: {r: 1, g: 1, b: 1, a: 1}
+    - tex649_position: {r: 0.22, g: -0.7, b: 0, a: 0}
     - tex733_position: {r: -2.36, g: 3.96, b: 0, a: 0}
     - tex829_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle106_a: {r: 0, g: -0.4, b: 0, a: 0}

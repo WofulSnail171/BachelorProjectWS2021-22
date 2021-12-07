@@ -11,25 +11,11 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 rect138_position, float2 rect138_box, float rect138_scale, float4 rect138_roundness, float rect138_rotation, float2 circle673_position, float circle673_radius, float2 line265_position, float2 line265_a, float2 line265_b, float line265_roundness, float line265_scale, float line265_rotation){ 
+    float sdf (float2 uv, float2 circle673_position, float circle673_radius){ 
         
-        float2 t_rect138 = transform(rect138_position, rect138_rotation, rect138_scale, uv);
-        rect138_roundness.xy = (t_rect138.x > 0.0) ? rect138_roundness.xy : rect138_roundness.zw;
-        rect138_roundness.x  = (t_rect138.y  > 0.0) ? rect138_roundness.x  : rect138_roundness.y;
-        float2 q_rect138 = abs(t_rect138) - rect138_box + rect138_roundness.x;
-        float rect138_out = (min(max(q_rect138.x,q_rect138.y),0.0) + length(max(q_rect138,0.0)) - rect138_roundness.x) * rect138_scale;
         float circle673_out = length(circle673_position- uv)- circle673_radius;
 
-        float comb777_out = min(circle673_out,rect138_out);
-        
-        float2 pa_line265 = transform(line265_position, line265_rotation, line265_scale, uv) - line265_a;
-        float2 ba_line265 = line265_b - line265_a;
-        float h_line265 = clamp(dot(pa_line265, ba_line265)/dot(ba_line265, ba_line265), 0, 1);
-        float line265_out = (length(pa_line265 - ba_line265*h_line265) - (0.01 * line265_roundness)) * line265_scale;
-
-        float comb802_out = min(line265_out,comb777_out);
-
-        return comb802_out;
+        return circle673_out;
     }
         
 

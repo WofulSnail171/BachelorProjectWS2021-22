@@ -4,21 +4,8 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] line265_position ("line265_position", Vector) = (0,0,0,0)
-                [HideInInspector] line265_a ("line265_a", Vector) = (0,0,0,0)
-                [HideInInspector] line265_b ("line265_b", Vector) = (0,0,0,0)
-                [HideInInspector] line265_scale ("line265_scale", Float) = 1
-                [HideInInspector] line265_roundness ("line265_roundness", Float) = 1
-                [HideInInspector] line265_rotation ("line265_rotation", Float) = 0
-                
                 [HideInInspector] circle673_position ("circle673_position", Vector) = (0,0,0,0)
                 [HideInInspector] circle673_radius ("circle673_radius", Float) = 0.2
-                
-                [HideInInspector] rect138_position ("rect138_position", Vector) = (0,0,0,0)
-                [HideInInspector] rect138_box ("rect138_box", Vector) = (0,0,0,0)
-                [HideInInspector] rect138_scale ("rect138_scale", Float) = 1
-                [HideInInspector] rect138_roundness ("rect138_roundness", Vector) = (0,0,0,0)
-                [HideInInspector] rect138_rotation ("rect138_rotation", Float) = 0
                 
                 [HideInInspector] colorOutput51_thickness ("colorOutput51_thickness", Float) = 0.2
                 [HideInInspector] colorOutput51_repetition ("colorOutput51_repetition", Float) = 1
@@ -80,19 +67,8 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 line265_position;
-        float2 line265_a;
-        float2 line265_b;
-        float line265_roundness;
-        float line265_scale;
-        float line265_rotation;
         float2 circle673_position;
         float circle673_radius;
-        float2 rect138_position;
-        float2 rect138_box;
-        float rect138_scale;
-        float4 rect138_roundness;
-        float rect138_rotation;
         float colorOutput51_thickness;
         float colorOutput51_repetition;
         float colorOutput51_lineDistance;
@@ -104,7 +80,7 @@ Shader "SDF/test"
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, rect138_position, rect138_box, rect138_scale, rect138_roundness, rect138_rotation, circle673_position, circle673_radius, line265_position, line265_a, line265_b, line265_roundness, line265_scale, line265_rotation);
+            float sdfOut = sdf(i.uv, circle673_position, circle673_radius);
             
             float4 col = sdfColor(i.uv, sdfOut, color566, color665, colorOutput51_thickness, colorOutput51_repetition, colorOutput51_lineDistance);
             return col;

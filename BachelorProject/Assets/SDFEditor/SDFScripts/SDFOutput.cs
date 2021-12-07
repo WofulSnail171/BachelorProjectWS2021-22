@@ -210,14 +210,6 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case NodeType.Comb: {
-
-                    break;
-                }
-                case NodeType.Invert: {
-
-                    break;
-                }
                 case NodeType.SBlend: {
                     var n = (SDFSBLend) node;
                     properties += @"
@@ -233,7 +225,6 @@ public class SDFOutput : SDFNode{
                     break;
                 }
                 default: {
-                    Debug.LogWarning("unknow node");
                     break;
                 }
             }
@@ -591,14 +582,6 @@ public class SDFOutput : SDFNode{
                 
                 break;
             }
-            case NodeType.Comb: {
-
-                break;
-            }
-            case NodeType.Invert: {
-
-                break;
-            }
             case NodeType.SBlend: {
                 var n = (SDFSBLend) node;
                 this.sdfMaterial.SetFloat(n.sdfName + "_k" , n.K);
@@ -610,7 +593,6 @@ public class SDFOutput : SDFNode{
                 break;
             }
             default: {
-                Debug.LogWarning("unknow node");
                 break;
             }
         }

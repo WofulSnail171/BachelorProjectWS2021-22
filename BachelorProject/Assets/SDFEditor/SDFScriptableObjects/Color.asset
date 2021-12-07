@@ -19,4 +19,4 @@ MonoBehaviour:
   types:
   - float4
   colorNodeType: 1
-  color: {r: 0, g: 0, b: 0, a: 0}
+  color: {r: 0.8207547, g: 0.15546861, b: 0, a: 1}
