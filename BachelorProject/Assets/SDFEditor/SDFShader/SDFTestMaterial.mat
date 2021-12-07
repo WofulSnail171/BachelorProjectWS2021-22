@@ -79,7 +79,7 @@ Material:
     - circle429_radius: 0.13
     - circle477_radius: 0.2
     - circle479_radius: 0.2
-    - circle673_radius: -0.15
+    - circle673_radius: 0.27
     - circle686_radius: 0.13
     - circle780_radius: 0
     - circle891_radius: 0.33
