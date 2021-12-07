@@ -24,16 +24,18 @@ public class SwipeSlot : MonoBehaviour
 
     [SerializeField] GameObject matched;
     [SerializeField] GameObject highlight;
-    [SerializeField] public bool IsMatched;
+    [HideInInspector] public bool IsMatched;
 
 
     public event Action <int> OnClickEvent;
+    public event Action <int> OnDoubleClickEvent;
 
     #endregion
 
     private void Start()
     {
         heroCard.GetComponent<Button>().onClick.AddListener(() => OnClick());
+        heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += OnDoubleClickEvent;
     }
 
     public void updateHero(PlayerHero hero, Sprite sprite, int rarity, int referenceID)
@@ -110,4 +112,5 @@ public class SwipeSlot : MonoBehaviour
     {
         OnClickEvent(slotID);
     }
+
 }

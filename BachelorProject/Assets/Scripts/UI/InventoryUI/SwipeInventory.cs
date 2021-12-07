@@ -22,7 +22,7 @@ public class SwipeInventory : MonoBehaviour
 
 
         foreach (SwipeSlot swipeSlot in swipeSlots)
-            swipeSlot.OnClickEvent += Click; ;
+            swipeSlot.OnClickEvent += Click; 
     }
 
     private void OnEnable()
@@ -54,7 +54,13 @@ public class SwipeInventory : MonoBehaviour
     }
 
 
-    //drag
+    public void UnmatchAll()
+    {
+        foreach (SwipeSlot slot in swipeSlots)
+        {
+            slot.unmatchHero();
+        }
+    }
 
 
     //highlight
@@ -70,5 +76,16 @@ public class SwipeInventory : MonoBehaviour
         matchHero = swipeSlots[index].playerHero;
 
         swipeIndex = index;
+    }
+    private void DoubleClick(int index)
+    {
+        foreach (SwipeSlot heroSlot in swipeSlots)
+        {
+            if (heroSlot.playerHero != null)
+                heroSlot.disableHighlight();
+        }
+        matchHero = null;
+
+        swipeIndex = -1;
     }
 }
