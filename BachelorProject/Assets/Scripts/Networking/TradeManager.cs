@@ -160,5 +160,17 @@ public class TradeManager : MonoBehaviour
         }
     }
 
-
+    public List<TradeOffer> GetSwipeBatch(int _maxCountOffers = 12)
+    {
+        List<TradeOffer> result = new List<TradeOffer>();
+        while (DatabaseManager._instance.tradeData.openOffers.Count > 0 && result.Count < DatabaseManager._instance.tradeData.openOffers.Count && result.Count < _maxCountOffers)
+        {
+            TradeOffer temp = DatabaseManager._instance.tradeData.openOffers[UnityEngine.Random.Range(0, DatabaseManager._instance.tradeData.openOffers.Count)];
+            if (!result.Contains(temp))
+            {
+                result.Add(temp);
+            }
+        }
+        return result;
+    }
 }

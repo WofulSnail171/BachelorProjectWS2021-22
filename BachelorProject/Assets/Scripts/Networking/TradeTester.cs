@@ -17,6 +17,11 @@ public class TradeTester : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            //List<TradeOffer> temp = TradeManager._instance.GetSwipeBatch();
+        }
+
         /*
         if (Input.GetKeyDown(KeyCode.Q))
         {
