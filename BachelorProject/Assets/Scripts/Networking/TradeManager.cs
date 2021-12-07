@@ -108,12 +108,12 @@ public class TradeManager : MonoBehaviour
     }
 
 
-    public void PullTradeOffers()
+    public void PullTradeOffers(DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         // gets current status of the online backend concerning trades.
         // 1) when getting new trade offers for "swiping"
         // 2) when checking whether a trade was successful -> happens after x amount of time
-        ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, OnPullTradeOffers);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, _simpleEvent, _messageEvent);
     }
 
     public void OnPullTradeOffers()
