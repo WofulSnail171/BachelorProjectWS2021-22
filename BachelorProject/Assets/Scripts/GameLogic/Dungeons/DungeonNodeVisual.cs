@@ -18,7 +18,7 @@ public class DungeonNodeVisual : MonoBehaviour
     //public CheapProgressBar pgBar;
 
     public GameObject pathVisualPrefab;
-    public List<Image> pathVisualizer;
+    public List<Image> pathVisualizer = new List<Image>();
 
     [SerializeField] Color clearColor;
     //public PathGradient[] pathGradients;
@@ -35,6 +35,8 @@ public class DungeonNodeVisual : MonoBehaviour
 
     private void Start()
     {
+        pathVisualizer.Clear();
+
         foreach (var node in dungeonNode.nextNodes)
         {
             /*GameObject go = Instantiate(pathVisualPrefab, transform.position, transform.rotation);
@@ -66,7 +68,7 @@ public class DungeonNodeVisual : MonoBehaviour
             image.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0.2f);
 
             pathVisualizer.Add(image);
-
+            go.transform.SetParent(this.transform);
         }
     }
 
@@ -106,6 +108,7 @@ public class DungeonNodeVisual : MonoBehaviour
         }
         if(dungeonNode.chosenPathIndex != -1 && DungeonManager._instance.CheckCalcRun() && DungeonManager._instance.currentCalcRun.currentNode != dungeonNode)
         {
+            pathVisualizer[dungeonNode.chosenPathIndex].sprite = IconStruct.IconDictionary[dungeonNode.nextPaths[dungeonNode.chosenPathIndex]].sprite;
             pathVisualizer[dungeonNode.chosenPathIndex].color = clearColor;
         }
     }
