@@ -139,9 +139,11 @@ public class HubButtonActions : MonoBehaviour
 
         if(tradeState == ProgressState.Done)
         {
-            //do stuff
-            //
-            //
+            tradeProgressBar.gameObject.SetActive(false);
+            tradeTextGroup.SetActive(false);
+            tradeSungleTextGroup.SetActive(true);
+
+            UpdateTradeButton(ButtonState.Finished);
         }
     }
 
@@ -160,6 +162,21 @@ public class HubButtonActions : MonoBehaviour
             setDungeonText(value, dungeonFocusProgressTime);
             setDungeonText(value, dungeonProgressTime);
             
+        }
+
+        if (dungeonState == ProgressState.Pending)
+        {
+            //set active progress bar
+            tradeProgressBar.gameObject.SetActive(true);
+            tradeTextGroup.SetActive(true);
+            tradeSungleTextGroup.SetActive(false);
+
+            //float value = some value
+            /*tradeFocusProgressBar.fillAmount = value;
+            tradeProgressBar.fillAmount = value;
+            setTradeText(value, tradeFocusProgressTime);
+            setTradeText(value, dungeonProgressTime);
+            */
         }
     }
 
@@ -595,6 +612,13 @@ public class HubButtonActions : MonoBehaviour
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //
     private void setDungeonText(float value, TextMeshProUGUI textMesh)
+    {
+        int recalcValue = (int)(value * 100f);
+
+        textMesh.text = $"{recalcValue} %";
+    }
+
+    private void setTradeText(float value, TextMeshProUGUI textMesh)
     {
         int recalcValue = (int)(value * 100f);
 
