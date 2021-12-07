@@ -38,7 +38,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject dungeonFocusedButton;
     [SerializeField] GameObject dungeonReadyButton;
     [SerializeField] GameObject hubButton;
-    [SerializeField] GameObject hubFocusedButton;//do nothing, just set active
+    [SerializeField] GameObject hubFocusedButton;
     [Space]
     [SerializeField] GameObject ContinueEndTextButton;
     [SerializeField] GameObject ContinueHeroPullButton;
@@ -111,13 +111,14 @@ public class HubButtonActions : MonoBehaviour
         DeleventSystem.DungeonEnd += UpdateStates;
         DeleventSystem.DungeonEvent += UpdateStates;
         DeleventSystem.DungeonRewardFinished += UpdateStates;
+
         //dungeon cancel? connected to seperate cancel func?
 
         DeleventSystem.TradeStart += UpdateStates;
         DeleventSystem.TradeEnd += UpdateStates;
 
         //maybe connect to a seperate cancel func?
-        DeleventSystem.TradeCancel += UpdateStates;
+        //DeleventSystem.TradeCancel += UpdateStates;
     }
 
 
@@ -397,16 +398,12 @@ public class HubButtonActions : MonoBehaviour
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void ClickedFocusedDungeon()
     {
-        //wanna cancel?
-
         //do pop up
         UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
 
     private void ClickedFocusedTrade()
     {
-        //wanna cancel?
-
         //do pop up
         UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
     }
@@ -460,6 +457,8 @@ public class HubButtonActions : MonoBehaviour
     }
 
 
+
+    //pop up flow
     //
     //reward flow pop ups
     private void ContinueEndText()
@@ -622,7 +621,7 @@ public class HubButtonActions : MonoBehaviour
     {
         int recalcValue = (int)(value * 100f);
 
-        textMesh.text = $"{recalcValue} %";
+        textMesh.text = $"{recalcValue} min";
     }
     
 
@@ -699,5 +698,12 @@ public class HubButtonActions : MonoBehaviour
         currentHubFocus = state;
     }
 
+
+
+    //tradedone
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    //
 }
 

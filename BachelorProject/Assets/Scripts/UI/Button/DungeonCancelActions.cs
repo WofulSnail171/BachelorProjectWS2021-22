@@ -9,6 +9,8 @@ public class DungeonCancelActions : MonoBehaviour
     [SerializeField] Button no;
 
     [SerializeField] HubButtonActions hub;
+    [SerializeField] ExploreInventoryUI ExploreInventoryUI;
+    [SerializeField] InventoryUI inventory;
 
 
     private void Start()
@@ -19,9 +21,17 @@ public class DungeonCancelActions : MonoBehaviour
 
     private void ClickedYes()
     {
-        //hub.UpdateHubState(HubState.HeroHub);
+        //do cancel
 
 
+        ExploreInventoryUI.RemoveAllHeroesFromExplore();
+        inventory.UpdateInventory();
+
+        hub.UpdateHubState(HubState.HeroHub);
+
+        UIEnablerManager.Instance.DisableElement("DungeonCancel", true);
+        UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", false);
+        UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
     }
 
 
