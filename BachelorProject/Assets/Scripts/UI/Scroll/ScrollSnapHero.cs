@@ -116,9 +116,11 @@ public class ScrollSnapHero : MonoBehaviour{
 
         // init
         SetPagePositions();
-        SetPage(startingPage);
+        if(_pageCount > 0)
+            SetPage(startingPage);
         InitPageSelection();
-        SetPageSelection(startingPage);
+        if (_pageCount > 0)
+            SetPageSelection(startingPage);
 
     }
     

@@ -12,6 +12,7 @@ public class TradeSwipeActions : MonoBehaviour
     [SerializeField] GameObject matchButton;
     [SerializeField] GameObject unmatchButton;
     [SerializeField] GameObject cancelFetchDataButton;
+    [SerializeField] GameObject noMatchButton;
 
 
 
@@ -35,6 +36,7 @@ public class TradeSwipeActions : MonoBehaviour
         sendButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSend(); });
         nextButton.GetComponent<Button>().onClick.AddListener(() => { ClickedNext(); });
         cancelFetchDataButton.GetComponent<Button>().onClick.AddListener(() => { ClickedWaitCancel(); });
+        noMatchButton.GetComponent<Button>().onClick.AddListener(() => { NoMatchFinished(); });
     }
 
     private void Start()
@@ -79,10 +81,10 @@ public class TradeSwipeActions : MonoBehaviour
             UIEnablerManager.Instance.EnableElement("General", false);
             UIEnablerManager.Instance.EnableElement("HeroHub", false);
 
-            hub.UpdateHubState(HubState.HeroHub);
-            hub.UpdateHubState(HubState.HeroHub);
-            hub.UpdateTradeButton(ButtonState.Unfocused);
-            hub.UpdateHubButton(ButtonState.Focused);
+            hub.UpdateHubState(HubState.TradeHub);
+            hub.UpdateDungeonButton(ButtonState.Unfocused);
+            hub.UpdateTradeButton(ButtonState.Focused);
+            hub.UpdateHubButton(ButtonState.Unfocused);
         }
     }
 
@@ -143,7 +145,7 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         swipeInventory.UnmatchAll();
-        if(snapHero.GetNearestPage() == snapHero._pageCount)
+        if(snapHero.GetNearestPage() == snapHero._pageCount - 1)
         {
             nextButton.SetActive(false);
             sendButton.SetActive(true);
@@ -176,12 +178,17 @@ public class TradeSwipeActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("General", true);
         UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
-        hub.UpdateHubState(HubState.HeroHub);
-        hub.UpdateHubState(HubState.HeroHub);
-        hub.UpdateTradeButton(ButtonState.Unfocused);
-        hub.UpdateHubButton(ButtonState.Focused);
+        hub.UpdateHubState(HubState.TradeHub);
+        hub.UpdateTradeButton(ButtonState.Focused);
+        hub.UpdateDungeonButton(ButtonState.Unfocused);
+        hub.UpdateHubButton(ButtonState.Unfocused);
     }
 
+
+    private void NoMatchFinished()
+    {
+        UIEnablerManager.Instance.DisableElement("NoTradeFound", true);
+    }
 
     //hero focused
     private void ClickedMatch()

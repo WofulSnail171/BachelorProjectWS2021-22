@@ -13433,7 +13433,7 @@ MonoBehaviour:
   swipeInventory: {fileID: 157347098}
   tradeInventory: {fileID: 1782747286}
   snapHero: {fileID: 1392598847}
-  hub: {fileID: 0}
+  hub: {fileID: 250211648}
 --- !u!1 &230314196
 GameObject:
   m_ObjectHideFlags: 0
