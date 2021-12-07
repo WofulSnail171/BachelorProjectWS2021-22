@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c133afe84d8de07448db7e615c46a6ff, type: 3}
   m_Name: SDF Line
   m_EditorClassIdentifier: 
-  o: line59_out
-  sdfName: line59
+  o: line265_out
+  sdfName: line265
   variables:
-  - line59_position
-  - line59_a
-  - line59_b
-  - line59_roundness
-  - line59_scale
-  - line59_rotation
+  - line265_position
+  - line265_a
+  - line265_b
+  - line265_roundness
+  - line265_scale
+  - line265_rotation
   types:
   - float2
   - float2
@@ -28,11 +28,10 @@ MonoBehaviour:
   - float
   - float
   - float
-  nodes: []
   nodeType: 3
   position: {x: 0, y: 0}
-  scale: 0
-  rotation: 0
+  scale: 0.51
+  rotation: 59.81
   a: {x: 0, y: 0}
-  b: {x: 0, y: 0}
-  roundness: 0
+  b: {x: -0.8, y: 0.59}
+  roundness: 13.29

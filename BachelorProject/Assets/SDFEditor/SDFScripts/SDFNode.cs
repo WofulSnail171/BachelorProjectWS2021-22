@@ -43,13 +43,11 @@ public abstract class SDFNode : ScriptableObject
             bool d;
             foreach (SDFNode s in nodes) {
                 if (s.sdfName == input.sdfName) {
-                    Debug.Log("found double in inputA");
                     return;
                 }
             }
 
             nodes.Add(input);
-            Debug.Log("found no double in inputA");
         }
     }
 }

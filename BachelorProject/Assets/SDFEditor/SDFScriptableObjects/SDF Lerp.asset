@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec3a03eeeaa1394b8c1b5b657d2e7ae, type: 3}
   m_Name: SDF Lerp
   m_EditorClassIdentifier: 
-  o: lerp979_out
-  sdfName: lerp979
+  o: lerp893_out
+  sdfName: lerp893
   variables:
-  - lerp979_t
+  - lerp893_t
   types:
   - float
-  nodes: []
   nodeType: 9
   inputA: {fileID: 11400000, guid: 42bbe8d41ce5b7b43bc5c946d062ff3f, type: 2}
   inputB: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
-  t: -9.14
+  t: -45.4

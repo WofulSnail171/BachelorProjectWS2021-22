@@ -12,24 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df76ed01223f4a4086b85788543c7c3, type: 3}
   m_Name: SDF Rectangle
   m_EditorClassIdentifier: 
-  o: rect121_out
-  sdfName: rect121
+  o: rect138_out
+  sdfName: rect138
   variables:
-  - rect121_position
-  - rect121_box
-  - rect121_scale
-  - rect121_roundness
-  - rect121_rotation
+  - rect138_position
+  - rect138_box
+  - rect138_scale
+  - rect138_roundness
+  - rect138_rotation
   types:
   - float2
   - float2
   - float
   - float4
   - float
-  nodes: []
   nodeType: 1
-  position: {x: 0.02, y: 0}
-  rotation: 39.44
-  scale: 0.59
-  box: {x: 0.2, y: 0.09}
-  roundness: {x: -0.14, y: -0.12, z: 0, w: 0}
+  position: {x: 0, y: 0}
+  rotation: 48.57
+  scale: 0.55
+  box: {x: 0.85, y: 0.21}
+  roundness: {x: 0.55, y: 0.55, z: 0.01, w: 0.14}

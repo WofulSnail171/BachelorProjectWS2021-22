@@ -16,9 +16,9 @@ MonoBehaviour:
   sdfName: newSDF
   variables: []
   types: []
-  nodes: []
   nodeType: 0
-  shaderName: 
-  input: {fileID: 0}
-  sdfMaterial: {fileID: 0}
+  shaderName: test
+  input: {fileID: 11400000, guid: 45ad138f3e246b741a77841b6b457219, type: 2}
+  inputColor: {fileID: 11400000, guid: 93885d184325a464eb8adbf9fc4c0d61, type: 2}
+  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0

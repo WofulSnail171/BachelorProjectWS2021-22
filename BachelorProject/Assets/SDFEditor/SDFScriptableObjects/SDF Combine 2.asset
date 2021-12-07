@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edc6db39e8ee8bb459e53c718edd5f2e, type: 3}
+  m_Name: SDF Combine 2
+  m_EditorClassIdentifier: 
+  o: comb377_out
+  sdfName: comb377
+  variables: []
+  types: []
+  nodeType: 6
+  inputA: {fileID: 11400000, guid: 6e15468d8af68da40a83e731294927fc, type: 2}
+  inputB: {fileID: 11400000, guid: 42bbe8d41ce5b7b43bc5c946d062ff3f, type: 2}

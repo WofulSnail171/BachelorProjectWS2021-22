@@ -4,25 +4,40 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] line59_position ("line59_position", Vector) = (0,0,0,0)
-                [HideInInspector] line59_a ("line59_a", Vector) = (0,0,0,0)
-                [HideInInspector] line59_b ("line59_b", Vector) = (0,0,0,0)
-                [HideInInspector] line59_scale ("line59_scale", Float) = 1
-                [HideInInspector] line59_roundness ("line59_roundness", Float) = 1
-                [HideInInspector] line59_rotation ("line59_rotation", Float) = 0
+                [HideInInspector] line265_position ("line265_position", Vector) = (0,0,0,0)
+                [HideInInspector] line265_a ("line265_a", Vector) = (0,0,0,0)
+                [HideInInspector] line265_b ("line265_b", Vector) = (0,0,0,0)
+                [HideInInspector] line265_scale ("line265_scale", Float) = 1
+                [HideInInspector] line265_roundness ("line265_roundness", Float) = 1
+                [HideInInspector] line265_rotation ("line265_rotation", Float) = 0
                 
+                [HideInInspector] circle673_position ("circle673_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle673_radius ("circle673_radius", Float) = 0.2
+                
+                [HideInInspector] rect138_position ("rect138_position", Vector) = (0,0,0,0)
+                [HideInInspector] rect138_box ("rect138_box", Vector) = (0,0,0,0)
+                [HideInInspector] rect138_scale ("rect138_scale", Float) = 1
+                [HideInInspector] rect138_roundness ("rect138_roundness", Vector) = (0,0,0,0)
+                [HideInInspector] rect138_rotation ("rect138_rotation", Float) = 0
+                
+                [HideInInspector] colorOutput51_thickness ("colorOutput51_thickness", Float) = 0.2
+                [HideInInspector] colorOutput51_repetition ("colorOutput51_repetition", Float) = 1
+                [HideInInspector] colorOutput51_lineDistance ("colorOutput51_lineDistance", Float) = 1
+                
+                [HideInInspector] color665 ("color665", Color) = (1,1,1,1)
+                
+                [HideInInspector] tex649_position ("tex649_position", Vector) = (0,0,0,0)
+                [HideInInspector] tex649_scale ("tex649_scale", Float) = 1
+                [HideInInspector] tex649_rotation ("tex649_rotation", Float) = 0
+                [HideInInspector] tex649_tex ("tex649_tex", 2D) = "white"{}
+                [HideInInspector] tex649_color ("tex649_color", Color) = (1,1,1,1)
+                
+
+                [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
+                [Enum(UnityEngine.Rendering.CullMode)] _CullMode("Cull Mode", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
                 [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend mode", Float) = 1
-                
-                insideColor ("inside Color", Color) = (1,1,1,1)
-                outsideColor ("outside Color", Color) = (1,1,1,1)
-                outlineColor ("outline Color", Color) = (1,1,1,1)
-                
-                thickness ("thickness", Float) = 0
-                repetition ("repetition", Float) = 2
-                lineDistance ("line distance", Float) = 0
-                
             }
 
             SubShader
@@ -34,6 +49,12 @@ Shader "SDF/test"
 
             Pass
             {
+            
+            Blend [_SrcBlend] [_DestBlend]
+            Cull [_CullMode]
+            ZWrite [_ZWrite]
+            ZTest [_ZTest]            
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -63,34 +84,37 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 line59_position;
-        float2 line59_a;
-        float2 line59_b;
-        float line59_roundness;
-        float line59_scale;
-        float line59_rotation;
-        
-        float4 insideColor;
-        float4 outsideColor;
-        float4 outlineColor;
-        
-        float thickness;
-        float repetition;
-        float lineDistance;
+        float2 line265_position;
+        float2 line265_a;
+        float2 line265_b;
+        float line265_roundness;
+        float line265_scale;
+        float line265_rotation;
+        float2 circle673_position;
+        float circle673_radius;
+        float2 rect138_position;
+        float2 rect138_box;
+        float rect138_scale;
+        float4 rect138_roundness;
+        float rect138_rotation;
+        float colorOutput51_thickness;
+        float colorOutput51_repetition;
+        float colorOutput51_lineDistance;
+        float4 color665;
+        float2 tex649_position;
+        sampler2D tex649_tex;
+        float tex649_scale;
+        float tex649_rotation;
+        float4 tex649_color;
         
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, line59_position, line59_a, line59_b, line59_roundness, line59_scale, line59_rotation);
+            float sdfOut = sdf(i.uv, rect138_position, rect138_box, rect138_scale, rect138_roundness, rect138_rotation, circle673_position, circle673_radius, line265_position, line265_a, line265_b, line265_roundness, line265_scale, line265_rotation);
             
-            float sdf = smoothstep(0,thickness*0.01 - thickness*0.005 ,sdfOut);
-            float4 col = lerp(insideColor, outsideColor, sdf);
-            float outline = 1-smoothstep(0,thickness*0.01 ,abs(frac(sdfOut / (lineDistance*0.1) + 0.5) - 0.5) * (lineDistance*0.1));
-            outline *= step(sdfOut-repetition *0.01, 0);
-            col = lerp(col, outlineColor, outline);
-            
+            float4 col = sdfColor(i.uv, sdfOut, tex649_position, tex649_tex, tex649_scale, tex649_rotation, tex649_color, color665, colorOutput51_thickness, colorOutput51_repetition, colorOutput51_lineDistance);
             return col;
         }
 

@@ -44,12 +44,11 @@ public class SDFOutput : SDFNode{
     private List<string> shaderStrings = new List<string>();
     private List<string> includeStrings = new List<string>();
     private List <SDFNode>  SDFNodes = new List<SDFNode>();
-    
-    //TODO: create SDFNodeList 
-    //TODO: subscribe to action for varibale changes
+    private List <SDFColorNode>  SDFColorNode = new List<SDFColorNode>();
 
     private void OnValidate() {
         this.Input = this.input;
+        this.InputColor = this.inputColor;
         
         if (this.applyMaterial) {
             
@@ -97,6 +96,10 @@ public class SDFOutput : SDFNode{
         this.AddHlslString();
         foreach (SDFNode s in this.SDFNodes) {
             this.ChangeShaderValues(s);
+        }
+
+        foreach (SDFColorNode c in this.SDFColorNode) {
+            this.ChangeColorValues(c);
         }
 
         Debug.Log("updated shader");
@@ -202,6 +205,8 @@ public class SDFOutput : SDFNode{
                     var n = (SDFTexture) node;
                     properties += @"
                 [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
                 [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", 2D) = ""white""{}
                 ";
                     break;
@@ -235,11 +240,51 @@ public class SDFOutput : SDFNode{
             }
         }
 
+        foreach (SDFColorNode colorNode in this.SDFColorNode) {
+            if (colorNode == null) {
+                Debug.Log(colorNode.sdfName + " is null");
+                break;
+            }
+
+            switch (colorNode.colorNodeType) {
+                case global::SDFColorNode.ColorNodeType.ColorOutput: {
+                    var n = (SDFColorOutput) colorNode;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_thickness (""" + n.sdfName + @"_thickness"", Float) = 0.2
+                [HideInInspector] " + n.sdfName + @"_repetition (""" + n.sdfName + @"_repetition"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_lineDistance (""" + n.sdfName + @"_lineDistance"", Float) = 1
+                ";
+                    break;
+                }
+                case global::SDFColorNode.ColorNodeType.Color: {
+                    var n = (SDFColor) colorNode;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @" (""" + n.sdfName + @""", Color) = (1,1,1,1)
+                ";
+                    break;
+                }
+                case global::SDFColorNode.ColorNodeType.Texture: {
+                    var n = (SDFTextureInput) colorNode;
+                    properties += @"
+                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
+                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
+                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
+                [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", 2D) = ""white""{}
+                [HideInInspector] " + n.sdfName + @"_color (""" + n.sdfName + @"_color"", Color) = (1,1,1,1)
+                ";
+                    break;
+                }
+            }
+        }
+
         return @"
             Properties
             {
                 " + properties + @"
+
+                [Enum(Off, 0, On, 1)] _ZWrite (""Z Write"", Float) = 1
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Float) = 0
+                [Enum(UnityEngine.Rendering.CullMode)] _CullMode(""Cull Mode"", Float) = 0
                 [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend (""Source Blend mode"", Float) = 1
                 [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend (""Destination Blend mode"", Float) = 1
             }";
@@ -259,6 +304,12 @@ public class SDFOutput : SDFNode{
         return@"
             Pass
             {
+            
+            Blend [_SrcBlend] [_DestBlend]
+            Cull [_CullMode]
+            ZWrite [_ZWrite]
+            ZTest [_ZTest]            
+
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -303,9 +354,16 @@ public class SDFOutput : SDFNode{
         ";
                 }
             }
-            else {
-                Debug.Log(s.sdfName + " has no valid variables");
+        }
+        
+        foreach (SDFColorNode c in this.SDFColorNode) {
+            if (c.variables != null && c.variables.Count > 0) {
+                for (int i = 0; i < c.variables.Count; i++) {
+                    shaderVariables += c.types[i] + " " + c.variables[i]+ @";
+        ";
+                }
             }
+                        
         }
 
         return @"
@@ -327,17 +385,30 @@ public class SDFOutput : SDFNode{
             }
                         
         }
-        shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
+        if(shaderVariables.Length>2)
+            shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
         
+        string colorVariables = "";
+
+        for(int j = this.SDFColorNode.Count-1; j >= 0; j--){
+            if (this.SDFColorNode[j].variables != null && this.SDFColorNode[j].variables.Count > 0) {
+                for (int i = 0; i < this.SDFColorNode[j].variables.Count; i++) {
+                    colorVariables += this.SDFColorNode[j].variables[i];
+                    colorVariables += ", ";
+                }
+            }
+                        
+        }
+        if(colorVariables.Length>2)
+            colorVariables = colorVariables.Substring(0, colorVariables.Length - 2);
         
-        Debug.Log(variables);
         return @"
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
             float sdfOut = sdf(i.uv, " + shaderVariables + @");
             
-            float4 col = smoothstep(0, 0.01, sdfOut);
+            float4 col = sdfColor(i.uv, sdfOut, " + colorVariables + @");
             return col;
         }
 ";
@@ -397,26 +468,29 @@ public class SDFOutput : SDFNode{
 
     private string GenerateIncludeSdfColor(SDFColorNode colorNode) {
     
-        string shaderVariables = "";
+        string colorVariables = "";
         string colorFunction = "";
         
-        for(int j = this.SDFNodes.Count-1; j >= 0; j--){
-            if (this.SDFNodes[j] != null) {
-                colorFunction += this.SDFNodes[j].GenerateHlslFunction();
+        for(int j = this.SDFColorNode.Count-1; j >= 0; j--){
+            if (this.SDFColorNode[j] != null) {
+                colorFunction += this.SDFColorNode[j].GenerateHlslFunction();
             }
 
-            if (this.SDFNodes[j].variables != null && this.SDFNodes[j].variables.Count > 0) {
-                for (int i = 0; i < this.SDFNodes[j].variables.Count; i++) {
-                    shaderVariables += this.SDFNodes[j].types[i] + " " + this.SDFNodes[j].variables[i];
-                    shaderVariables += ", ";
+            if (this.SDFColorNode[j].variables != null && this.SDFColorNode[j].variables.Count > 0) {
+                for (int i = 0; i < this.SDFColorNode[j].variables.Count; i++) {
+                    colorVariables += this.SDFColorNode[j].types[i] + " " + this.SDFColorNode[j].variables[i];
+                    colorVariables += ", ";
                 }
             }
                         
         }
-        shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
+        if(colorVariables.Length >2)
+            colorVariables = colorVariables.Substring(0, colorVariables.Length - 2);
+        if(colorNode != null)
+            Debug.Log(colorNode.o);
         
         return @"
-    float4 sdfColor (float2 uv, " + shaderVariables + @"){
+    float4 sdfColor (float2 uv, float sdfOut, " + colorVariables + @"){
         " + colorFunction + @"
 
         return " + colorNode.o + @";
@@ -456,8 +530,6 @@ public class SDFOutput : SDFNode{
             Debug.LogWarning("material has not been applied or assigned");
             return;
         }
-        
-        Debug.Log("changing shader variables from " + node.sdfName);
 
         Undo.RecordObject(this.sdfMaterial, "changed Material");        
 
@@ -547,6 +619,44 @@ public class SDFOutput : SDFNode{
         }
         EditorUtility.SetDirty(this.sdfMaterial);
     }
+    private void ChangeColorValues(SDFColorNode colorNode){
+
+        if (this.sdfMaterial == null) {
+            Debug.LogWarning("material has not been applied or assigned");
+            return;
+        }
+
+        Undo.RecordObject(this.sdfMaterial, "changed Material");        
+
+        switch (colorNode.colorNodeType) {
+            case global::SDFColorNode.ColorNodeType.ColorOutput: {
+                var n = (SDFColorOutput) colorNode;
+                this.sdfMaterial.SetFloat(n.sdfName + "_thickness", n.Thickness);
+                this.sdfMaterial.SetFloat(n.sdfName + "_repetition" , n.Repetition);
+                this.sdfMaterial.SetFloat(n.sdfName + "_lineDistance" , n.LineDistance);
+                break;
+            }
+            case global::SDFColorNode.ColorNodeType.Color: {
+                var n = (SDFColor) colorNode;
+                this.sdfMaterial.SetColor(n.sdfName, n.Color);
+                break;
+            }
+            case global::SDFColorNode.ColorNodeType.Texture: {
+                var n = (SDFTextureInput) colorNode;
+                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
+                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
+                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
+                this.sdfMaterial.SetTexture(n.sdfName + "_tex" , n.SdfTexture);
+                this.sdfMaterial.SetColor(n.sdfName + "_color", n.Color);
+                break;
+            }
+            default: {
+                Debug.LogWarning("unknow node");
+                break;
+            }
+        }
+        EditorUtility.SetDirty(this.sdfMaterial);
+    }
 
     public override string GenerateHlslFunction() {
         throw new NotImplementedException();
@@ -564,6 +674,16 @@ public class SDFOutput : SDFNode{
                 }
             }
         }
+        foreach (SDFColorNode s in this.SDFColorNode) {
+            if (s != null) {
+                s.OnValueChange -= this.ChangeColorValues;
+
+                if (s is SDFColorOutput) {
+                    SDFColorOutput sOut = (SDFColorOutput) s;
+                    sOut.OnInputChange -= this.UpdateShader;
+                }
+            }
+        }
         
         //get active nodes
         this.SDFNodes.Clear();
@@ -575,6 +695,15 @@ public class SDFOutput : SDFNode{
             this.SDFNodes.Add(this.input);
         }
         
+        this.SDFColorNode.Clear();
+        if (this.inputColor is SDFColorOutput) {
+            SDFColorOutput i = (SDFColorOutput) this.inputColor;
+            i.GetActiveNodes(this.SDFColorNode);
+        }
+        else if(!this.SDFColorNode.Contains(this.inputColor)){
+            this.SDFColorNode.Add(this.inputColor);
+        }
+        
         //add actions from active nodes
         foreach (SDFNode s in this.SDFNodes) {
             if (s != null) {
@@ -584,6 +713,18 @@ public class SDFOutput : SDFNode{
                 if (s is SDFFunction) {
                     SDFFunction sfunc = (SDFFunction) s;
                     sfunc.OnInputChange += this.UpdateShader;
+                }
+            }
+        }
+        
+        foreach (SDFColorNode s in this.SDFColorNode) {
+            if (s != null) {
+                this.ChangeColorValues(s);
+                s.OnValueChange += this.ChangeColorValues;
+                //Debug.Log("subscribed to value change on " +  s.sdfName);
+                if (s is SDFColorOutput) {
+                    SDFColorOutput sOut = (SDFColorOutput) s;
+                    sOut.OnInputChange += this.UpdateShader;
                 }
             }
         }

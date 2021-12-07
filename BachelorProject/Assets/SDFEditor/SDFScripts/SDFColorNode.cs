@@ -16,13 +16,13 @@ public abstract class SDFColorNode :ScriptableObject
     public Action<SDFColorNode> OnValueChange;
     public Action OnInputChange;
 
-    public enum NodeType {
+    public enum ColorNodeType {
         ColorOutput,
-        ColorInput,
-        TextureInput
+        Color,
+        Texture
     }
 
-    [HideInInspector]public NodeType nodeType;
+    [HideInInspector]public ColorNodeType colorNodeType;
 
     public abstract string GenerateHlslFunction();
 
@@ -33,16 +33,12 @@ public abstract class SDFColorNode :ScriptableObject
             i.GetActiveNodes(nodes);
         }
         else {
-            bool d;
             foreach (SDFColorNode s in nodes) {
                 if (s.sdfName == input.sdfName) {
-                    Debug.Log("found double in inputA");
                     return;
                 }
             }
-
             nodes.Add(input);
-            Debug.Log("found no double in inputA");
         }
     }
 }

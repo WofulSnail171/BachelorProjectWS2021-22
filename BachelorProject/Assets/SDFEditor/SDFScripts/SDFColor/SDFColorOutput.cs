@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways][CreateAssetMenu(menuName = "SDF Color/Color Output")]
 public class SDFColorOutput : SDFColorNode
 {
     [SerializeField] private SDFColorInput insideColor;
@@ -92,7 +93,7 @@ public class SDFColorOutput : SDFColorNode
     }
 
     private void Awake() {
-        this.nodeType = NodeType.ColorOutput;
+        this.colorNodeType = ColorNodeType.ColorOutput;
         
         this.index = (uint)UnityEngine.Random.Range(0, 1000);
         
@@ -112,9 +113,9 @@ public class SDFColorOutput : SDFColorNode
     }
 
     public override string GenerateHlslFunction() {
-        string iColor = "";
-        string oColor = "";
-        string olColor = "";
+        string iColor;
+        string oColor;
+        string olColor;
         
         if (this.InsideColor == null) {
             iColor = "float4(1,1,1,1)";
@@ -137,14 +138,13 @@ public class SDFColorOutput : SDFColorNode
         }
 
         string hlslString = @"
-        
-        float sdf = smoothstep(0,thickness*0.01 - thickness*0.005 ,sdfOut);
-            float4 col = lerp(insideColor, outsideColor, sdf);
-            float outline = 1-smoothstep(0,thickness*0.01 ,abs(frac(sdfOut / (lineDistance*0.1) + 0.5) - 0.5) * (lineDistance*0.1));
-            outline *= step(sdfOut-repetition *0.01, 0);
-            col = lerp(col, outlineColor, outline);
+        float sdf_"+ this.sdfName + " = smoothstep(0," + this.variables[0] + "*0.01 - " + this.variables[0] + @"*0.005 ,sdfOut);
+        float4 col_"+ this.sdfName + " = lerp(" + iColor + " , " + oColor + ", sdf_"+ this.sdfName + @");
+        float outline_"+ this.sdfName + " = 1-smoothstep(0," + this.variables[0] + "*0.01 ,abs(frac(sdfOut / (" + this.variables[2] + "*0.1) + 0.5) - 0.5) * (" + this.variables[2] + @"*0.1));
+        outline_"+ this.sdfName + " *= step(sdfOut-" + this.variables[1] + @" *0.01, 0);
+        col_"+ this.sdfName + " = lerp(col_"+ this.sdfName + ", " + olColor + ", outline_"+ this.sdfName + @");
 
-        " + "float " + this.o + " = ;";
+        " + "float4 " + this.o + " = col_"+ this.sdfName + ";";
         return hlslString;
 
     }
@@ -152,11 +152,11 @@ public class SDFColorOutput : SDFColorNode
     public void GetActiveNodes(List<SDFColorNode> activeNodes) {
         activeNodes.Add(this);
         
-        if(!this.InsideColor)
+        if(this.InsideColor != null)
             this.GetActiveNodes(activeNodes, this.InsideColor);
-        if(!this.OutsideColor)
+        if(this.OutsideColor!= null)
             this.GetActiveNodes(activeNodes, this.OutsideColor);
-        if(!this.OutlineColor)
+        if(this.OutlineColor!= null)
             this.GetActiveNodes(activeNodes, this.OutlineColor);
         
     }
