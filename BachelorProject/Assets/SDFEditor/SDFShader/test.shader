@@ -26,12 +26,6 @@ Shader "SDF/test"
                 
                 [HideInInspector] color665 ("color665", Color) = (1,1,1,1)
                 
-                [HideInInspector] tex649_position ("tex649_position", Vector) = (0,0,0,0)
-                [HideInInspector] tex649_scale ("tex649_scale", Float) = 1
-                [HideInInspector] tex649_rotation ("tex649_rotation", Float) = 0
-                [HideInInspector] tex649_tex ("tex649_tex", 2D) = "white"{}
-                [HideInInspector] tex649_color ("tex649_color", Color) = (1,1,1,1)
-                
 
                 [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
                 [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
@@ -101,11 +95,6 @@ Shader "SDF/test"
         float colorOutput51_repetition;
         float colorOutput51_lineDistance;
         float4 color665;
-        float2 tex649_position;
-        sampler2D tex649_tex;
-        float tex649_scale;
-        float tex649_rotation;
-        float4 tex649_color;
         
      CBUFFER_END
 
@@ -114,7 +103,7 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
             float sdfOut = sdf(i.uv, rect138_position, rect138_box, rect138_scale, rect138_roundness, rect138_rotation, circle673_position, circle673_radius, line265_position, line265_a, line265_b, line265_roundness, line265_scale, line265_rotation);
             
-            float4 col = sdfColor(i.uv, sdfOut, tex649_position, tex649_tex, tex649_scale, tex649_rotation, tex649_color, color665, colorOutput51_thickness, colorOutput51_repetition, colorOutput51_lineDistance);
+            float4 col = sdfColor(i.uv, sdfOut, color665, colorOutput51_thickness, colorOutput51_repetition, colorOutput51_lineDistance);
             return col;
         }
 

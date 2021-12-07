@@ -12,7 +12,8 @@ public class SDFColor : SDFColorInput {
         set {
             if (this._color == value) return;
             this._color = value;
-            this.OnInputChange?.Invoke();
+            this.OnValueChange?.Invoke(this);
+            Debug.Log("color has changed");
         }
     }
 

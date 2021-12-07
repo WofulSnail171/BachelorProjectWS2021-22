@@ -101,8 +101,6 @@ public class SDFOutput : SDFNode{
         foreach (SDFColorNode c in this.SDFColorNode) {
             this.ChangeColorValues(c);
         }
-
-        Debug.Log("updated shader");
     }
 
     private void AddHlslString() {
@@ -486,9 +484,7 @@ public class SDFOutput : SDFNode{
         }
         if(colorVariables.Length >2)
             colorVariables = colorVariables.Substring(0, colorVariables.Length - 2);
-        if(colorNode != null)
-            Debug.Log(colorNode.o);
-        
+
         return @"
     float4 sdfColor (float2 uv, float sdfOut, " + colorVariables + @"){
         " + colorFunction + @"
@@ -620,7 +616,7 @@ public class SDFOutput : SDFNode{
         EditorUtility.SetDirty(this.sdfMaterial);
     }
     private void ChangeColorValues(SDFColorNode colorNode){
-
+        Debug.Log("updating shader");
         if (this.sdfMaterial == null) {
             Debug.LogWarning("material has not been applied or assigned");
             return;
@@ -639,6 +635,7 @@ public class SDFOutput : SDFNode{
             case global::SDFColorNode.ColorNodeType.Color: {
                 var n = (SDFColor) colorNode;
                 this.sdfMaterial.SetColor(n.sdfName, n.Color);
+                Debug.Log("updated color in shader");
                 break;
             }
             case global::SDFColorNode.ColorNodeType.Texture: {
@@ -721,7 +718,7 @@ public class SDFOutput : SDFNode{
             if (s != null) {
                 this.ChangeColorValues(s);
                 s.OnValueChange += this.ChangeColorValues;
-                //Debug.Log("subscribed to value change on " +  s.sdfName);
+                Debug.Log("subscribed to value change on " +  s.sdfName);
                 if (s is SDFColorOutput) {
                     SDFColorOutput sOut = (SDFColorOutput) s;
                     sOut.OnInputChange += this.UpdateShader;
