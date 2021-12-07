@@ -33,13 +33,13 @@
     }
         
 
-    float4 sdfColor (float2 uv, float sdfOut, float4 color665, float colorOutput51_thickness, float colorOutput51_repetition, float colorOutput51_lineDistance){
+    float4 sdfColor (float2 uv, float sdfOut, float4 color566, float4 color665, float colorOutput51_thickness, float colorOutput51_repetition, float colorOutput51_lineDistance){
         
         float sdf_colorOutput51 = smoothstep(0,colorOutput51_thickness*0.01 - colorOutput51_thickness*0.005 ,sdfOut);
         float4 col_colorOutput51 = lerp(color665 , color665, sdf_colorOutput51);
         float outline_colorOutput51 = 1-smoothstep(0,colorOutput51_thickness*0.01 ,abs(frac(sdfOut / (colorOutput51_lineDistance*0.1) + 0.5) - 0.5) * (colorOutput51_lineDistance*0.1));
         outline_colorOutput51 *= step(sdfOut-colorOutput51_repetition *0.01, 0);
-        col_colorOutput51 = lerp(col_colorOutput51, float4(0,0,0,1), outline_colorOutput51);
+        col_colorOutput51 = lerp(col_colorOutput51, color566, outline_colorOutput51);
 
         float4 colorOutput51_out = col_colorOutput51;
 

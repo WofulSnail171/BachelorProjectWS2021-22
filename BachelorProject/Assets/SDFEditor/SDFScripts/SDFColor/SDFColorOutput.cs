@@ -48,6 +48,7 @@ public class SDFColorOutput : SDFColorNode
             if (this._outlineColor == value) return;
             this._outlineColor = value;
             this.OnInputChange?.Invoke();
+            Debug.Log("input has changed");
         }
     }
     

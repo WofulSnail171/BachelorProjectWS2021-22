@@ -82,6 +82,7 @@ public class SDFOutput : SDFNode{
     }
 
     private void UpdateShader() {
+      
         if (!this.Input) {
             Debug.LogWarning("forgot to assign Input in Output Node");
             return;
@@ -722,6 +723,7 @@ public class SDFOutput : SDFNode{
                 if (s is SDFColorOutput) {
                     SDFColorOutput sOut = (SDFColorOutput) s;
                     sOut.OnInputChange += this.UpdateShader;
+                    Debug.Log("subscribed to input change on " +  s.sdfName);
                 }
             }
         }
