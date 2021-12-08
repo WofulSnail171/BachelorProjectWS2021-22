@@ -87,8 +87,10 @@ public class DungeonManager : MonoBehaviour
         double elapsedSeconds = 0;
         if (DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.date != null)
         {
-            var bla = DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date);
-            elapsedSeconds = DateTime.Now.Subtract(DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date)).TotalSeconds;
+            var bla = DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date).ToUniversalTime();
+            var blub = DateTime.Now.ToUniversalTime();
+            var bli = DateTime.UtcNow;
+            elapsedSeconds = DateTime.Now.ToUniversalTime().Subtract(DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date).ToUniversalTime()).TotalSeconds;
             if(AutoPlayWaitTimeSec != 0)
             {
                 elapsedSeconds /= AutoPlayWaitTimeSec;
@@ -113,7 +115,7 @@ public class DungeonManager : MonoBehaviour
         if (DatabaseManager._instance.dungeonData.dailyDungeons != null && DatabaseManager._instance.dungeonData.dailyDungeons.Length > 0)
         {
             //check if current daily dungeon data is older than 24 hours
-            if (false )//DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).Date == DateTime.Now.Date)
+            if (false)//DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).ToUniversalTime().Date == DateTime.Now.ToUniversalTime().Date)
             {
                 Debug.Log("Current daily dungeons are still valid");
                 //if (DatabaseManager._instance.dungeonData.dailyDungeons[0].dungeonLayout == null)
@@ -129,7 +131,7 @@ public class DungeonManager : MonoBehaviour
             {
                 dailySeed = UnityEngine.Random.Range(1, 3000),
                 layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-                date = DateTime.Now.ToString("u"),
+                date = DateTime.Now.ToUniversalTime().ToString("u"),
                 questName = DatabaseManager._instance.eventData.basicQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.basicQuestDeck.Length)].eventName,
                 type = DungeonType.basic,
                 difficultyIndex = i
@@ -140,7 +142,7 @@ public class DungeonManager : MonoBehaviour
         {
             dailySeed = UnityEngine.Random.Range(1, 3000),
             layoutId = layoutList.layouts[UnityEngine.Random.Range(0, layoutList.layouts.Length)].name,
-            date = DateTime.Now.ToString("u"),
+            date = DateTime.Now.ToUniversalTime().ToString("u"),
             questName = DatabaseManager._instance.eventData.doomQuestDeck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.doomQuestDeck.Length)].eventName,
             type = DungeonType.doom,
             difficultyIndex = DatabaseManager._instance.rewardTable.dungeonDifficulties.Count - 1
@@ -176,7 +178,7 @@ public class DungeonManager : MonoBehaviour
             result = new DungeonRun
             {
                 dungeon = chosenDungeon,
-                date = DateTime.Now.ToString("u"),
+                date = DateTime.Now.ToUniversalTime().ToString("u"),
                 valid = false,
                 dungeonSeed = UnityEngine.Random.Range(0, 500),
                 initialRewardTier = DatabaseManager._instance.activePlayerData.rewardTierBuff,
@@ -215,7 +217,7 @@ public class DungeonManager : MonoBehaviour
             NextStepRun();
         }
         events = true;
-        //UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        //UnityEngine.Random.InitState((int)DateTime.Now.ToUniversalTime().Ticks);
     }
 
     public void RevalidateMaxStepsAndRandomNums()
@@ -242,7 +244,7 @@ public class DungeonManager : MonoBehaviour
         _dungeonRun.maxSteps = currentCalcRun.currentStep;
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
 
-        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        UnityEngine.Random.InitState((int)DateTime.Now.ToUniversalTime().Ticks);
         currentCalcRun = null;
         events = true;
     }
@@ -357,7 +359,7 @@ public class DungeonManager : MonoBehaviour
                 break;
             case DungeonActivity.pathChoosing:
                 currentCalcRun.currentNode.chosenPathIndex = currentCalcRun.RandomNum(0, currentCalcRun.currentNode.nextPaths.Count);
-                currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathHandlingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
+                currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathChoosingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
                 //string text = "#Hero tut stuff";
                 //text = text.Replace("#Hero", DatabaseManager._instance.dungeonData.currentRun.party[DungeonManager._instance.currentCalcRun.nextHero].heroId);
                 //currentCalcRun.UpdateLog(text);

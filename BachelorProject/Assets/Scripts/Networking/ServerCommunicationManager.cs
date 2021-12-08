@@ -342,7 +342,7 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushPlayerData:
                 //ToDO: Decouple PlayerData from Inventory
                 DoServerRequest(Request.PushInventory);
-                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToUniversalTime().ToString("u");
                 DatabaseManager._instance.SaveGameDataLocally();
                 ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(new UploadPlayerData( DatabaseManager._instance.activePlayerData)), _simpleEvent, _messageEvent);
                 break;

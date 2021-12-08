@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class TextReplacer
 {
-    static public string[] replacements = new string[] 
-    { 
+    static public string[] replacements = new string[]
+    {
+        "$Enemy",
+        "$RandEnemy",
+        "$NodeType",
+        "$NextNodeType",
+        "$PathType",
+        "$EventName",
+        "$NextEventName",
         "$HeroId",
         "$HeroJob",
         "$HeroRace",
@@ -22,17 +29,21 @@ public class TextReplacer
         "$RandHeroPhy",
         "$RandHeroMag",
         "$RandHeroSoc",
-        "$Enemy",
-        "$NodeType",
-        "$PathType",
-        "$EventName"
+        "$FirstHeroId",
+        "$FirstHeroJob",
+        "$FirstHeroRace",
+        "$FirstHeroRar",
+        "$FirstHeroVal",
+        "$FirstHeroPhy",
+        "$FirstHeroMag",
+        "$FirstHeroSoc"
     };
     public static string ReplaceWordsBulk(string _input)
     {
         string result = _input;
         foreach (var entry in replacements) {
-            if(_input.Contains(entry))
-                result = _input.Replace(entry, ReplaceWord(entry));
+            if(result.Contains(entry))
+                result = result.Replace(entry, ReplaceWord(entry));
         }
         return result;
     }
@@ -124,24 +135,74 @@ public class TextReplacer
             case "$RandHeroSoc":
                 result = DatabaseManager._instance.dungeonData.currentRun.party[DungeonManager._instance.currentCalcRun.RandomNum(0, DatabaseManager._instance.dungeonData.currentRun.party.Count)].sVal.ToString();
                 break;
+            //FirstHero
+            case "$FirstHeroId":
+                result = DatabaseManager._instance.dungeonData.currentRun.party[0].heroId;
+
+                break;
+            case "$FirstHeroJob":
+                result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[DatabaseManager._instance.dungeonData.currentRun.party[0].heroId].job;
+                break;
+            case "$FirstHeroRace":
+                result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[DatabaseManager._instance.dungeonData.currentRun.party[0].heroId].race;
+                break;
+            case "$FirstHeroRar":
+                result = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[DatabaseManager._instance.dungeonData.currentRun.party[0].heroId].rarity.ToString();
+                break;
+            case "$FirstHeroVal":
+                switch (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType)
+                {
+                    case "physical":
+                        result = DatabaseManager._instance.dungeonData.currentRun.party[0].pVal.ToString();
+                        break;
+                    case "magical":
+                        result = DatabaseManager._instance.dungeonData.currentRun.party[0].mVal.ToString();
+                        break;
+                    case "social":
+                        result = DatabaseManager._instance.dungeonData.currentRun.party[0].sVal.ToString();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "$FirstHeroPhy":
+                result = DatabaseManager._instance.dungeonData.currentRun.party[0].pVal.ToString();
+                break;
+            case "$FirstHeroMag":
+                result = DatabaseManager._instance.dungeonData.currentRun.party[0].mVal.ToString();
+                break;
+            case "$FirstHeroSoc":
+                result = DatabaseManager._instance.dungeonData.currentRun.party[0].sVal.ToString();
+                break;
             case "$Enemy":
                 result = DungeonManager._instance.currentCalcRun.currentNode.eventEnemy;
-                //ToDo
+                break;
+            case "$RandEnemy":
+                result = DatabaseManager._instance.eventData.textFlavours.textsEnemyNames[DungeonManager._instance.currentCalcRun.RandomNum(0, DatabaseManager._instance.eventData.textFlavours.textsEnemyNames.Length)].name;
                 break;
             case "$NodeType":
                 result = DungeonManager._instance.currentCalcRun.currentNode.nodeType;
-                //ToDo
+                break;
+            case "$NextNodeType":
+                if (DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex != -1)
+                {
+                    result = DungeonManager._instance.currentCalcRun.currentNode.nextNodes[DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex].nodeType;
+                }
                 break;
             case "$PathType":
                 if(DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex != -1)
                 {
                     result = DungeonManager._instance.currentCalcRun.currentNode.nextPaths[DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex];
                 }
-                //ToDo
                 break;
             case "$EventName":
                 result = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.eventName;
-                //ToDo
+                break;
+            case "$NextEventName":
+                if (DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex != -1)
+                {
+                    result = DungeonManager._instance.currentCalcRun.currentNode.nextNodes[DungeonManager._instance.currentCalcRun.currentNode.chosenPathIndex].nodeEvent.eventName;
+                }
                 break;
             default:
                 break;

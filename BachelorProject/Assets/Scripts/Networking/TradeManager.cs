@@ -39,7 +39,7 @@ public class TradeManager : MonoBehaviour
     private bool AutoPLay = true;
     public float AutoPlayWaitTimeSec = 1.0f;
 
-    public int TargetStep = 100;
+    public int TargetStep = 1000;
     public int CurrentStep = 0;
     bool done = false;
 
@@ -55,6 +55,30 @@ public class TradeManager : MonoBehaviour
             }
         }
         return result;
+    }
+
+    public void FastForwardToStep(int _targetStep)
+    {
+        CurrentStep = _targetStep;
+        done = false;
+        DeleventSystem.TradeStep?.Invoke();
+    }
+
+    public int GetCurrentStep()
+    {
+        double elapsedSeconds = 0;
+        if (DatabaseManager._instance.activePlayerData.tradeStartDate != "" && DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            var bla = DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToUniversalTime();
+            var blub = DateTime.Now.ToUniversalTime();
+            var bli = DateTime.UtcNow;
+            elapsedSeconds = DateTime.Now.ToUniversalTime().Subtract(DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToUniversalTime()).TotalSeconds;
+            if (AutoPlayWaitTimeSec != 0)
+            {
+                elapsedSeconds /= AutoPlayWaitTimeSec;
+            }
+        }
+        return (int)elapsedSeconds;
     }
 
     private void NextStepTrade()
@@ -106,11 +130,12 @@ public class TradeManager : MonoBehaviour
     public void UploadOffer(PlayerHero[] _heroes)
     {
         UploadOfferData _data = new UploadOfferData { heroes = _heroes, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-        _data.date = DateTime.Now.ToString("u");
+        _data.date = DateTime.Now.ToUniversalTime().ToString("u");
         string message = JsonUtility.ToJson(_data);
         var test = JsonUtility.FromJson<PlayerHero[]>(message);
 
         ServerCommunicationManager._instance.GetInfo(Request.UploadOffer, message);
+
         PullTradeOffers();
     }
     [System.Serializable]

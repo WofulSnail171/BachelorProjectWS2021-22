@@ -218,6 +218,10 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
             //DungeonManager._instance.CalculateRun(0);
         }
+        if (DatabaseManager._instance.activePlayerData.tradeStartDate != "" && DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
+        }
 
         SceneManager.LoadScene(1);
     }
@@ -422,8 +426,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             name = "Benedikt",
             password = "321",
-            date = System.DateTime.Now.ToString("o"),
-            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString("o")),
+            date = System.DateTime.Now.ToUniversalTime().ToString("o"),
+            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToUniversalTime().ToString("u")).ToUniversalTime(),
             profileDescription = "",
             mtDoomCounter = 0,
             tradeCounter = 0,
@@ -439,5 +443,5 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         }
         */
 
-    }    
+    }
 }

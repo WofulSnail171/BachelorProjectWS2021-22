@@ -70,7 +70,7 @@ public class DatabaseManager : MonoBehaviour
     //some logic to compare local and online data and do something according
     public void SaveGameDataLocally()
     {
-        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToUniversalTime().ToString("u");
         LocalSaveSystem.SaveLocaldata();
         //Push to server?
     }
@@ -85,7 +85,7 @@ public class DatabaseManager : MonoBehaviour
         }
         else
         {            
-            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate)) < 0)
+            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) < 0)
             {
                 //online save is younger the local one -> played on an other device -> need to fire special event
 
@@ -170,7 +170,7 @@ public class DatabaseManager : MonoBehaviour
     {
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
         //check for dates lol
-        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate));
+        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime());
         if (localSave == null || bla > 0)
         {
             //online save is younger the local one -> played on an other device -> need to fire special event
@@ -327,8 +327,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString("u"),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("u")),
+//date = System.DateTime.Now.ToUniversalTime().ToString("u"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToUniversalTime().ToString("u")).ToUniversalTime(),
 
 [System.Serializable]
 public class PlayerData
@@ -544,6 +544,7 @@ public class LoginInfo
 {
     public string playerId = "name";
     public string password = "pw";
+    public string date = DateTime.Now.ToUniversalTime().ToString("u");
 }
 
 [System.Serializable]
