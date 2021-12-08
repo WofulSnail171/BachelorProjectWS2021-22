@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a1dd578e7347014985db9c2acbb3dbb, type: 3}
+  m_Name: SDFSB Lend
+  m_EditorClassIdentifier: 
+  o: sblend343_out
+  sdfName: sblend343
+  variables:
+  - sblend343_k
+  types:
+  - float
+  nodeType: 8
+  inputA: {fileID: 11400000, guid: 556a8e7be640f4b4290a08f2b89c76a3, type: 2}
+  inputB: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
+  k: 0.28
