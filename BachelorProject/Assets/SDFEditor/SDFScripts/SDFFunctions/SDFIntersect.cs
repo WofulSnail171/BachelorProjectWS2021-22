@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName = "SDF Function/Intersect")]
 public class SDFIntersect : SDFFunction
 {
     [SerializeField] private SDFNode inputA;

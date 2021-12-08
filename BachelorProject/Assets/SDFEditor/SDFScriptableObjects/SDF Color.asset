@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade508fe7b633f144a3385ea924e4680, type: 3}
   m_Name: SDF Color
   m_EditorClassIdentifier: 
-  o: color665
-  sdfName: color665
+  o: color646
+  sdfName: color646
   variables:
-  - color665
+  - color646
   types:
   - float4
   colorNodeType: 1
-  color: {r: 0.3066038, g: 1, b: 0.64235353, a: 1}
+  color: {r: 0.36405307, g: 0.9076464, b: 0.9528302, a: 1}

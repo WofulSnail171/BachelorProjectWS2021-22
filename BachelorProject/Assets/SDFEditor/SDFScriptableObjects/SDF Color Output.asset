@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db4d411f56df004eadc219410cf182b, type: 3}
   m_Name: SDF Color Output
   m_EditorClassIdentifier: 
-  o: colorOutput51_out
-  sdfName: colorOutput51
+  o: colorOutput839_out
+  sdfName: colorOutput839
   variables:
-  - colorOutput51_thickness
-  - colorOutput51_repetition
-  - colorOutput51_lineDistance
+  - colorOutput839_thickness
+  - colorOutput839_repetition
+  - colorOutput839_lineDistance
   types:
   - float
   - float
   - float
   colorNodeType: 0
-  insideColor: {fileID: 11400000, guid: 18eb2ae3bc5bb7f409c0ace8cccaa120, type: 2}
+  insideColor: {fileID: 11400000, guid: becca107a80389a489dd220f1136f4c3, type: 2}
   outsideColor: {fileID: 11400000, guid: 18eb2ae3bc5bb7f409c0ace8cccaa120, type: 2}
   outlineColor: {fileID: 11400000, guid: 2b55cf11d7d2cb24d8ba95479f879dcf, type: 2}
-  thickness: 0.56
-  repetition: 5
-  lineDistance: 0.3
+  thickness: 1.07
+  repetition: 12
+  lineDistance: 0.78

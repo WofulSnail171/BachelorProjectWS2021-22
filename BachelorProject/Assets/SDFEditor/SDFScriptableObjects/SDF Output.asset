@@ -18,7 +18,7 @@ MonoBehaviour:
   types: []
   nodeType: 0
   shaderName: test
-  input: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
+  input: {fileID: 11400000, guid: b07c2f906701eb5408c6ab51c0510692, type: 2}
   inputColor: {fileID: 11400000, guid: 93885d184325a464eb8adbf9fc4c0d61, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0

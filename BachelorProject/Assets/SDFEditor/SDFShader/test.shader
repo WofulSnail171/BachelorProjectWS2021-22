@@ -4,16 +4,29 @@ Shader "SDF/test"
             Properties
             {
                 
-                [HideInInspector] circle673_position ("circle673_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle673_radius ("circle673_radius", Float) = 0.2
+                [HideInInspector] circle646_position ("circle646_position", Vector) = (0,0,0,0)
+                [HideInInspector] circle646_radius ("circle646_radius", Float) = 0.2
                 
-                [HideInInspector] colorOutput51_thickness ("colorOutput51_thickness", Float) = 0.2
-                [HideInInspector] colorOutput51_repetition ("colorOutput51_repetition", Float) = 1
-                [HideInInspector] colorOutput51_lineDistance ("colorOutput51_lineDistance", Float) = 1
+                [HideInInspector] triangle490_position ("triangle490_position", Vector) = (0,0,0,0)
+                [HideInInspector] triangle490_a ("triangle490_a", Vector) = (0,0,0,0)
+                [HideInInspector] triangle490_b ("triangle490_b", Vector) = (0,0,0,0)
+                [HideInInspector] triangle490_c ("triangle490_c", Vector) = (0,0,0,0)
+                [HideInInspector] triangle490_scale ("triangle490_scale", Float) = 1
+                [HideInInspector] triangle490_rotation ("triangle490_rotation", Float) = 0
                 
-                [HideInInspector] color665 ("color665", Color) = (1,1,1,1)
+                [HideInInspector] colorOutput839_thickness ("colorOutput839_thickness", Float) = 0.2
+                [HideInInspector] colorOutput839_repetition ("colorOutput839_repetition", Float) = 1
+                [HideInInspector] colorOutput839_lineDistance ("colorOutput839_lineDistance", Float) = 1
                 
-                [HideInInspector] color566 ("color566", Color) = (1,1,1,1)
+                [HideInInspector] tex705_position ("tex705_position", Vector) = (0,0,0,0)
+                [HideInInspector] tex705_scale ("tex705_scale", Float) = 1
+                [HideInInspector] tex705_rotation ("tex705_rotation", Float) = 0
+                [HideInInspector] tex705_tex ("tex705_tex", 2D) = "white"{}
+                [HideInInspector] tex705_color ("tex705_color", Color) = (1,1,1,1)
+                
+                [HideInInspector] color646 ("color646", Color) = (1,1,1,1)
+                
+                [HideInInspector] color855 ("color855", Color) = (1,1,1,1)
                 
 
                 [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
@@ -67,22 +80,33 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 circle673_position;
-        float circle673_radius;
-        float colorOutput51_thickness;
-        float colorOutput51_repetition;
-        float colorOutput51_lineDistance;
-        float4 color665;
-        float4 color566;
+        float2 circle646_position;
+        float circle646_radius;
+        float2 triangle490_position;
+        float2 triangle490_a;
+        float2 triangle490_b;
+        float2 triangle490_c;
+        float triangle490_scale;
+        float triangle490_rotation;
+        float colorOutput839_thickness;
+        float colorOutput839_repetition;
+        float colorOutput839_lineDistance;
+        float2 tex705_position;
+        sampler2D tex705_tex;
+        float tex705_scale;
+        float tex705_rotation;
+        float4 tex705_color;
+        float4 color646;
+        float4 color855;
         
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
             i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, circle673_position, circle673_radius);
+            float sdfOut = sdf(i.uv, triangle490_position, triangle490_a, triangle490_b, triangle490_c, triangle490_scale, triangle490_rotation, circle646_position, circle646_radius);
             
-            float4 col = sdfColor(i.uv, sdfOut, color566, color665, colorOutput51_thickness, colorOutput51_repetition, colorOutput51_lineDistance);
+            float4 col = sdfColor(i.uv, sdfOut, color855, color646, tex705_position, tex705_tex, tex705_scale, tex705_rotation, tex705_color, colorOutput839_thickness, colorOutput839_repetition, colorOutput839_lineDistance);
             return col;
         }
 

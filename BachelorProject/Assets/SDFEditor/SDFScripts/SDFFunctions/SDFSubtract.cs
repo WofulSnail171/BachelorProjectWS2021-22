@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[CreateAssetMenu(menuName = "SDF Function/Subtract")]
 public class SDFSubtract : SDFFunction
 {
     [SerializeField] private SDFNode inputA;

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade508fe7b633f144a3385ea924e4680, type: 3}
   m_Name: Color
   m_EditorClassIdentifier: 
-  o: color566
-  sdfName: color566
+  o: color855
+  sdfName: color855
   variables:
-  - color566
+  - color855
   types:
   - float4
   colorNodeType: 1
-  color: {r: 0.8207547, g: 0.15546861, b: 0, a: 1}
+  color: {r: 0, g: 0, b: 0, a: 1}
