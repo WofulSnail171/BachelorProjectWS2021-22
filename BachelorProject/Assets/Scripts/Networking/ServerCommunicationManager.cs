@@ -152,12 +152,10 @@ public class ServerCommunicationManager : MonoBehaviour
                 //create new userprofil with data given
                 //tutorials + first hero
                 //DatabaseManager._instance.UpdateActivePlayerFromServer(lastMessage);
-                DeleventSystem.trySignUp(JsonUtility.FromJson<PlayerData>(lastMessage));
                 break;
             case Request.SignIn:
                 //get user profil
-                //if time stamp on online profile is newer than local discard local data and reapply online data
-                DeleventSystem.trySignIn(JsonUtility.FromJson<PlayerData>(lastMessage));
+                //if time stamp on online profile is newer than local discard local data and reapply online data                
                 break;
             case Request.GetPlayerData:
                 // generically download a specified user profile for diverse use cases
@@ -177,8 +175,7 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushDungeonData:
                 break;
             case Request.DownloadDungeonData:
-                Debug.Log(lastMessage);
-                DungeonData newData = JsonUtility.FromJson<DungeonData>(lastMessage);
+                DatabaseManager._instance.UpdateDungeonDataFromServer(LastMessage);
                 break;
             case Request.PushInventory:
                 break;
@@ -186,6 +183,16 @@ public class ServerCommunicationManager : MonoBehaviour
                 break;
             case Request.PullRewardTable:
                 DatabaseManager._instance.UpdateRewardTableFromServer(lastMessage);
+                break;
+            case Request.UploadOffer:
+                break;
+            case Request.UpdateOffer:
+                break;
+            case Request.PullTradeOffers:
+                DatabaseManager._instance.UpdateTradeDataFromServer(lastMessage);
+                break;
+            case Request.DeleteOffers:
+                //ToDo
                 break;
             default:
                 break;
@@ -213,10 +220,10 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.Error:
                 break;
             case Request.SignUp:
-                DeleventSystem.trySignUp(new PlayerData { playerId = "Error", password = _message});
+                lastMessage = JsonUtility.ToJson(new PlayerData { playerId = "Error", password = _message });
                 break;
             case Request.SignIn:
-                DeleventSystem.trySignIn(new PlayerData { playerId = "Error", password = _message});
+                lastMessage = JsonUtility.ToJson(new PlayerData { playerId = "Error", password = _message });
                 break;
             case Request.GetPlayerData:
                 break;
@@ -235,6 +242,15 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushBlacklist:
                 break;
             case Request.PullRewardTable:
+                break;
+            case Request.UploadOffer:
+                break;
+            case Request.UpdateOffer:
+                break;
+            case Request.PullTradeOffers:
+                break;
+            case Request.DeleteOffers:
+                //ToDo
                 break;
             default:
                 break;
@@ -326,6 +342,8 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushPlayerData:
                 //ToDO: Decouple PlayerData from Inventory
                 DoServerRequest(Request.PushInventory);
+                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+                DatabaseManager._instance.SaveGameDataLocally();
                 ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(new UploadPlayerData( DatabaseManager._instance.activePlayerData)), _simpleEvent, _messageEvent);
                 break;
             case Request.PushDungeonData:
@@ -365,6 +383,19 @@ public class ServerCommunicationManager : MonoBehaviour
                 ServerCommunicationManager._instance.GetInfo(Request.PullRewardTable, "", _simpleEvent, _messageEvent);
                 //ToDo: Splitted into multiple Requests
                 break;
+            case Request.UploadOffer:
+                //ToDo
+                break;
+            case Request.UpdateOffer:
+                //ToDo
+                break;
+            case Request.PullTradeOffers:
+                //ToDo
+                ServerCommunicationManager._instance.GetInfo(Request.PullTradeOffers, "", _simpleEvent, _messageEvent);
+                break;
+            case Request.DeleteOffers:
+                //ToDo
+                break;
             default:
                 break;
         }
@@ -391,7 +422,11 @@ public enum Request
     DownloadDungeonData,
     PushInventory,
     PushBlacklist,
-    PullRewardTable
+    PullRewardTable,
+    UploadOffer,
+    UpdateOffer,
+    PullTradeOffers,
+    DeleteOffers
 }
 
 //for the request queue:

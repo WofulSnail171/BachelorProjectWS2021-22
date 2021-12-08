@@ -11,7 +11,7 @@ public class TradeSlot : MonoBehaviour, IDropHandler
     [HideInInspector] public PlayerHero playerHero;
 
     [HideInInspector] public int slotID;
-    [HideInInspector] public int originalSlotReferenceID;
+    [HideInInspector] public int originalSlotReferenceID = -1;
 
 
     [SerializeField] public  GameObject heroCard;

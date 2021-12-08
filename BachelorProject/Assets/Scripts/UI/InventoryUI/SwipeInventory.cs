@@ -1,13 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwipeInventory : MonoBehaviour
 {
     #region vars
     [SerializeField] TradeInventoryUI tradeInventory;
-    [HideInInspector] public SwipeSlot[] swipeSlots { get; private set; }
+    [SerializeField] GameObject slotParent;
+    [HideInInspector] public SwipeSlot[] swipeSlots;
+
+    //swipeslot focused
+    private PlayerHero matchHero;
+    public int swipeIndex = -1;
     #endregion
+
+
+    private void Awake()
+    {
+        swipeSlots = slotParent.GetComponentsInChildren<SwipeSlot>();
+
+
+        foreach (SwipeSlot swipeSlot in swipeSlots)
+            swipeSlot.OnClickEvent += Click; 
+    }
 
     private void OnEnable()
     {
@@ -23,6 +39,7 @@ public class SwipeInventory : MonoBehaviour
             {
                 swipeSlots[slot.slotID].updateHero(slot.playerHero, slot.portrait.sprite, slot.slotrarity,slot.originalSlotReferenceID);
                 swipeSlots[slot.slotID].slotID = slot.slotID;
+                swipeSlots[slot.slotID].showHero();
             }
         }
     }
@@ -32,10 +49,43 @@ public class SwipeInventory : MonoBehaviour
          foreach (SwipeSlot slot in swipeSlots)
         {
             slot.hideHero();
-            slot.IsMatched = false;
+            slot.unmatchHero();
         }    
     }
 
 
-    //drag
+    public void UnmatchAll()
+    {
+        foreach (SwipeSlot slot in swipeSlots)
+        {
+            slot.unmatchHero();
+        }
+    }
+
+
+    //highlight
+    private void Click(int index)
+    {
+        foreach (SwipeSlot heroSlot in swipeSlots)
+        {
+            if (heroSlot.playerHero != null)
+                heroSlot.disableHighlight();
+        }
+
+        swipeSlots[index].enableHighlight();
+        matchHero = swipeSlots[index].playerHero;
+
+        swipeIndex = index;
+    }
+    private void DoubleClick(int index)
+    {
+        foreach (SwipeSlot heroSlot in swipeSlots)
+        {
+            if (heroSlot.playerHero != null)
+                heroSlot.disableHighlight();
+        }
+        matchHero = null;
+
+        swipeIndex = -1;
+    }
 }

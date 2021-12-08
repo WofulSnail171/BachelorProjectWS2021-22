@@ -11,7 +11,7 @@ public class DailyDungeon
     public string date;
     public string questName;
     public DungeonType type;
-    public int difficutlyIndex;
+    public int difficultyIndex;
 
     //does not get serialized. Gets set on dungeon layout setup
     [System.NonSerialized]  public DungeonLayOut dungeonLayout;
@@ -24,8 +24,8 @@ public class DailyDungeon
         }
         GameObject go = GameObject.Instantiate(DungeonManager._instance.layoutList.layoutPrefabs[layoutId], new Vector3(0, 0, 0), Quaternion.identity);
         dungeonLayout =  go.GetComponent<DungeonLayOut>();
-        if(DatabaseManager._instance.rewardTable.dungeonDifficulties.Count > difficutlyIndex)
-            dungeonLayout.SetupDungeonDailySeed(dailySeed, DatabaseManager._instance.rewardTable.dungeonDifficulties[difficutlyIndex]);
+        if(DatabaseManager._instance.rewardTable.dungeonDifficulties.Count > difficultyIndex)
+            dungeonLayout.SetupDungeonDailySeed(dailySeed, DatabaseManager._instance.rewardTable.dungeonDifficulties[difficultyIndex]);
         else
             dungeonLayout.SetupDungeonDailySeed(dailySeed);
     }

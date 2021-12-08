@@ -95,7 +95,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         outputTextfield.text = "Getting Data from Server...";
         Request requestType = Request.SignUp;
         LoginInfo playerLogin = new LoginInfo { playerId = PlayerIdSend, password = PasswordSend };
-        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin));
+        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin), null, OnTrySignUp);
     }
 
     public void OnSignInButton()
@@ -115,14 +115,15 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         outputTextfield.text = "Getting Data from Server...";
         Request requestType = Request.SignIn;
         LoginInfo playerLogin = new LoginInfo { playerId = PlayerIdSend, password = PasswordSend };
-        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin));
+        ServerCommunicationManager._instance.GetInfo(requestType, JsonUtility.ToJson(playerLogin), null, OnTrySignIn);
     }
 
 
 
-    public void OnTrySignUp(PlayerData _playerData)
+    public void OnTrySignUp(string _message)
     {
-        if(_playerData.playerId == "Error")
+        PlayerData PlayerDataFromServer = JsonUtility.FromJson<PlayerData>(_message);
+        if(PlayerDataFromServer.playerId == "Error")
         {
             outputTextfield.text = "Username already Taken";
             SignUpInScreenInit();
@@ -130,19 +131,21 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignUp successful";
-            DatabaseManager._instance.activePlayerData = _playerData;
+            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
             DeleventSystem.eventDataDownloaded += FirstSignUp;
             DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
             ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
         }
     }
 
-    public void OnTrySignIn(PlayerData _playerData)
+    public void OnTrySignIn(string _lastMessage)
     {
-        if (_playerData.playerId == "Error")
+        PlayerData PlayerDataFromServer = JsonUtility.FromJson<PlayerData>(_lastMessage);
+        if (PlayerDataFromServer.playerId == "Error")
         {
             outputTextfield.text = "Username or password incorrect";
             SignUpInScreenInit();
@@ -150,12 +153,17 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignIn successful";
-            DatabaseManager._instance.activePlayerData = _playerData;
+            DatabaseManager._instance.UpdateActivePlayerFromServer(_lastMessage);
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
+
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
+            
+            // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply
+            //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
             //FinishedLogIn();
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
@@ -190,15 +198,12 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
     private void OnEnable()
     {
-        DeleventSystem.trySignIn += OnTrySignIn;
-        DeleventSystem.trySignUp += OnTrySignUp;
         
     }
 
     private void OnDisable()
     {
-        DeleventSystem.trySignIn -= OnTrySignIn;
-        DeleventSystem.trySignUp -= OnTrySignUp;
+
     }
 
     public void FinishedLogIn()
@@ -207,6 +212,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         DungeonManager._instance.CreateDailyDungeons();
         if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
         {
+            DungeonManager._instance.RevalidateMaxStepsAndRandomNums();
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
             DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
             //DungeonManager._instance.CalculateRun(0);

@@ -51,7 +51,7 @@ public class DungeonLayOut : MonoBehaviour
         if (nodes.Contains(_node))
             return;
         nodes.Add(_node);
-        _node.nodeType = DatabaseManager._instance.eventData.nodeTypes[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.nodeTypes.Length)];
+        _node.nodeType = DatabaseManager._instance.eventData.nodeTypes[UnityEngine.Random.Range(1, DatabaseManager._instance.eventData.nodeTypes.Length)];
         
         if(_ddiff == null)
             _node.level = UnityEngine.Random.Range(1, 8);
@@ -62,7 +62,7 @@ public class DungeonLayOut : MonoBehaviour
 
         for (int i = 0; i < _node.nextNodes.Length; i++)
         {
-            _node.nextPaths.Add(DatabaseManager._instance.eventData.pathTypes[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.pathTypes.Length)]);
+            _node.nextPaths.Add(DatabaseManager._instance.eventData.pathTypes[UnityEngine.Random.Range(1, DatabaseManager._instance.eventData.pathTypes.Length)]);
             SetupNodeDailySeed(_node.nextNodes[i], _ddiff);
         }
     }
@@ -74,7 +74,9 @@ public class DungeonLayOut : MonoBehaviour
         nodes.Add(_node);
         //_node.statType = DatabaseManager._instance.eventData.eventDecks.[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.nodeTypes.Length)];
         _node.nodeEvent  = DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck.Length)];
-
+        //ToDo
+        _node.eventEnemy = "EnemyName";
+        //toDo Rika neue function für dungeonHealth
         _node.maxEventHealth = UnityEngine.Random.Range(100 *_node.level , 150 * _node.level);
         _node.eventHealth = _node.maxEventHealth;
         _node.defaultGrowth = UnityEngine.Random.Range(1 * _node.level, 2 * _node.level);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class SwipeSlot : MonoBehaviour
 {
@@ -22,9 +23,20 @@ public class SwipeSlot : MonoBehaviour
 
 
     [SerializeField] GameObject matched;
-    [SerializeField] public bool IsMatched;
+    [SerializeField] GameObject highlight;
+    [HideInInspector] public bool IsMatched;
+
+
+    public event Action <int> OnClickEvent;
+    public event Action <int> OnDoubleClickEvent;
+
     #endregion
 
+    private void Start()
+    {
+        heroCard.GetComponent<Button>().onClick.AddListener(() => OnClick());
+        heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += OnDoubleClickEvent;
+    }
 
     public void updateHero(PlayerHero hero, Sprite sprite, int rarity, int referenceID)
     {
@@ -48,10 +60,15 @@ public class SwipeSlot : MonoBehaviour
         }
 
         rarityGroup.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
+
+        if (SpriteStruct.SpriteDictionary.ContainsKey(playerHero.heroId))
+            portrait.sprite = SpriteStruct.SpriteDictionary[playerHero.heroId];
     }
 
     public void showHero()
     {
+        matched.SetActive(false);
+        highlight.SetActive(false);
         disabledCard.SetActive(false);
         heroCard.SetActive(true);
     }
@@ -61,11 +78,6 @@ public class SwipeSlot : MonoBehaviour
     {
         heroCard.SetActive(false);
         disabledCard.SetActive(true);
-    }
-
-    public void focusHero()
-    {
-
     }
 
     public void matchHero()
@@ -80,6 +92,25 @@ public class SwipeSlot : MonoBehaviour
         IsMatched = false;
     }
 
-
+    public void enableHighlight()
+    {
+        highlight.SetActive(true);
+    }    
+    
+    public void disableHighlight()
+    {
+        highlight.SetActive(false);
+    }
     //drag
+
+
+
+
+
+    //click
+    public void OnClick()
+    {
+        OnClickEvent(slotID);
+    }
+
 }

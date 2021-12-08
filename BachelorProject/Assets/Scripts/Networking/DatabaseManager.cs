@@ -70,6 +70,7 @@ public class DatabaseManager : MonoBehaviour
     //some logic to compare local and online data and do something according
     public void SaveGameDataLocally()
     {
+        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
         LocalSaveSystem.SaveLocaldata();
         //Push to server?
     }
@@ -83,8 +84,8 @@ public class DatabaseManager : MonoBehaviour
             //perform no local load event
         }
         else
-        {
-            if(activePlayerData.lastUpdate != "" && DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+        {            
+            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate)) < 0)
             {
                 //online save is younger the local one -> played on an other device -> need to fire special event
 
@@ -112,6 +113,7 @@ public class DatabaseManager : MonoBehaviour
         {
             ValidatePlayerHero(item);
         }
+        DatabaseManager._instance.SaveGameDataLocally();
     }
 
     public static void ValidatePlayerHero(PlayerHero _hero)
@@ -168,14 +170,20 @@ public class DatabaseManager : MonoBehaviour
     {
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
         //check for dates lol
-        if(localSave == null || DateTime.Parse(activePlayerData.lastUpdate).CompareTo(DateTime.Parse(localSave.activePlayerData.lastUpdate)) < 0)
+        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate));
+        if (localSave == null || bla > 0)
         {
             //online save is younger the local one -> played on an other device -> need to fire special event
+            SaveGameDataLocally();
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
             Debug.Log("online save is younger than the local one");
+            //ToDo maybe Also Pull DungeonData and investigate it
+            //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
         }
         else
         {
             //online save is older -> probably need to update online savefile
+            LoadLocalSave();
             Debug.Log("online save is older than the local one");
         }
         return;
@@ -200,6 +208,52 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateDungeonDataFromServer(string _message)
     {
         dungeonData = JsonUtility.FromJson<DungeonData>(_message);
+        DungeonManager._instance.CreateDailyDungeons();
+
+        if (DatabaseManager._instance.dungeonData.currentRun != null && (DatabaseManager._instance.dungeonData.currentRun.valid))
+        {
+            //this run should be getting continued
+            //Probelm: Party is not there!
+            DatabaseManager._instance.dungeonData.currentRun.party = new List<PlayerHero>();
+            foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+            {
+                if(heroUnit.status == HeroStatus.Exploring)
+                {
+                    DatabaseManager._instance.dungeonData.currentRun.party.Add(heroUnit);
+                }
+            }
+            if(DatabaseManager._instance.dungeonData.currentRun.party.Count == 0)
+            {
+                //Fallback: Get the first idling heroes to continue dungeon Run
+                foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+                {
+                    if (heroUnit.status == HeroStatus.Idle)
+                    {
+                        heroUnit.status = HeroStatus.Exploring;
+                        DatabaseManager._instance.dungeonData.currentRun.party.Add(heroUnit);
+                    }
+                    if (DatabaseManager._instance.dungeonData.currentRun.party.Count == 4)
+                        break;
+                }
+            }
+            if (DatabaseManager._instance.dungeonData.currentRun.party.Count == 0)
+            {
+                DatabaseManager._instance.dungeonData.currentRun = null;
+                foreach (var heroUnit in DatabaseManager._instance.activePlayerData.inventory)
+                {
+                    if (heroUnit.status == HeroStatus.Exploring)
+                        heroUnit.status = HeroStatus.Idle;
+                }
+            }
+        }
+        LocalSaveSystem.SaveLocaldata();
+    }
+
+    public TradeData tradeData;
+    public void UpdateTradeDataFromServer(string _message)
+    {
+        tradeData = JsonUtility.FromJson<TradeData>(_message);
+        tradeData.UpdateOwnOffers();
         LocalSaveSystem.SaveLocaldata();
     }
 
@@ -273,8 +327,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString("o"),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("o")),
+//date = System.DateTime.Now.ToString("u"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("u")),
 
 [System.Serializable]
 public class PlayerData
@@ -290,9 +344,23 @@ public class PlayerData
     public string currentDungeonRun;
     public int rewardTierBuff;
     public int shards;
+    public string tradeStartDate;
 
-    public BlacklistEntry[] blacklist;
+    public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
+
+    public PlayerHero GetHeroByUniqueId(int _uniqueId)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].uniqueId == _uniqueId)
+            {
+                return inventory[i];
+            }
+        }
+        return null;
+    }
+
 
     public void ReleaseHero(int _uniqueId, bool _syncOnline = true)
     {
@@ -309,6 +377,31 @@ public class PlayerData
         if (_syncOnline){
             ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
         }
+    }
+
+
+    public bool BlackListContainsOffer(TradeOffer _offer)
+    {
+        foreach (var item in blacklist)
+        {
+            if(item.heroId == _offer.heroId && item.playerId == _offer.playerId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool PlayerIsInterestedInOffer(TradeOffer _offer)
+    {
+        foreach (var item in DatabaseManager._instance.tradeData.ownOffers)
+        {
+            if (_offer.interestedOffers.Contains(item.offerId))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -328,6 +421,7 @@ public class UploadPlayerData
         currentDungeonRun = _playerData.currentDungeonRun;
         rewardTierBuff = _playerData.rewardTierBuff;
         shards = _playerData.shards;
+        tradeStartDate = _playerData.tradeStartDate;
     }
     public string playerId;
     public string password;
@@ -340,6 +434,7 @@ public class UploadPlayerData
     public string currentDungeonRun;
     public int rewardTierBuff;
     public int shards;
+    public string tradeStartDate;
 }
 
 [System.Serializable]
@@ -406,6 +501,9 @@ public class EventData
     public EventDeck[] eventDecks;
     public string[] nodeTypes;
     public string[] pathTypes;
+
+    //FlavourTexts
+    public TextFlavours textFlavours;
 }
 
 [System.Serializable]
@@ -423,6 +521,7 @@ public class Event
     public string startText;
     public string endText;
 }
+
 [System.Serializable]
 public class DungeonEvent
 {
@@ -430,6 +529,7 @@ public class DungeonEvent
     public string dungeonType;
     public string startText;
     public string endText;
+    public string shortEndText;
     public string description;
 }
 
@@ -471,4 +571,103 @@ public class DungeonDifficulty
     public int minLvl;
     public int maxLvl;
     public int medianLvl;
+}
+
+[System.Serializable]
+public class TradeData
+{
+    public List<TradeOffer> ownOffers;
+    public List<TradeOffer> tradeOffers;
+    public List<TradeOffer> openOffers;
+
+    //
+    //TODO
+    public int GetNumberOFOpenOffers()
+    {
+        return openOffers.Count;
+    }
+
+    public TradeOffer GetOfferById(int _tradeId)
+    {
+        foreach (var item in tradeOffers)
+        {
+            if (item.offerId == _tradeId)
+                return item;
+        }
+        return null;
+    }
+
+    void UpdateOpenOffers()
+    {
+        openOffers = new List<TradeOffer>();
+        if (tradeOffers == null)
+            return;
+        foreach (var item in tradeOffers)
+        {
+            if (item.available == "" && !ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item) && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
+            {
+                openOffers.Add(item);
+            }
+        }
+    }
+
+    public void UpdateOwnOffers()
+    {
+        ownOffers = new List<TradeOffer>();
+        if (tradeOffers == null)
+            return;
+        foreach (var item in tradeOffers)
+        {
+            if(item.playerId == DatabaseManager._instance.activePlayerData.playerId)
+            {
+                ownOffers.Add(item);
+            }
+        }
+
+        bool valid = false;
+        List<TradeOffer> tradeOffersToDelete = new List<TradeOffer>();
+        foreach (var offer in ownOffers)
+        {
+            valid = false;
+            foreach (var plHero in DatabaseManager._instance.activePlayerData.inventory)
+            {
+                if(plHero.uniqueId == offer.uniqueId)
+                {
+                    valid = true; //hero connected to offer still exists
+                    if (plHero.status != HeroStatus.Trading)
+                    {
+                        Debug.LogWarning("Hero is not in trading status but is referenced by tradeoffer");
+                    }
+                    break;                    
+                }
+            }
+            if(valid == false)
+            {
+                tradeOffersToDelete.Add(offer);
+            }
+        }
+        if(tradeOffersToDelete.Count > 0)
+        {
+            TradeManager._instance.DeleteOffers(tradeOffersToDelete.ToArray());
+        }
+        //
+        UpdateOpenOffers();
+    }
+}
+
+[System.Serializable]
+public class TradeOffer
+{
+    public string available;
+    public int offerId;
+    public string date;
+    public string playerId;
+    public string heroId;
+    public int uniqueId;
+    public string lastOwner;
+    public string origOwner;
+    public int traded;
+    public int runs;
+
+    public List<int> interestedOffers;
 }
