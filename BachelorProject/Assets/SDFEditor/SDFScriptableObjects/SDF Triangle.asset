@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b8f266ae2ae0642b3eb64a0a12f537, type: 3}
+  m_Name: SDF Triangle
+  m_EditorClassIdentifier: 
+  o: triangle490_out
+  sdfName: triangle490
+  variables:
+  - triangle490_position
+  - triangle490_a
+  - triangle490_b
+  - triangle490_c
+  - triangle490_scale
+  - triangle490_rotation
+  types:
+  - float2
+  - float2
+  - float2
+  - float2
+  - float
+  - float
+  nodeType: 2
+  position: {x: 0.25, y: 0}
+  rotation: 2.79
+  scale: 2.35
+  a: {x: 0.35, y: 0.91}
+  b: {x: -0.11, y: 0.03}
+  c: {x: 0.12, y: -0.13}

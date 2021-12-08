@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fbf2246d5377cf44b508658bd26c76d, type: 3}
+  m_Name: SDF Texture Input
+  m_EditorClassIdentifier: 
+  o: tex705_out
+  sdfName: tex705
+  variables:
+  - tex705_position
+  - tex705_tex
+  - tex705_scale
+  - tex705_rotation
+  - tex705_color
+  types:
+  - float2
+  - sampler2D
+  - float
+  - float
+  - float4
+  colorNodeType: 2
+  sdfTexture: {fileID: 2800000, guid: 4d2322a723caa334d80e6eaf2263af79, type: 3}
+  position: {x: 0.06, y: -0.58}
+  scale: 0.94
+  rotation: -0.32
+  color: {r: 1, g: 1, b: 1, a: 1}

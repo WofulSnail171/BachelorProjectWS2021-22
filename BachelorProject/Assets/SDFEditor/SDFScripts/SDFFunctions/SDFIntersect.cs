@@ -1,13 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using Random = UnityEngine.Random;
-
-[CreateAssetMenu(menuName = "SDF Function/Combine")]
-public class SDFCombine : SDFFunction {
-    
+[CreateAssetMenu(menuName = "SDF Function/Intersect")]
+public class SDFIntersect : SDFFunction
+{
     [SerializeField] private SDFNode inputA;
     private SDFNode _inputA;
     
@@ -53,11 +49,11 @@ public class SDFCombine : SDFFunction {
     private void Awake() {
         
         //Debug.Log("started awake for " + this.sdfName);
-        this.nodeType = NodeType.Comb;
+        this.nodeType = NodeType.Subtract;
         
         this.index = (uint)Random.Range(0, 1000);
 
-        this.sdfName = "comb" + this.index;
+        this.sdfName = "subtract" + this.index;
         this.o = this.sdfName +"_out";
 
     }
@@ -66,7 +62,7 @@ public class SDFCombine : SDFFunction {
 
         string hlslString = @"
 
-        " + "float " + this.o + " = min(" + this.inputA.o + "," + this.inputB.o + @");";
+        " + "float " + this.o + " = max(" + this.inputA.o + "," + this.inputB.o + @");";
         
         return hlslString;
     }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF Function/Lerp")]
@@ -42,6 +41,18 @@ public class SDFLerp : SDFFunction
     }
 
     private void OnValidate() {
+        if (this.inputA != null && this.sdfName == this.inputA.sdfName) {
+            Debug.LogWarning("invalid node in Input A");
+            this.inputA = null;
+            return;
+        }
+
+        if (this.inputB != null && this.sdfName == this.inputB.sdfName) {
+            Debug.LogWarning("invalid node in Input B");
+            this.inputB = null;
+            return;
+        }
+
         this.InputA = this.inputA;
         this.InputB = this.inputB;
         this.T = this.t;
@@ -55,85 +66,26 @@ public class SDFLerp : SDFFunction
         this.sdfName = "lerp" + this.index;
         this.o = this.sdfName + "_out";
         
-        this.OnInputChange += this.GenerateVariables;
-        if (this._inputA != null || this._inputB != null) {
-            this.GenerateVariables();
-        }
-        else {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
-        }
+        this.variables.Clear();
+        this.types.Clear();
         
+        this.variables.Add(this.sdfName + "_t");
+        this.types.Add("float");
     }
     
     public override string GenerateHlslFunction() {
 
-        string a = this.inputA.GenerateHlslFunction();
-        string b = this.inputB.GenerateHlslFunction();
-
-        string hlslString = a +@"
-        " + b + @"
+        string hlslString = @"
 
         " + "float " + this.o + " = lerp(" + this.inputA.o + "," + this.inputB.o + ", " +  this.variables[0] + ");";
         return hlslString;
     }
     
-    public override void GetActiveNodes(List<SDFNode> nodes) {
-        nodes.Add(this);
+    public override void GetActiveNodes(List<SDFNode> activeNodes) {
+        activeNodes.Add(this);
         
-        if (this.inputA is SDFFunction) {
-            SDFFunction i = (SDFFunction) this.inputA;
-            i.GetActiveNodes(nodes);
-        }
-        else {
-            nodes.Add(this.inputA);
-        }
-        if (this.inputB is SDFFunction) {
-            SDFFunction i = (SDFFunction) this.inputB;
-            i.GetActiveNodes(nodes);
-        }
-        else {
-            nodes.Add(this.inputB);
-        }
-    }
-    
-    public override void GenerateVariables() {
-
-        //Debug.Log("generated new variables");
-        if (this._inputA == null || this.inputB == null) {
-            Debug.LogWarning("cant generate shader. missing assigned node in " + this.sdfName);
-            return;}
-
-        if (this.variables != null) {
-            this.variables.Clear();
-            this.types.Clear();
-        }
+        this.GetActiveNodes(activeNodes, this.InputA);
+        this.GetActiveNodes(activeNodes, this.InputB);
         
-        this.variables.Add(this.sdfName + "_t");
-        this.types.Add("float");
-
-        foreach (string s in this.inputA.variables) {
-            this.variables.Add(s);
-        }
-        foreach (string s in this.inputB.variables) {
-            this.variables.Add(s);
-        }
-        foreach (string s in this.inputA.types) {
-            this.types.Add(s);
-        }
-
-        foreach (string s in this.inputB.types) {
-            this.types.Add(s);
-        }
-
-
-        string debug = "";
-        foreach (string s in this.variables) {
-            debug += s;
-        }
-        Debug.Log(debug);
-    }
-
-    private void OnDisable() {
-        this.OnInputChange -= GenerateVariables;
     }
 }

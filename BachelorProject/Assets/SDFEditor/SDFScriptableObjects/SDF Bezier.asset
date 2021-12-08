@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07fef9d6fb277be4081f81da0e574a28, type: 3}
+  m_Name: SDF Bezier
+  m_EditorClassIdentifier: 
+  o: bezier686_out
+  sdfName: bezier686
+  variables:
+  - bezier686_position
+  - bezier686_a
+  - bezier686_b
+  - bezier686_c
+  - bezier686_scale
+  - bezier686_rotation
+  - bezier686_roundness
+  types:
+  - float2
+  - float2
+  - float2
+  - float2
+  - float
+  - float
+  - float
+  nodeType: 4
+  position: {x: 0, y: 0}
+  scale: 1
+  rotation: 0
+  a: {x: 0.49, y: 0}
+  b: {x: 0, y: 0.43}
+  c: {x: -0.27, y: 0}
+  roundness: 6.15

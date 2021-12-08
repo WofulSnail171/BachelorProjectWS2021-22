@@ -9,16 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
-  m_Name: Test Output
+  m_Script: {fileID: 11500000, guid: edc6db39e8ee8bb459e53c718edd5f2e, type: 3}
+  m_Name: SDF Combine
   m_EditorClassIdentifier: 
-  o: 
-  sdfName: newSDF
+  o: comb0_out
+  sdfName: comb0
   variables: []
   types: []
   nodes: []
-  nodeType: 0
-  shaderName: test
-  input: {fileID: 11400000, guid: 720382bcd72aa4241bdf3cdd90ee9bea, type: 2}
-  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
-  applyMaterial: 0
+  nodeType: 6
+  inputA: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
+  inputB: {fileID: 11400000, guid: 556a8e7be640f4b4290a08f2b89c76a3, type: 2}

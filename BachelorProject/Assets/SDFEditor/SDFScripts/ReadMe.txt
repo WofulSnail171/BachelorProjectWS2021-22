@@ -3,7 +3,7 @@ SDF Editor:
 -> creating new nodes: right-click on project files -> create -> sdf...
 
 SDF Object:
-standart inputs
+standard inputs
 
 - circle
 - rectangle
@@ -30,7 +30,6 @@ SDF Output:
 
 
 Known issues, things to avoid:
-- putting a node twice into the node system 
-- having an infinie loop inside a node
+- having an infinite loop inside a node
 
 - more nodes to come :)
