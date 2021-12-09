@@ -20,9 +20,10 @@ public class TradeTester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             //List<TradeOffer> temp = TradeManager._instance.GetSwipeBatch();
+            //var matches = TradeManager._instance.GetTradingResults();
         }
 
-        
+        /*
         if (Input.GetKeyDown(KeyCode.Q))
         {
             List<PlayerHero> list = new List<PlayerHero>();
@@ -66,5 +67,6 @@ public class TradeTester : MonoBehaviour
         {
             TradeManager._instance.ApplySuccessfulTrades();
         }
+        */
     }
 }
