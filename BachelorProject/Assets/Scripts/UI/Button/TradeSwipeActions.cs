@@ -92,7 +92,7 @@ public class TradeSwipeActions : MonoBehaviour
     {
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
         //send data
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        //ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
 
         //send own data
         List<PlayerHero> playerHeroes = new List<PlayerHero>();
