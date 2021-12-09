@@ -829,6 +829,7 @@ public class HubButtonActions : MonoBehaviour
 
     private void AddHeroSubmit()
     {
+        //todo
         //update selected hero
         Queue<TradeSlot> slotsEmpty = new Queue<TradeSlot> ();
 
@@ -846,12 +847,12 @@ public class HubButtonActions : MonoBehaviour
         PlayerHero[] playerHeroestoAdd = { InventoryUI.addHero };
         TradeManager._instance.UploadOffer(playerHeroestoAdd);
 
-        InventoryUI.UpdateInventory();
+        InventoryUI.heroSlots[InventoryUI.addHeroSlotId].changeStatus(HeroStatus.Trading);
+        InventoryUI.heroSlots[InventoryUI.addHeroSlotId].updateHero(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero, InventoryUI.CheckForSprite(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero.heroId].rarity, tradeslot.slotID, -1);
 
         if (TradeManager._instance.GetTradingResults().Count == 4)
             AddHeroFinish();
 
-        //else update header
     }
 
    private void AddHeroFinish()

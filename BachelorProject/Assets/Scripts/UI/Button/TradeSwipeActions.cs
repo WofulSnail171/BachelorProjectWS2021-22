@@ -85,6 +85,8 @@ public class TradeSwipeActions : MonoBehaviour
             hub.UpdateDungeonButton(ButtonState.Unfocused);
             hub.UpdateTradeButton(ButtonState.Focused);
             hub.UpdateHubButton(ButtonState.Unfocused);
+
+            TradeManager._instance.StartTrade(900);
         }
     }
 
