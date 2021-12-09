@@ -311,8 +311,69 @@ public class TradeManager : MonoBehaviour
         return _hero;
     }
 
+    
+
     public void CancelOwnTrades()
     {
         DeleteOffers(DatabaseManager._instance.tradeData.ownOffers.ToArray());
+    }
+
+    public List<Match> GetTradingResults()
+    {
+        List<Match> result = new List<Match>();
+        foreach (var item in DatabaseManager._instance.tradeData.ownOffers)
+        {
+            Match temp = new Match();
+            temp.ownHero = DatabaseManager._instance.activePlayerData.GetHeroByUniqueId(item.uniqueId);
+            if (item.available != "")
+                temp.matchedOffer = item;
+            if(temp.ownHero != null)
+            {
+                result.Add(temp);
+            }
+        }
+        return result;
+    }
+}
+
+public class Match
+{
+    public PlayerHero ownHero;
+    public TradeOffer matchedOffer;
+
+    public int[] GetBuffDiff()
+    {
+        int[] buffs = new int[] { 0, 0, 0 };
+        if (ownHero == null || matchedOffer == null)
+            return buffs;
+        DefaultHero newHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[matchedOffer.heroId];
+        DefaultHero oldHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[ownHero.heroId];
+
+        int rarityDiff = oldHero.rarity - newHero.rarity;
+        if (newHero.rarity != 5 && rarityDiff > 0)
+        {
+            float potentialStep = (float)(newHero.pMaxPot - newHero.pDefPot) / (float)(5 - newHero.rarity);
+            buffs[0] = (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.mMaxPot - newHero.mDefPot) / (float)(5 - newHero.rarity);
+            buffs[1] = (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.sMaxPot - newHero.sDefPot) / (float)(5 - newHero.rarity);
+            buffs[2] = (int)(potentialStep * rarityDiff);
+        }
+        return buffs;
+    }
+
+    public int[] GetCalcPotentials()
+    {
+        int[] potentials = new int[] { 0, 0, 0 };
+        if (ownHero == null || matchedOffer == null)
+            return potentials;
+        DefaultHero newHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[matchedOffer.heroId];
+        int[] buffs = GetBuffDiff();
+        potentials[0] = newHero.pDefPot + buffs[0];
+        potentials[1] = newHero.mDefPot + buffs[1];
+        potentials[2] = newHero.sDefPot + buffs[2];
+        return potentials;
     }
 }
