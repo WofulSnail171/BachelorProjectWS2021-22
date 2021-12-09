@@ -37,6 +37,7 @@ public class InventoryUI : MonoBehaviour
 
     public PlayerHero releaseHero;
     public bool DoRelease;
+    public bool DoAdd;
     #endregion
 
 
@@ -191,6 +192,11 @@ public class InventoryUI : MonoBehaviour
     public void ResetExploring()
     {
         exploreInventory.RemoveAllHeroesFromExplore();
+    }
+
+    public void ResetTrade()
+    {
+        tradeInventory.RemoveAllHeroesFromTrade();
     }
 
     public void UpdateInventory()
@@ -348,6 +354,34 @@ public class InventoryUI : MonoBehaviour
         }
 
         else if (DoRelease)
+        {
+            foreach (HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
+
+            heroSlots[index].EnableHighlight();
+
+            UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
+            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroSubmit", false);
+        }
+
+        else if (DoAdd && heroSlots[index].playerHero.status == HeroStatus.Idle)
+        {
+            foreach (HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
+
+            heroSlots[index].EnableHighlight();
+
+            UIEnablerManager.Instance.DisableElement("ReleaseSubmit", false);
+            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroBlocked", false);
+        }
+
+        else if(DoAdd)
         {
             foreach (HeroSlot heroSlot in heroSlots)
             {

@@ -39,7 +39,7 @@ public class TradeManager : MonoBehaviour
     private bool AutoPLay = true;
     public float AutoPlayWaitTimeSec = 1.0f;
 
-    public int TargetStep = 1000;
+    public int TargetStep = 900;
     public int CurrentStep = 0;
     bool done = false;
 
