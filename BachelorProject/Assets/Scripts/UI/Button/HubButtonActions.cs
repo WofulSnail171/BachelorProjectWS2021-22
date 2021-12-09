@@ -31,7 +31,7 @@ public class HubButtonActions : MonoBehaviour
 
     #region vars
     //actual buttons
-    [SerializeField] GameObject tradeButton;
+    [SerializeField] GameObject tradeButton;//base hub buttons
     [SerializeField] GameObject tradeFocusedButton;
     [SerializeField] GameObject tradeReadyButton;
     [SerializeField] GameObject dungeonButton;
@@ -40,7 +40,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject hubButton;
     [SerializeField] GameObject hubFocusedButton;
     [Space]
-    [SerializeField] GameObject ContinueEndTextButton;
+    [SerializeField] GameObject ContinueEndTextButton;//reward UI buttons
     [SerializeField] GameObject ContinueHeroPullButton;
     [SerializeField] GameObject DiscardHeroPullButton;
     [SerializeField] GameObject ReleaseHeroPullButton;
@@ -50,6 +50,19 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject CancelReleaseButton;
     [SerializeField] GameObject ConfirmReleaseButton;
     [SerializeField] GameObject CannotConfirmReleaseButton;
+    [Space]
+    [SerializeField] GameObject CloseAddWarning;
+    [SerializeField] GameObject SubmitAddHero;
+    [SerializeField] GameObject BlockedAddHero;
+    [SerializeField] GameObject CancelAddHero;
+    [SerializeField] GameObject DontWantAddHero;
+    [SerializeField] GameObject YesWantAddHero;
+    [SerializeField] GameObject NextHeroExchange;
+    [SerializeField] GameObject FinishHeroExchange;
+    [SerializeField] GameObject FinishTrade;
+    [SerializeField] GameObject ContinueTrade;
+    [SerializeField] GameObject CancelAdd1;
+    [SerializeField] GameObject CancelAdd2;
     [Space]
     [SerializeField] GameObject Cancel1;
     [SerializeField] GameObject Cancel2;
@@ -73,11 +86,18 @@ public class HubButtonActions : MonoBehaviour
     [Space]
     [Space]
     [SerializeField] InventoryUI InventoryUI;
+    [SerializeField] TradeInventoryUI TradeInventoryUI;
+    [SerializeField] ExchangeHeroes exchangeUI;
 
     public bool isRewarding = false;
 
+    //helper
     private ProgressState tradeState;
     private ProgressState dungeonState;
+
+    [HideInInspector]public int totalMatchAmount = 0;
+    [HideInInspector]public int currentMatchNumber = 0;
+
     #endregion
 
 
@@ -106,6 +126,21 @@ public class HubButtonActions : MonoBehaviour
         ConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ConfirmRelease(); });
         CloseWarningButton.GetComponent<Button>().onClick.AddListener(() => { CloseWarningPopUp(); });
         CannotConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { CannotConfirmRelease(); });
+
+        CloseAddWarning.GetComponent<Button>().onClick.AddListener(() => { CloseAddWarningConfirm(); });
+        CancelAdd1.GetComponent<Button>().onClick.AddListener(() => { AddHeroFinish(); });
+        CancelAdd2.GetComponent<Button>().onClick.AddListener(() => { AddHeroFinish(); });
+        SubmitAddHero.GetComponent<Button>().onClick.AddListener(() => { AddHeroSubmit(); });
+        BlockedAddHero.GetComponent<Button>().onClick.AddListener(() => { CannotAddHeroSubmit(); });
+        CancelAddHero.GetComponent<Button>().onClick.AddListener(() => { AddHeroFinish(); });
+        DontWantAddHero.GetComponent<Button>().onClick.AddListener(() => { DoNotAddHeroToRoster(); });
+        YesWantAddHero.GetComponent<Button>().onClick.AddListener(() => { ShowAddHeroToRoster(); });
+        NextHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ContinueExchange(); });
+        FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { FinishExchange(); });
+        FinishTrade.GetComponent<Button>().onClick.AddListener(() => { FinishedTrade(); });
+        ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ContinueToSwipe(); });
+
+
 
         //delevents
         DeleventSystem.DungeonStep += UpdateStates;
@@ -442,10 +477,11 @@ public class HubButtonActions : MonoBehaviour
         switch (currentHubFocus)
         {
             case HubState.HeroHub:
-                UIEnablerManager.Instance.EnableCanvas();
+                UIEnablerManager.Instance.EnableBlur();
                 break;
             case HubState.DungeonHub:
                 UIEnablerManager.Instance.EnableCanvas();
+                UIEnablerManager.Instance.EnableBlur();
                 UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
                 UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
 
@@ -453,7 +489,7 @@ public class HubButtonActions : MonoBehaviour
                 UpdateHubButton(ButtonState.Focused);
                 break;
             case HubState.TradeHub:
-                UIEnablerManager.Instance.EnableCanvas();
+                UIEnablerManager.Instance.EnableBlur();
                 UIEnablerManager.Instance.SwitchElements("TradeObserve", "ShardAndBuff", true);
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
@@ -624,8 +660,17 @@ public class HubButtonActions : MonoBehaviour
     //tradedone
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    [HideInInspector]public bool oneMatch;
+    [HideInInspector]public bool allMatch;
+    [HideInInspector]public List<Match> allMatchList = new List<Match>();
+    [HideInInspector]public List<int[]> allMatchListPotential = new List<int[]>();
+
+
     private void ClickedReadyTrade()
     {
+        allMatchList.Clear();
+        allMatchListPotential.Clear();
+
         //change buttons and hub focus in bg
         switch (currentHubFocus)
         {
@@ -656,83 +701,192 @@ public class HubButtonActions : MonoBehaviour
                 break;
         }
 
+
+        //helper bools
+
+
+        oneMatch = false;
+        allMatch = true;
+
+        totalMatchAmount = 0;
+
+        //check how many matches
+        foreach (Match match in TradeManager._instance.GetTradingResults())
+        {
+            if(match.matchedOffer != null)
+            {
+                oneMatch = true;
+                totalMatchAmount++;
+                allMatchList.Add(match);
+
+                allMatchListPotential.Add(match.GetBuffDiff());
+            }
+
+            else
+            {
+                allMatch = false;
+            }
+        }
+
+
+        currentMatchNumber = 0;
+
+        exchangeUI.totalMatch = totalMatchAmount;
+        exchangeUI.currentMatch = currentMatchNumber;
+        exchangeUI.allMatch = allMatch;
+        exchangeUI.allMatchList = allMatchList;
+        exchangeUI.allMatchListPotential = allMatchListPotential;
+
         //actually start pop up flow
+        if (allMatch)
+        {
+            UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+        }
 
 
+        else if (oneMatch)
+        {
+            UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+        }
 
+        //no matches
+        else
+        { 
+            if(TradeManager._instance.GetTradingResults().Count < 4)
+            {
+                UIEnablerManager.Instance.DisableBlur();
+                UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
+                UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
+                UIEnablerManager.Instance.EnableElement("AddHero",true);
+            }
 
-
-
-        //do some trade manager logic to fetch the current state of trade
-        //fetch new heroes
-
-        //own heroes in trade
-
-        //who
-
-        //wie viele? wer gleich getauscht wird
-        // wenn ja
-        // gegen wen?
-
-        //buff auslesen?
+            else
+            {
+                ContinueToSwipe();
+            }
+        }
     }
 
 
     //
     //pop up flow trade
-
-
-    //exchanged hero
-    private void GoToExchange()
-    {
-        //hero x leaves you
-        //hero x is exchanged
-        //hero set idle and removed from tradeinventory
-
-        //ask if add new hero to roster
-
-        //update trade offer data
-    }
-
     private void ContinueExchange()
     {
-        //go to next exchange pr exchange finish
+        currentMatchNumber++;
+        exchangeUI.currentMatch = currentMatchNumber;
+
+        StartCoroutine(DisableEnableExchange());
+    }
+
+    private void FinishExchange()
+    {
+        //update logic
+        TradeManager._instance.ApplySuccessfulTrades();
+
+        //ui
+        UIEnablerManager.Instance.DisableBlur();
+        UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
+        UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
+        UIEnablerManager.Instance.EnableElement("AddHero", true);
     }
 
 
+    //add more heroes to trade
     private void DoNotAddHeroToRoster()
     {
-        //UIEnablerManager
+        InventoryUI.DoAdd = false;
+
+        //go to trade swipe
+        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
+        UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
+        UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
+
+        //disable addhero ui
+        UIEnablerManager.Instance.DisableElement("AddHero", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroDone", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
+        //send data
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
     }
 
-    private void AddHeroToRoster()
+    private void ShowAddHeroToRoster()
     {
-        //update trade inventory
-        //update trade offer info
+        InventoryUI.DoAdd = true;
 
-        UIEnablerManager.Instance.EnableElement("AddHero", true);
-        UIEnablerManager.Instance.EnableElement("AddHero", true);
+        UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
+    }
 
+    private void CannotAddHeroSubmit()
+    {
+        UIEnablerManager.Instance.EnableElement("AddWarning", true);
+    }
+
+    private void CloseAddWarningConfirm()
+    {
+        UIEnablerManager.Instance.DisableElement("AddWarning", true);
     }
 
     private void AddHeroSubmit()
     {
-        //header with empty spaces
+        //update selected hero
+        Queue<TradeSlot> slotsEmpty = new Queue<TradeSlot> ();
+
+        foreach(TradeSlot slot in TradeInventoryUI.tradeSlots)
+        {
+            if (slot.playerHero == null)
+                slotsEmpty.Enqueue(slot);
+        }
+
+        TradeSlot tradeslot = slotsEmpty.Dequeue();
+
+        TradeInventoryUI.AssignHeroToSlot(InventoryUI.addHero, tradeslot.slotID, InventoryUI.addHeroSlotId);
+
+        //upload to ggoogle
+        PlayerHero[] playerHeroestoAdd = { InventoryUI.addHero };
+        TradeManager._instance.UploadOffer(playerHeroestoAdd);
+
+        InventoryUI.UpdateInventory();
+
+        if (TradeManager._instance.GetTradingResults().Count == 4)
+            AddHeroFinish();
+
+        //else update header
     }
 
+   private void AddHeroFinish()
+    {
+        //close addhero ui and go to swipe
+        InventoryUI.DoAdd = false;
+
+        UIEnablerManager.Instance.DisableElement("Genral", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroDone", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
+        UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
+        UIEnablerManager.Instance.DisableElement("AddHero", true);
+        UIEnablerManager.Instance.DisableElement("HeroHub", true);
+
+        ContinueToSwipe();
+    }
 
     //
     private void ContinueToSwipe()
     {
+        //re-update
         TradeManager._instance.ApplySuccessfulTrades();
         InventoryUI.UpdateInventory();
+        InventoryUI.InitInventoryUI();
 
         //update trade inventory
-
         InventoryUI.DoAdd = false;
 
         //go to swipe inventory
-        //go to swipe cards
+        UIEnablerManager.Instance.DisableBlur();
+        UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
+        UIEnablerManager.Instance.DisableElement("General", false);
+        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
+        //send data
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
     }
 
 
@@ -740,6 +894,7 @@ public class HubButtonActions : MonoBehaviour
     private void FinishedTrade()
     {
         TradeManager._instance.ApplySuccessfulTrades();
+
 
         InventoryUI.DoAdd = false;
 
@@ -841,6 +996,13 @@ public class HubButtonActions : MonoBehaviour
 
 
 
+    IEnumerator DisableEnableExchange()
+    {
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
 
+        yield return new WaitForSeconds(.6f);
+
+        UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+    }
 }
 

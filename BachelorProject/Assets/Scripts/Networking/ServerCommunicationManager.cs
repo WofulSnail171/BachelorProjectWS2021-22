@@ -37,7 +37,7 @@ public class ServerCommunicationManager : MonoBehaviour
     public TMP_Text errorInfoText; 
 
     float waitTimer = 0.0f;
-    float waitTime = 13.0f;
+    float waitTime = 25.0f;
 
     // Update is called once per frame
     void Update()

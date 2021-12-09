@@ -90,20 +90,6 @@ public class TradeSwipeActions : MonoBehaviour
 
     private void OnEnable()
     {
-        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
-        //send data
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
-
-        //send own data
-        List<PlayerHero> playerHeroes = new List<PlayerHero>();
-        foreach (TradeSlot slot in tradeInventory.tradeSlots)
-        {
-            if(slot.playerHero != null)
-                playerHeroes.Add(slot.playerHero);
-        }
-
-        //push own offer data
-        TradeManager._instance.UploadOffer(playerHeroes.ToArray());
         TradeManager._instance.PullTradeOffers(OnPullTradeOffers);
     }
 
@@ -172,6 +158,8 @@ public class TradeSwipeActions : MonoBehaviour
         {
             TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
         }
+
+        TradeManager._instance.StartTrade(900);
 
         //go to observe
         UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", true);

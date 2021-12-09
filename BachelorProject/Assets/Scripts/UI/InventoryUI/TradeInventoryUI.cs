@@ -165,11 +165,6 @@ public class TradeInventoryUI : MonoBehaviour
         {
             Debug.Log("do transfer logic");
 
-
-            //transmit the data here and update the database
-            //
-            //
-
             return true;
         }
 
