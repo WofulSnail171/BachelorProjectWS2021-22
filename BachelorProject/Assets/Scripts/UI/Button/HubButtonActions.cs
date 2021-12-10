@@ -668,6 +668,15 @@ public class HubButtonActions : MonoBehaviour
 
     private void ClickedReadyTrade()
     {
+        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
+        TradeManager._instance.PullTradeOffers(OnPullTradeOffers);
+    }
+
+
+    private void OnPullTradeOffers()
+    {
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
+
         allMatchList.Clear();
         allMatchListPotential.Clear();
 
@@ -713,7 +722,7 @@ public class HubButtonActions : MonoBehaviour
         //check how many matches
         foreach (Match match in TradeManager._instance.GetTradingResults())
         {
-            if(match.matchedOffer != null)
+            if (match.matchedOffer != null)
             {
                 oneMatch = true;
                 totalMatchAmount++;
@@ -751,13 +760,13 @@ public class HubButtonActions : MonoBehaviour
 
         //no matches
         else
-        { 
-            if(TradeManager._instance.GetTradingResults().Count < 4)
+        {
+            if (TradeManager._instance.GetTradingResults().Count < 4)
             {
                 UIEnablerManager.Instance.DisableBlur();
                 UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
                 UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
-                UIEnablerManager.Instance.EnableElement("AddHero",true);
+                UIEnablerManager.Instance.EnableElement("AddHero", true);
             }
 
             else
@@ -766,7 +775,6 @@ public class HubButtonActions : MonoBehaviour
             }
         }
     }
-
 
     //
     //pop up flow trade
@@ -785,6 +793,7 @@ public class HubButtonActions : MonoBehaviour
 
         //ui
         UIEnablerManager.Instance.DisableBlur();
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
         UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
         UIEnablerManager.Instance.EnableElement("AddHero", true);
@@ -797,8 +806,6 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.DoAdd = false;
 
         //go to trade swipe
-        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
-        UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
         UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
 
         //disable addhero ui
@@ -807,7 +814,7 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
         UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
         //send data
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ContinueToSwipe();
     }
 
     private void ShowAddHeroToRoster()
@@ -831,28 +838,39 @@ public class HubButtonActions : MonoBehaviour
     {
         //todo
         //update selected hero
-        Queue<TradeSlot> slotsEmpty = new Queue<TradeSlot> ();
+        TradeSlot tradeSlot = null;
 
-        foreach(TradeSlot slot in TradeInventoryUI.tradeSlots)
+        foreach (TradeSlot slot in TradeInventoryUI.tradeSlots)
         {
             if (slot.playerHero == null)
-                slotsEmpty.Enqueue(slot);
+            {
+                tradeSlot = slot;
+                break;
+            }
         }
 
-        TradeSlot tradeslot = slotsEmpty.Dequeue();
+        if (tradeSlot == null)
+            return;
 
-        TradeInventoryUI.AssignHeroToSlot(InventoryUI.addHero, tradeslot.slotID, InventoryUI.addHeroSlotId);
+        TradeInventoryUI.AssignHeroToSlot(InventoryUI.addHero, tradeSlot.slotID, InventoryUI.addHeroSlotId);
 
         //upload to ggoogle
         PlayerHero[] playerHeroestoAdd = { InventoryUI.addHero };
         TradeManager._instance.UploadOffer(playerHeroestoAdd);
 
         InventoryUI.heroSlots[InventoryUI.addHeroSlotId].changeStatus(HeroStatus.Trading);
-        InventoryUI.heroSlots[InventoryUI.addHeroSlotId].updateHero(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero, InventoryUI.CheckForSprite(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero.heroId].rarity, tradeslot.slotID, -1);
+        InventoryUI.heroSlots[InventoryUI.addHeroSlotId].updateHero(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero, InventoryUI.CheckForSprite(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero), DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero.heroId].rarity, tradeSlot.slotID, -1);
+
+        TradeInventoryUI.AssignHeroToSlot(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero, tradeSlot.slotID, InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero.invIndex);
 
         if (TradeManager._instance.GetTradingResults().Count == 4)
             AddHeroFinish();
 
+        else
+        {
+            UIEnablerManager.Instance.EnableElement("AddHeroDone", false);
+            UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
+        }
     }
 
    private void AddHeroFinish()
@@ -883,6 +901,7 @@ public class HubButtonActions : MonoBehaviour
 
         //go to swipe inventory
         UIEnablerManager.Instance.DisableBlur();
+        UIEnablerManager.Instance.DisableElement("HeroHub", false);
         UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
         UIEnablerManager.Instance.DisableElement("General", false);
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);

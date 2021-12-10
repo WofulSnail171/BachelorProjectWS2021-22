@@ -14238,7 +14238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -118.1}
+  m_AnchoredPosition: {x: 0, y: -118.1001}
   m_SizeDelta: {x: -160, y: 162.73}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &231043457
@@ -120619,7 +120619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blur: {fileID: 983941238}
   Buttons: {fileID: 1015781558}
-  PopUp: {fileID: 0}
+  PopUp: {fileID: 819055119}
   animSpeed: 0.5
   animationType: 18
 --- !u!114 &1890581261

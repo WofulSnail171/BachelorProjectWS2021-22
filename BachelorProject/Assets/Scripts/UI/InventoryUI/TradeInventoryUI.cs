@@ -145,7 +145,7 @@ public class TradeInventoryUI : MonoBehaviour
             slot.removeHero();
         }
 
-        UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", true); //hide UI
+        UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", false); //hide UI
     }
 
     public bool ConfirmAllHeroesForTrade()

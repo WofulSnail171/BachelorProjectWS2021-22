@@ -17,7 +17,6 @@ public class ExchangeHeroes : MonoBehaviour
     [SerializeField] GameObject newCard;
     [SerializeField] TextMeshProUGUI statusText;
     [SerializeField] TextMeshProUGUI userText;
-    [SerializeField] Rect PopUp;
     [Space]
     [SerializeField] GameObject nextExchange;
     [SerializeField] GameObject FinishExchange;
@@ -27,6 +26,8 @@ public class ExchangeHeroes : MonoBehaviour
 
     private void OnEnable()
     {
+        statusText.text = "";
+
         FinishExchange.SetActive(false);
         FinishTrade.SetActive(false);
         nextExchange.SetActive(false);
@@ -36,14 +37,16 @@ public class ExchangeHeroes : MonoBehaviour
 
     private void EnableButton()
     {
-        if(allMatch && totalMatch == currentMatch && totalMatch != 0)
+        currentMatch++;
+
+        if(allMatch && totalMatch >= currentMatch && totalMatch != 0)
         {
             FinishExchange.SetActive(false);
             FinishTrade.SetActive(true);
             nextExchange.SetActive(false);
         }
 
-        else if(totalMatch == currentMatch && totalMatch != 0)
+        else if(totalMatch >= currentMatch && totalMatch != 0)
         {
             FinishExchange.SetActive(true);
             FinishTrade.SetActive(false);
@@ -61,11 +64,12 @@ public class ExchangeHeroes : MonoBehaviour
     private void ResetAndAnimate()
     {
         //init
+        givenCard.transform.localScale = new Vector3(1, 1, 1);
+        newCard.transform.localScale = new Vector3(0,0,0);
+
         givenCard.SetActive(true);
         newCard.SetActive(false);
 
-        givenCard.transform.position = new Vector3(0, 0, 0);
-        newCard.transform.position = new Vector3(PopUp.width, 0, 0);
 
         //update cards according to match
         givenCard.GetComponent<ExchangeCardAnim>().UpdateHero(allMatchList[currentMatch].ownHero);
@@ -83,18 +87,20 @@ public class ExchangeHeroes : MonoBehaviour
         yield return new WaitForSeconds(animSpeed);
 
         //remove old card
-        LeanTween.moveX(givenCard, givenCard.transform.position.x + PopUp.width,animSpeed);
+        LeanTween.scale(givenCard, new Vector3(0, 0, 0), animSpeed);
 
         yield return new WaitForSeconds(animSpeed*1.5f);
 
         //get new card
         userText.text = $"You welcome {allMatchList[currentMatch].matchedOffer.heroId}.";
 
-        givenCard.transform.position = new Vector3(0, 0, 0);
         givenCard.SetActive(false);
         newCard.SetActive(true);
 
-        LeanTween.moveX(newCard, 0 + PopUp.width, animSpeed);
+        newCard.transform.localScale = new Vector3(0, 0, 0);
+        givenCard.transform.localScale = new Vector3(1, 1, 1);
+
+        LeanTween.scale(newCard, new Vector3(1,1,1), animSpeed);
 
         yield return new WaitForSeconds(animSpeed * 1.5f);
 

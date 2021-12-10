@@ -93,6 +93,7 @@ public class TradeSwipeActions : MonoBehaviour
     private void OnEnable()
     {
         TradeManager._instance.PullTradeOffers(OnPullTradeOffers);
+        
     }
 
     //all heroes unfocused
@@ -133,7 +134,8 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         swipeInventory.UnmatchAll();
-        if(snapHero.GetNearestPage() == snapHero._pageCount - 1)
+
+        if(snapHero.GetNearestPage() == snapHero._pageCount - 2)
         {
             nextButton.SetActive(false);
             sendButton.SetActive(true);
@@ -178,6 +180,7 @@ public class TradeSwipeActions : MonoBehaviour
     private void NoMatchFinished()
     {
         UIEnablerManager.Instance.DisableElement("NoTradeFound", true);
+        TradeManager._instance.StartTrade(900);
     }
 
     //hero focused

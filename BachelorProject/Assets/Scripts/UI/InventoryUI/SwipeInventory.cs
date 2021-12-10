@@ -33,6 +33,7 @@ public class SwipeInventory : MonoBehaviour
 
     private void UpdateSwipeHeroes()
     {
+
         foreach (TradeSlot slot in tradeInventory.tradeSlots)
         {
             if (slot.playerHero != null)
