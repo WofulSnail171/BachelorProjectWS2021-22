@@ -96,6 +96,7 @@ public class DatabaseManager : MonoBehaviour
             {
                 //online save is older -> probably need to update online savefile
                 //but we can savely apply the local savefile to the active data
+                globalData = localSave.globalData;
                 defaultHeroData = localSave.defaultHeroData;
                 eventData = localSave.eventData;
                 eventData.CreateDictionaries();
@@ -103,6 +104,7 @@ public class DatabaseManager : MonoBehaviour
                 ValidateInventory();
                 dungeonData = localSave.dungeonData;
                 rewardTable = localSave.rewardTable;
+                tradeData = localSave.tradeData;
             }
         }
     }
@@ -154,6 +156,31 @@ public class DatabaseManager : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public GlobalData globalData;
+    public void UpdateGlobalDataFromServer(string _message)
+    {
+        GlobalData fetchedData = JsonUtility.FromJson<GlobalData>(_message);
+        if(fetchedData.defaultUpdate == 1 || globalData == null)
+        {
+            //Do UpdateRoutine for all universal thingies (default heroes, event data)
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+        }
+        else
+        {
+            if(globalData.versionNum != fetchedData.versionNum)
+            {
+                //Do UpdateRoutine for all universal thingies (default heroes, event data, rewardTable)
+                ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+                ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+                ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            }
+        }
+        globalData = fetchedData;
+        LocalSaveSystem.SaveLocaldata();
     }
 
     public IncomingHeroData defaultHeroData;
@@ -291,17 +318,21 @@ public class GameData
 {
     public GameData(DatabaseManager _manager)
     {
+        globalData = _manager.globalData;
         defaultHeroData = _manager.defaultHeroData;
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
         dungeonData = _manager.dungeonData;
         rewardTable = _manager.rewardTable;
+        tradeData = _manager.tradeData;
     }
+    public GlobalData globalData;
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
     public DungeonData dungeonData;
     public RewardTable rewardTable;
+    public TradeData tradeData;
 
 
 
@@ -671,4 +702,11 @@ public class TradeOffer
     public int runs;
 
     public List<int> interestedOffers;
+}
+
+[System.Serializable]
+public class GlobalData
+{
+    public int defaultUpdate;
+    public int versionNum;
 }

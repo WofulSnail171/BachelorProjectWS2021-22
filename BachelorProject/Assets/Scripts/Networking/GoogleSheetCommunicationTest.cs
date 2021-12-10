@@ -153,15 +153,15 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignIn successful";
-
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
             DatabaseManager._instance.UpdateActivePlayerFromServer(_lastMessage);
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
-
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
+            /*
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            */
             
             // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply
             //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
@@ -169,6 +169,11 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
+    }
+
+    void OnGlobalDataFetched()
+    {
+        ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
     }
 
     public void StooopidTest()
