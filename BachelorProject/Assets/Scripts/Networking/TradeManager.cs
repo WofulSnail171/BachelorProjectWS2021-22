@@ -257,6 +257,7 @@ public class TradeManager : MonoBehaviour
             }
         }
         DeleteOffers(toDelete.ToArray());
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData); 
 
         //Then clear all other own trades
         //CancelOwnTrades();

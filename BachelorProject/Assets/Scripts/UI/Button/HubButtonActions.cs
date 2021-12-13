@@ -807,6 +807,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void FinishExchange()
     {
+        FinishHeroExchange.GetComponent<Button>().enabled = false;
+
+
         //update logic
         TradeManager._instance.ApplySuccessfulTrades();
 
@@ -925,14 +928,14 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
         UIEnablerManager.Instance.DisableElement("General", false);
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
-        //send data
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
     }
 
 
     //no more heroes in trade inventory
     private void FinishedTrade()
     {
+        FinishTrade.GetComponent<Button>().enabled = false;
+
         TradeManager._instance.ApplySuccessfulTrades();
 
 
