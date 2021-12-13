@@ -84,6 +84,8 @@ public class SwipeInventory : MonoBehaviour
         {
             if (heroSlot.playerHero != null)
                 heroSlot.disableHighlight();
+
+
         }
         matchHero = null;
 

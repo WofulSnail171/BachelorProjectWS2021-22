@@ -317,6 +317,7 @@ public class TradeManager : MonoBehaviour
     public void CancelOwnTrades()
     {
         DeleteOffers(DatabaseManager._instance.tradeData.ownOffers.ToArray());
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
     }
 
     public List<Match> GetTradingResults()

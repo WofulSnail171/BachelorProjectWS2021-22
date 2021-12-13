@@ -399,7 +399,7 @@ public class InventoryUI : MonoBehaviour
 
 
             UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
-            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroBlock", false);
+            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroBlocked", false);
         }
     }
     

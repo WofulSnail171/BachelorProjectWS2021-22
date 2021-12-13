@@ -550,6 +550,14 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
+    public void CancelHeroesDungeon()
+    {
+        foreach (var hero in DatabaseManager._instance.dungeonData.currentRun.party)
+        {
+            hero.status = HeroStatus.Idle;
+        }
+    }
+
     public void EventRewardShardHandling()
     {
         if(DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
@@ -600,6 +608,21 @@ public class DungeonManager : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun.valid = false;
         Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout();
+        DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(false);
+
+
+        DatabaseManager._instance.SaveGameDataLocally();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushDungeonData);
+    }
+
+    public void CancelDungeon()
+    {
+        CancelHeroesDungeon();
+        currentCalcRun = null;
+        DatabaseManager._instance.dungeonData.currentRun.valid = false;
+        Destroy(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject);
+        DatabaseManager._instance.dungeonData.currentRun.dungeon.InitDungeonLayout(); 
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(false);
 
 

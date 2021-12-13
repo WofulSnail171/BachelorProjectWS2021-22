@@ -78,6 +78,26 @@ public class TradeInventoryUI : MonoBehaviour
     //public funcs
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
     //init
+    public void RefreshTradeUI()
+    {
+        foreach(TradeSlot slot in tradeSlots)
+        {
+            PlayerHero tempHero= DatabaseManager._instance.activePlayerData.GetHeroByUniqueId(slot.playerHero.uniqueId);
+            if (tempHero != null && tempHero.status == HeroStatus.Trading)
+            {
+                
+            }
+
+            else
+            {
+                RemoveHeroFromSlot(slot);
+                slot.removeHero();
+                slot.hideHero();
+            }
+        }
+        
+    }
+
     public void ResetTrade()
     {
         foreach (TradeSlot slot in tradeSlots)

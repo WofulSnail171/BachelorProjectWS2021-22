@@ -134,6 +134,8 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         swipeInventory.UnmatchAll();
+        unmatchButton.SetActive(false);
+        cancelButton.SetActive(true);
 
         if(snapHero.GetNearestPage() == snapHero._pageCount - 2)
         {

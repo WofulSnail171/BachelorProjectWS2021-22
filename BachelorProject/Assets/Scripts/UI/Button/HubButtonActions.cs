@@ -152,13 +152,15 @@ public class HubButtonActions : MonoBehaviour
         DeleventSystem.DungeonRewardFinished += UpdateStates;
 
         //dungeon cancel? connected to seperate cancel func?
+        DeleventSystem.DungeonCancel += CancelDungeonState;
+
 
         DeleventSystem.TradeStart += UpdateStates;
         DeleventSystem.TradeEnd += UpdateStates;
         DeleventSystem.TradeStep += UpdateStates;
 
         //maybe connect to a seperate cancel func?
-        //DeleventSystem.TradeCancel += UpdateStates;
+        DeleventSystem.TradeCancel += CancelTradeState;
 
 
         UpdateStates();
@@ -189,6 +191,8 @@ public class HubButtonActions : MonoBehaviour
 
             UpdateTradeButton(ButtonState.Finished);
         }
+
+
     }
 
     void Update()
@@ -228,6 +232,36 @@ public class HubButtonActions : MonoBehaviour
             setTradeText(textValue, tradeFocusProgressTime);
             setTradeText(textValue, tradeProgressTime);
         }
+    }
+
+    //
+    //cancel funcs
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void CancelDungeonState()
+    {
+        dungeonState = ProgressState.Empty;
+
+        dungeonProgressBar.gameObject.SetActive(false);
+        dungeonTextGroup.SetActive(false);
+        dungeonSingleTextGroup.SetActive(true);
+        
+        UpdateDungeonButton(ButtonState.Unfocused);
+        UpdateHubButton(ButtonState.Focused);
+    }
+
+
+    private void CancelTradeState()
+    {
+        tradeState = ProgressState.Empty;
+
+        tradeProgressBar.gameObject.SetActive(false);
+        tradeTextGroup.SetActive(false);
+        tradeSungleTextGroup.SetActive(true);
+
+        UpdateTradeButton(ButtonState.Unfocused);
+        UpdateHubButton(ButtonState.Focused);
+
+        UpdateHubState(HubState.HeroHub);
     }
 
     //click checks
@@ -452,7 +486,7 @@ public class HubButtonActions : MonoBehaviour
     private void ClickedFocusedTrade()
     {
         //do pop up
-        UIEnablerManager.Instance.EnableElement("DungeonCancel", true);
+        UIEnablerManager.Instance.EnableElement("TradeCancel", true);
     }
 
 
@@ -717,6 +751,8 @@ public class HubButtonActions : MonoBehaviour
             }
 
 
+            UIEnablerManager.Instance.EnableBlur();
+
             //helper bools
             oneMatch = false;
             allMatch = true;
@@ -773,7 +809,7 @@ public class HubButtonActions : MonoBehaviour
             //no matches
             else
                 {
-                    if (TradeManager._instance.GetTradingResults().Count < 4)
+                    if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
                     {
                         UIEnablerManager.Instance.DisableBlur();
                         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
@@ -809,9 +845,13 @@ public class HubButtonActions : MonoBehaviour
     {
         FinishHeroExchange.GetComponent<Button>().enabled = false;
 
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
+
 
         //update logic
         TradeManager._instance.ApplySuccessfulTrades();
+        TradeInventoryUI.RefreshTradeUI();
+        InventoryUI.UpdateInventory();
 
         //ui
         UIEnablerManager.Instance.DisableBlur();
@@ -823,6 +863,8 @@ public class HubButtonActions : MonoBehaviour
 
 
     //add more heroes to trade
+    int addedOffers = 0;
+
     private void DoNotAddHeroToRoster()
     {
         InventoryUI.DoAdd = false;
@@ -841,6 +883,8 @@ public class HubButtonActions : MonoBehaviour
 
     private void ShowAddHeroToRoster()
     {
+        addedOffers = 0;
+
         InventoryUI.DoAdd = true;
 
         UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
@@ -856,11 +900,13 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("AddWarning", true);
     }
 
+
     private void AddHeroSubmit()
     {
-        //todo
-        //update selected hero
+        addedOffers++;
+
         TradeSlot tradeSlot = null;
+
 
         foreach (TradeSlot slot in TradeInventoryUI.tradeSlots)
         {
@@ -876,7 +922,7 @@ public class HubButtonActions : MonoBehaviour
 
         TradeInventoryUI.AssignHeroToSlot(InventoryUI.addHero, tradeSlot.slotID, InventoryUI.addHeroSlotId);
 
-        //upload to ggoogle
+        //upload to google
         PlayerHero[] playerHeroestoAdd = { InventoryUI.addHero };
         TradeManager._instance.UploadOffer(playerHeroestoAdd);
 
@@ -885,13 +931,14 @@ public class HubButtonActions : MonoBehaviour
 
         TradeInventoryUI.AssignHeroToSlot(InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero, tradeSlot.slotID, InventoryUI.heroSlots[InventoryUI.addHeroSlotId].playerHero.invIndex);
 
-        if (TradeManager._instance.GetTradingResults().Count == 4)
+        if (DatabaseManager._instance.tradeData.ownOffers.Count + addedOffers >= 4)
             AddHeroFinish();
 
         else
         {
             UIEnablerManager.Instance.EnableElement("AddHeroDone", false);
             UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
+            UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
         }
     }
 
@@ -913,11 +960,7 @@ public class HubButtonActions : MonoBehaviour
     //
     private void ContinueToSwipe()
     {
-        //re-update
-        TradeManager._instance.ApplySuccessfulTrades();
-
         InventoryUI.UpdateInventory();
-        
 
         //update trade inventory
         InventoryUI.DoAdd = false;
@@ -934,15 +977,21 @@ public class HubButtonActions : MonoBehaviour
     //no more heroes in trade inventory
     private void FinishedTrade()
     {
+        UIEnablerManager.Instance.DisableBlur();
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
+
         FinishTrade.GetComponent<Button>().enabled = false;
 
         TradeManager._instance.ApplySuccessfulTrades();
 
+        tradeState = ProgressState.Empty;
 
         InventoryUI.DoAdd = false;
 
         InventoryUI.ResetTrade();
         InventoryUI.UpdateInventory();
+
+        UpdateTradeButton(ButtonState.Unfocused);
     }
 
 
@@ -1041,6 +1090,8 @@ public class HubButtonActions : MonoBehaviour
 
     IEnumerator DisableEnableExchange()
     {
+
+
         UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
 
         yield return new WaitForSeconds(.6f);

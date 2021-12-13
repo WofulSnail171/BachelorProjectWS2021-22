@@ -37,16 +37,15 @@ public class ExchangeHeroes : MonoBehaviour
 
     private void EnableButton()
     {
-        currentMatch++;
 
-        if(allMatch && totalMatch >= currentMatch && totalMatch != 0)
+        if(allMatch && totalMatch == currentMatch + 1 && totalMatch != 0)
         {
             FinishExchange.SetActive(false);
             FinishTrade.SetActive(true);
             nextExchange.SetActive(false);
         }
 
-        else if(totalMatch >= currentMatch && totalMatch != 0)
+        else if(totalMatch == currentMatch + 1 && totalMatch != 0)
         {
             FinishExchange.SetActive(true);
             FinishTrade.SetActive(false);
@@ -58,7 +57,11 @@ public class ExchangeHeroes : MonoBehaviour
             FinishExchange.SetActive(false);
             FinishTrade.SetActive(false);
             nextExchange.SetActive(true);
+
+            //currentMatch++;
         }
+
+        
     }
 
     private void ResetAndAnimate()
