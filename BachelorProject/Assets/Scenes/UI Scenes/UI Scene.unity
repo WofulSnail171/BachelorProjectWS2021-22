@@ -41944,7 +41944,7 @@ GameObject:
   - component: {fileID: 668576259}
   - component: {fileID: 668576258}
   m_Layer: 0
-  m_Name: Button (2)
+  m_Name: No
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41967,8 +41967,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 289.75, y: -200}
-  m_SizeDelta: {x: 579.5, y: 200}
+  m_AnchoredPosition: {x: 271.75, y: -200}
+  m_SizeDelta: {x: 543.5, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &668576258
 MonoBehaviour:
@@ -60709,8 +60709,8 @@ MonoBehaviour:
   yes: {fileID: 3728679168750866523}
   no: {fileID: 3728679167721000686}
   hub: {fileID: 250211648}
-  ExploreInventoryUI: {fileID: 0}
-  inventory: {fileID: 0}
+  ExploreInventoryUI: {fileID: 1557440920}
+  inventory: {fileID: 1198303509}
 --- !u!1 &954318270
 GameObject:
   m_ObjectHideFlags: 0
@@ -94075,6 +94075,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1459924512}
   - component: {fileID: 1068459387}
+  - component: {fileID: 1459924513}
   m_Layer: 5
   m_Name: TradeCancel_PopUp
   m_TagString: Untagged
@@ -94104,6 +94105,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1459924513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459924511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cbaa840dc12cc4297cb409883d1d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  yes: {fileID: 1752839351}
+  no: {fileID: 668576258}
+  hub: {fileID: 0}
+  tradeInventoryUI: {fileID: 1782747286}
+  inventory: {fileID: 1198303509}
 --- !u!1 &1463342467
 GameObject:
   m_ObjectHideFlags: 0
@@ -109810,7 +109828,7 @@ GameObject:
   - component: {fileID: 1752839352}
   - component: {fileID: 1752839351}
   m_Layer: 0
-  m_Name: Button (3)
+  m_Name: Yes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109833,8 +109851,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 865.75, y: -200}
-  m_SizeDelta: {x: 572.5, y: 200}
+  m_AnchoredPosition: {x: 811.75, y: -200}
+  m_SizeDelta: {x: 536.5, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1752839351
 MonoBehaviour:
@@ -128474,7 +128492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2023052178
 RectTransform:
   m_ObjectHideFlags: 0
@@ -137928,7 +137946,7 @@ GameObject:
   - component: {fileID: 3728679167721000687}
   - component: {fileID: 3728679167721000686}
   m_Layer: 0
-  m_Name: Button (2)
+  m_Name: No
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137951,8 +137969,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 289.75, y: -200}
-  m_SizeDelta: {x: 579.5, y: 200}
+  m_AnchoredPosition: {x: 801.75, y: -200}
+  m_SizeDelta: {x: 1603.5, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &3728679167721000686
 MonoBehaviour:
@@ -138872,7 +138890,7 @@ GameObject:
   - component: {fileID: 3728679168750866516}
   - component: {fileID: 3728679168750866523}
   m_Layer: 0
-  m_Name: Button (3)
+  m_Name: Yes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138895,8 +138913,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 865.75, y: -200}
-  m_SizeDelta: {x: 572.5, y: 200}
+  m_AnchoredPosition: {x: 2401.75, y: -200}
+  m_SizeDelta: {x: 1596.5, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &3728679168750866523
 MonoBehaviour:
