@@ -18,7 +18,24 @@ MonoBehaviour:
   types: []
   nodeType: 0
   shaderName: test
-  input: {fileID: 11400000, guid: b07c2f906701eb5408c6ab51c0510692, type: 2}
-  inputColor: {fileID: 11400000, guid: 93885d184325a464eb8adbf9fc4c0d61, type: 2}
+  input: {fileID: 11400000, guid: 556a8e7be640f4b4290a08f2b89c76a3, type: 2}
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
+  insideTex: {fileID: 2800000, guid: 99b132da77b48b54ea70e7b6fce460f9, type: 3}
+  insideColor: {r: 1, g: 1, b: 1, a: 1}
+  insideTexPosition: {x: 0, y: 0}
+  insideTexScale: 1
+  insideTexRotation: 0
+  outsideTex: {fileID: 2800000, guid: 99b132da77b48b54ea70e7b6fce460f9, type: 3}
+  outsideColor: {r: 1, g: 1, b: 1, a: 1}
+  outsideTexPosition: {x: 0, y: 0}
+  outsideTexScale: 1
+  outsideTexRotation: 0
+  outlineTex: {fileID: 0}
+  outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  outlineTexPosition: {x: 0, y: 0}
+  outlineTexScale: 1
+  outlineTexRotation: 0
+  thickness: 0.8
+  repetition: 1
+  lineDistance: 1

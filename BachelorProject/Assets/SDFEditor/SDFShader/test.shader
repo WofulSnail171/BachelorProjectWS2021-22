@@ -1,44 +1,49 @@
 Shader "SDF/test"
         {
 
-            Properties
-            {
-                
-                [HideInInspector] circle646_position ("circle646_position", Vector) = (0,0,0,0)
-                [HideInInspector] circle646_radius ("circle646_radius", Float) = 0.2
-                
-                [HideInInspector] triangle490_position ("triangle490_position", Vector) = (0,0,0,0)
-                [HideInInspector] triangle490_a ("triangle490_a", Vector) = (0,0,0,0)
-                [HideInInspector] triangle490_b ("triangle490_b", Vector) = (0,0,0,0)
-                [HideInInspector] triangle490_c ("triangle490_c", Vector) = (0,0,0,0)
-                [HideInInspector] triangle490_scale ("triangle490_scale", Float) = 1
-                [HideInInspector] triangle490_rotation ("triangle490_rotation", Float) = 0
-                
-                [HideInInspector] colorOutput839_thickness ("colorOutput839_thickness", Float) = 0.2
-                [HideInInspector] colorOutput839_repetition ("colorOutput839_repetition", Float) = 1
-                [HideInInspector] colorOutput839_lineDistance ("colorOutput839_lineDistance", Float) = 1
-                
-                [HideInInspector] tex705_position ("tex705_position", Vector) = (0,0,0,0)
-                [HideInInspector] tex705_scale ("tex705_scale", Float) = 1
-                [HideInInspector] tex705_rotation ("tex705_rotation", Float) = 0
-                [HideInInspector] tex705_tex ("tex705_tex", 2D) = "white"{}
-                [HideInInspector] tex705_color ("tex705_color", Color) = (1,1,1,1)
-                
-                [HideInInspector] color646 ("color646", Color) = (1,1,1,1)
-                
-                [HideInInspector] color855 ("color855", Color) = (1,1,1,1)
+        Properties
+        {
+            
+                [HideInInspector] rect939_position ("rect939_position", Vector) = (0,0,0,0)
+                [HideInInspector] rect939_box ("rect939_box", Vector) = (0,0,0,0)
+                [HideInInspector] rect939_scale ("rect939_scale", Float) = 1
+                [HideInInspector] rect939_roundness ("rect939_roundness", Vector) = (0,0,0,0)
+                [HideInInspector] rect939_rotation ("rect939_rotation", Float) = 0
                 
 
-                [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
-                [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
-                [Enum(UnityEngine.Rendering.CullMode)] _CullMode("Cull Mode", Float) = 0
-                [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
-                [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend mode", Float) = 1
-            }
+            [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
+            [HideInInspector] insideColor ("inside Color", Color) = (1,1,1,1)
+            [HideInInspector] insideTexPosition ("inside Texture Position", Vector) = (0,0,0,0)
+            [HideInInspector] insideTexScale ("inside Texture Scale", Float) = 1
+            [HideInInspector] insideTexRotation ("inside Texture Rotation", Float) = 0
+
+            [HideInInspector] outsideTex ("outside Texture", 2D) = "white"{}
+            [HideInInspector] outsideColor ("outside Color", Color) = (1,1,1,1)
+            [HideInInspector] outsideTexPosition ("outside Texture Position", Vector) = (0,0,0,0)
+            [HideInInspector] outsideTexScale ("outside Texture Scale", Float) = 1
+            [HideInInspector] outsideTexRotation ("outside Texture Rotation", Float) = 0
+
+            [HideInInspector] outlineTex ("outline Texture", 2D) = "white"{}
+            [HideInInspector] outlineColor ("outline Color", Color) = (1,1,1,1)
+            [HideInInspector] outlineTexPosition ("outline Texture Position", Vector) = (0,0,0,0)
+            [HideInInspector] outlineTexScale ("outline Texture Scale", Float) = 1
+            [HideInInspector] outlineTexRotation ("outline Texture Rotation", Float) = 0
+
+            [HideInInspector] outlineThickness ("outline Thickness", Float) = 0.2
+            [HideInInspector] outlineRepetition ("outline Repetition", Float) = 1
+            [HideInInspector] outlineLineDistance ("outline LineDistance", Float) = 1
+
+            [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
+            [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 0
+            [Enum(UnityEngine.Rendering.CullMode)] _CullMode("Cull Mode", Float) = 0
+            [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Source Blend mode", Float) = 1
+            [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Destination Blend mode", Float) = 1
+        }
 
             SubShader
             {
-            Tags { "RenderType"="Opaque" 
+            Tags { "RenderType"="Transparent" 
+                   "Queue"="Transparent" 
                    "RenderPipeline"="UniversalRenderPipeline"
                  }
             LOD 100
@@ -80,34 +85,29 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 circle646_position;
-        float circle646_radius;
-        float2 triangle490_position;
-        float2 triangle490_a;
-        float2 triangle490_b;
-        float2 triangle490_c;
-        float triangle490_scale;
-        float triangle490_rotation;
-        float colorOutput839_thickness;
-        float colorOutput839_repetition;
-        float colorOutput839_lineDistance;
-        float2 tex705_position;
-        sampler2D tex705_tex;
-        float tex705_scale;
-        float tex705_rotation;
-        float4 tex705_color;
-        float4 color646;
-        float4 color855;
+        float2 rect939_position;
+        float2 rect939_box;
+        float rect939_scale;
+        float4 rect939_roundness;
+        float rect939_rotation;
         
+     float4 insideColor, outsideColor, outlineColor;
+     sampler2D insideTex, outsideTex, outlineTex;
+     float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
+     float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
         {
-            i.uv -= float2(0.5, 0.5);
-            float sdfOut = sdf(i.uv, triangle490_position, triangle490_a, triangle490_b, triangle490_c, triangle490_scale, triangle490_rotation, circle646_position, circle646_radius);
+            float sdfOut = sdf(i.uv, rect939_position, rect939_box, rect939_scale, rect939_roundness, rect939_rotation);
             
-            float4 col = sdfColor(i.uv, sdfOut, color855, color646, tex705_position, tex705_tex, tex705_scale, tex705_rotation, tex705_color, colorOutput839_thickness, colorOutput839_repetition, colorOutput839_lineDistance);
-            return col;
+            float4 col = sdfColor(i.uv, sdfOut,
+                                  insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
+                                  outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
+                                  outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
+                                  outlineThickness, outlineRepetition, outlineLineDistance);
+            
+            return float4(1,1,1,0);
         }
 
 

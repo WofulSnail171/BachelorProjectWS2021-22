@@ -11,47 +11,35 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 triangle490_position, float2 triangle490_a, float2 triangle490_b, float2 triangle490_c, float triangle490_scale, float triangle490_rotation, float2 circle646_position, float circle646_radius){ 
+    float sdf (float2 uv, float2 rect939_position, float2 rect939_box, float rect939_scale, float4 rect939_roundness, float rect939_rotation){ 
+         uv -= float2(0.5, 0.5);
         
-    float2 e0_triangle490 = triangle490_b - triangle490_a;
-    float2 e1_triangle490 = triangle490_c - triangle490_b;
-    float2 e2_triangle490 = triangle490_a - triangle490_c;
-    
-    float2 t_triangle490 = transform(triangle490_position, triangle490_rotation, triangle490_scale, uv);
-    
-    float2 v0_triangle490 = t_triangle490 - triangle490_a;
-    float2 v1_triangle490 = t_triangle490 - triangle490_b;
-    float2 v2_triangle490 = t_triangle490 - triangle490_c;
-    
-    float2 pq0_triangle490 = v0_triangle490 - e0_triangle490 * clamp( dot(v0_triangle490,e0_triangle490)/dot(e0_triangle490,e0_triangle490), 0.0, 1.0 );
-    float2 pq1_triangle490 = v1_triangle490 - e1_triangle490 * clamp( dot(v1_triangle490,e1_triangle490)/dot(e1_triangle490,e1_triangle490), 0.0, 1.0 );
-    float2 pq2_triangle490 = v2_triangle490 - e2_triangle490 * clamp( dot(v2_triangle490,e2_triangle490)/dot(e2_triangle490,e2_triangle490), 0.0, 1.0 );
-    
-    float s_triangle490 = sign( e0_triangle490.x*e2_triangle490.y - e0_triangle490.y*e2_triangle490.x ) ;
-    float2 d_triangle490 = min(min(float2(dot(pq0_triangle490,pq0_triangle490), s_triangle490*(v0_triangle490.x*e0_triangle490.y-v0_triangle490.y*e0_triangle490.x)),
-                       float2(dot(pq1_triangle490,pq1_triangle490), s_triangle490*(v1_triangle490.x*e1_triangle490.y-v1_triangle490.y*e1_triangle490.x))),
-                       float2(dot(pq2_triangle490,pq2_triangle490), s_triangle490*(v2_triangle490.x*e2_triangle490.y-v2_triangle490.y*e2_triangle490.x)));
-    float triangle490_out= -sqrt(d_triangle490.x) * sign(d_triangle490.y) * triangle490_scale;
-        float circle646_out = length(circle646_position- uv)- circle646_radius;
+        float2 t_rect939 = transform(rect939_position, rect939_rotation, rect939_scale, uv);
+        rect939_roundness.xy = (t_rect939.x > 0.0) ? rect939_roundness.xy : rect939_roundness.zw;
+        rect939_roundness.x  = (t_rect939.y  > 0.0) ? rect939_roundness.x  : rect939_roundness.y;
+        float2 q_rect939 = abs(t_rect939) - rect939_box + rect939_roundness.x;
+        float rect939_out = (min(max(q_rect939.x,q_rect939.y),0.0) + length(max(q_rect939,0.0)) - rect939_roundness.x) * rect939_scale;
 
-        float subtract69_out = max(circle646_out,triangle490_out);
-
-        return subtract69_out;
+        return rect939_out;
     }
         
 
-    float4 sdfColor (float2 uv, float sdfOut, float4 color855, float4 color646, float2 tex705_position, sampler2D tex705_tex, float tex705_scale, float tex705_rotation, float4 tex705_color, float colorOutput839_thickness, float colorOutput839_repetition, float colorOutput839_lineDistance){
-        float4  tex705_out = tex2D(tex705_tex, transform(tex705_position, tex705_rotation, tex705_scale, uv) + tex705_position + float2(0.5, 0.5)) * tex705_color;
-        float sdf_colorOutput839 = smoothstep(0,colorOutput839_thickness*0.01 - colorOutput839_thickness*0.005 ,sdfOut);
-        float4 col_colorOutput839 = lerp(tex705_out , color646, sdf_colorOutput839);
-        float outline_colorOutput839 = 1-smoothstep(0,colorOutput839_thickness*0.01 ,abs(frac(sdfOut / (colorOutput839_lineDistance*0.1) + 0.5) - 0.5) * (colorOutput839_lineDistance*0.1));
-        outline_colorOutput839 *= step(sdfOut-colorOutput839_repetition *0.01, 0);
-        col_colorOutput839 = lerp(col_colorOutput839, color855, outline_colorOutput839);
+    float4 sdfColor (float2 uv, float sdfOut, 
+                     float4 insideColor, sampler2D insideTex, float2 insideTexPosition, float insideTexScale, float insideTexRotation, 
+                     float4 outsideColor, sampler2D outsideTex, float2 outsideTexPosition, float outsideTexScale, float outsideTexRotation, 
+                     float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
+                     float outlineThickness, float outlineRepetition, float outlineLineDistance){
 
-        float4 colorOutput839_out = col_colorOutput839;
+        float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv)) * insideColor;
+        float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv)) * outsideColor;
+        float4 olColor = tex2D(outlineTex, transform(outlineTexPosition, outlineTexRotation, outlineTexScale, uv)) * outlineColor;
 
-        return colorOutput839_out;
+        float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
+        float4 col = lerp(iColor ,oColor, sdf);
+        float outline = 1-smoothstep(0, outlineThickness*0.01 ,abs(frac(sdfOut / (outlineLineDistance*0.1) + 0.5) - 0.5) * (outlineLineDistance*0.1));
+        outline *= step(sdfOut - outlineRepetition *0.01, 0);
+        col = lerp(col, olColor, outline);
+
+        return col;
     }
-
-
 #endif

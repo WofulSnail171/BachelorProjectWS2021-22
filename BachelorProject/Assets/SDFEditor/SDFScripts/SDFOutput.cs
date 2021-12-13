@@ -15,9 +15,6 @@ public class SDFOutput : SDFNode{
     [SerializeField]private SDFNode input;
     private SDFNode _input;
     
-    [SerializeField]private SDFColorNode inputColor;
-    private SDFColorNode _inputColor;
-
     public SDFNode Input {
         get => this._input;
         set {
@@ -26,16 +23,7 @@ public class SDFOutput : SDFNode{
             this.OnInputChange?.Invoke();
         }
     }
-    
-    public SDFColorNode InputColor {
-        get => this._inputColor;
-        set {
-            if (this._inputColor == value) return;
-            this._inputColor = value;
-            this.OnInputChange?.Invoke();
-        }
-    }
-    
+
     public Material sdfMaterial;
     private Shader sdfShader;
     
@@ -44,12 +32,291 @@ public class SDFOutput : SDFNode{
     private List<string> shaderStrings = new List<string>();
     private List<string> includeStrings = new List<string>();
     private List <SDFNode>  SDFNodes = new List<SDFNode>();
-    private List <SDFColorNode>  SDFColorNode = new List<SDFColorNode>();
+
+    //Color variables
+    #region Color
+
+    private enum ColorChange {
+        Inside,
+        Outside,
+        Outline
+    }
+
+    private ColorChange colorChange;
+    private Action<ColorChange> OnColorChange;
+
+    private bool isInsideDirty;
+    private bool isOutsideDirty;
+    private bool isOutlineDirty;
+    
+
+    [Space] [Header("Inside")]
+    [SerializeField] private Texture insideTex;
+    private Texture _insideTex;
+    
+    [SerializeField] private Color insideColor;
+    private Color _insideColor;
+
+    [SerializeField] private Vector2 insideTexPosition;
+    private Vector2 _insideTexPosition;
+    
+    [SerializeField] private float insideTexScale;
+    private float _insideTexScale = 1;
+    
+    [SerializeField] private float insideTexRotation;
+    private float _insideTexRotation;
+    
+    [Header("Outside")] 
+    [SerializeField] private Texture outsideTex;
+    private Texture _outsideTex;
+    
+    [SerializeField] private Color outsideColor;
+    private Color _outsideColor;
+    
+    [SerializeField] private Vector2 outsideTexPosition;
+    private Vector2 _outsideTexPosition;
+    
+    [SerializeField] private float outsideTexScale;
+    private float _outsideTexScale = 1;
+    
+    [SerializeField] private float outsideTexRotation;
+    private float _outsideTexRotation;
+    
+    [Header ("Outline")]
+    [SerializeField] private Texture outlineTex;
+    private Texture _outlineTex;
+    
+    [SerializeField] private Color outlineColor;
+    private Color _outlineColor;
+    
+    [SerializeField] private Vector2 outlineTexPosition;
+    private Vector2 _outlineTexPosition;
+    
+    [SerializeField] private float outlineTexScale;
+    private float _outlineTexScale = 1;
+    
+    [SerializeField] private float outlineTexRotation;
+    private float _outlineTexRotation;
+
+    [SerializeField] private float thickness;
+    private float _thickness = 0.2f;
+
+    [SerializeField] private int repetition;
+    private int _repetition = 1;
+
+    [SerializeField] private float lineDistance;
+    private float _lineDistance = 1f;
+    
+    
+    //Color variable Setter & Getter
+    //Inside
+    public Texture InsideTex {
+        get => this._insideTex;
+        set {
+            if (this._insideTex == value) return;
+            this._insideTex = value;
+            this.isInsideDirty = true;
+        }
+    }
+    
+    public Color InsideColor {
+        get => this._insideColor;
+        set {
+            if (this._insideColor == value) return;
+            this._insideColor = value;
+            this.isInsideDirty = true;
+        }
+    }
+    
+    public Vector2 InsideTexPosition {
+        get => this._insideTexPosition;
+        set {
+            if (this._insideTexPosition == value) return;
+            this._insideTexPosition = value;
+            this.isInsideDirty = true;
+        }
+    }
+    
+    public float InsideTexScale {
+        get => this._insideTexScale;
+        set {
+            if (this._insideTexScale == value) return;
+            this._insideTexScale = value;
+            this.isInsideDirty = true;
+        }
+    }
+    
+    public float InsideTexRotation {
+        get => this._insideTexRotation;
+        set {
+            if (this._insideTexRotation == value) return;
+            this._insideTexRotation = value;
+            this.isInsideDirty = true;
+        }
+    }
+    
+    //Outside
+    public Texture OutsideTex {
+        get => this._outsideTex;
+        set {
+            if (this._outsideTex == value) return;
+            this._outsideTex = value;
+            this.isOutsideDirty = true;
+        }
+    }
+
+    public Color OutsideColor {
+        get => this._outsideColor;
+        set {
+            if (this._outsideColor == value) return;
+            this._outsideColor = value;
+            this.isOutsideDirty = true;
+        }
+    }
+    
+    public Vector2 OutsideTexPosition {
+        get => this._outsideTexPosition;
+        set {
+            if (this._outsideTexPosition == value) return;
+            this._outsideTexPosition = value;
+            this.isOutsideDirty = true;
+        }
+    }
+    
+    public float OutsideTexScale {
+        get => this._outsideTexScale;
+        set {
+            if (this._outsideTexScale == value) return;
+            this._outsideTexScale = value;
+            this.isOutsideDirty = true;
+        }
+    }
+    
+    public float OutsideTexRotation {
+        get => this._outsideTexRotation;
+        set {
+            if (this._outsideTexRotation == value) return;
+            this._outsideTexRotation = value;
+            this.isOutsideDirty = true;
+        }
+    }
+    
+    //Outline
+    public Texture OutlineTex {
+        get => this._outlineTex;
+        set {
+            if (this._outlineTex == value) return;
+            this._outlineTex = value;
+            this.isOutlineDirty = true;
+        }
+    }
+
+    public Color OutlineColor {
+        get => this._outlineColor;
+        set {
+            if (this._outlineColor == value) return;
+            this._outlineColor = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public Vector2 OutlineTexPosition {
+        get => this._outlineTexPosition;
+        set {
+            if (this._outlineTexPosition == value) return;
+            this._outlineTexPosition = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public float OutlineTexScale {
+        get => this._outlineTexScale;
+        set {
+            if (this._outlineTexScale == value) return;
+            this._outlineTexScale = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public float OutlineTexRotation {
+        get => this._outlineTexRotation;
+        set {
+            if (this._outlineTexRotation == value) return;
+            this._outlineTexRotation = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public float Thickness {
+        get => this._thickness;
+        set {
+            if (this._thickness == value) return;
+            this._thickness = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public int Repetition {
+        get => this._repetition;
+        set {
+            if (this._repetition == value) return;
+            this._repetition = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public float LineDistance {
+        get => this._lineDistance;
+        set {
+            if (this._lineDistance == value) return;
+            this._lineDistance = value;
+            this.isOutlineDirty = true;
+        }
+    }
+
+    #endregion
 
     private void OnValidate() {
         this.Input = this.input;
-        this.InputColor = this.inputColor;
+
+        this.InsideTex = this.insideTex;
+        this.InsideColor = this.insideColor;
+        this.InsideTexPosition = this.insideTexPosition;
+        this.InsideTexScale = this.insideTexScale;
+        this.InsideTexRotation = this.insideTexRotation;
         
+        this.OutsideTex = this.outsideTex;
+        this.OutsideColor = this.outsideColor;
+        this.OutsideTexPosition = this.outsideTexPosition;
+        this.OutsideTexScale = this.outsideTexScale;
+        this.OutsideTexRotation = this.outsideTexRotation;
+        
+        this.OutlineTex = this.outlineTex;
+        this.OutlineColor = this.outlineColor;
+        this.OutlineTexPosition = this.outlineTexPosition;
+        this.OutlineTexScale = this.outlineTexScale;
+        this.OutlineTexRotation = this.outlineTexRotation;
+        
+        this.Thickness = this.thickness;
+        this.Repetition = this.repetition;
+        this.LineDistance = this.lineDistance;
+        
+        if (this.isInsideDirty) {
+            this.colorChange = ColorChange.Inside;
+            this.OnColorChange?.Invoke(this.colorChange);
+            this.isInsideDirty = false;
+        }
+        if (this.isOutsideDirty) {
+            this.colorChange = ColorChange.Outside;
+            this.OnColorChange?.Invoke(this.colorChange);
+            this.isOutsideDirty = false;
+        }
+        if (this.isOutlineDirty) {
+            this.colorChange = ColorChange.Outline;
+            this.OnColorChange?.Invoke(this.colorChange);
+            this.isOutlineDirty = false;
+        }
+
         if (this.applyMaterial) {
             
             this.ApplyMaterial();
@@ -59,6 +326,7 @@ public class SDFOutput : SDFNode{
 
     private void Awake() {
         this.OnInputChange += this.UpdateShader;
+        this.OnColorChange += this.UpdateColor;
     }
 
     private void ApplyMaterial() {
@@ -98,10 +366,7 @@ public class SDFOutput : SDFNode{
         foreach (SDFNode s in this.SDFNodes) {
             this.ChangeShaderValues(s);
         }
-
-        foreach (SDFColorNode c in this.SDFColorNode) {
-            this.ChangeColorValues(c);
-        }
+        
     }
 
     private void AddHlslString() {
@@ -122,7 +387,7 @@ public class SDFOutput : SDFNode{
         this.includeStrings.Clear();
         this.includeStrings.Add(this.GenerateIncludeIfdef());
         this.includeStrings.Add(this.GenerateShaderSdfFunction(this.Input));
-        this.includeStrings.Add(this.GenerateIncludeSdfColor(this.InputColor));
+        this.includeStrings.Add(this.GenerateIncludeSdfColor());
         
         this.WriteHlslToText();
     }
@@ -229,55 +494,40 @@ public class SDFOutput : SDFNode{
                 }
             }
         }
-
-        foreach (SDFColorNode colorNode in this.SDFColorNode) {
-            if (colorNode == null) {
-                Debug.Log(colorNode.sdfName + " is null");
-                break;
-            }
-
-            switch (colorNode.colorNodeType) {
-                case global::SDFColorNode.ColorNodeType.ColorOutput: {
-                    var n = (SDFColorOutput) colorNode;
-                    properties += @"
-                [HideInInspector] " + n.sdfName + @"_thickness (""" + n.sdfName + @"_thickness"", Float) = 0.2
-                [HideInInspector] " + n.sdfName + @"_repetition (""" + n.sdfName + @"_repetition"", Float) = 1
-                [HideInInspector] " + n.sdfName + @"_lineDistance (""" + n.sdfName + @"_lineDistance"", Float) = 1
-                ";
-                    break;
-                }
-                case global::SDFColorNode.ColorNodeType.Color: {
-                    var n = (SDFColor) colorNode;
-                    properties += @"
-                [HideInInspector] " + n.sdfName + @" (""" + n.sdfName + @""", Color) = (1,1,1,1)
-                ";
-                    break;
-                }
-                case global::SDFColorNode.ColorNodeType.Texture: {
-                    var n = (SDFTextureInput) colorNode;
-                    properties += @"
-                [HideInInspector] " + n.sdfName + @"_position (""" + n.sdfName + @"_position"", Vector) = (0,0,0,0)
-                [HideInInspector] " + n.sdfName + @"_scale (""" + n.sdfName + @"_scale"", Float) = 1
-                [HideInInspector] " + n.sdfName + @"_rotation (""" + n.sdfName + @"_rotation"", Float) = 0
-                [HideInInspector] " + n.sdfName + @"_tex (""" + n.sdfName + @"_tex"", 2D) = ""white""{}
-                [HideInInspector] " + n.sdfName + @"_color (""" + n.sdfName + @"_color"", Color) = (1,1,1,1)
-                ";
-                    break;
-                }
-            }
-        }
-
+        
         return @"
-            Properties
-            {
-                " + properties + @"
+        Properties
+        {
+            " + properties + @"
 
-                [Enum(Off, 0, On, 1)] _ZWrite (""Z Write"", Float) = 1
-                [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Float) = 0
-                [Enum(UnityEngine.Rendering.CullMode)] _CullMode(""Cull Mode"", Float) = 0
-                [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend (""Source Blend mode"", Float) = 1
-                [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend (""Destination Blend mode"", Float) = 1
-            }";
+            [HideInInspector] insideTex (""inside Texture"", 2D) = ""white""{}
+            [HideInInspector] insideColor (""inside Color"", Color) = (1,1,1,1)
+            [HideInInspector] insideTexPosition (""inside Texture Position"", Vector) = (0,0,0,0)
+            [HideInInspector] insideTexScale (""inside Texture Scale"", Float) = 1
+            [HideInInspector] insideTexRotation (""inside Texture Rotation"", Float) = 0
+
+            [HideInInspector] outsideTex (""outside Texture"", 2D) = ""white""{}
+            [HideInInspector] outsideColor (""outside Color"", Color) = (1,1,1,1)
+            [HideInInspector] outsideTexPosition (""outside Texture Position"", Vector) = (0,0,0,0)
+            [HideInInspector] outsideTexScale (""outside Texture Scale"", Float) = 1
+            [HideInInspector] outsideTexRotation (""outside Texture Rotation"", Float) = 0
+
+            [HideInInspector] outlineTex (""outline Texture"", 2D) = ""white""{}
+            [HideInInspector] outlineColor (""outline Color"", Color) = (1,1,1,1)
+            [HideInInspector] outlineTexPosition (""outline Texture Position"", Vector) = (0,0,0,0)
+            [HideInInspector] outlineTexScale (""outline Texture Scale"", Float) = 1
+            [HideInInspector] outlineTexRotation (""outline Texture Rotation"", Float) = 0
+
+            [HideInInspector] outlineThickness (""outline Thickness"", Float) = 0.2
+            [HideInInspector] outlineRepetition (""outline Repetition"", Float) = 1
+            [HideInInspector] outlineLineDistance (""outline LineDistance"", Float) = 1
+
+            [Enum(Off, 0, On, 1)] _ZWrite (""Z Write"", Float) = 1
+            [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Float) = 0
+            [Enum(UnityEngine.Rendering.CullMode)] _CullMode(""Cull Mode"", Float) = 0
+            [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend (""Source Blend mode"", Float) = 1
+            [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend (""Destination Blend mode"", Float) = 1
+        }";
     }
     
     string GenerateShaderTags() {
@@ -345,20 +595,14 @@ public class SDFOutput : SDFNode{
                 }
             }
         }
-        
-        foreach (SDFColorNode c in this.SDFColorNode) {
-            if (c.variables != null && c.variables.Count > 0) {
-                for (int i = 0; i < c.variables.Count; i++) {
-                    shaderVariables += c.types[i] + " " + c.variables[i]+ @";
-        ";
-                }
-            }
-                        
-        }
 
         return @"
      CBUFFER_START(UnityPerMaterial)
      " + shaderVariables + @"
+     float4 insideColor, outsideColor, outlineColor;
+     sampler2D insideTex, outsideTex, outlineTex;
+     float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
+     float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
      CBUFFER_END";
     }
 
@@ -379,26 +623,19 @@ public class SDFOutput : SDFNode{
             shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
         
         string colorVariables = "";
-
-        for(int j = this.SDFColorNode.Count-1; j >= 0; j--){
-            if (this.SDFColorNode[j].variables != null && this.SDFColorNode[j].variables.Count > 0) {
-                for (int i = 0; i < this.SDFColorNode[j].variables.Count; i++) {
-                    colorVariables += this.SDFColorNode[j].variables[i];
-                    colorVariables += ", ";
-                }
-            }
-                        
-        }
-        if(colorVariables.Length>2)
-            colorVariables = colorVariables.Substring(0, colorVariables.Length - 2);
         
+
         return @"
         float4 frag (v2f i) : SV_Target
         {
-            i.uv -= float2(0.5, 0.5);
             float sdfOut = sdf(i.uv, " + shaderVariables + @");
             
-            float4 col = sdfColor(i.uv, sdfOut, " + colorVariables + @");
+            float4 col = sdfColor(i.uv, sdfOut,
+                                  insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
+                                  outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
+                                  outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
+                                  outlineThickness, outlineRepetition, outlineLineDistance);
+
             return col;
         }
 ";
@@ -449,6 +686,7 @@ public class SDFOutput : SDFNode{
     }
 
     float sdf (float2 uv, " + shaderVariables + @"){ 
+         uv -= float2(0.5, 0.5);
         " + sdfFunction + @"
 
         return " + node.o + @";
@@ -456,35 +694,27 @@ public class SDFOutput : SDFNode{
         ";
     }
 
-    private string GenerateIncludeSdfColor(SDFColorNode colorNode) {
-    
-        string colorVariables = "";
-        string colorFunction = "";
-        
-        for(int j = this.SDFColorNode.Count-1; j >= 0; j--){
-            if (this.SDFColorNode[j] != null) {
-                colorFunction += this.SDFColorNode[j].GenerateHlslFunction();
-            }
-
-            if (this.SDFColorNode[j].variables != null && this.SDFColorNode[j].variables.Count > 0) {
-                for (int i = 0; i < this.SDFColorNode[j].variables.Count; i++) {
-                    colorVariables += this.SDFColorNode[j].types[i] + " " + this.SDFColorNode[j].variables[i];
-                    colorVariables += ", ";
-                }
-            }
-                        
-        }
-        if(colorVariables.Length >2)
-            colorVariables = colorVariables.Substring(0, colorVariables.Length - 2);
+    private string GenerateIncludeSdfColor() {
 
         return @"
-    float4 sdfColor (float2 uv, float sdfOut, " + colorVariables + @"){
-        " + colorFunction + @"
+    float4 sdfColor (float2 uv, float sdfOut, 
+                     float4 insideColor, sampler2D insideTex, float2 insideTexPosition, float insideTexScale, float insideTexRotation, 
+                     float4 outsideColor, sampler2D outsideTex, float2 outsideTexPosition, float outsideTexScale, float outsideTexRotation, 
+                     float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
+                     float outlineThickness, float outlineRepetition, float outlineLineDistance){
 
-        return " + colorNode.o + @";
-    }
+        float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv)) * insideColor;
+        float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv)) * outsideColor;
+        float4 olColor = tex2D(outlineTex, transform(outlineTexPosition, outlineTexRotation, outlineTexScale, uv)) * outlineColor;
 
-";
+        float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
+        float4 col = lerp(iColor ,oColor, sdf);
+        float outline = 1-smoothstep(0, outlineThickness*0.01 ,abs(frac(sdfOut / (outlineLineDistance*0.1) + 0.5) - 0.5) * (outlineLineDistance*0.1));
+        outline *= step(sdfOut - outlineRepetition *0.01, 0);
+        col = lerp(col, olColor, outline);
+
+        return col;
+    }";
     }
 
     private void WriteHlslToText() {
@@ -598,8 +828,7 @@ public class SDFOutput : SDFNode{
         }
         EditorUtility.SetDirty(this.sdfMaterial);
     }
-    private void ChangeColorValues(SDFColorNode colorNode){
-        Debug.Log("updating shader");
+    private void UpdateColor( ColorChange change){
         if (this.sdfMaterial == null) {
             Debug.LogWarning("material has not been applied or assigned");
             return;
@@ -607,31 +836,39 @@ public class SDFOutput : SDFNode{
 
         Undo.RecordObject(this.sdfMaterial, "changed Material");        
 
-        switch (colorNode.colorNodeType) {
-            case global::SDFColorNode.ColorNodeType.ColorOutput: {
-                var n = (SDFColorOutput) colorNode;
-                this.sdfMaterial.SetFloat(n.sdfName + "_thickness", n.Thickness);
-                this.sdfMaterial.SetFloat(n.sdfName + "_repetition" , n.Repetition);
-                this.sdfMaterial.SetFloat(n.sdfName + "_lineDistance" , n.LineDistance);
+        switch (change) {
+            case ColorChange.Inside: {
+                
+                this.sdfMaterial.SetTexture("insideTex" , this.InsideTex);
+                this.sdfMaterial.SetColor("insideColor", this.InsideColor);
+                this.sdfMaterial.SetVector( "insideTexPosition",this.InsideTexPosition);
+                this.sdfMaterial.SetFloat("insideTexScale",this.InsideTexScale);
+                this.sdfMaterial.SetFloat("insideTexRotation",this.InsideTexRotation);
                 break;
             }
-            case global::SDFColorNode.ColorNodeType.Color: {
-                var n = (SDFColor) colorNode;
-                this.sdfMaterial.SetColor(n.sdfName, n.Color);
-                Debug.Log("updated color in shader");
+            case ColorChange.Outside: {
+                
+                this.sdfMaterial.SetTexture("outsideTex" , this.OutsideTex);
+                this.sdfMaterial.SetColor("outsideColor", this.OutsideColor);
+                this.sdfMaterial.SetVector( "outsideTexPosition",this.OutsideTexPosition);
+                this.sdfMaterial.SetFloat("outsideTexScale",this.OutsideTexScale);
+                this.sdfMaterial.SetFloat("outsideTexRotation",this.OutsideTexRotation);
                 break;
             }
-            case global::SDFColorNode.ColorNodeType.Texture: {
-                var n = (SDFTextureInput) colorNode;
-                this.sdfMaterial.SetVector(n.sdfName + "_position", n.Position);
-                this.sdfMaterial.SetFloat(n.sdfName + "_scale", n.Scale);
-                this.sdfMaterial.SetFloat(n.sdfName + "_rotation", n.Rotation);
-                this.sdfMaterial.SetTexture(n.sdfName + "_tex" , n.SdfTexture);
-                this.sdfMaterial.SetColor(n.sdfName + "_color", n.Color);
+            case ColorChange.Outline: {
+                this.sdfMaterial.SetTexture("outlineTex" , this.OutlineTex);
+                this.sdfMaterial.SetColor("outlineColor", this.OutlineColor);
+                this.sdfMaterial.SetVector( "outlineTexPosition",this.OutlineTexPosition);
+                this.sdfMaterial.SetFloat("outlineTexScale",this.OutlineTexScale);
+                this.sdfMaterial.SetFloat("outlineTexRotation",this.OutlineTexRotation);
+
+                this.sdfMaterial.SetFloat("outlineThickness", this.Thickness);
+                this.sdfMaterial.SetFloat("outlineRepetition" , this.Repetition);
+                this.sdfMaterial.SetFloat("outlineLineDistance" , this.LineDistance);
                 break;
             }
             default: {
-                Debug.LogWarning("unknow node");
+                Debug.LogWarning("unknow Color switch");
                 break;
             }
         }
@@ -654,17 +891,7 @@ public class SDFOutput : SDFNode{
                 }
             }
         }
-        foreach (SDFColorNode s in this.SDFColorNode) {
-            if (s != null) {
-                s.OnValueChange -= this.ChangeColorValues;
 
-                if (s is SDFColorOutput) {
-                    SDFColorOutput sOut = (SDFColorOutput) s;
-                    sOut.OnInputChange -= this.UpdateShader;
-                }
-            }
-        }
-        
         //get active nodes
         this.SDFNodes.Clear();
         if (this.input is SDFFunction) {
@@ -674,16 +901,7 @@ public class SDFOutput : SDFNode{
         else if(!this.SDFNodes.Contains(this.input)){
             this.SDFNodes.Add(this.input);
         }
-        
-        this.SDFColorNode.Clear();
-        if (this.inputColor is SDFColorOutput) {
-            SDFColorOutput i = (SDFColorOutput) this.inputColor;
-            i.GetActiveNodes(this.SDFColorNode);
-        }
-        else if(!this.SDFColorNode.Contains(this.inputColor)){
-            this.SDFColorNode.Add(this.inputColor);
-        }
-        
+
         //add actions from active nodes
         foreach (SDFNode s in this.SDFNodes) {
             if (s != null) {
@@ -693,19 +911,6 @@ public class SDFOutput : SDFNode{
                 if (s is SDFFunction) {
                     SDFFunction sfunc = (SDFFunction) s;
                     sfunc.OnInputChange += this.UpdateShader;
-                }
-            }
-        }
-        
-        foreach (SDFColorNode s in this.SDFColorNode) {
-            if (s != null) {
-                this.ChangeColorValues(s);
-                s.OnValueChange += this.ChangeColorValues;
-                Debug.Log("subscribed to value change on " +  s.sdfName);
-                if (s is SDFColorOutput) {
-                    SDFColorOutput sOut = (SDFColorOutput) s;
-                    sOut.OnInputChange += this.UpdateShader;
-                    Debug.Log("subscribed to input change on " +  s.sdfName);
                 }
             }
         }
