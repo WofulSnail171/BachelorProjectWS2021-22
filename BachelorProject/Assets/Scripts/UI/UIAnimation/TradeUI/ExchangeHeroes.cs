@@ -77,7 +77,7 @@ public class ExchangeHeroes : MonoBehaviour
 
         //update match text
         userText.text = $"Found a match with {allMatchList[currentMatch].matchedOffer.available}.";
-        userText.text = $"You say goodbye to {allMatchList[currentMatch].ownHero.heroId}.";
+        statusText.text = $"You say goodbye to {allMatchList[currentMatch].ownHero.heroId}.";
 
         StartCoroutine(Animate());
     }
@@ -92,7 +92,7 @@ public class ExchangeHeroes : MonoBehaviour
         yield return new WaitForSeconds(animSpeed*1.5f);
 
         //get new card
-        userText.text = $"You welcome {allMatchList[currentMatch].matchedOffer.heroId}.";
+        statusText.text = $"You welcome {allMatchList[currentMatch].matchedOffer.heroId}.";
 
         givenCard.SetActive(false);
         newCard.SetActive(true);

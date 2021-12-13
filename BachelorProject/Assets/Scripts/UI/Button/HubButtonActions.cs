@@ -95,6 +95,8 @@ public class HubButtonActions : MonoBehaviour
     private ProgressState tradeState;
     private ProgressState dungeonState;
 
+    private bool IsPulling = false;
+
     [HideInInspector]public int totalMatchAmount = 0;
     [HideInInspector]public int currentMatchNumber = 0;
 
@@ -227,8 +229,6 @@ public class HubButtonActions : MonoBehaviour
             setTradeText(textValue, tradeProgressTime);
         }
     }
-
-
 
     //click checks
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -668,118 +668,137 @@ public class HubButtonActions : MonoBehaviour
 
     private void ClickedReadyTrade()
     {
+        //helper bool
+        IsPulling = true;
+
+        //fetch data
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
         TradeManager._instance.PullTradeOffers(OnPullTradeOffers);
     }
 
-
+    //wait until data fetched
     private void OnPullTradeOffers()
     {
-        UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
+        if(IsPulling)
+        { 
+            UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
 
-        allMatchList.Clear();
-        allMatchListPotential.Clear();
+            allMatchList.Clear();
+            allMatchListPotential.Clear();
 
-        //change buttons and hub focus in bg
-        switch (currentHubFocus)
-        {
-            case HubState.HeroHub:
-                UIEnablerManager.Instance.EnableCanvas();
-                break;
-            case HubState.DungeonHub:
-                UIEnablerManager.Instance.EnableCanvas();
-                UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
-                UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
+            //change buttons and hub focus in bg
+            switch (currentHubFocus)
+            {
+                case HubState.HeroHub:
+                    UIEnablerManager.Instance.EnableCanvas();
+                    break;
+                case HubState.DungeonHub:
+                    UIEnablerManager.Instance.EnableCanvas();
+                    UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
+                    UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
 
-                UpdateDungeonButton(ButtonState.Unfocused);
-                UpdateHubButton(ButtonState.Focused);
-                break;
-            case HubState.TradeHub:
-                UIEnablerManager.Instance.EnableCanvas();
-                UIEnablerManager.Instance.SwitchElements("TradeObserve", "ShardAndBuff", true);
-                UIEnablerManager.Instance.EnableElement("HeroHub", true);
-
-                //buttons
-                if (dungeonState == ProgressState.Pending)
                     UpdateDungeonButton(ButtonState.Unfocused);
+                    UpdateHubButton(ButtonState.Focused);
+                    break;
+                case HubState.TradeHub:
+                    UIEnablerManager.Instance.EnableCanvas();
+                    UIEnablerManager.Instance.SwitchElements("TradeObserve", "ShardAndBuff", true);
+                    UIEnablerManager.Instance.EnableElement("HeroHub", true);
+
+                    //buttons
+                    if (dungeonState == ProgressState.Pending)
+                        UpdateDungeonButton(ButtonState.Unfocused);
+
+                    else
+                        UpdateDungeonButton(ButtonState.Finished);
+                    break;
+                default:
+                    break;
+            }
+
+
+            //helper bools
+            oneMatch = false;
+            allMatch = true;
+
+            totalMatchAmount = 0;
+
+            //check how many matches
+            foreach (Match match in TradeManager._instance.GetTradingResults())
+            {
+                if (match.matchedOffer != null)
+                {
+                    oneMatch = true;
+                    totalMatchAmount++;
+                    allMatchList.Add(match);
+
+                    allMatchListPotential.Add(match.GetBuffDiff());
+                }
 
                 else
-                    UpdateDungeonButton(ButtonState.Finished);
-                break;
-            default:
-                break;
-        }
-
-
-        //helper bools
-
-
-        oneMatch = false;
-        allMatch = true;
-
-        totalMatchAmount = 0;
-
-        //check how many matches
-        foreach (Match match in TradeManager._instance.GetTradingResults())
-        {
-            if (match.matchedOffer != null)
-            {
-                oneMatch = true;
-                totalMatchAmount++;
-                allMatchList.Add(match);
-
-                allMatchListPotential.Add(match.GetBuffDiff());
+                {
+                    allMatch = false;
+                }
             }
 
+
+            currentMatchNumber = 0;
+
+            exchangeUI.totalMatch = totalMatchAmount;
+            exchangeUI.currentMatch = currentMatchNumber;
+            exchangeUI.allMatch = allMatch;
+            exchangeUI.allMatchList = allMatchList;
+            exchangeUI.allMatchListPotential = allMatchListPotential;
+
+
+                //actually start pop up flow
+                if (allMatch)
+                {
+                    UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+                    NextHeroExchange.GetComponent<Button>().enabled = true;
+                    FinishHeroExchange.GetComponent<Button>().enabled = true;
+                    FinishTrade.GetComponent<Button>().enabled = true;
+
+                }
+
+
+            else if (oneMatch)
+                {
+                    UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+                    NextHeroExchange.GetComponent<Button>().enabled = true;
+                    FinishHeroExchange.GetComponent<Button>().enabled = true;
+                    FinishTrade.GetComponent<Button>().enabled = true;
+                }
+
+            //no matches
             else
-            {
-                allMatch = false;
-            }
-        }
+                {
+                    if (TradeManager._instance.GetTradingResults().Count < 4)
+                    {
+                        UIEnablerManager.Instance.DisableBlur();
+                        UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
+                        UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
+                        UIEnablerManager.Instance.EnableElement("AddHero", true);
+                    }
 
+                    else
+                    {
+                        ContinueToSwipe();
+                    }
 
-        currentMatchNumber = 0;
-
-        exchangeUI.totalMatch = totalMatchAmount;
-        exchangeUI.currentMatch = currentMatchNumber;
-        exchangeUI.allMatch = allMatch;
-        exchangeUI.allMatchList = allMatchList;
-        exchangeUI.allMatchListPotential = allMatchListPotential;
-
-        //actually start pop up flow
-        if (allMatch)
-        {
-            UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
-        }
-
-
-        else if (oneMatch)
-        {
-            UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
-        }
-
-        //no matches
-        else
-        {
-            if (TradeManager._instance.GetTradingResults().Count < 4)
-            {
-                UIEnablerManager.Instance.DisableBlur();
-                UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
-                UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
-                UIEnablerManager.Instance.EnableElement("AddHero", true);
-            }
-
-            else
-            {
-                ContinueToSwipe();
+                IsPulling = false;
             }
         }
     }
+
+
 
     //
     //pop up flow trade
     private void ContinueExchange()
     {
+        NextHeroExchange.GetComponent<Button>().enabled = false;
+
         currentMatchNumber++;
         exchangeUI.currentMatch = currentMatchNumber;
 
@@ -893,8 +912,9 @@ public class HubButtonActions : MonoBehaviour
     {
         //re-update
         TradeManager._instance.ApplySuccessfulTrades();
+
         InventoryUI.UpdateInventory();
-        InventoryUI.InitInventoryUI();
+        
 
         //update trade inventory
         InventoryUI.DoAdd = false;
@@ -1023,6 +1043,11 @@ public class HubButtonActions : MonoBehaviour
         yield return new WaitForSeconds(.6f);
 
         UIEnablerManager.Instance.EnableElement("ExchangeHeroes", true);
+
+        NextHeroExchange.GetComponent<Button>().enabled = true;
+        FinishHeroExchange.GetComponent<Button>().enabled = true;
+        FinishTrade.GetComponent<Button>().enabled = true;
+
     }
 }
 

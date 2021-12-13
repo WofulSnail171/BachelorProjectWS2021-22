@@ -20,6 +20,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         localSaveNo.interactable = false;
 
         DatabaseManager._instance.LoadLocalSave();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
         if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
         {
             localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
@@ -153,16 +154,17 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignIn successful";
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
+            //ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
             DatabaseManager._instance.UpdateActivePlayerFromServer(_lastMessage);
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
             /*
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             */
-            
+
             // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply
             //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
             //FinishedLogIn();
@@ -173,7 +175,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
     void OnGlobalDataFetched()
     {
-        ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
+        //
     }
 
     public void StooopidTest()

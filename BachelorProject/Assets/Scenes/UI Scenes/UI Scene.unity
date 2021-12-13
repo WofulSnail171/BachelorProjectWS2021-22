@@ -16113,6 +16113,12 @@ MonoBehaviour:
   - name: settlement
     sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
     color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
+  - name: final destination
+    sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
+    color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
+  - name: home town
+    sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
+    color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
 --- !u!1 &250211646
 GameObject:
   m_ObjectHideFlags: 0
@@ -120641,12 +120647,6 @@ MonoBehaviour:
   newCard: {fileID: 1801063141}
   statusText: {fileID: 897721476}
   userText: {fileID: 231043457}
-  PopUp:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1000
-    height: 300
   nextExchange: {fileID: 778163490}
   FinishExchange: {fileID: 594102343}
   FinishTrade: {fileID: 1787387561}
