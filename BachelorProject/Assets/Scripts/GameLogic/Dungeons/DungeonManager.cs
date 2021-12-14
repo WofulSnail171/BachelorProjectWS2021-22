@@ -186,11 +186,17 @@ public class DungeonManager : MonoBehaviour
             };
             DatabaseManager._instance.activePlayerData.rewardTierBuff = 0;
             if (chosenDungeon.type == DungeonType.basic)
+            {
                 result.initialRewardTier = 3 + DatabaseManager._instance.activePlayerData.rewardTierBuff;
+                if (result.initialRewardTier > 5)
+                    result.initialRewardTier = 5;
+            }
             else
-                result.initialRewardTier = 6 + DatabaseManager._instance.activePlayerData.rewardTierBuff;
-            if (result.initialRewardTier > 10)
-                result.initialRewardTier = 10;
+            {
+                result.initialRewardTier = 5 + DatabaseManager._instance.activePlayerData.rewardTierBuff;
+                if (result.initialRewardTier > 9)
+                    result.initialRewardTier = 9;
+            }
             result.party = chosenParty;
             result.valid = true;
             DatabaseManager._instance.dungeonData.currentRun = result;

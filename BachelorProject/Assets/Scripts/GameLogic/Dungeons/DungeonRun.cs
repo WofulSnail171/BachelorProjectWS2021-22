@@ -30,15 +30,11 @@ public class CalculatedDungeonRun
         int baseReward = 0;        
         if(dungeonRun.dungeon.type == DungeonType.basic)
         {
-            baseReward = 3 + dungeonRun.initialRewardTier;
-            if (baseReward > 7)
-                baseReward = 7;
+            baseReward =dungeonRun.initialRewardTier;
         }
         else
         {
-            baseReward = 6 + dungeonRun.initialRewardTier;
-            if (baseReward > 10)
-                baseReward = 10;
+            baseReward = dungeonRun.initialRewardTier;
         }
         rewardHealthBar = (baseReward) * 10;
         currentNode = dungeonRun.dungeon.dungeonLayout.startNode;
