@@ -10,6 +10,9 @@ public class CenteredAnimation : AbstractElementAnimation
     {
         StopAllCoroutines();
 
+        if (gameObject.activeSelf == false)
+            gameObject.SetActive(true);
+
         gameObject.transform.localScale = new Vector3(1, 1, 1);
         LeanTween.scaleX(gameObject, 0, animSpeed);
 
