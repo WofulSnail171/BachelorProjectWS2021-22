@@ -127,9 +127,9 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         //update blacklist
-        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
-        
-        if(playerHeroesToMatch.Count > 0)
+        DatabaseManager._instance.activePlayerData.AddBlackListEntry(snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, snapHero._tradeOffers[snapHero.GetNearestPage()].heroId);
+
+        if (playerHeroesToMatch.Count > 0)
         {
             TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
         }
@@ -159,7 +159,7 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         //update blacklist
-        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
+        DatabaseManager._instance.activePlayerData.AddBlackListEntry(snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, snapHero._tradeOffers[snapHero.GetNearestPage()].heroId); 
 
         if (playerHeroesToMatch.Count > 0)
         {

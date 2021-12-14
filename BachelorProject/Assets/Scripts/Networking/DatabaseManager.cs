@@ -195,7 +195,9 @@ public class DatabaseManager : MonoBehaviour
     public PlayerData activePlayerData;
     public void UpdateActivePlayerFromServer(string _message)
     {
+        var blackList = activePlayerData.blacklist;
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
+        activePlayerData.blacklist = blackList;
         //check for dates lol
         var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime());
         if (localSave == null || bla > 0)
@@ -380,6 +382,19 @@ public class PlayerData
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
 
+    public void AffectRewardTierBuff(int _amount)
+    {
+        rewardTierBuff += _amount;
+        if(rewardTierBuff >= 9)
+        {
+            rewardTierBuff = 9;
+        }
+        else if(rewardTierBuff < 0)
+        {
+            rewardTierBuff = 0;
+        }
+    }
+
     public PlayerHero GetHeroByUniqueId(int _uniqueId)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -421,6 +436,20 @@ public class PlayerData
             }
         }
         return false;
+    }
+
+    public void AddBlackListEntry(string _playerId, string _heroId)
+    {
+        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = _playerId, heroId = _heroId });
+        DatabaseManager._instance.tradeData.UpdateOwnOffers();
+    }
+
+    public void ResetBlackList()
+    {
+        DatabaseManager._instance.activePlayerData.blacklist = new List<BlacklistEntry>();
+        //Potential ToDO. Sync online
+        DatabaseManager._instance.SaveGameDataLocally();
+        DatabaseManager._instance.tradeData.UpdateOwnOffers();
     }
 
     public bool PlayerIsInterestedInOffer(TradeOffer _offer)
@@ -533,8 +562,24 @@ public class EventData
     public string[] nodeTypes;
     public string[] pathTypes;
 
+    public EventSteps eventSteps;
+
     //FlavourTexts
     public TextFlavours textFlavours;
+}
+
+[System.Serializable]
+public class EventSteps
+{
+    public int questStart;
+    public int questEnd;
+    public int pathHandling;
+    public int pathChoosing;
+    public int eventTurn;
+    public int eventStart;
+    public int eventEnd;
+
+    public int fallBack;
 }
 
 [System.Serializable]
