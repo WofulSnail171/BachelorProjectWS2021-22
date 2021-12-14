@@ -16402,12 +16402,16 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 597422dcbea064449b7055d6aa271548, type: 3}
   - name: Lorenzo
     sprite: {fileID: 21300000, guid: f230bb80c68ffe443a2fada402c34f92, type: 3}
+  - name: Lark
+    sprite: {fileID: 21300000, guid: 64a99a1cd0d898247a043b21adfe610f, type: 3}
   - name: Luca
     sprite: {fileID: 21300000, guid: d22c25f721a6abc458d7cf150eb6e83b, type: 3}
   - name: Ludolf
     sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
   - name: Manny
     sprite: {fileID: 21300000, guid: 3e842cbb14419a94dbf295ff237e938e, type: 3}
+  - name: Markus
+    sprite: {fileID: 21300000, guid: 19314a89a9c07ad4999a386977f3a3b1, type: 3}
   - name: Mia
     sprite: {fileID: 21300000, guid: cce6667c055017344beb2381981e0afd, type: 3}
   - name: Mocka
@@ -16462,6 +16466,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6b8d505bb07b17b4e9b932cc57065ce7, type: 3}
   - name: Winfred
     sprite: {fileID: 21300000, guid: 2c0e97931baf5e54591612930a374189, type: 3}
+  - name: Woful
+    sprite: {fileID: 21300000, guid: d28e3b750b753b24895f81b0c0079ca7, type: 3}
   - name: Zenia
     sprite: {fileID: 21300000, guid: 901a68f0898334948a8c861f588cf994, type: 3}
 --- !u!114 &249821545
