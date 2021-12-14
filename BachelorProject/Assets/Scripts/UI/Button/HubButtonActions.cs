@@ -88,6 +88,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] InventoryUI InventoryUI;
     [SerializeField] TradeInventoryUI TradeInventoryUI;
     [SerializeField] ExchangeHeroes exchangeUI;
+    [SerializeField] TradeObserveUpdate tradeObserve;
 
     public bool isRewarding = false;
 
@@ -190,6 +191,8 @@ public class HubButtonActions : MonoBehaviour
             tradeSungleTextGroup.SetActive(true);
 
             UpdateTradeButton(ButtonState.Finished);
+
+            tradeObserve.EndTrade();
         }
 
 
@@ -231,6 +234,8 @@ public class HubButtonActions : MonoBehaviour
             tradeProgressBar.fillAmount = barValue;
             setTradeText(textValue, tradeFocusProgressTime);
             setTradeText(textValue, tradeProgressTime);
+
+            tradeObserve.UpdateObserve(barValue);
         }
     }
 
@@ -262,6 +267,7 @@ public class HubButtonActions : MonoBehaviour
         UpdateHubButton(ButtonState.Focused);
 
         UpdateHubState(HubState.HeroHub);
+
     }
 
     //click checks
@@ -1009,7 +1015,15 @@ public class HubButtonActions : MonoBehaviour
     {
         int recalcValue = (int)(value * 100f);
 
-        textMesh.text = $"{recalcValue} min";
+        if (recalcValue != 0)
+            textMesh.text = $"{recalcValue} min";
+
+        else
+        {
+           int secCalc = (int)(value * 100f * 60f);
+           textMesh.text = $"{secCalc} sec";
+
+        }
     }
     
 
