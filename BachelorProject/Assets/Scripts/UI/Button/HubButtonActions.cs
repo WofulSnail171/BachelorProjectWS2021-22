@@ -290,7 +290,7 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
 
                         //button
-                        if (tradeState != ProgressState.Done)
+                        if (dungeonState != ProgressState.Done)
                             UpdateDungeonButton(ButtonState.Unfocused);
 
                         break;
@@ -373,9 +373,15 @@ public class HubButtonActions : MonoBehaviour
                     case HubState.HeroHub:
                         UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonMapSelect", true);
                         UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
+
+
                         break;
                     case HubState.TradeHub:
                         UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonMapSelect", true);
+                        if (tradeState != ProgressState.Done)
+                            UpdateTradeButton(ButtonState.Unfocused);
+
+                        UpdateHubButton(ButtonState.Focused);
                         break;
 
                     default:
@@ -865,6 +871,8 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
         UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
         UIEnablerManager.Instance.EnableElement("AddHero", true);
+
+        currentHubFocus = HubState.TradeHub;
     }
 
 
@@ -998,6 +1006,8 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.UpdateInventory();
 
         UpdateTradeButton(ButtonState.Unfocused);
+
+        currentHubFocus = HubState.HeroHub;
     }
 
 

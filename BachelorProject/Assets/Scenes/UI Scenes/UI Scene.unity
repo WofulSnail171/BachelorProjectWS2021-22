@@ -16318,7 +16318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1255045209}
   blur: {fileID: 1094860496}
-  canvasAnimTime: 0.35
+  canvasAnimTime: 0.1
 --- !u!4 &249821543
 Transform:
   m_ObjectHideFlags: 0
