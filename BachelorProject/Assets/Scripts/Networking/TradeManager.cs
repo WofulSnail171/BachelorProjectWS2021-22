@@ -133,7 +133,7 @@ public class TradeManager : MonoBehaviour
         _data.date = DateTime.Now.ToUniversalTime().ToString("u");
         string message = JsonUtility.ToJson(_data);
         var test = JsonUtility.FromJson<PlayerHero[]>(message);
-
+        DatabaseManager._instance.activePlayerData.ResetBlackList();
         ServerCommunicationManager._instance.GetInfo(Request.UploadOffer, message);
 
         PullTradeOffers();
@@ -218,6 +218,7 @@ public class TradeManager : MonoBehaviour
             }
         }
         DatabaseManager._instance.tradeData.UpdateOwnOffers();
+        DatabaseManager._instance.activePlayerData.ResetBlackList();
         string message = JsonUtility.ToJson(uploadData);
         ServerCommunicationManager._instance.GetInfo(Request.DeleteOffers, message, _simpleEvent, _messageEvent);
     }
