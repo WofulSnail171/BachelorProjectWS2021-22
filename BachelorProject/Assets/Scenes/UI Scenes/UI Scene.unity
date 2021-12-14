@@ -39691,7 +39691,7 @@ GameObject:
   - component: {fileID: 630238656}
   - component: {fileID: 630238657}
   m_Layer: 5
-  m_Name: TradeSwipeCards_Centered
+  m_Name: TradeSwipe_Centered
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
