@@ -17,25 +17,25 @@ MonoBehaviour:
   variables: []
   types: []
   nodeType: 0
-  shaderName: test
-  input: {fileID: 11400000, guid: 556a8e7be640f4b4290a08f2b89c76a3, type: 2}
-  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
+  shaderName: 
+  input: {fileID: 0}
+  sdfMaterial: {fileID: 0}
   applyMaterial: 0
-  insideTex: {fileID: 2800000, guid: 99b132da77b48b54ea70e7b6fce460f9, type: 3}
-  insideColor: {r: 1, g: 1, b: 1, a: 1}
+  insideTex: {fileID: 0}
+  insideColor: {r: 0, g: 0, b: 0, a: 0}
   insideTexPosition: {x: 0, y: 0}
-  insideTexScale: 1
+  insideTexScale: 0
   insideTexRotation: 0
-  outsideTex: {fileID: 2800000, guid: 99b132da77b48b54ea70e7b6fce460f9, type: 3}
-  outsideColor: {r: 1, g: 1, b: 1, a: 1}
+  outsideTex: {fileID: 0}
+  outsideColor: {r: 0, g: 0, b: 0, a: 0}
   outsideTexPosition: {x: 0, y: 0}
-  outsideTexScale: 1
+  outsideTexScale: 0
   outsideTexRotation: 0
   outlineTex: {fileID: 0}
   outlineColor: {r: 0, g: 0, b: 0, a: 0}
   outlineTexPosition: {x: 0, y: 0}
-  outlineTexScale: 1
+  outlineTexScale: 0
   outlineTexRotation: 0
-  thickness: 0.8
-  repetition: 1
-  lineDistance: 1
+  thickness: 0
+  repetition: 0
+  lineDistance: 0

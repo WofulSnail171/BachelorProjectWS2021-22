@@ -11,16 +11,33 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 rect939_position, float2 rect939_box, float rect939_scale, float4 rect939_roundness, float rect939_rotation){ 
+    float sdf (float2 uv, float2 triangle600_position, float2 triangle600_a, float2 triangle600_b, float2 triangle600_c, float triangle600_scale, float triangle600_rotation, float2 circle662_position, float circle662_radius){ 
          uv -= float2(0.5, 0.5);
         
-        float2 t_rect939 = transform(rect939_position, rect939_rotation, rect939_scale, uv);
-        rect939_roundness.xy = (t_rect939.x > 0.0) ? rect939_roundness.xy : rect939_roundness.zw;
-        rect939_roundness.x  = (t_rect939.y  > 0.0) ? rect939_roundness.x  : rect939_roundness.y;
-        float2 q_rect939 = abs(t_rect939) - rect939_box + rect939_roundness.x;
-        float rect939_out = (min(max(q_rect939.x,q_rect939.y),0.0) + length(max(q_rect939,0.0)) - rect939_roundness.x) * rect939_scale;
+    float2 e0_triangle600 = triangle600_b - triangle600_a;
+    float2 e1_triangle600 = triangle600_c - triangle600_b;
+    float2 e2_triangle600 = triangle600_a - triangle600_c;
+    
+    float2 t_triangle600 = transform(triangle600_position, triangle600_rotation, triangle600_scale, uv);
+    
+    float2 v0_triangle600 = t_triangle600 - triangle600_a;
+    float2 v1_triangle600 = t_triangle600 - triangle600_b;
+    float2 v2_triangle600 = t_triangle600 - triangle600_c;
+    
+    float2 pq0_triangle600 = v0_triangle600 - e0_triangle600 * clamp( dot(v0_triangle600,e0_triangle600)/dot(e0_triangle600,e0_triangle600), 0.0, 1.0 );
+    float2 pq1_triangle600 = v1_triangle600 - e1_triangle600 * clamp( dot(v1_triangle600,e1_triangle600)/dot(e1_triangle600,e1_triangle600), 0.0, 1.0 );
+    float2 pq2_triangle600 = v2_triangle600 - e2_triangle600 * clamp( dot(v2_triangle600,e2_triangle600)/dot(e2_triangle600,e2_triangle600), 0.0, 1.0 );
+    
+    float s_triangle600 = sign( e0_triangle600.x*e2_triangle600.y - e0_triangle600.y*e2_triangle600.x ) ;
+    float2 d_triangle600 = min(min(float2(dot(pq0_triangle600,pq0_triangle600), s_triangle600*(v0_triangle600.x*e0_triangle600.y-v0_triangle600.y*e0_triangle600.x)),
+                       float2(dot(pq1_triangle600,pq1_triangle600), s_triangle600*(v1_triangle600.x*e1_triangle600.y-v1_triangle600.y*e1_triangle600.x))),
+                       float2(dot(pq2_triangle600,pq2_triangle600), s_triangle600*(v2_triangle600.x*e2_triangle600.y-v2_triangle600.y*e2_triangle600.x)));
+    float triangle600_out= -sqrt(d_triangle600.x) * sign(d_triangle600.y) * triangle600_scale;
+        float circle662_out = length(circle662_position- uv)- circle662_radius;
 
-        return rect939_out;
+        float subtract431_out = max(-circle662_out,triangle600_out);
+
+        return subtract431_out;
     }
         
 

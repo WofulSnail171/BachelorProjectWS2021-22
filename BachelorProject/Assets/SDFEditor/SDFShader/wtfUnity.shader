@@ -15,12 +15,19 @@ Shader "Unlit/wtfUnity"
         Pass
         {
             ZWrite Off
-            Blend One OneMinusSrcAlpha
+            Blend SrcAlpha OneMinusSrcAlpha
             Cull Back
             
             HLSLPROGRAM
+            
+            #pragma target 2.0
+            
             #pragma vertex vert
             #pragma fragment frag
+            
+            #pragma shader_feature_local_fragment _ _ALPHAPREMULTIPLY_ON _ALPHAMODULATE_ON
+            #pragma shader_feature_local_fragment _ALPHATEST_ON
+            #pragma shader_feature_local_fragment _ _COLOROVERLAY_ON _COLORCOLOR_ON _COLORADDSUBDIFF_ON
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
@@ -51,7 +58,7 @@ Shader "Unlit/wtfUnity"
             {
                 // sample the texture
                 half4 col = tex2D(_MainTex, i.uv);
-                return float4(1,1,1,0);
+                return float4(i.uv, i.uv.x, 0);
             }
             ENDHLSL
         }

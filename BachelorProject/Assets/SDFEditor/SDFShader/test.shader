@@ -4,11 +4,15 @@ Shader "SDF/test"
         Properties
         {
             
-                [HideInInspector] rect939_position ("rect939_position", Vector) = (0,0,0,0)
-                [HideInInspector] rect939_box ("rect939_box", Vector) = (0,0,0,0)
-                [HideInInspector] rect939_scale ("rect939_scale", Float) = 1
-                [HideInInspector] rect939_roundness ("rect939_roundness", Vector) = (0,0,0,0)
-                [HideInInspector] rect939_rotation ("rect939_rotation", Float) = 0
+            [HideInInspector] circle662_position ("circle662_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle662_radius ("circle662_radius", Float) = 0.2
+                
+            [HideInInspector] triangle600_position ("triangle600_position", Vector) = (0,0,0,0)
+            [HideInInspector] triangle600_a ("triangle600_a", Vector) = (0,0,0,0)
+            [HideInInspector] triangle600_b ("triangle600_b", Vector) = (0,0,0,0)
+            [HideInInspector] triangle600_c ("triangle600_c", Vector) = (0,0,0,0)
+            [HideInInspector] triangle600_scale ("triangle600_scale", Float) = 1
+            [HideInInspector] triangle600_rotation ("triangle600_rotation", Float) = 0
                 
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
@@ -42,8 +46,7 @@ Shader "SDF/test"
 
             SubShader
             {
-            Tags { "RenderType"="Transparent" 
-                   "Queue"="Transparent" 
+            Tags { "RenderType"="Opaque" 
                    "RenderPipeline"="UniversalRenderPipeline"
                  }
             LOD 100
@@ -51,7 +54,7 @@ Shader "SDF/test"
             Pass
             {
             
-            Blend [_SrcBlend] [_DestBlend]
+            Blend [_SrcBlend] [_DstBlend]
             Cull [_CullMode]
             ZWrite [_ZWrite]
             ZTest [_ZTest]            
@@ -85,11 +88,14 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 rect939_position;
-        float2 rect939_box;
-        float rect939_scale;
-        float4 rect939_roundness;
-        float rect939_rotation;
+        float2 circle662_position;
+        float circle662_radius;
+        float2 triangle600_position;
+        float2 triangle600_a;
+        float2 triangle600_b;
+        float2 triangle600_c;
+        float triangle600_scale;
+        float triangle600_rotation;
         
      float4 insideColor, outsideColor, outlineColor;
      sampler2D insideTex, outsideTex, outlineTex;
@@ -99,15 +105,15 @@ Shader "SDF/test"
 
         float4 frag (v2f i) : SV_Target
         {
-            float sdfOut = sdf(i.uv, rect939_position, rect939_box, rect939_scale, rect939_roundness, rect939_rotation);
+            float sdfOut = sdf(i.uv, triangle600_position, triangle600_a, triangle600_b, triangle600_c, triangle600_scale, triangle600_rotation, circle662_position, circle662_radius);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
                                   outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
                                   outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
                                   outlineThickness, outlineRepetition, outlineLineDistance);
-            
-            return float4(1,1,1,0);
+
+            return col;
         }
 
 
