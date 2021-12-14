@@ -80,6 +80,7 @@ public class TradeSwipeActions : MonoBehaviour
             UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", false);
             UIEnablerManager.Instance.EnableElement("General", false);
             UIEnablerManager.Instance.EnableElement("HeroHub", false);
+            UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
 
             hub.UpdateHubState(HubState.TradeHub);
             hub.UpdateDungeonButton(ButtonState.Unfocused);
