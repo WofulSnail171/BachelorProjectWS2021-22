@@ -90,8 +90,8 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Texture insideTex;
     private Texture _insideTex;
     
-    [SerializeField] private Color insideColor;
-    private Color _insideColor;
+    [SerializeField] private Color insideColor = Color.white;
+    private Color _insideColor = Color.white;
 
     [SerializeField] private Vector2 insideTexPosition;
     private Vector2 _insideTexPosition;
@@ -106,8 +106,8 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Texture outsideTex;
     private Texture _outsideTex;
     
-    [SerializeField] private Color outsideColor;
-    private Color _outsideColor;
+    [SerializeField] private Color outsideColor = new Color(1,1,1,0);
+    private Color _outsideColor = new Color(1,1,1,0);
     
     [SerializeField] private Vector2 outsideTexPosition;
     private Vector2 _outsideTexPosition;
@@ -122,8 +122,8 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Texture outlineTex;
     private Texture _outlineTex;
     
-    [SerializeField] private Color outlineColor;
-    private Color _outlineColor;
+    [SerializeField] private Color outlineColor = Color.black;
+    private Color _outlineColor = Color.black;
     
     [SerializeField] private Vector2 outlineTexPosition;
     private Vector2 _outlineTexPosition;
@@ -372,6 +372,10 @@ public class SDFOutput : SDFNode{
     private void ApplyMaterial() {
 
         this.UpdateShader();
+        this.UpdateColor(ColorChange.Inside);
+        this.UpdateColor(ColorChange.Outside);
+        this.UpdateColor(ColorChange.Outline);
+        this.ChangeShaderValues(this);
 
         if (this.sdfMaterial == null){
             this.sdfShader = Shader.Find("SDF/" + this.shaderName);
