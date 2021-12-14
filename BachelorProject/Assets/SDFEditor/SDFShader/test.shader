@@ -4,15 +4,18 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] circle662_position ("circle662_position", Vector) = (0,0,0,0)
-            [HideInInspector] circle662_radius ("circle662_radius", Float) = 0.2
+            [HideInInspector] line92_position ("line92_position", Vector) = (0,0,0,0)
+            [HideInInspector] line92_a ("line92_a", Vector) = (0,0,0,0)
+            [HideInInspector] line92_b ("line92_b", Vector) = (0,0,0,0)
+            [HideInInspector] line92_scale ("line92_scale", Float) = 1
+            [HideInInspector] line92_roundness ("line92_roundness", Float) = 1
+            [HideInInspector] line92_rotation ("line92_rotation", Float) = 0
                 
-            [HideInInspector] triangle600_position ("triangle600_position", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_a ("triangle600_a", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_b ("triangle600_b", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_c ("triangle600_c", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_scale ("triangle600_scale", Float) = 1
-            [HideInInspector] triangle600_rotation ("triangle600_rotation", Float) = 0
+            [HideInInspector] rect962_position ("rect962_position", Vector) = (0,0,0,0)
+            [HideInInspector] rect962_box ("rect962_box", Vector) = (0,0,0,0)
+            [HideInInspector] rect962_scale ("rect962_scale", Float) = 1
+            [HideInInspector] rect962_roundness ("rect962_roundness", Vector) = (0,0,0,0)
+            [HideInInspector] rect962_rotation ("rect962_rotation", Float) = 0
                 
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
@@ -88,24 +91,32 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 circle662_position;
-        float circle662_radius;
-        float2 triangle600_position;
-        float2 triangle600_a;
-        float2 triangle600_b;
-        float2 triangle600_c;
-        float triangle600_scale;
-        float triangle600_rotation;
+        float2 positionSDF;
+        float rotationSDF, scaleSDF;
+        float2 line92_position;
+        float2 line92_a;
+        float2 line92_b;
+        float line92_roundness;
+        float line92_scale;
+        float line92_rotation;
+        float2 rect962_position;
+        float2 rect962_box;
+        float rect962_scale;
+        float4 rect962_roundness;
+        float rect962_rotation;
         
-     float4 insideColor, outsideColor, outlineColor;
-     sampler2D insideTex, outsideTex, outlineTex;
-     float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-     float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
+        float4 insideColor, outsideColor, outlineColor;
+        sampler2D insideTex, outsideTex, outlineTex;
+        float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
-        {
-            float sdfOut = sdf(i.uv, triangle600_position, triangle600_a, triangle600_b, triangle600_c, triangle600_scale, triangle600_rotation, circle662_position, circle662_radius);
+        {    
+            i.uv -= float2(0.5, 0.5);
+
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF,
+                               rect962_position, rect962_box, rect962_scale, rect962_roundness, rect962_rotation, line92_position, line92_a, line92_b, line92_roundness, line92_scale, line92_rotation);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

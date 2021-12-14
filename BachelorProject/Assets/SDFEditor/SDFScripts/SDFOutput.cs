@@ -14,6 +14,15 @@ public class SDFOutput : SDFNode{
 
     [SerializeField]private SDFNode input;
     private SDFNode _input;
+
+    [SerializeField] private Vector2 positionSDF;
+    private Vector2 _positionSDF;
+    
+    [SerializeField] private float scaleSDF = 1;
+    private float _scaleSDF = 1;
+    
+    [SerializeField] private float rotationSDF;
+    private float _rotationSDF;
     
     public SDFNode Input {
         get => this._input;
@@ -21,6 +30,33 @@ public class SDFOutput : SDFNode{
             if (this._input == value) return;
             this._input = value;
             this.OnInputChange?.Invoke();
+        }
+    }
+    
+    public Vector2 PositionSDF {
+        get => this._positionSDF;
+        set {
+            if (this._positionSDF == value) return;
+            this._positionSDF = value;
+            this.OnValueChange?.Invoke(this);
+        }
+    }
+    
+    public float ScaleSDF {
+        get => this._scaleSDF;
+        set {
+            if (this._scaleSDF == value) return;
+            this._scaleSDF = value;
+            this.OnValueChange?.Invoke(this);
+        }
+    }
+    
+    public float RotationSDF {
+        get => this._rotationSDF;
+        set {
+            if (this._rotationSDF == value) return;
+            this._rotationSDF = value;
+            this.OnValueChange?.Invoke(this);
         }
     }
 
@@ -60,7 +96,7 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Vector2 insideTexPosition;
     private Vector2 _insideTexPosition;
     
-    [SerializeField] private float insideTexScale;
+    [SerializeField] private float insideTexScale = 1;
     private float _insideTexScale = 1;
     
     [SerializeField] private float insideTexRotation;
@@ -76,7 +112,7 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Vector2 outsideTexPosition;
     private Vector2 _outsideTexPosition;
     
-    [SerializeField] private float outsideTexScale;
+    [SerializeField] private float outsideTexScale = 1;
     private float _outsideTexScale = 1;
     
     [SerializeField] private float outsideTexRotation;
@@ -92,19 +128,19 @@ public class SDFOutput : SDFNode{
     [SerializeField] private Vector2 outlineTexPosition;
     private Vector2 _outlineTexPosition;
     
-    [SerializeField] private float outlineTexScale;
+    [SerializeField] private float outlineTexScale = 1;
     private float _outlineTexScale = 1;
     
     [SerializeField] private float outlineTexRotation;
     private float _outlineTexRotation;
 
-    [SerializeField] private float thickness;
+    [SerializeField] private float thickness = 0.2f;
     private float _thickness = 0.2f;
 
-    [SerializeField] private int repetition;
+    [SerializeField] private int repetition = 1;
     private int _repetition = 1;
 
-    [SerializeField] private float lineDistance;
+    [SerializeField] private float lineDistance = 1f;
     private float _lineDistance = 1f;
     
     
@@ -278,6 +314,9 @@ public class SDFOutput : SDFNode{
 
     private void OnValidate() {
         this.Input = this.input;
+        this.PositionSDF = this.positionSDF;
+        this.ScaleSDF = this.scaleSDF;
+        this.RotationSDF = this.rotationSDF;
 
         this.InsideTex = this.insideTex;
         this.InsideColor = this.insideColor;
@@ -318,7 +357,6 @@ public class SDFOutput : SDFNode{
         }
 
         if (this.applyMaterial) {
-            
             this.ApplyMaterial();
             this.applyMaterial = false;
         }
@@ -326,7 +364,9 @@ public class SDFOutput : SDFNode{
 
     private void Awake() {
         this.OnInputChange += this.UpdateShader;
+        this.OnValueChange += this.ChangeShaderValues;
         this.OnColorChange += this.UpdateColor;
+        this.nodeType = NodeType.Output;
     }
 
     private void ApplyMaterial() {
@@ -489,6 +529,16 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
+                case NodeType.Output: {
+                    var n = (SDFLerp) node;
+                    properties += @"
+            [HideInInspector] positionSDF (""positionSDF"", Vector) = (0,0,0,0)
+            [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
+            [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
+                }
+                ";
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -598,11 +648,13 @@ public class SDFOutput : SDFNode{
 
         return @"
      CBUFFER_START(UnityPerMaterial)
+        float2 positionSDF;
+        float rotationSDF, scaleSDF;
      " + shaderVariables + @"
-     float4 insideColor, outsideColor, outlineColor;
-     sampler2D insideTex, outsideTex, outlineTex;
-     float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-     float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
+        float4 insideColor, outsideColor, outlineColor;
+        sampler2D insideTex, outsideTex, outlineTex;
+        float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
      CBUFFER_END";
     }
 
@@ -627,8 +679,11 @@ public class SDFOutput : SDFNode{
 
         return @"
         float4 frag (v2f i) : SV_Target
-        {
-            float sdfOut = sdf(i.uv, " + shaderVariables + @");
+        {    
+            i.uv -= float2(0.5, 0.5);
+
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF,
+                               " + shaderVariables + @");
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
@@ -685,11 +740,14 @@ public class SDFOutput : SDFNode{
         return t;
     }
 
-    float sdf (float2 uv, " + shaderVariables + @"){ 
-         uv -= float2(0.5, 0.5);
+    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF,
+               " + shaderVariables + @"){ 
+        
+        uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
         " + sdfFunction + @"
 
-        return " + node.o + @";
+
+        return " + node.o + @"*scaleSDF;
     }
         ";
     }
@@ -703,9 +761,9 @@ public class SDFOutput : SDFNode{
                      float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
                      float outlineThickness, float outlineRepetition, float outlineLineDistance){
 
-        float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv)) * insideColor;
-        float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv)) * outsideColor;
-        float4 olColor = tex2D(outlineTex, transform(outlineTexPosition, outlineTexRotation, outlineTexScale, uv)) * outlineColor;
+        float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv) + float2(0.5, 0.5)) * insideColor;
+        float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv) + float2(0.5, 0.5)) * outsideColor;
+        float4 olColor = tex2D(outlineTex, transform(outlineTexPosition, outlineTexRotation, outlineTexScale, uv) + float2(0.5, 0.5)) * outlineColor;
 
         float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
         float4 col = lerp(iColor ,oColor, sdf);
@@ -822,12 +880,20 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetFloat(n.sdfName + "_t" , n.T);
                 break;
             }
+            case NodeType.Output: {
+                var n = (SDFOutput) node;
+                this.sdfMaterial.SetVector("positionSDF", this.PositionSDF);
+                this.sdfMaterial.SetFloat("rotationSDF", this.RotationSDF);
+                this.sdfMaterial.SetFloat("scaleSDF", this.ScaleSDF);
+                break;
+            }
             default: {
                 break;
             }
         }
         EditorUtility.SetDirty(this.sdfMaterial);
     }
+    
     private void UpdateColor( ColorChange change){
         if (this.sdfMaterial == null) {
             Debug.LogWarning("material has not been applied or assigned");

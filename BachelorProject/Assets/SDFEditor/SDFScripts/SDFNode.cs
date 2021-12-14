@@ -28,7 +28,8 @@ public abstract class SDFNode : ScriptableObject
         SBlend,
         Lerp,
         Subtract,
-        Intersect
+        Intersect,
+        Output
     }
 
     [HideInInspector]public NodeType nodeType;

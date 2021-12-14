@@ -16,26 +16,29 @@ MonoBehaviour:
   sdfName: newSDF
   variables: []
   types: []
-  nodeType: 0
+  nodeType: 12
   shaderName: 
   input: {fileID: 0}
+  positionSDF: {x: 0, y: 0}
+  scaleSDF: 1
+  rotationSDF: 0
   sdfMaterial: {fileID: 0}
   applyMaterial: 0
   insideTex: {fileID: 0}
   insideColor: {r: 0, g: 0, b: 0, a: 0}
   insideTexPosition: {x: 0, y: 0}
-  insideTexScale: 0
+  insideTexScale: 1
   insideTexRotation: 0
   outsideTex: {fileID: 0}
   outsideColor: {r: 0, g: 0, b: 0, a: 0}
   outsideTexPosition: {x: 0, y: 0}
-  outsideTexScale: 0
+  outsideTexScale: 1
   outsideTexRotation: 0
   outlineTex: {fileID: 0}
   outlineColor: {r: 0, g: 0, b: 0, a: 0}
   outlineTexPosition: {x: 0, y: 0}
-  outlineTexScale: 0
+  outlineTexScale: 1
   outlineTexRotation: 0
-  thickness: 0
-  repetition: 0
-  lineDistance: 0
+  thickness: 0.2
+  repetition: 1
+  lineDistance: 1
