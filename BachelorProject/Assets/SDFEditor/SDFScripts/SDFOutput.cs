@@ -519,8 +519,22 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case NodeType.SBlend: {
-                    var n = (SDFSBLend) node;
+                case NodeType.SmoothCombine: {
+                    var n = (SDFSmoothCombine) node;
+                    properties += @"
+            [HideInInspector] " + n.sdfName + @"_k (""" + n.sdfName + @"_k"", Float) = 0
+                ";
+                    break;
+                }
+                case NodeType.SmoothIntersect: {
+                    var n = (SDFSmoothIntersect) node;
+                    properties += @"
+            [HideInInspector] " + n.sdfName + @"_k (""" + n.sdfName + @"_k"", Float) = 0
+                ";
+                    break;
+                }
+                case NodeType.SmoothSubtract: {
+                    var n = (SDFSmoothSubtract) node;
                     properties += @"
             [HideInInspector] " + n.sdfName + @"_k (""" + n.sdfName + @"_k"", Float) = 0
                 ";
@@ -874,8 +888,18 @@ public class SDFOutput : SDFNode{
                 
                 break;
             }
-            case NodeType.SBlend: {
-                var n = (SDFSBLend) node;
+            case NodeType.SmoothCombine: {
+                var n = (SDFSmoothCombine) node;
+                this.sdfMaterial.SetFloat(n.sdfName + "_k" , n.K);
+                break;
+            }
+            case NodeType.SmoothIntersect: {
+                var n = (SDFSmoothIntersect) node;
+                this.sdfMaterial.SetFloat(n.sdfName + "_k" , n.K);
+                break;
+            }
+            case NodeType.SmoothSubtract: {
+                var n = (SDFSmoothSubtract) node;
                 this.sdfMaterial.SetFloat(n.sdfName + "_k" , n.K);
                 break;
             }

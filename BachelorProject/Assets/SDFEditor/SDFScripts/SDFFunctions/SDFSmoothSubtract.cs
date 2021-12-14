@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[CreateAssetMenu(menuName = "SDF Function/Smooth Blend")]
-public class SDFSBLend : SDFFunction
+[CreateAssetMenu(menuName = "SDF Function/Smooth Subtract")]
+public class SDFSmoothSubtract : SDFFunction
 {
     [SerializeField] private SDFNode inputA;
     private SDFNode _inputA;
@@ -62,11 +60,11 @@ public class SDFSBLend : SDFFunction
     }
 
     private void Awake() {
-        this.nodeType = NodeType.SBlend;
+        this.nodeType = NodeType.SmoothSubtract;
         
         this.index = (uint)Random.Range(0, 1000);
        
-        this.sdfName = "sblend" + this.index;
+        this.sdfName = "sSubtract" + this.index;
         this.o = this.sdfName + "_out";
         
         this.variables.Clear();
@@ -76,11 +74,11 @@ public class SDFSBLend : SDFFunction
         this.types.Add("float");
     }
     public override string GenerateHlslFunction() {
-        
+
         string hlslString = @"
 
-    float h_" + this.sdfName + " = max( " + this.variables[0] +" - abs(" + this.inputA.o + " - " + this.inputB.o + @"), 0.0 )/" + this.variables[0] + @";
-    float " + this.o + " =  min( " + this.inputA.o + ", " + this.inputB.o + ") - h_" + this.sdfName + "*h_" + this.sdfName + "*" + this.variables[0] +"*(1.0/4.0);";
+    float h_" + this.sdfName + " = clamp( 0.5 - 0.5*(" + this.inputA.o + "+" + this.inputB.o + ")/" + this.variables[0] + @", 0.0, 1.0 );
+    float " + this.o + " = lerp( " + this.inputA.o + ", -" + this.inputB.o + ", h_" + this.sdfName + " ) + " + this.variables[0] + "*h_" + this.sdfName + "*(1.0-h_" + this.sdfName + @");";
         
         return hlslString;
     }
