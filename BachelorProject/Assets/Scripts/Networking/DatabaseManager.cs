@@ -382,6 +382,19 @@ public class PlayerData
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
 
+    public void AffectRewardTierBuff(int _amount)
+    {
+        rewardTierBuff += _amount;
+        if(rewardTierBuff >= 9)
+        {
+            rewardTierBuff = 9;
+        }
+        else if(rewardTierBuff < 0)
+        {
+            rewardTierBuff = 0;
+        }
+    }
+
     public PlayerHero GetHeroByUniqueId(int _uniqueId)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -549,8 +562,24 @@ public class EventData
     public string[] nodeTypes;
     public string[] pathTypes;
 
+    public EventSteps eventSteps;
+
     //FlavourTexts
     public TextFlavours textFlavours;
+}
+
+[System.Serializable]
+public class EventSteps
+{
+    public int questStart;
+    public int questEnd;
+    public int pathHandling;
+    public int pathChoosing;
+    public int eventTurn;
+    public int eventStart;
+    public int eventEnd;
+
+    public int fallBack;
 }
 
 [System.Serializable]

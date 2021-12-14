@@ -27,7 +27,7 @@ public class CalculatedDungeonRun
         currentActivity = DungeonActivity.startQuest;
         startActivitySteps = 0;
         remainingActivitySteps = 0;
-        int baseReward = 0;
+        int baseReward = 0;        
         if(dungeonRun.dungeon.type == DungeonType.basic)
         {
             baseReward = 3 + dungeonRun.initialRewardTier;
@@ -98,12 +98,28 @@ public class CalculatedDungeonRun
         */
     }
 
+    int numRewardHealthLowered = 0;
     public int AffectRewardHealth(int _amount)
     {
-        rewardHealthBar += _amount;
-        if (rewardHealthBar < 0)
-            rewardHealthBar = 0;
-        if(DungeonManager.events)
+        if(_amount >= 0)
+        {
+            numRewardHealthLowered = 0;
+            rewardHealthBar += _amount;
+        }
+        else
+        {            
+            if(numRewardHealthLowered < 7)
+            {
+                rewardHealthBar += _amount;
+                numRewardHealthLowered++;
+            }
+        }
+        
+        if (rewardHealthBar < 4)
+            rewardHealthBar = 4;
+        else if (rewardHealthBar >= 100)
+            rewardHealthBar = 100;
+        if (DungeonManager.events)
             DeleventSystem.RewardHealthChanged?.Invoke();
         return rewardHealthBar;
     }

@@ -255,6 +255,7 @@ public class TradeManager : MonoBehaviour
             {
                 SwapHeros(trade);
                 toDelete.Add(trade);
+                DatabaseManager._instance.activePlayerData.AffectRewardTierBuff(1);
             }
         }
         DeleteOffers(toDelete.ToArray());

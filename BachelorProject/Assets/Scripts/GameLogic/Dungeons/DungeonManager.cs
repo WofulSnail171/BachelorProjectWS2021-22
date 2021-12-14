@@ -185,6 +185,12 @@ public class DungeonManager : MonoBehaviour
                 randomNums = new List<RandomNum>()
             };
             DatabaseManager._instance.activePlayerData.rewardTierBuff = 0;
+            if (chosenDungeon.type == DungeonType.basic)
+                result.initialRewardTier = 3 + DatabaseManager._instance.activePlayerData.rewardTierBuff;
+            else
+                result.initialRewardTier = 6 + DatabaseManager._instance.activePlayerData.rewardTierBuff;
+            if (result.initialRewardTier > 10)
+                result.initialRewardTier = 10;
             result.party = chosenParty;
             result.valid = true;
             DatabaseManager._instance.dungeonData.currentRun = result;
@@ -320,18 +326,20 @@ public class DungeonManager : MonoBehaviour
 
 
         //currently flat 20 steps per interaction
-        currentCalcRun.SetActivitySteps(20);
+        currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.fallBack);
         currentCalcRun.currentActivity = _newActivity;
         //enter behvior/steup if necessary
         switch (_newActivity)
         {
             case DungeonActivity.eventStart:
                 currentCalcRun.UpdateLog(currentCalcRun.currentNode.nodeEvent.startText);
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventStart);
                 if (events)
                     DeleventSystem.DungeonEventStart?.Invoke();
                 EnterNewActivityState(DungeonActivity.eventHandling);
                 break;
             case DungeonActivity.eventEnd:
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventEnd);
                 switch (currentCalcRun.currentNode.nodeEvent.statType)
                 {
                     case "physical":
@@ -351,13 +359,15 @@ public class DungeonManager : MonoBehaviour
                     DeleventSystem.DungeonEventEnd?.Invoke();
                 break;
             case DungeonActivity.eventHandling:
-
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventTurn);
                 break;
             case DungeonActivity.pathHandling:
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.pathHandling);
                 currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathHandlingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
                 //playerParty.position = currentCalcRun.currentNode.PathPosition(currentCalcRun.currentNode.chosenPathIndex);
                 break;
             case DungeonActivity.pathChoosing:
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.pathChoosing);
                 currentCalcRun.currentNode.chosenPathIndex = currentCalcRun.RandomNum(0, currentCalcRun.currentNode.nextPaths.Count);
                 currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathChoosingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
                 //string text = "#Hero tut stuff";
@@ -365,12 +375,14 @@ public class DungeonManager : MonoBehaviour
                 //currentCalcRun.UpdateLog(text);
                 break;
             case DungeonActivity.startQuest:
-                if(DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.questStart);
+                if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].startText);
                 else
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].startText);
                 break;
             case DungeonActivity.endQuest:
+                currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.questEnd);
                 if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].endText);
                 else
@@ -403,6 +415,7 @@ public class DungeonManager : MonoBehaviour
         }
         else
         {
+            currentCalcRun.AffectRewardHealth(6);
             EnterNewActivityState(DungeonActivity.pathChoosing);
         }
     }
@@ -421,19 +434,19 @@ public class DungeonManager : MonoBehaviour
                 if (currentCalcRun.nextHero >= DatabaseManager._instance.dungeonData.currentRun.party.Count)
                 {
                     //fineished a round
-                    currentCalcRun.remainingActivitySteps = 20;
+                    currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventStart);
                     currentCalcRun.nextHero = 0;
                     //display end round text for event
                     currentCalcRun.currentNode.currentGrowth--;
                     if (currentCalcRun.currentNode.currentGrowth < -3)
                         currentCalcRun.currentNode.currentGrowth = -3;
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomEnemyTurnText(DungeonManager._instance.currentCalcRun.currentNode.nodeType, DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType));
-                    currentCalcRun.AffectRewardHealth(-1);
+                    currentCalcRun.AffectRewardHealth(-2);
                 }
                 else
                 {
                     //intriguing event logic
-                    currentCalcRun.remainingActivitySteps = 20;
+                    currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventStart);
                     //trigger a zwischentext?
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomHeroTurnText(DungeonManager._instance.currentCalcRun.currentNode.nodeType, DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType));
                     switch (currentCalcRun.currentNode.nodeEvent.statType)
@@ -478,7 +491,6 @@ public class DungeonManager : MonoBehaviour
         }
         else
         {
-            currentCalcRun.remainingActivitySteps = 20;
             currentCalcRun.currentNode = currentCalcRun.currentNode.nextNodes[currentCalcRun.currentNode.chosenPathIndex]; 
             //playerParty.position = currentCalcRun.currentNode.transform.position;
             if(currentCalcRun.currentNode.nextNodes == null || currentCalcRun.currentNode.nextNodes.Length <= 0)
@@ -502,7 +514,6 @@ public class DungeonManager : MonoBehaviour
         else
         {
             EnterNewActivityState(DungeonActivity.pathHandling);
-            currentCalcRun.AffectRewardHealth(-1);
         }
     }
 
