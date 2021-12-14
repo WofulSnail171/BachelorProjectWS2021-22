@@ -30,6 +30,7 @@ public class TradeCancelActions : MonoBehaviour
         DeleventSystem.TradeCancel?.Invoke();
 
         UIEnablerManager.Instance.DisableElement("TradeCancel", true);
+        UIEnablerManager.Instance.DisableElement("TradeSwipe", false);
         UIEnablerManager.Instance.SwitchElements("TradeObserve", "HeroHub", false);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
     }
