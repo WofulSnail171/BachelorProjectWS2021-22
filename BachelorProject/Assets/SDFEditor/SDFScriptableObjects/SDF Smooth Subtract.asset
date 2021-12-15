@@ -19,6 +19,6 @@ MonoBehaviour:
   types:
   - float
   nodeType: 9
-  inputA: {fileID: 0}
-  inputB: {fileID: 0}
-  k: 0
+  inputA: {fileID: 11400000, guid: 1ca8f0c0edb6b5c43bb2935d07e3d378, type: 2}
+  inputB: {fileID: 11400000, guid: 80d64ee3862e6d949b1ee259c9fee8c9, type: 2}
+  k: 0.03

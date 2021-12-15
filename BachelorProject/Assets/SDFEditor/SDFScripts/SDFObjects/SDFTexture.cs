@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 [CreateAssetMenu(menuName = "SDF/Texture")]
 public partial class SDFTexture : SDFObject {

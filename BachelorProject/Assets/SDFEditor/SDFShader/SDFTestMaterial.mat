@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
@@ -53,7 +53,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - insideTex:
-        m_Texture: {fileID: 2800000, guid: 9c3bf8d5c8730d3449439bfab5cd3ef9, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - outlineTex:
@@ -166,7 +166,7 @@ Material:
     - circle479_radius: 0.2
     - circle535_radius: 0.17
     - circle646_radius: 0.25
-    - circle662_radius: 0.18
+    - circle662_radius: 0.32
     - circle673_radius: 0.27
     - circle686_radius: 0.13
     - circle780_radius: 0
@@ -235,10 +235,10 @@ Material:
     - outlineLineDistance: 1
     - outlineRepetition: 1
     - outlineTexRotation: 0
-    - outlineTexScale: 0
-    - outlineThickness: 1.8
+    - outlineTexScale: 1
+    - outlineThickness: 0.2
     - outsideTexRotation: 0
-    - outsideTexScale: 0
+    - outsideTexScale: 1
     - rect121_rotation: 39.44
     - rect121_scale: 0.59
     - rect138_rotation: 48.57
@@ -267,6 +267,9 @@ Material:
     - rect962_scale: 0.3
     - rect983_scale: 2
     - repetition: 17.09
+    - sCombine93_k: 0.18
+    - sIntersect842_k: 0.19
+    - sSubtract899_k: 0.03
     - sblend343_k: 0.28
     - sblend571_k: 0.29
     - sblend896_k: 0.28
@@ -285,8 +288,8 @@ Material:
     - triangle274_scale: 2.35
     - triangle490_rotation: 2.79
     - triangle490_scale: 2.35
-    - triangle600_rotation: 2.79
-    - triangle600_scale: 2.35
+    - triangle600_rotation: 0
+    - triangle600_scale: 1
     - triangle826_scale: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0.46666667}
@@ -328,7 +331,7 @@ Material:
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
     - circle535_position: {r: 0, g: 0, b: 0, a: 0}
     - circle646_position: {r: 0.1, g: 0.01, b: 0, a: 0}
-    - circle662_position: {r: 0.13, g: 0, b: 0, a: 0}
+    - circle662_position: {r: 0, g: 0, b: 0, a: 0}
     - circle673_position: {r: 0, g: 0, b: 0, a: 0}
     - circle686_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle780_position: {r: 0, g: 0, b: 0, a: 0}
@@ -383,7 +386,7 @@ Material:
     - line982_position: {r: 0, g: 0, b: 0, a: 0}
     - outlineColor: {r: 0, g: 0, b: 0, a: 1}
     - outlineTexPosition: {r: 0, g: 0, b: 0, a: 0}
-    - outsideColor: {r: 0, g: 0, b: 0, a: 0}
+    - outsideColor: {r: 1, g: 1, b: 1, a: 0}
     - outsideTexPosition: {r: 0, g: 0, b: 0, a: 0}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect121_position: {r: 0.02, g: 0, b: 0, a: 0}
@@ -469,10 +472,10 @@ Material:
     - triangle490_b: {r: -0.11, g: 0.03, b: 0, a: 0}
     - triangle490_c: {r: 0.12, g: -0.13, b: 0, a: 0}
     - triangle490_position: {r: 0.25, g: 0, b: 0, a: 0}
-    - triangle600_a: {r: 0.35, g: 0.91, b: 0, a: 0}
-    - triangle600_b: {r: -0.19, g: 0.03, b: 0, a: 0}
-    - triangle600_c: {r: 0.27, g: -0.37, b: 0, a: 0}
-    - triangle600_position: {r: 0.25, g: 0, b: 0, a: 0}
+    - triangle600_a: {r: 0.2, g: 0, b: 0, a: 0}
+    - triangle600_b: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - triangle600_c: {r: 0.5, g: -0.5, b: 0, a: 0}
+    - triangle600_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle826_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle826_b: {r: -0.4, g: 0.4, b: 0, a: 0}
     - triangle826_c: {r: 0.4, g: 0.4, b: 0, a: 0}

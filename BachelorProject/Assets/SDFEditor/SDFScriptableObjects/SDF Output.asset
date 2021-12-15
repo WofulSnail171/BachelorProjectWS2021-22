@@ -17,12 +17,12 @@ MonoBehaviour:
   variables: []
   types: []
   nodeType: 14
-  shaderName: 
-  input: {fileID: 0}
+  shaderName: test
+  input: {fileID: 11400000, guid: f8e76762d75c04841ac0159ced8a8fa5, type: 2}
   positionSDF: {x: 0, y: 0}
   scaleSDF: 1
   rotationSDF: 0
-  sdfMaterial: {fileID: 0}
+  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
   insideTex: {fileID: 0}
   insideColor: {r: 1, g: 1, b: 1, a: 1}
