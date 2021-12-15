@@ -126,7 +126,7 @@ public class CameraMover : MonoBehaviour
 
     public static void SetTargetPos(Vector3 _targetPos)
     {
-        if (_instance == null)
+        if (_instance == null || _targetPos == null)
             return;
         _targetPos += _instance.offset;
         //lerpTime abhängig von distance:

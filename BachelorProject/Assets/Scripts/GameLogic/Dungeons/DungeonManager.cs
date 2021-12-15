@@ -115,7 +115,7 @@ public class DungeonManager : MonoBehaviour
         if (DatabaseManager._instance.dungeonData.dailyDungeons != null && DatabaseManager._instance.dungeonData.dailyDungeons.Length > 0)
         {
             //check if current daily dungeon data is older than 24 hours
-            if (false)//DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).ToUniversalTime().Date == DateTime.Now.ToUniversalTime().Date)
+            if (DateTime.Parse(DatabaseManager._instance.dungeonData.dailyDungeons[0].date).ToUniversalTime().Date == DateTime.Now.ToUniversalTime().Date)
             {
                 Debug.Log("Current daily dungeons are still valid");
                 //if (DatabaseManager._instance.dungeonData.dailyDungeons[0].dungeonLayout == null)
