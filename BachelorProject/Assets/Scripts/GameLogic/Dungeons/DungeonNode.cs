@@ -60,7 +60,7 @@ public class DungeonNode : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 //on clicked
-                CameraMover._instance.SetTargetPos(transform.position);
+                //CameraMover._instance?.SetTargetPos(transform.position);
             }
         }
         else

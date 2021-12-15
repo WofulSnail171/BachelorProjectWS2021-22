@@ -249,6 +249,7 @@ public class DungeonManager : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.ResetNodes();
         UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
+        EnterNewActivityState(DungeonActivity.startQuest, false);
         while (currentCalcRun.currentNode != DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.endNode || currentCalcRun.remainingActivitySteps > 0)
         {
             StepCalcRun();
@@ -267,6 +268,7 @@ public class DungeonManager : MonoBehaviour
             return;
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         currentCalcRun = new CalculatedDungeonRun(DatabaseManager._instance.dungeonData.currentRun);
+        EnterNewActivityState(DungeonActivity.startQuest, false);
         //playerParty.position = DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.startNode.transform.position;
     }
 
@@ -338,6 +340,7 @@ public class DungeonManager : MonoBehaviour
         switch (_newActivity)
         {
             case DungeonActivity.eventStart:
+                CameraMover.SetTargetPos(currentCalcRun.currentNode.transform.position);
                 currentCalcRun.UpdateLog(currentCalcRun.currentNode.nodeEvent.startText);
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventStart);
                 if (events)
@@ -368,6 +371,7 @@ public class DungeonManager : MonoBehaviour
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.eventTurn);
                 break;
             case DungeonActivity.pathHandling:
+                CameraMover.SetTargetPos(currentCalcRun.currentNode.PathPosition(currentCalcRun.currentNode.chosenPathIndex));
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.pathHandling);
                 currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathHandlingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
                 //playerParty.position = currentCalcRun.currentNode.PathPosition(currentCalcRun.currentNode.chosenPathIndex);
@@ -381,6 +385,7 @@ public class DungeonManager : MonoBehaviour
                 //currentCalcRun.UpdateLog(text);
                 break;
             case DungeonActivity.startQuest:
+                CameraMover.SetTargetPos(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.startNode.transform.position);
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.questStart);
                 if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].startText);
@@ -388,11 +393,12 @@ public class DungeonManager : MonoBehaviour
                     currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].startText);
                 break;
             case DungeonActivity.endQuest:
+                CameraMover.SetTargetPos(DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.endNode.transform.position);
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.questEnd);
                 if (DatabaseManager._instance.dungeonData.currentRun.dungeon.type == DungeonType.basic)
-                    currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].endText);
+                    currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.basicQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].shortEndText);
                 else
-                    currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].endText);
+                    currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.doomQuestDict[DatabaseManager._instance.dungeonData.currentRun.dungeon.questName].shortEndText);
                 break;
             default:
                 break;
@@ -501,7 +507,7 @@ public class DungeonManager : MonoBehaviour
             //playerParty.position = currentCalcRun.currentNode.transform.position;
             if(currentCalcRun.currentNode.nextNodes == null || currentCalcRun.currentNode.nextNodes.Length <= 0)
             {
-                currentCalcRun.currentActivity = DungeonActivity.endQuest;
+                EnterNewActivityState(DungeonActivity.endQuest);
             }
             else
             {

@@ -33,6 +33,8 @@ public class DungeonCancelActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("DungeonCancel", true);
         UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
+
+        hub.currentHubFocus = HubState.HeroHub;
     }
 
 
