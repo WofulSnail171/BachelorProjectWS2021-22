@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 [ExecuteAlways][CreateAssetMenu(menuName = "SDF Output/Output")]
@@ -815,7 +817,9 @@ public class SDFOutput : SDFNode{
             }
             sw.Close();
         }
+#if UNITY_EDITOR
         AssetDatabase.Refresh();
+#endif
     }
     
     private void ChangeShaderValues(SDFNode node){
@@ -824,9 +828,9 @@ public class SDFOutput : SDFNode{
             Debug.LogWarning("material has not been applied or assigned");
             return;
         }
-
+#if UNITY_EDITOR
         Undo.RecordObject(this.sdfMaterial, "changed Material");        
-
+#endif
         switch (node.nodeType) {
             case NodeType.Circle: {
                 var n = (SDFCircle) node;
@@ -919,7 +923,9 @@ public class SDFOutput : SDFNode{
                 break;
             }
         }
+#if UNITY_EDITOR
         EditorUtility.SetDirty(this.sdfMaterial);
+#endif
     }
     
     private void UpdateColor( ColorChange change){
@@ -927,9 +933,9 @@ public class SDFOutput : SDFNode{
             Debug.LogWarning("material has not been applied or assigned");
             return;
         }
-
+#if UNITY_EDITOR
         Undo.RecordObject(this.sdfMaterial, "changed Material");        
-
+#endif
         switch (change) {
             case ColorChange.Inside: {
                 
@@ -966,7 +972,9 @@ public class SDFOutput : SDFNode{
                 break;
             }
         }
+#if UNITY_EDITOR
         EditorUtility.SetDirty(this.sdfMaterial);
+#endif        
     }
 
     public override string GenerateHlslFunction() {
