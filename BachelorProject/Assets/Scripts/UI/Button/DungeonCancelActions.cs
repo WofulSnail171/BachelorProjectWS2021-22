@@ -22,16 +22,17 @@ public class DungeonCancelActions : MonoBehaviour
     private void ClickedYes()
     {
         //do cancel
-
+        DungeonManager._instance.CancelDungeon();
 
         ExploreInventoryUI.RemoveAllHeroesFromExplore();
         inventory.UpdateInventory();
 
-        hub.UpdateHubState(HubState.HeroHub);
+        DeleventSystem.DungeonCancel?.Invoke();
 
+        UIEnablerManager.Instance.EnableCanvas();
         UIEnablerManager.Instance.DisableElement("DungeonCancel", true);
-        UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", false);
-        UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
+        UIEnablerManager.Instance.SwitchElements("DungeonObserve", "HeroHub", true);
+        UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
     }
 
 

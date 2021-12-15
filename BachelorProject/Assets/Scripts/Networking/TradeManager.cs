@@ -13,6 +13,7 @@ public class TradeManager : MonoBehaviour
         {
             _instance = this;
             DontDestroyOnLoad(this);
+            StartCoroutine(AutoplayRoutine());
         }
         else
         {
@@ -38,6 +39,82 @@ public class TradeManager : MonoBehaviour
     private bool AutoPLay = true;
     public float AutoPlayWaitTimeSec = 1.0f;
 
+    public int TargetStep = 900;
+    public int CurrentStep = 0;
+    bool done = false;
+
+    public ProgressState GetProgressState()
+    {
+        ProgressState result = ProgressState.Empty;
+        if(DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            result = ProgressState.Pending;
+            if(CurrentStep >= TargetStep)
+            {
+                result = ProgressState.Done;
+            }
+        }
+        return result;
+    }
+
+    public void FastForwardToStep(int _targetStep)
+    {
+        CurrentStep = _targetStep;
+        done = false;
+        DeleventSystem.TradeStep?.Invoke();
+    }
+
+    public int GetCurrentStep()
+    {
+        double elapsedSeconds = 0;
+        if (DatabaseManager._instance.activePlayerData.tradeStartDate != "" && DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            var bla = DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToUniversalTime();
+            var blub = DateTime.Now.ToUniversalTime();
+            var bli = DateTime.UtcNow;
+            elapsedSeconds = DateTime.Now.ToUniversalTime().Subtract(DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToUniversalTime()).TotalSeconds;
+            if (AutoPlayWaitTimeSec != 0)
+            {
+                elapsedSeconds /= AutoPlayWaitTimeSec;
+            }
+        }
+        return (int)elapsedSeconds;
+    }
+
+    private void NextStepTrade()
+    {
+        if(CurrentStep < TargetStep)
+        {
+            CurrentStep++;
+            DeleventSystem.TradeStep?.Invoke();
+        }
+        else if (done == false)
+        {
+            done = true;
+            DeleventSystem.TradeEnd?.Invoke();
+        }
+    }
+
+    public void StartTrade(int _targetStep = 20)
+    {
+        done = false;
+        TargetStep = _targetStep;
+        CurrentStep = 0;
+        DeleventSystem.TradeStart?.Invoke();
+    }
+    IEnumerator AutoplayRoutine()
+    {
+        while (AutoPLay)
+        {
+            //Update Loop for dungeonRun
+            if (DatabaseManager._instance.tradeData != null)
+            {
+                NextStepTrade();
+            }
+            yield return new WaitForSeconds(AutoPlayWaitTimeSec);
+        }
+    }
+
     public void UploadOffer(PlayerHero heroOne, PlayerHero heroTwo = null, PlayerHero heroThree = null, PlayerHero heroFour = null)
     {
         if(heroFour != null)
@@ -53,11 +130,12 @@ public class TradeManager : MonoBehaviour
     public void UploadOffer(PlayerHero[] _heroes)
     {
         UploadOfferData _data = new UploadOfferData { heroes = _heroes, playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
-        _data.date = DateTime.Now.ToString("u");
+        _data.date = DateTime.Now.ToUniversalTime().ToString("u");
         string message = JsonUtility.ToJson(_data);
         var test = JsonUtility.FromJson<PlayerHero[]>(message);
-
+        DatabaseManager._instance.activePlayerData.ResetBlackList();
         ServerCommunicationManager._instance.GetInfo(Request.UploadOffer, message);
+
         PullTradeOffers();
     }
     [System.Serializable]
@@ -121,12 +199,6 @@ public class TradeManager : MonoBehaviour
         //Analyze and check for trades that have potentially happened
     }
 
-
-    private void NextStepTrade()
-    {
-
-    }
-
     public void DeleteOffers(TradeOffer[] _tradeOffers, DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         UploadDeleteOffers uploadData = new UploadDeleteOffers { offersToDelete = new List<TradeOffer>(), playerInfo = new LoginInfo { playerId = DatabaseManager._instance.activePlayerData.playerId, password = DatabaseManager._instance.activePlayerData.password } };
@@ -146,6 +218,7 @@ public class TradeManager : MonoBehaviour
             }
         }
         DatabaseManager._instance.tradeData.UpdateOwnOffers();
+        DatabaseManager._instance.activePlayerData.ResetBlackList();
         string message = JsonUtility.ToJson(uploadData);
         ServerCommunicationManager._instance.GetInfo(Request.DeleteOffers, message, _simpleEvent, _messageEvent);
     }
@@ -155,19 +228,6 @@ public class TradeManager : MonoBehaviour
     {
         public LoginInfo playerInfo;
         public List<TradeOffer> offersToDelete;
-    }
-
-    IEnumerator AutoplayRoutine()
-    {
-        while (AutoPLay)
-        {
-            //Update Loop for dungeonRun
-            if (DatabaseManager._instance.tradeData != null)
-            {
-                NextStepTrade();
-            }
-            yield return new WaitForSeconds(AutoPlayWaitTimeSec);
-        }
     }
 
     public List<TradeOffer> GetSwipeBatch(int _maxCountOffers = 12)
@@ -195,9 +255,11 @@ public class TradeManager : MonoBehaviour
             {
                 SwapHeros(trade);
                 toDelete.Add(trade);
+                DatabaseManager._instance.activePlayerData.AffectRewardTierBuff(1);
             }
         }
         DeleteOffers(toDelete.ToArray());
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData); 
 
         //Then clear all other own trades
         //CancelOwnTrades();
@@ -252,8 +314,70 @@ public class TradeManager : MonoBehaviour
         return _hero;
     }
 
+    
+
     public void CancelOwnTrades()
     {
         DeleteOffers(DatabaseManager._instance.tradeData.ownOffers.ToArray());
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+    }
+
+    public List<Match> GetTradingResults()
+    {
+        List<Match> result = new List<Match>();
+        foreach (var item in DatabaseManager._instance.tradeData.ownOffers)
+        {
+            Match temp = new Match();
+            temp.ownHero = DatabaseManager._instance.activePlayerData.GetHeroByUniqueId(item.uniqueId);
+            if (item.available != "")
+                temp.matchedOffer = item;
+            if(temp.ownHero != null)
+            {
+                result.Add(temp);
+            }
+        }
+        return result;
+    }
+}
+
+public class Match
+{
+    public PlayerHero ownHero;
+    public TradeOffer matchedOffer;
+
+    public int[] GetBuffDiff()
+    {
+        int[] buffs = new int[] { 0, 0, 0 };
+        if (ownHero == null || matchedOffer == null)
+            return buffs;
+        DefaultHero newHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[matchedOffer.heroId];
+        DefaultHero oldHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[ownHero.heroId];
+
+        int rarityDiff = oldHero.rarity - newHero.rarity;
+        if (newHero.rarity != 5 && rarityDiff > 0)
+        {
+            float potentialStep = (float)(newHero.pMaxPot - newHero.pDefPot) / (float)(5 - newHero.rarity);
+            buffs[0] = (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.mMaxPot - newHero.mDefPot) / (float)(5 - newHero.rarity);
+            buffs[1] = (int)(potentialStep * rarityDiff);
+
+            potentialStep = (float)(newHero.sMaxPot - newHero.sDefPot) / (float)(5 - newHero.rarity);
+            buffs[2] = (int)(potentialStep * rarityDiff);
+        }
+        return buffs;
+    }
+
+    public int[] GetCalcPotentials()
+    {
+        int[] potentials = new int[] { 0, 0, 0 };
+        if (ownHero == null || matchedOffer == null)
+            return potentials;
+        DefaultHero newHero = DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[matchedOffer.heroId];
+        int[] buffs = GetBuffDiff();
+        potentials[0] = newHero.pDefPot + buffs[0];
+        potentials[1] = newHero.mDefPot + buffs[1];
+        potentials[2] = newHero.sDefPot + buffs[2];
+        return potentials;
     }
 }

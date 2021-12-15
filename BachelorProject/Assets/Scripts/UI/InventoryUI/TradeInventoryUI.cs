@@ -78,6 +78,26 @@ public class TradeInventoryUI : MonoBehaviour
     //public funcs
     //-------------------------------------------------------------------------------------------------------------------------------------------------------
     //init
+    public void RefreshTradeUI()
+    {
+        foreach(TradeSlot slot in tradeSlots)
+        {
+            PlayerHero tempHero= DatabaseManager._instance.activePlayerData.GetHeroByUniqueId(slot.playerHero.uniqueId);
+            if (tempHero != null && tempHero.status == HeroStatus.Trading)
+            {
+                
+            }
+
+            else
+            {
+                RemoveHeroFromSlot(slot);
+                slot.removeHero();
+                slot.hideHero();
+            }
+        }
+        
+    }
+
     public void ResetTrade()
     {
         foreach (TradeSlot slot in tradeSlots)
@@ -145,7 +165,7 @@ public class TradeInventoryUI : MonoBehaviour
             slot.removeHero();
         }
 
-        UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", true); //hide UI
+        UIEnablerManager.Instance.SwitchElements("TradeSelect", "General", false); //hide UI
     }
 
     public bool ConfirmAllHeroesForTrade()
@@ -164,11 +184,6 @@ public class TradeInventoryUI : MonoBehaviour
         if (anySlotIsFull)
         {
             Debug.Log("do transfer logic");
-
-
-            //transmit the data here and update the database
-            //
-            //
 
             return true;
         }

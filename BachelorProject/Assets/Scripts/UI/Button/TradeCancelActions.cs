@@ -8,7 +8,6 @@ public class TradeCancelActions : MonoBehaviour
     [SerializeField] Button yes;
     [SerializeField] Button no;
 
-    [SerializeField] HubButtonActions hub;
     [SerializeField] TradeInventoryUI tradeInventoryUI;
     [SerializeField] InventoryUI inventory;
 
@@ -22,16 +21,19 @@ public class TradeCancelActions : MonoBehaviour
     private void ClickedYes()
     {
         //do cancel
-        //TradeManager._instance.
+        TradeManager._instance.CancelOwnTrades();
 
         tradeInventoryUI.RemoveAllHeroesFromTrade();
         inventory.UpdateInventory();
 
-        hub.UpdateHubState(HubState.HeroHub);
+        //update everything in hub
+        DeleventSystem.TradeCancel?.Invoke();
 
         UIEnablerManager.Instance.DisableElement("TradeCancel", true);
-        UIEnablerManager.Instance.SwitchElements("TradeObserve", "HeroHub", false);
-        UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
+        UIEnablerManager.Instance.DisableElement("TradeObserve", false);
+        UIEnablerManager.Instance.DisableElement("TradeSwipe", true);
+        UIEnablerManager.Instance.EnableElement( "HeroHub", true);
+        UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
     }
 
 

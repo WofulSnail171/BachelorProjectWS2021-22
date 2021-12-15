@@ -23,8 +23,10 @@ public class DungeonLayOut : MonoBehaviour
         //set dungeon nodes
         nodes = new List<DungeonNode>();
         SetupNodeDailySeed(startNode, _ddiff);
+        startNode.nodeType = DatabaseManager._instance.eventData.nodeTypes[1];
+        endNode.nodeType = DatabaseManager._instance.eventData.nodeTypes[2];
         DontDestroyOnLoad(this);
-        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        UnityEngine.Random.InitState((int)DateTime.Now.ToUniversalTime().Ticks);
     }
 
     public void SetupDungeonRunSeed(int _seed)
@@ -32,7 +34,7 @@ public class DungeonLayOut : MonoBehaviour
         UnityEngine.Random.InitState(_seed);
         nodes = new List<DungeonNode>();
         SetupNodeRunSeed(startNode);
-        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+        UnityEngine.Random.InitState((int)DateTime.Now.ToUniversalTime().Ticks);
     }
 
     public void ResetNodes()
@@ -51,7 +53,7 @@ public class DungeonLayOut : MonoBehaviour
         if (nodes.Contains(_node))
             return;
         nodes.Add(_node);
-        _node.nodeType = DatabaseManager._instance.eventData.nodeTypes[UnityEngine.Random.Range(1, DatabaseManager._instance.eventData.nodeTypes.Length)];
+        _node.nodeType = DatabaseManager._instance.eventData.nodeTypes[UnityEngine.Random.Range(3, DatabaseManager._instance.eventData.nodeTypes.Length)];
         
         if(_ddiff == null)
             _node.level = UnityEngine.Random.Range(1, 8);
@@ -72,12 +74,32 @@ public class DungeonLayOut : MonoBehaviour
         if (nodes.Contains(_node))
             return;
         nodes.Add(_node);
-        //_node.statType = DatabaseManager._instance.eventData.eventDecks.[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.nodeTypes.Length)];
-        _node.nodeEvent  = DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck.Length)];
-        //ToDo
-        _node.eventEnemy = "EnemyName";
+
+        if(DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType) <= 2)
+        {
+            if (DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType) == 0)
+                _node.nodeEvent = new Event { eventName = "none", endText = "none", startText = "none", statType = "social" };
+            else if (DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType) == 1)
+                _node.nodeEvent = new Event { eventName = "Start of the Quest", endText = "The heroes left the warmth of the home and face the cold of the unknown", startText = "Preperations are made", statType = "social" };
+            else if (DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType) == 2)
+                _node.nodeEvent = new Event { eventName = "End of the Quest", endText = "The heroic deed was done and our heroes will now continue to walk their paths. What will the future bring?", startText = "Almost there. The grande finale is so close!", statType = "physical" };
+            _node.eventEnemy = DatabaseManager._instance.eventData.textFlavours.textsEnemyNames[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.textFlavours.textsEnemyNames.Length)].name;
+        }
+        else
+        {
+            //_node.statType = DatabaseManager._instance.eventData.eventDecks.[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.nodeTypes.Length)];
+            _node.nodeEvent = DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.eventDecks[DatabaseManager._instance.eventData.GetNodeTypeIndex(_node.nodeType)].deck.Length)];
+            //ToDo
+            _node.eventEnemy = DatabaseManager._instance.eventData.textFlavours.textsEnemyNames[UnityEngine.Random.Range(0, DatabaseManager._instance.eventData.textFlavours.textsEnemyNames.Length)].name;
+        }
         //toDo Rika neue function für dungeonHealth
-        _node.maxEventHealth = UnityEngine.Random.Range(100 *_node.level , 150 * _node.level);
+        //_node.maxEventHealth = UnityEngine.Random.Range(100 *_node.level , 150 * _node.level);
+        //_node.maxEventHealth = (int)(200 + (100 * Math.Pow(2, _node.level - 1))/(4) ) * 2;
+        //ToDo dungeonLevel!!!!
+        var dungeonLevel = 4;
+        _node.maxEventHealth = (int)(200 * dungeonLevel + (100 * Math.Pow(2, _node.level - 1))/( 8 - dungeonLevel));
+        int randomOffset = UnityEngine.Random.Range((-_node.maxEventHealth) / 20, (_node.maxEventHealth) / 10);
+        _node.maxEventHealth += randomOffset;
         _node.eventHealth = _node.maxEventHealth;
         _node.defaultGrowth = UnityEngine.Random.Range(1 * _node.level, 2 * _node.level);
         _node.currentGrowth = _node.defaultGrowth;

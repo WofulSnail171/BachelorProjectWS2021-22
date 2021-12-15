@@ -37,7 +37,7 @@ public class DatabaseManager : MonoBehaviour
 
     public static ProgressState GetTradeState()
     {
-        ProgressState result = ProgressState.Empty;
+        ProgressState result = TradeManager._instance.GetProgressState();       
         return result;
     }
 
@@ -70,7 +70,7 @@ public class DatabaseManager : MonoBehaviour
     //some logic to compare local and online data and do something according
     public void SaveGameDataLocally()
     {
-        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+        DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToUniversalTime().ToString("u");
         LocalSaveSystem.SaveLocaldata();
         //Push to server?
     }
@@ -85,7 +85,7 @@ public class DatabaseManager : MonoBehaviour
         }
         else
         {            
-            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate)) < 0)
+            if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) < 0)
             {
                 //online save is younger the local one -> played on an other device -> need to fire special event
 
@@ -96,6 +96,7 @@ public class DatabaseManager : MonoBehaviour
             {
                 //online save is older -> probably need to update online savefile
                 //but we can savely apply the local savefile to the active data
+                globalData = localSave.globalData;
                 defaultHeroData = localSave.defaultHeroData;
                 eventData = localSave.eventData;
                 eventData.CreateDictionaries();
@@ -103,6 +104,7 @@ public class DatabaseManager : MonoBehaviour
                 ValidateInventory();
                 dungeonData = localSave.dungeonData;
                 rewardTable = localSave.rewardTable;
+                tradeData = localSave.tradeData;
             }
         }
     }
@@ -156,6 +158,31 @@ public class DatabaseManager : MonoBehaviour
         return true;
     }
 
+    public GlobalData globalData;
+    public void UpdateGlobalDataFromServer(string _message)
+    {
+        GlobalData fetchedData = JsonUtility.FromJson<GlobalData>(_message);
+        if(fetchedData.defaultUpdate == 1 || globalData == null)
+        {
+            //Do UpdateRoutine for all universal thingies (default heroes, event data)
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+        }
+        else
+        {
+            if(globalData.versionNum != fetchedData.versionNum)
+            {
+                //Do UpdateRoutine for all universal thingies (default heroes, event data, rewardTable)
+                ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
+                ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
+                ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            }
+        }
+        globalData = fetchedData;
+        LocalSaveSystem.SaveLocaldata();
+    }
+
     public IncomingHeroData defaultHeroData;
     public void UpdateDefaultHeroListFromServer(string _message)
     {
@@ -168,9 +195,11 @@ public class DatabaseManager : MonoBehaviour
     public PlayerData activePlayerData;
     public void UpdateActivePlayerFromServer(string _message)
     {
+        var blackList = activePlayerData.blacklist;
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
+        activePlayerData.blacklist = blackList;
         //check for dates lol
-        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).CompareTo(DateTime.Parse(activePlayerData.lastUpdate));
+        var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime());
         if (localSave == null || bla > 0)
         {
             //online save is younger the local one -> played on an other device -> need to fire special event
@@ -291,17 +320,21 @@ public class GameData
 {
     public GameData(DatabaseManager _manager)
     {
+        globalData = _manager.globalData;
         defaultHeroData = _manager.defaultHeroData;
         activePlayerData = _manager.activePlayerData;
         eventData = _manager.eventData;
         dungeonData = _manager.dungeonData;
         rewardTable = _manager.rewardTable;
+        tradeData = _manager.tradeData;
     }
+    public GlobalData globalData;
     public IncomingHeroData defaultHeroData;
     public PlayerData activePlayerData;
     public EventData eventData;
     public DungeonData dungeonData;
     public RewardTable rewardTable;
+    public TradeData tradeData;
 
 
 
@@ -327,8 +360,8 @@ public class GameData
 }
 
 //Dates: Use DateTime to fetch, cast and compare dates and save them as strings
-//date = System.DateTime.Now.ToString("u"),
-//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToString("u")),
+//date = System.DateTime.Now.ToUniversalTime().ToString("u"),
+//signUpDate = System.DateTime.Parse(System.DateTime.Now.ToUniversalTime().ToString("u")).ToUniversalTime(),
 
 [System.Serializable]
 public class PlayerData
@@ -348,6 +381,19 @@ public class PlayerData
 
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
+
+    public void AffectRewardTierBuff(int _amount)
+    {
+        rewardTierBuff += _amount;
+        if(rewardTierBuff >= 9)
+        {
+            rewardTierBuff = 9;
+        }
+        else if(rewardTierBuff < 0)
+        {
+            rewardTierBuff = 0;
+        }
+    }
 
     public PlayerHero GetHeroByUniqueId(int _uniqueId)
     {
@@ -390,6 +436,20 @@ public class PlayerData
             }
         }
         return false;
+    }
+
+    public void AddBlackListEntry(string _playerId, string _heroId)
+    {
+        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = _playerId, heroId = _heroId });
+        DatabaseManager._instance.tradeData.UpdateOwnOffers();
+    }
+
+    public void ResetBlackList()
+    {
+        DatabaseManager._instance.activePlayerData.blacklist = new List<BlacklistEntry>();
+        //Potential ToDO. Sync online
+        DatabaseManager._instance.SaveGameDataLocally();
+        DatabaseManager._instance.tradeData.UpdateOwnOffers();
     }
 
     public bool PlayerIsInterestedInOffer(TradeOffer _offer)
@@ -502,8 +562,24 @@ public class EventData
     public string[] nodeTypes;
     public string[] pathTypes;
 
+    public EventSteps eventSteps;
+
     //FlavourTexts
     public TextFlavours textFlavours;
+}
+
+[System.Serializable]
+public class EventSteps
+{
+    public int questStart;
+    public int questEnd;
+    public int pathHandling;
+    public int pathChoosing;
+    public int eventTurn;
+    public int eventStart;
+    public int eventEnd;
+
+    public int fallBack;
 }
 
 [System.Serializable]
@@ -544,6 +620,7 @@ public class LoginInfo
 {
     public string playerId = "name";
     public string password = "pw";
+    public string date = DateTime.Now.ToUniversalTime().ToString("u");
 }
 
 [System.Serializable]
@@ -604,7 +681,7 @@ public class TradeData
             return;
         foreach (var item in tradeOffers)
         {
-            if (item.available == "" && !ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item) && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
+            if (item.available == "" && !ownOffers.Contains(item) && !DatabaseManager._instance.activePlayerData.BlackListContainsOffer(item))// && !DatabaseManager._instance.activePlayerData.PlayerIsInterestedInOffer(item))
             {
                 openOffers.Add(item);
             }
@@ -670,4 +747,11 @@ public class TradeOffer
     public int runs;
 
     public List<int> interestedOffers;
+}
+
+[System.Serializable]
+public class GlobalData
+{
+    public int defaultUpdate;
+    public int versionNum;
 }

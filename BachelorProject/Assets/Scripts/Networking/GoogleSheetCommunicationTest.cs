@@ -20,6 +20,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         localSaveNo.interactable = false;
 
         DatabaseManager._instance.LoadLocalSave();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
         if(DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.playerId != "")
         {
             localSaveTextfield.text = "Savefile found! Continue as " + DatabaseManager._instance.activePlayerData.playerId + "?";
@@ -131,14 +132,14 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignUp successful";
-            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
-            DeleventSystem.eventDataDownloaded += FirstSignUp;
-            DatabaseManager._instance.SaveGameDataLocally();
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, FinishedLogIn);
+            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
+            DeleventSystem.eventDataDownloaded += FirstSignUp;
+            DatabaseManager._instance.SaveGameDataLocally();            
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
         }
     }
 
@@ -153,21 +154,28 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignIn successful";
+            //ServerCommunicationManager._instance.DoServerRequest(Request.PullGlobalData, OnGlobalDataFetched);
             DatabaseManager._instance.UpdateActivePlayerFromServer(_lastMessage);
             DatabaseManager.ValidateInventory();
             DatabaseManager._instance.SaveGameDataLocally();
-
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
+            /*
             ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
             ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers);
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData, FinishedLogIn);
-            
+            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
+            */
+
             // Download dungeonData only makes sense if the playerdata online was also more valid, therefore it gets called in apply
             //ServerCommunicationManager._instance.DoServerRequest(Request.DownloadDungeonData);
             //FinishedLogIn();
             //ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(DatabaseManager._instance.activePlayerData), FinishedLogIn);
 
         }
+    }
+
+    void OnGlobalDataFetched()
+    {
+        //
     }
 
     public void StooopidTest()
@@ -216,6 +224,10 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
             DungeonManager._instance.CalculateRun(DungeonManager._instance.CurrentStep());
             //DungeonManager._instance.CalculateRun(0);
+        }
+        if (DatabaseManager._instance.activePlayerData.tradeStartDate != "" && DatabaseManager._instance.tradeData.ownOffers != null && DatabaseManager._instance.tradeData.ownOffers.Count > 0)
+        {
+            TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
         }
 
         SceneManager.LoadScene(1);
@@ -421,8 +433,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             name = "Benedikt",
             password = "321",
-            date = System.DateTime.Now.ToString("o"),
-            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToString("o")),
+            date = System.DateTime.Now.ToUniversalTime().ToString("o"),
+            //signUpDate = System.DateTime.Parse( System.DateTime.Now.ToUniversalTime().ToString("u")).ToUniversalTime(),
             profileDescription = "",
             mtDoomCounter = 0,
             tradeCounter = 0,
@@ -438,5 +450,5 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         }
         */
 
-    }    
+    }
 }

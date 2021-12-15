@@ -37,7 +37,7 @@ public class ServerCommunicationManager : MonoBehaviour
     public TMP_Text errorInfoText; 
 
     float waitTimer = 0.0f;
-    float waitTime = 13.0f;
+    float waitTime = 30.0f;
 
     // Update is called once per frame
     void Update()
@@ -194,6 +194,9 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.DeleteOffers:
                 //ToDo
                 break;
+            case Request.PullGlobalData:
+                DatabaseManager._instance.UpdateGlobalDataFromServer(lastMessage);
+                break;
             default:
                 break;
         }
@@ -251,6 +254,8 @@ public class ServerCommunicationManager : MonoBehaviour
                 break;
             case Request.DeleteOffers:
                 //ToDo
+                break;
+            case Request.PullGlobalData:
                 break;
             default:
                 break;
@@ -342,7 +347,7 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PushPlayerData:
                 //ToDO: Decouple PlayerData from Inventory
                 DoServerRequest(Request.PushInventory);
-                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToString("u");
+                DatabaseManager._instance.activePlayerData.lastUpdate = DateTime.Now.ToUniversalTime().ToString("u");
                 DatabaseManager._instance.SaveGameDataLocally();
                 ServerCommunicationManager._instance.GetInfo(Request.PushPlayerData, JsonUtility.ToJson(new UploadPlayerData( DatabaseManager._instance.activePlayerData)), _simpleEvent, _messageEvent);
                 break;
@@ -396,6 +401,9 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.DeleteOffers:
                 //ToDo
                 break;
+            case Request.PullGlobalData:
+                ServerCommunicationManager._instance.GetInfo(Request.PullGlobalData, "", _simpleEvent, _messageEvent);
+                break;
             default:
                 break;
         }
@@ -426,7 +434,8 @@ public enum Request
     UploadOffer,
     UpdateOffer,
     PullTradeOffers,
-    DeleteOffers
+    DeleteOffers,
+    PullGlobalData
 }
 
 //for the request queue:

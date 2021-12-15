@@ -35,8 +35,11 @@ public class InventoryUI : MonoBehaviour
     private int amountInTrade = 0;
     private int amountInDungeon = 0;
 
-    public PlayerHero releaseHero;
-    public bool DoRelease;
+    [HideInInspector] public PlayerHero releaseHero;
+    [HideInInspector] public PlayerHero addHero;
+    [HideInInspector] public int addHeroSlotId;
+    [HideInInspector] public bool DoRelease;
+    [HideInInspector] public bool DoAdd;
     #endregion
 
 
@@ -87,7 +90,7 @@ public class InventoryUI : MonoBehaviour
         InitInventoryUI();
     }
 
-    private void InitInventoryUI()
+    public void InitInventoryUI()
     {
         if (DatabaseManager._instance != null && DatabaseManager._instance.activePlayerData != null && DatabaseManager._instance.activePlayerData.inventory != null && heroSlots != null)
         {     
@@ -191,6 +194,11 @@ public class InventoryUI : MonoBehaviour
     public void ResetExploring()
     {
         exploreInventory.RemoveAllHeroesFromExplore();
+    }
+
+    public void ResetTrade()
+    {
+        tradeInventory.RemoveAllHeroesFromTrade();
     }
 
     public void UpdateInventory()
@@ -359,6 +367,39 @@ public class InventoryUI : MonoBehaviour
 
             UIEnablerManager.Instance.DisableElement("ReleaseSubmit", false);
             UIEnablerManager.Instance.SwitchElements("ReleaseCancel", "ReleaseBlocked", false);
+
+        }
+
+        else if (DoAdd && heroSlots[index].playerHero.status == HeroStatus.Idle)
+        {
+            foreach (HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
+
+            heroSlots[index].EnableHighlight();
+            addHero = heroSlots[index].playerHero;
+            addHeroSlotId = heroSlots[index].slotID;
+
+
+            UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
+            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroSubmit", false);
+        }
+
+        else if(DoAdd)
+        {
+            foreach (HeroSlot heroSlot in heroSlots)
+            {
+                if (heroSlot.playerHero != null)
+                    heroSlot.DisableHighlight();
+            }
+
+            heroSlots[index].EnableHighlight();
+
+
+            UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
+            UIEnablerManager.Instance.SwitchElements("AddHeroDone", "AddHeroBlocked", false);
         }
     }
     

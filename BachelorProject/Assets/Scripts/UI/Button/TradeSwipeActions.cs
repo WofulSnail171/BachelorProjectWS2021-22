@@ -80,31 +80,21 @@ public class TradeSwipeActions : MonoBehaviour
             UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", false);
             UIEnablerManager.Instance.EnableElement("General", false);
             UIEnablerManager.Instance.EnableElement("HeroHub", false);
+            UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
 
             hub.UpdateHubState(HubState.TradeHub);
             hub.UpdateDungeonButton(ButtonState.Unfocused);
             hub.UpdateTradeButton(ButtonState.Focused);
             hub.UpdateHubButton(ButtonState.Unfocused);
+
+            TradeManager._instance.StartTrade(900);
         }
     }
 
     private void OnEnable()
     {
-        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
-        //send data
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
-
-        //send own data
-        List<PlayerHero> playerHeroes = new List<PlayerHero>();
-        foreach (TradeSlot slot in tradeInventory.tradeSlots)
-        {
-            if(slot.playerHero != null)
-                playerHeroes.Add(slot.playerHero);
-        }
-
-        //push own offer data
-        TradeManager._instance.UploadOffer(playerHeroes.ToArray());
         TradeManager._instance.PullTradeOffers(OnPullTradeOffers);
+        
     }
 
     //all heroes unfocused
@@ -137,15 +127,18 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         //update blacklist
-        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
-        
-        if(playerHeroesToMatch.Count > 0)
+        DatabaseManager._instance.activePlayerData.AddBlackListEntry(snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, snapHero._tradeOffers[snapHero.GetNearestPage()].heroId);
+
+        if (playerHeroesToMatch.Count > 0)
         {
             TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
         }
 
         swipeInventory.UnmatchAll();
-        if(snapHero.GetNearestPage() == snapHero._pageCount - 1)
+        unmatchButton.SetActive(false);
+        cancelButton.SetActive(true);
+
+        if(snapHero.GetNearestPage() == snapHero._pageCount - 2)
         {
             nextButton.SetActive(false);
             sendButton.SetActive(true);
@@ -166,12 +159,14 @@ public class TradeSwipeActions : MonoBehaviour
         }
 
         //update blacklist
-        DatabaseManager._instance.activePlayerData.blacklist.Add(new BlacklistEntry { playerId = snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, heroId = snapHero._tradeOffers[snapHero.GetNearestPage()].heroId });
+        DatabaseManager._instance.activePlayerData.AddBlackListEntry(snapHero._tradeOffers[snapHero.GetNearestPage()].playerId, snapHero._tradeOffers[snapHero.GetNearestPage()].heroId); 
 
         if (playerHeroesToMatch.Count > 0)
         {
             TradeManager._instance.UpdateOffer(snapHero._tradeOffers[snapHero.GetNearestPage()].offerId, playerHeroesToMatch.ToArray());
         }
+
+        TradeManager._instance.StartTrade(900);
 
         //go to observe
         UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", true);
@@ -188,6 +183,7 @@ public class TradeSwipeActions : MonoBehaviour
     private void NoMatchFinished()
     {
         UIEnablerManager.Instance.DisableElement("NoTradeFound", true);
+        TradeManager._instance.StartTrade(900);
     }
 
     //hero focused
