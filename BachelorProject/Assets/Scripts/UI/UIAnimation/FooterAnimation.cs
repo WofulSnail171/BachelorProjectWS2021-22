@@ -12,6 +12,8 @@ public class FooterAnimation : AbstractElementAnimation
     public override float HideObject()
     {
         StopAllCoroutines();
+        gameObject.SetActive(true);
+
 
         original = gameObject.GetComponent<RectTransform>().rect.y;
         float removed = -gameObject.GetComponent<RectTransform>().rect.height;

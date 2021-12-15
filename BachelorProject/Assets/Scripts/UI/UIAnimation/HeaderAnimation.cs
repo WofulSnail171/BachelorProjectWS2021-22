@@ -12,6 +12,8 @@ public class HeaderAnimation : AbstractElementAnimation
     public override float HideObject()
     {
         StopAllCoroutines();
+        gameObject.SetActive(true);
+
 
         original = gameObject.GetComponent<RectTransform>().rect.y;
         float removed = Screen.height + gameObject.GetComponent<RectTransform>().rect.height*2;

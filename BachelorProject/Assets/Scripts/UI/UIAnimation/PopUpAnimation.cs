@@ -18,7 +18,10 @@ public class PopUpAnimation : AbstractElementAnimation
     public override float HideObject()
     {
         //bg
-         LeanTween.value(blur.gameObject, 1f, 0f, animSpeed)
+        gameObject.SetActive(true);
+
+
+        LeanTween.value(blur.gameObject, 1f, 0f, animSpeed)
          .setOnUpdate((value) =>
          {
              blur.color = new Color(blur.color.r, blur.color.g, blur.color.b, value);
