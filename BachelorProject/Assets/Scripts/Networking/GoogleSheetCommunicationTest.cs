@@ -15,6 +15,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     public Button localSaveNo;
     public void LocalSaveScreenInit()
     {
+        Application.runInBackground = true;
+
         localSaveScreen.SetActive(true);
         localSaveYes.interactable = false;
         localSaveNo.interactable = false;
