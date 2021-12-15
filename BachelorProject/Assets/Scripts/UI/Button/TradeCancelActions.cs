@@ -10,6 +10,7 @@ public class TradeCancelActions : MonoBehaviour
 
     [SerializeField] TradeInventoryUI tradeInventoryUI;
     [SerializeField] InventoryUI inventory;
+    [SerializeField] HubButtonActions hub;
 
 
     private void Start()
@@ -34,6 +35,8 @@ public class TradeCancelActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("TradeSwipe", true);
         UIEnablerManager.Instance.EnableElement( "HeroHub", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
+
+        hub.currentHubFocus = HubState.HeroHub;
     }
 
 
