@@ -378,7 +378,7 @@ public class DungeonManager : MonoBehaviour
                 break;
             case DungeonActivity.pathChoosing:
                 currentCalcRun.SetActivitySteps(DatabaseManager._instance.eventData.eventSteps.pathChoosing);
-                currentCalcRun.currentNode.chosenPathIndex = currentCalcRun.RandomNum(0, currentCalcRun.currentNode.nextPaths.Count);
+                currentCalcRun.currentNode.chosenPathIndex = DoPathChoosing();
                 currentCalcRun.UpdateLog(DatabaseManager._instance.eventData.textFlavours.GetRandomPathChoosingText(currentCalcRun.currentNode.nextPaths[currentCalcRun.currentNode.chosenPathIndex]));
                 //string text = "#Hero tut stuff";
                 //text = text.Replace("#Hero", DatabaseManager._instance.dungeonData.currentRun.party[DungeonManager._instance.currentCalcRun.nextHero].heroId);
@@ -405,6 +405,42 @@ public class DungeonManager : MonoBehaviour
         }
 
 
+    }
+
+    int DoPathChoosing()
+    {
+        int result = 0;
+        Dictionary<string, int> pathPriorities = new Dictionary<string, int>();
+        foreach (var item in currentCalcRun.currentNode.nextPaths)
+        {
+            if(!pathPriorities.ContainsKey(item))
+                pathPriorities.Add(item, 0);
+        }
+        foreach (var item in DatabaseManager._instance.dungeonData.currentRun.party)
+        {
+            if (pathPriorities.ContainsKey(DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[item.heroId].pathAff))
+            {
+                pathPriorities[DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[item.heroId].pathAff] += 1;
+            }
+        }
+        int highest = 0;
+        List<int> highPrioIndex = new List<int>();
+        for(int i = 0; i < currentCalcRun.currentNode.nextPaths.Count; i++)
+        {
+            if(pathPriorities[currentCalcRun.currentNode.nextPaths[i]] == highest)
+            {
+                highPrioIndex.Add(i);
+            }
+            else if (pathPriorities[currentCalcRun.currentNode.nextPaths[i]] > highest)
+            {
+                highPrioIndex = new List<int>();
+                highest = pathPriorities[currentCalcRun.currentNode.nextPaths[i]];
+                highPrioIndex.Add(i);
+            }
+        }
+        if(highPrioIndex.Count > 0)
+            result = highPrioIndex[currentCalcRun.RandomNum(0, highPrioIndex.Count)];
+        return result;
     }
 
     void CalcEventStart()
