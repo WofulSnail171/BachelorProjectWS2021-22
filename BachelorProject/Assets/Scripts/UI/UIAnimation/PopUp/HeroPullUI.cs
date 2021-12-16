@@ -44,6 +44,8 @@ public class HeroPullUI : MonoBehaviour
 
     private void OnEnable()
     {
+        AudioManager.PlayEffect("pull");
+
         blackCard.SetActive(true);
 
         blink.SetActive(false);
@@ -137,7 +139,11 @@ public class HeroPullUI : MonoBehaviour
         LeanTween.value(blink, 1, 0, pullAnimSpeed/2)
             .setOnUpdate(setColor)
             .setEaseOutExpo();
+
+        AudioManager.PlayEffect("reward");
         yield return new WaitForSeconds(pullAnimSpeed/2);
+
+
 
         //wrap up
         blink.SetActive(false);
@@ -185,6 +191,9 @@ public class HeroPullUI : MonoBehaviour
             .setOnUpdate(setColor)
             .setEaseOutExpo();
         yield return new WaitForSeconds(pullAnimSpeed/2);
+
+        AudioManager.PlayEffect("reward");
+
 
         //wrap up
         blink.SetActive(false);

@@ -590,7 +590,10 @@ public class DungeonManager : MonoBehaviour
             DatabaseManager._instance.SaveGameDataLocally();
             Debug.Log("Run Ended");
             if (events)
+            {
+                AudioManager.PlayEffect("done");
                 DeleventSystem.dungeonRunFinished?.Invoke();
+            }
             
             //Debug.LogError("Finished Boiiii");
         }

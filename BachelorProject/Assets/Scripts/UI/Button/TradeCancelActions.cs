@@ -19,6 +19,7 @@ public class TradeCancelActions : MonoBehaviour
         no.GetComponent<Button>().onClick.AddListener(() => { ClickedNo(); });
     }
 
+
     private void ClickedYes()
     {
         //do cancel

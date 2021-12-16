@@ -30,6 +30,8 @@ public class HeroGrowthUI : MonoBehaviour
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void UpdateHeroGrowthPopUp()
     {
+        AudioManager.PlayEffect("finished");
+
         ContinueButton.SetActive(false);
 
 

@@ -54248,7 +54248,7 @@ MonoBehaviour:
   blink: {fileID: 28989701}
   pullAnimSpeed: 0.6
   inventory: {fileID: 1198303509}
-  discardAnimSpeed: 0.6
+  discardAnimSpeed: 1.3
   Image: {fileID: 651288134}
   name: {fileID: 43123804}
   rarity:
@@ -82052,10 +82052,95 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tryout: 
-  musicVolume: 0.5
-  musicTracks: []
-  effectVolume: 0.5
-  soundEffects: []
+  musicVolume: 0.6
+  musicTracks:
+  - soundName: hubSong
+    audioFile: {fileID: 8300000, guid: c2eeafb386a127d43b57acbef1841ebe, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  effectVolume: 0.35
+  soundEffects:
+  - soundName: drop
+    audioFile: {fileID: 8300000, guid: e6d8d1277eff2574c9050e36b994e682, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: drag
+    audioFile: {fileID: 8300000, guid: 85c2a29942420df47943a6cfdd31ee9e, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: click
+    audioFile: {fileID: 8300000, guid: 9747111b26348ac4ab2c2cb25b80a836, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: closePopUp
+    audioFile: {fileID: 8300000, guid: 162b10b6cff60f84ab9166ad186c40aa, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: openPopUp
+    audioFile: {fileID: 8300000, guid: 8330b1177ddc2f242b43b69a1040f046, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: statBarFill
+    audioFile: {fileID: 8300000, guid: 63f08936e7e8f7544a790b74446616fd, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: finished
+    audioFile: {fileID: 8300000, guid: 2205b415a2fd4504094d85b6ebf14c49, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: done
+    audioFile: {fileID: 8300000, guid: 5bcf8fef25c79ab4a8c4381a35724eb2, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: pull
+    audioFile: {fileID: 8300000, guid: 2b771e07822e96f4c924a3d32a44829e, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: reward
+    audioFile: {fileID: 8300000, guid: 6e5164cc6503b1246874243d58a0b963, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: tradeAway
+    audioFile: {fileID: 8300000, guid: 6e5164cc6503b1246874243d58a0b963, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: tradeReceive
+    audioFile: {fileID: 8300000, guid: 57293f617ef81c840a3213b739a22314, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: match
+    audioFile: {fileID: 8300000, guid: 0374311a0da98fe439521d7e261d2803, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: nextMatch
+    audioFile: {fileID: 8300000, guid: 5cc1c01515b9bc846b9a79d96dc203d6, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: startLoad
+    audioFile: {fileID: 8300000, guid: 1c8cde1ec54bcfa478232aad277ff55c, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+  - soundName: endLoad
+    audioFile: {fileID: 8300000, guid: f42cd62c4351b134a97197ece62d6886, type: 3}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
 --- !u!4 &1253197829
 Transform:
   m_ObjectHideFlags: 0

@@ -1634,6 +1634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec0d84456797c1448b45970cc558b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalData:
+    defaultUpdate: 0
+    versionNum: 0
   defaultHeroData:
     defaultHeroList: []
   activePlayerData:
@@ -1657,6 +1660,15 @@ MonoBehaviour:
     eventDecks: []
     nodeTypes: []
     pathTypes: []
+    eventSteps:
+      questStart: 0
+      questEnd: 0
+      pathHandling: 0
+      pathChoosing: 0
+      eventTurn: 0
+      eventStart: 0
+      eventEnd: 0
+      fallBack: 0
     textFlavours:
       textsEnemyNames: []
       textsPathChoosing: []
@@ -2154,6 +2166,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoPlayWaitTimeSec: 1
+  TargetStep: 900
+  CurrentStep: 0
 --- !u!114 &552644758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4640,6 +4654,7 @@ GameObject:
   - component: {fileID: 1263295643}
   - component: {fileID: 1263295642}
   - component: {fileID: 1263295641}
+  - component: {fileID: 1263295644}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4728,6 +4743,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1263295644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263295639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58df8c3159df19a4da284dc4c7021129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1519290594
 GameObject:
   m_ObjectHideFlags: 0
