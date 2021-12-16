@@ -50,8 +50,34 @@ public class AudioManager : MonoBehaviour
     public string tryout;
 
     public float musicVolume = .5f; //should be serialized
+    public static void SetMusicVolume(float _vol)
+    {
+        if (_instance == null)
+            return;
+        _instance.musicVolume = _vol;
+        if (_instance.musicVolume < 0)
+            _instance.musicVolume = 0;
+        else if (_instance.musicVolume > 1)
+            _instance.musicVolume = 1;
+        if (_instance.musicTracks == null)
+            return;
+        foreach (var item in _instance.musicTracks)
+        {
+            item.source.volume = _instance.musicVolume;
+        }
+    }
     public Sound[] musicTracks;
     public float effectVolume = .5f;
+    public static void SetEffectVolume(float _vol)
+    {
+        if (_instance == null)
+            return;
+        _instance.effectVolume = _vol;
+        if (_instance.effectVolume < 0)
+            _instance.effectVolume = 0;
+        else if (_instance.effectVolume > 1)
+            _instance.effectVolume = 1;
+    }
     public Sound[] soundEffects;
 
     public static Sound PlayEffect(string _name)
@@ -83,6 +109,22 @@ public class AudioManager : MonoBehaviour
             s.source.Play();
         }
         return s;
+    }
+
+    public static void StopEffectLoop(string _name)
+    {
+        if (_instance == null)
+        {
+            Debug.LogWarning("Sound manager not instantiated!");
+            return;
+        }
+        Sound s = Array.Find(_instance.musicTracks, sound => sound.soundName == _name);
+        if (s == null || s.source == null)
+        {
+            Debug.LogWarning("Sound name not found or sound has no source!");
+            return;
+        }
+        s.source.Stop();
     }
 
     public static Sound PlayMusic(string _name)
