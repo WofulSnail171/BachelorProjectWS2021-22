@@ -91,6 +91,7 @@ public class TradeManager : MonoBehaviour
         else if (done == false)
         {
             done = true;
+            AudioManager.PlayEffect("done");
             DeleventSystem.TradeEnd?.Invoke();
         }
     }

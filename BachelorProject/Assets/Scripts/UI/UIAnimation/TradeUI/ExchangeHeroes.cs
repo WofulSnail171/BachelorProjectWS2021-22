@@ -32,6 +32,8 @@ public class ExchangeHeroes : MonoBehaviour
         FinishTrade.SetActive(false);
         nextExchange.SetActive(false);
 
+        AudioManager.PlayEffect("tradeAway");
+
         ResetAndAnimate();
     }
 
@@ -93,6 +95,9 @@ public class ExchangeHeroes : MonoBehaviour
         LeanTween.scale(givenCard, new Vector3(0, 0, 0), animSpeed);
 
         yield return new WaitForSeconds(animSpeed*1.5f);
+
+        AudioManager.PlayEffect("tradeReceive");
+
 
         //get new card
         statusText.text = $"You welcome {allMatchList[currentMatch].matchedOffer.heroId}.";

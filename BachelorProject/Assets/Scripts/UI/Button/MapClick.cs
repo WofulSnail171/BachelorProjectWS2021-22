@@ -75,6 +75,8 @@ public class MapClick : MonoBehaviour
 
     private void MapClicked()
     {
+        AudioManager.PlayEffect("click");
+
         //go to the map instance
         //
         //

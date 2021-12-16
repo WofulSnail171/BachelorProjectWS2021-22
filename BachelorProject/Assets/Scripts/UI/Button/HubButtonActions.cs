@@ -106,6 +106,7 @@ public class HubButtonActions : MonoBehaviour
 
     private void Start()
     {
+
         tradeButton.GetComponent<Button>().onClick.AddListener(() => { ClickedTrade(); });
         dungeonButton.GetComponent<Button>().onClick.AddListener(() => { ClickedDungeon(); });
         hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickedHub(); });
@@ -143,7 +144,43 @@ public class HubButtonActions : MonoBehaviour
         FinishTrade.GetComponent<Button>().onClick.AddListener(() => { FinishedTrade(); });
         ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ContinueToSwipe(); });
 
+        //sound
+        tradeButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        dungeonButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //tradeFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //dungeonFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //dungeonReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //tradeReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
 
+        ContinueHeroGrowthButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueEndTextButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueShardButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ReleaseHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        DiscardHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        CancelReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        Cancel1.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        Cancel2.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+
+        ConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //CloseWarningButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //CannotConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        //CloseAddWarning.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAdd1.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAdd2.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        SubmitAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //BlockedAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        DontWantAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        YesWantAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        NextHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        FinishTrade.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
 
         //delevents
         DeleventSystem.DungeonStep += UpdateStates;
@@ -167,6 +204,11 @@ public class HubButtonActions : MonoBehaviour
         UpdateStates();
     }
 
+    private void ClickSound()
+    {
+        AudioManager.PlayEffect("click");
+    }
+
 
     private void UpdateStates()
     {
@@ -186,6 +228,7 @@ public class HubButtonActions : MonoBehaviour
 
         if (tradeState == ProgressState.Done)
         {
+
             tradeProgressBar.gameObject.SetActive(false);
             tradeTextGroup.SetActive(false);
             tradeSungleTextGroup.SetActive(true);
@@ -1006,6 +1049,7 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.UpdateInventory();
 
         UpdateTradeButton(ButtonState.Unfocused);
+        UpdateHubButton(ButtonState.Focused);
 
         currentHubFocus = HubState.HeroHub;
     }

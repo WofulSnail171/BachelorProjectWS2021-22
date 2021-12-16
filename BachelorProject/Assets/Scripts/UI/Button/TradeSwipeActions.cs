@@ -116,6 +116,9 @@ public class TradeSwipeActions : MonoBehaviour
 
     private void ClickedNext()
     {
+        AudioManager.PlayEffect("nextMatch");
+
+
         List<PlayerHero> playerHeroesToMatch = new List<PlayerHero>();
 
         foreach (SwipeSlot slot in swipeInventory.swipeSlots)
@@ -136,6 +139,7 @@ public class TradeSwipeActions : MonoBehaviour
 
         swipeInventory.UnmatchAll();
         unmatchButton.SetActive(false);
+        matchButton.SetActive(false);
         cancelButton.SetActive(true);
 
         if(snapHero.GetNearestPage() == snapHero._pageCount - 2)
@@ -189,6 +193,8 @@ public class TradeSwipeActions : MonoBehaviour
     //hero focused
     private void ClickedMatch()
     {
+        AudioManager.PlayEffect("match");
+
         if(swipeInventory.swipeIndex != -1)
         {
             matchButton.SetActive(false);
@@ -204,6 +210,8 @@ public class TradeSwipeActions : MonoBehaviour
 
     private void ClickedUnmatch()
     {
+        AudioManager.PlayEffect("match");
+
         if (swipeInventory.swipeIndex != -1)
         {
             matchButton.SetActive(true);

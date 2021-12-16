@@ -33,6 +33,9 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(this) ;
         }
+
+        AudioManager.PlayMusic("hubSong");
+
     }
 
     private void Update()

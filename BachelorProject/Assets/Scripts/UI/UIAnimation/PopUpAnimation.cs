@@ -20,6 +20,8 @@ public class PopUpAnimation : AbstractElementAnimation
         //bg
         gameObject.SetActive(true);
 
+        AudioManager.PlayEffect("closePopUp");
+
 
         LeanTween.value(blur.gameObject, 1f, 0f, animSpeed)
          .setOnUpdate((value) =>
@@ -53,7 +55,10 @@ public class PopUpAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
+
         StopAllCoroutines();
+
+        AudioManager.PlayEffect("openPopUp");
 
         //bg
         gameObject.SetActive(true);
