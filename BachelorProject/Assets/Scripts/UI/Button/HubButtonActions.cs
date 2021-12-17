@@ -872,13 +872,16 @@ public class HubButtonActions : MonoBehaviour
             //no matches
             else
                 {
-                    if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
+                
+
+                if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
                     {
                         UIEnablerManager.Instance.DisableBlur();
                         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
                         UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
                         UIEnablerManager.Instance.EnableElement("AddHero", true);
-                    }
+                        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+                }
 
                     else
                     {
@@ -938,7 +941,7 @@ public class HubButtonActions : MonoBehaviour
 
     private void DoNotAddHeroToRoster()
     {
-        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+        //UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
 
 
         InventoryUI.DoAdd = false;
