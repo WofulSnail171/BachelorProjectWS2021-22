@@ -48,6 +48,7 @@ public class DungeonMapActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("General", true);
         UIEnablerManager.Instance.SwitchElements( "DungeonMapSelect", "HeroHub", true);
 
+
         hub.UpdateHubState(HubState.HeroHub);
     }
 

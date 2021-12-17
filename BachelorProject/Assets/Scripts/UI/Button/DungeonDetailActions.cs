@@ -37,6 +37,7 @@ public class DungeonDetailActions : MonoBehaviour
         //go to hero selection
         //save the selected map in data
         UIEnablerManager.Instance.SwitchElements("DungeonDetailSelect", "DungeonHeroSelect", true);
+
         UIEnablerManager.Instance.EnableElement("HeroHub", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
 

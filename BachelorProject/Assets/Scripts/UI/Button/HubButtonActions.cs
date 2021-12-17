@@ -60,6 +60,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject NextHeroExchange;
     [SerializeField] GameObject FinishHeroExchange;
     [SerializeField] GameObject FinishTrade;
+    [SerializeField] GameObject ShowBuff;
     [SerializeField] GameObject ContinueTrade;
     [SerializeField] GameObject CancelAdd1;
     [SerializeField] GameObject CancelAdd2;
@@ -143,8 +144,11 @@ public class HubButtonActions : MonoBehaviour
         FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { FinishExchange(); });
         FinishTrade.GetComponent<Button>().onClick.AddListener(() => { FinishedTrade(); });
         ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ContinueToSwipe(); });
+        ShowBuff.GetComponent<Button>().onClick.AddListener(() => { ShowBuffUI(); });
 
         //sound
+        FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
         tradeButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
         dungeonButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
         hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
@@ -415,12 +419,14 @@ public class HubButtonActions : MonoBehaviour
                 {
                     case HubState.HeroHub:
                         UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonMapSelect", true);
+
                         UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
 
 
                         break;
                     case HubState.TradeHub:
                         UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonMapSelect", true);
+
                         if (tradeState != ProgressState.Done)
                             UpdateTradeButton(ButtonState.Unfocused);
 
@@ -749,6 +755,8 @@ public class HubButtonActions : MonoBehaviour
     //tradedone
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    private bool showsshards = false;
+
     [HideInInspector]public bool oneMatch;
     [HideInInspector]public bool allMatch;
     [HideInInspector]public List<Match> allMatchList = new List<Match>();
@@ -898,6 +906,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void FinishExchange()
     {
+        UIEnablerManager.Instance.DisableElement("BuffReward", true);
+
+
         FinishHeroExchange.GetComponent<Button>().enabled = false;
 
         UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
@@ -1035,6 +1046,9 @@ public class HubButtonActions : MonoBehaviour
     //no more heroes in trade inventory
     private void FinishedTrade()
     {
+        UIEnablerManager.Instance.DisableElement("BuffReward", true);
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+
         UIEnablerManager.Instance.DisableBlur();
         UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
 
@@ -1055,6 +1069,13 @@ public class HubButtonActions : MonoBehaviour
         currentHubFocus = HubState.HeroHub;
     }
 
+
+    private void ShowBuffUI()
+    {
+        showsshards = true;
+
+        UIEnablerManager.Instance.EnableElement("BuffReward", true);
+    }
 
     //update buttons
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1159,9 +1180,13 @@ public class HubButtonActions : MonoBehaviour
 
     IEnumerator DisableEnableExchange()
     {
+        if(showsshards)
+        {
+            UIEnablerManager.Instance.DisableElement("BuffReward", true);
+            showsshards = false;
+        }
 
-
-        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", false);
 
         yield return new WaitForSeconds(.6f);
 

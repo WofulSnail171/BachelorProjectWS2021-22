@@ -21,6 +21,7 @@ public class ExchangeHeroes : MonoBehaviour
     [SerializeField] GameObject nextExchange;
     [SerializeField] GameObject FinishExchange;
     [SerializeField] GameObject FinishTrade;
+    [SerializeField] GameObject ShowBuff;
     [SerializeField] float animSpeed;
     #endregion
 
@@ -31,6 +32,7 @@ public class ExchangeHeroes : MonoBehaviour
         FinishExchange.SetActive(false);
         FinishTrade.SetActive(false);
         nextExchange.SetActive(false);
+        ShowBuff.SetActive(false);
 
         AudioManager.PlayEffect("tradeAway");
 
@@ -39,6 +41,8 @@ public class ExchangeHeroes : MonoBehaviour
 
     private void EnableButton()
     {
+        //always
+        ShowBuff.SetActive(true);
 
         if(allMatch && totalMatch == currentMatch + 1 && totalMatch != 0)
         {
@@ -138,5 +142,6 @@ public class ExchangeHeroes : MonoBehaviour
 
         EnableButton();
     }
+
 
 }
