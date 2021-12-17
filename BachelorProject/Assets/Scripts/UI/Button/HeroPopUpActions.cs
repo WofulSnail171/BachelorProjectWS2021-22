@@ -19,10 +19,11 @@ public class HeroPopUpActions : MonoBehaviour
     [SerializeField] UpdateHeroCard card;
 
     [SerializeField] InventoryUI InventoryUI;
+    [SerializeField] SwipeInventory Swipe;
 
     private void OnEnable()
     {
-        if (hub.currentHubFocus == HubState.HeroHub && !hub.isRewarding)
+        if (hub.currentHubFocus == HubState.HeroHub && !hub.isRewarding && Swipe.isActiveAndEnabled == false)
             ReleaseButton.SetActive(true);
 
         else

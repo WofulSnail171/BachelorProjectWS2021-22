@@ -916,6 +916,7 @@ public class HubButtonActions : MonoBehaviour
 
         //update logic
         TradeManager._instance.ApplySuccessfulTrades();
+
         TradeInventoryUI.RefreshTradeUI();
         InventoryUI.UpdateInventory();
 
@@ -927,6 +928,8 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("AddHero", true);
 
         currentHubFocus = HubState.TradeHub;
+
+
     }
 
 
@@ -935,6 +938,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void DoNotAddHeroToRoster()
     {
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+
+
         InventoryUI.DoAdd = false;
 
         //go to trade swipe
