@@ -62,7 +62,14 @@ public class DungeonHeroActions : MonoBehaviour
 
 
             HubFooter.UpdateHubState(HubState.DungeonHub);
+
+            AudioManager.PlayEffect("click");
+
         }
+
+        else
+            AudioManager.PlayEffect("blocked");
+
 
     }
 }

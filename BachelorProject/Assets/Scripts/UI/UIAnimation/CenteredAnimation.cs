@@ -8,7 +8,7 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopCoroutine(Pause());
+        //StopCoroutine(Pause());
 
 
         if (gameObject.activeSelf == false)

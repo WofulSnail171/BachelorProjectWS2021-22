@@ -203,6 +203,8 @@ public class ExploreInventoryUI : MonoBehaviour
 
     private void DoubleClick(int index)
     {
+        AudioManager.PlayEffect("delete");
+
         RemoveHeroFromSlot(exploreSlots[index]);
         exploreSlots[index].removeHero();
         exploreSlots[index].hideHero();

@@ -17,7 +17,7 @@ public class PopUpAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopCoroutine(Pause());
+        //StopCoroutine(Pause());
 
         //bg
         gameObject.SetActive(true);

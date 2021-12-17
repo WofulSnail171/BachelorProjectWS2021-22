@@ -12,11 +12,18 @@ public class MatchHero : MonoBehaviour
     [SerializeField] TextMeshProUGUI heroName;
     [SerializeField] GameObject [] rarityGraphics;
     [SerializeField] GameObject rarityGroup;
+    [SerializeField] GameObject matchCard;
+    [SerializeField] UpdateHeroCard updateCard;
     [SerializeField] Image portrait;
 
     [HideInInspector] private TradeOffer offer;
 
     #endregion
+
+    private void Awake()
+    {
+        matchCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
+    }
 
     public void UpdateMatchHero(TradeOffer tradeOffer)
     {
@@ -43,5 +50,14 @@ public class MatchHero : MonoBehaviour
 
         if (SpriteStruct.SpriteDictionary.ContainsKey(offer.heroId))
             portrait.sprite = SpriteStruct.SpriteDictionary[offer.heroId];
+
+    }
+
+
+    private void DoubleClick(int i)
+    {
+        updateCard.UpdateHero(DatabaseManager._instance.defaultHeroData.defaultHeroDictionary[offer.heroId], offer.origOwner, offer.lastOwner, offer.runs, offer.traded);
+
+        UIEnablerManager.Instance.EnableElement("HeroCard", true);
     }
 }

@@ -11,7 +11,7 @@ public class HeaderAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopCoroutine(Pause());
+        //StopCoroutine(Pause());
 
         gameObject.SetActive(true);
 

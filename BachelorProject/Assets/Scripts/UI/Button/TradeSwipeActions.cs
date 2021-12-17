@@ -155,6 +155,9 @@ public class TradeSwipeActions : MonoBehaviour
     //final
     private void ClickedSend()
     {
+        AudioManager.PlayEffect("send");
+
+
         List<PlayerHero> playerHeroesToMatch = new List<PlayerHero>();
 
         foreach (SwipeSlot slot in swipeInventory.swipeSlots)

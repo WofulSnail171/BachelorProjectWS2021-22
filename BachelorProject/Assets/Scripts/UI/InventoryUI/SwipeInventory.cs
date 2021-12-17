@@ -8,11 +8,12 @@ public class SwipeInventory : MonoBehaviour
     #region vars
     [SerializeField] TradeInventoryUI tradeInventory;
     [SerializeField] GameObject slotParent;
+    [SerializeField] UpdateHeroCard updateHeroCard;
     [HideInInspector] public SwipeSlot[] swipeSlots;
 
     //swipeslot focused
     private PlayerHero matchHero;
-    public int swipeIndex = -1;
+    [HideInInspector] public int swipeIndex = -1;
     #endregion
 
 
@@ -20,9 +21,15 @@ public class SwipeInventory : MonoBehaviour
     {
         swipeSlots = slotParent.GetComponentsInChildren<SwipeSlot>();
 
+        int i = 0;
 
         foreach (SwipeSlot swipeSlot in swipeSlots)
-            swipeSlot.OnClickEvent += Click; 
+        {
+            swipeSlot.OnClickEvent += Click;
+            swipeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().heroReference = i;
+            swipeSlots[i].heroCard.GetComponent<ButtonDoubleClickListener>().onDoubleClick += DoubleClick;
+            i++;
+        }
     }
 
     private void OnEnable()
@@ -80,15 +87,7 @@ public class SwipeInventory : MonoBehaviour
     }
     private void DoubleClick(int index)
     {
-        foreach (SwipeSlot heroSlot in swipeSlots)
-        {
-            if (heroSlot.playerHero != null)
-                heroSlot.disableHighlight();
-
-
-        }
-        matchHero = null;
-
-        swipeIndex = -1;
+        updateHeroCard.UpdateHero(swipeSlots[index].playerHero);
+        UIEnablerManager.Instance.EnableElement("HeroCard", true);
     }
 }

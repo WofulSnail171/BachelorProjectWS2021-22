@@ -1016,7 +1016,7 @@ public class HubButtonActions : MonoBehaviour
         //close addhero ui and go to swipe
         InventoryUI.DoAdd = false;
 
-        UIEnablerManager.Instance.DisableElement("Genral", false);
+        UIEnablerManager.Instance.DisableElement("General", false);
         UIEnablerManager.Instance.DisableElement("AddHeroDone", false);
         UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
         UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
