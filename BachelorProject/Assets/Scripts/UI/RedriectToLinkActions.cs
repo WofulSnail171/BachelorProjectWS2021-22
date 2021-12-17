@@ -2,14 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RedriectToLinkActions : MonoBehaviour
 {
     [SerializeField] GameObject LinkButton;
-    [SerializeField] GameObject InfoButton;
+    //[SerializeField] GameObject InfoPopUp;
     [SerializeField] GameObject LaterButton;
     [SerializeField] GameObject ThanksButton;
-    [SerializeField] string URL;
+    [SerializeField] TextMeshProUGUI DisplayTextObject;
+
+
+    [SerializeField] public static string URL;
+    [SerializeField] public static string displayText;
 
     private void Start()
     {
@@ -20,6 +25,9 @@ public class RedriectToLinkActions : MonoBehaviour
 
     private void OnEnable()
     {
+        DisplayTextObject.text = displayText;
+
+
         ThanksButton.SetActive(false);
         LaterButton.SetActive(true);
     }
@@ -28,7 +36,7 @@ public class RedriectToLinkActions : MonoBehaviour
     {
         Application.OpenURL(URL);
 
-        InfoButton.SetActive(false);
+        UIEnablerManager.Instance.DisableElement("InfoAvailable",false);
         LaterButton.SetActive(false);
         ThanksButton.SetActive(true);
     }
@@ -37,4 +45,5 @@ public class RedriectToLinkActions : MonoBehaviour
     {
         UIEnablerManager.Instance.DisableElement("LinkInfo", true);
     }
+
 }

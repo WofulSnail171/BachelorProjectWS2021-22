@@ -17,6 +17,8 @@ public class PopUpAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
+        StopCoroutine(Pause());
+
         //bg
         gameObject.SetActive(true);
 
@@ -56,7 +58,7 @@ public class PopUpAnimation : AbstractElementAnimation
     public override void ShowObject()
     {
 
-        StopAllCoroutines();
+        StopCoroutine(Pause());
 
         AudioManager.PlayEffect("openPopUp");
 

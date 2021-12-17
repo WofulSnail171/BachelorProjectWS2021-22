@@ -35,7 +35,7 @@ public class TradeSwipeActions : MonoBehaviour
         unmatchButton.GetComponent<Button>().onClick.AddListener(() => { ClickedUnmatch(); });
         sendButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSend(); });
         nextButton.GetComponent<Button>().onClick.AddListener(() => { ClickedNext(); });
-        cancelFetchDataButton.GetComponent<Button>().onClick.AddListener(() => { ClickedWaitCancel(); });
+        //cancelFetchDataButton.GetComponent<Button>().onClick.AddListener(() => { ClickedWaitCancel(); });
         noMatchButton.GetComponent<Button>().onClick.AddListener(() => { NoMatchFinished(); });
     }
 
@@ -54,6 +54,7 @@ public class TradeSwipeActions : MonoBehaviour
         if(DatabaseManager._instance.tradeData.GetNumberOFOpenOffers() >= 1)
         {
             UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+            UIEnablerManager.Instance.DisableBlur();
 
             if (DatabaseManager._instance.tradeData.GetNumberOFOpenOffers() > 1)
             {
@@ -75,12 +76,13 @@ public class TradeSwipeActions : MonoBehaviour
         else
         {
             UIEnablerManager.Instance.SwitchElements("WaitingForTrade","NoTradeFound", true);
+            UIEnablerManager.Instance.DisableBlur();
 
             //go to observe
             UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", false);
             UIEnablerManager.Instance.EnableElement("General", false);
-            UIEnablerManager.Instance.EnableElement("HeroHub", false);
-            UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
+            //UIEnablerManager.Instance.EnableElement("HeroHub", false);
+            //UIEnablerManager.Instance.EnableElement("ShardAndBuff", false);
 
             hub.UpdateHubState(HubState.TradeHub);
             hub.UpdateDungeonButton(ButtonState.Unfocused);
@@ -98,7 +100,7 @@ public class TradeSwipeActions : MonoBehaviour
     }
 
     //all heroes unfocused
-    private void ClickedWaitCancel()
+    /*private void ClickedWaitCancel()
     {
         //do GoogleSheetCommunicationTest cancel;
 
@@ -108,7 +110,8 @@ public class TradeSwipeActions : MonoBehaviour
 
         UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
     }
-    
+    */
+
     private void ClickedCancel()
     {
         UIEnablerManager.Instance.EnableElement("TradeCancel", true);
@@ -175,11 +178,11 @@ public class TradeSwipeActions : MonoBehaviour
         //go to observe
         UIEnablerManager.Instance.SwitchElements("TradeSwipe", "TradeObserve", true);
         UIEnablerManager.Instance.EnableElement("General", true);
-        UIEnablerManager.Instance.EnableElement("HeroHub", true);
+        //UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
         hub.UpdateHubState(HubState.TradeHub);
         hub.UpdateTradeButton(ButtonState.Focused);
-        hub.UpdateDungeonButton(ButtonState.Unfocused);
+        //hub.UpdateDungeonButton(ButtonState.Unfocused);
         hub.UpdateHubButton(ButtonState.Unfocused);
     }
 

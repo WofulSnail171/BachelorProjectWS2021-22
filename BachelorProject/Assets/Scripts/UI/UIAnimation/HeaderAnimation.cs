@@ -11,7 +11,8 @@ public class HeaderAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(Pause());
+
         gameObject.SetActive(true);
 
 
@@ -28,7 +29,8 @@ public class HeaderAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(Pause());
+
         float original = gameObject.GetComponent<RectTransform>().rect.y;
 
         gameObject.transform.position = new Vector3(gameObject.transform.position.x, Screen.height + gameObject.GetComponent<RectTransform>().rect.height*2, gameObject.transform.position.z);

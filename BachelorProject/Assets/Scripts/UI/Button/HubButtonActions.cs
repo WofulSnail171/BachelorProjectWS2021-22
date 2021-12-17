@@ -583,7 +583,7 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if (tradeState == ProgressState.Pending)
+                if (tradeState != ProgressState.Done)
                     UpdateTradeButton(ButtonState.Unfocused);
 
                 else
@@ -770,7 +770,7 @@ public class HubButtonActions : MonoBehaviour
     {
         if(IsPulling)
         { 
-            UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
+            //UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
 
             allMatchList.Clear();
             allMatchListPotential.Clear();
@@ -795,7 +795,7 @@ public class HubButtonActions : MonoBehaviour
                     UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                     //buttons
-                    if (dungeonState == ProgressState.Pending)
+                    if (dungeonState != ProgressState.Done )
                         UpdateDungeonButton(ButtonState.Unfocused);
 
                     else
@@ -945,6 +945,7 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.DoAdd = true;
 
         UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
     }
 
     private void CannotAddHeroSubmit()
@@ -1023,10 +1024,10 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.DoAdd = false;
 
         //go to swipe inventory
-        UIEnablerManager.Instance.DisableBlur();
-        UIEnablerManager.Instance.DisableElement("HeroHub", false);
+        UIEnablerManager.Instance.DisableElement("HeroHub", true);
+        UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
         UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
-        UIEnablerManager.Instance.DisableElement("General", false);
+        UIEnablerManager.Instance.DisableElement("General", true);
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
     }
 

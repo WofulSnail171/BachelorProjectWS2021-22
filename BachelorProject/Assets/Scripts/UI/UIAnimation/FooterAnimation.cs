@@ -11,7 +11,8 @@ public class FooterAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(Pause());
+
         gameObject.SetActive(true);
 
 
@@ -28,7 +29,8 @@ public class FooterAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(Pause());
+
 
         float original = gameObject.GetComponent<RectTransform>().rect.y;
 
