@@ -23,6 +23,11 @@ public class DungeonObserveHeader : MonoBehaviour
     [SerializeField] GameObject DialogGroup;
 
     [SerializeField] float animSpeed;
+    [SerializeField] Color physColor;
+    [SerializeField] Color magColor;
+    [SerializeField] Color socColor;
+
+
 
 
 
@@ -81,8 +86,12 @@ public class DungeonObserveHeader : MonoBehaviour
                     rewardBar.fillAmount = 1;
             }
 
-            //text
-            rewardTierText.text = $"Lvl {rewardTier}";
+            else
+                rewardBar.fillAmount = 0;
+
+
+        //text
+        rewardTierText.text = $"Lvl {rewardTier}";
 
 
             DialogText.text = DungeonManager._instance.currentCalcRun.dungeonLogArr[DungeonManager._instance.currentCalcRun.dungeonLogArr.Length - 1].entry;
@@ -95,7 +104,16 @@ public class DungeonObserveHeader : MonoBehaviour
                 EventType.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType;
                 EventValue.text = $"{DungeonManager._instance.currentCalcRun.currentNode.eventHealth} / {DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth}";
 
-                eventBar.fillAmount = (float)DungeonManager._instance.currentCalcRun.currentNode.eventHealth / (float) DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth;
+                if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "magical")
+                    eventBar.color = magColor;
+
+                if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "physical")
+                    eventBar.color = physColor;
+
+                if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "social")
+                    eventBar.color = socColor;
+
+            eventBar.fillAmount = (float)DungeonManager._instance.currentCalcRun.currentNode.eventHealth / (float) DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth;
             }
 
             else
@@ -136,7 +154,7 @@ public class DungeonObserveHeader : MonoBehaviour
                 rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;//--> lowest lvl 1
 
             else
-                rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10;
+                rewardTier = DungeonManager._instance.currentCalcRun.rewardHealthBar / 10 + 1;
 
 
             //animate if active and not lowest tier
@@ -158,7 +176,7 @@ public class DungeonObserveHeader : MonoBehaviour
 
             if(rewardTier == 1)
             {
-                rewardBar.fillAmount = 1;
+                rewardBar.fillAmount = 0;
 
                 rewardTierText.text = $"Lvl {rewardTier}";
             }
@@ -210,6 +228,8 @@ public class DungeonObserveHeader : MonoBehaviour
         if (gameObject.activeSelf)
         {
             //show info
+            
+
             EventInfoGroup.transform.localScale = new Vector3 (1,0,1);
 
             LeanTween.value(EventInfoGroup, 0, 1, animSpeed).
@@ -221,6 +241,15 @@ public class DungeonObserveHeader : MonoBehaviour
 
             //set health init and health type
             EventType.text = DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType;
+
+            if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "magical")
+                eventBar.color = magColor;
+
+            if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "physical")
+                eventBar.color = physColor;
+
+            if (DungeonManager._instance.currentCalcRun.currentNode.nodeEvent.statType == "social")
+                eventBar.color = socColor;
 
             int health = DungeonManager._instance.currentCalcRun.currentNode.maxEventHealth;
 
@@ -312,12 +341,12 @@ public class DungeonObserveHeader : MonoBehaviour
     {
         if(oldRewardTier < rewardTier)
         {
-            rewardTierText.text = $"Lvl {rewardTier}";
             startValue = 0;
+            rewardBar.fillAmount = 0;
         }
 
 
-        if(oldRewardTier > rewardTier)
+        if (oldRewardTier > rewardTier)
         {
             startValue = 1;
             rewardBar.fillAmount = 1;
@@ -328,9 +357,8 @@ public class DungeonObserveHeader : MonoBehaviour
 
 
 
-        LeanTween.value(rewardBar.gameObject,startValue, endValue, time)
-            .setOnUpdate(setRewardFillAmount)
-            .setEaseInOutExpo();
+        LeanTween.value(rewardBar.gameObject, startValue, endValue, time)
+            .setOnUpdate(setRewardFillAmount);
 
         yield return new WaitForSeconds(time);
 
@@ -341,7 +369,7 @@ public class DungeonObserveHeader : MonoBehaviour
             rewardTierText.text = $"Lvl {rewardTier}";
         }
 
-        if (oldRewardTier > rewardTier)
+        if (oldRewardTier > rewardTier )
             rewardTierText.text = $"Lvl {rewardTier}";
     }
 

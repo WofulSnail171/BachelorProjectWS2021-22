@@ -11783,7 +11783,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 843.43, y: -84.59}
+  m_AnchoredPosition: {x: 853.43, y: -84.59}
   m_SizeDelta: {x: 500, y: 30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &190952924
@@ -18952,7 +18952,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 206.715, y: -84.59}
+  m_AnchoredPosition: {x: 216.715, y: -84.59}
   m_SizeDelta: {x: 153.43, y: 169.18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &317900513
@@ -66935,7 +66935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.42745098, g: 0.70980394, b: 0.84313726, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -89749,6 +89749,9 @@ MonoBehaviour:
   EventInfoGroup: {fileID: 642430531}
   DialogGroup: {fileID: 2002444153}
   animSpeed: 0.5
+  physColor: {r: 0.8235294, g: 0.45882353, b: 0.42352942, a: 1}
+  magColor: {r: 0.7764706, g: 0.47843137, b: 0.9647059, a: 1}
+  socColor: {r: 0.42745098, g: 0.70980394, b: 0.84313726, a: 1}
 --- !u!1 &1377074230
 GameObject:
   m_ObjectHideFlags: 0
@@ -98739,8 +98742,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70, y: -84.59}
-  m_SizeDelta: {x: 70, y: 70}
+  m_AnchoredPosition: {x: 80, y: -84.59}
+  m_SizeDelta: {x: 80, y: 169.18}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1506077355
 MonoBehaviour:
@@ -98755,10 +98758,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 70
-  m_MinHeight: 70
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
+  m_MinWidth: 80
+  m_MinHeight: 80
+  m_PreferredWidth: 80
+  m_PreferredHeight: 80
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -98782,7 +98785,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f65f80b8f6c62748bbc6e4bc347537f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4dec3da6850fcd049821963b5020cf87, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -108559,7 +108562,7 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
