@@ -4,16 +4,20 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] rect55_position ("rect55_position", Vector) = (0,0,0,0)
-            [HideInInspector] rect55_box ("rect55_box", Vector) = (0,0,0,0)
-            [HideInInspector] rect55_scale ("rect55_scale", Float) = 1
-            [HideInInspector] rect55_roundness ("rect55_roundness", Vector) = (0,0,0,0)
-            [HideInInspector] rect55_rotation ("rect55_rotation", Float) = 0
+            [HideInInspector] rect828_position ("rect828_position", Vector) = (0,0,0,0)
+            [HideInInspector] rect828_box ("rect828_box", Vector) = (0,0,0,0)
+            [HideInInspector] rect828_scale ("rect828_scale", Float) = 1
+            [HideInInspector] rect828_roundness ("rect828_roundness", Vector) = (0,0,0,0)
+            [HideInInspector] rect828_rotation ("rect828_rotation", Float) = 0
                 
             
             [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
             [HideInInspector] scaleSDF ("scaleSDF", Float) = 1
             [HideInInspector] rotationSDF ("rotationSDF", Float) = 0
+
+            [HideInInspector] infiniteDistance ("infiniteDistance", Vector) = (0,0,0,0)
+            [HideInInspector] finiteDistance ("finiteDistance", Vector) = (0,0,0,0)
+            [HideInInspector] finiteClamp ("finiteClamp", Vector) = (0,0,0,0)
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
             [HideInInspector] insideColor ("inside Color", Color) = (1,1,1,1)
@@ -88,13 +92,13 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 positionSDF;
+        float2 positionSDF, infiniteDistance, finiteDistance, finiteClamp;
         float rotationSDF, scaleSDF;
-        float2 rect55_position;
-        float2 rect55_box;
-        float rect55_scale;
-        float4 rect55_roundness;
-        float rect55_rotation;
+        float2 rect828_position;
+        float2 rect828_box;
+        float rect828_scale;
+        float4 rect828_roundness;
+        float rect828_rotation;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
@@ -106,8 +110,8 @@ Shader "SDF/test"
         {    
             i.uv -= float2(0.5, 0.5);
 
-            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF,
-                               rect55_position, rect55_box, rect55_scale, rect55_roundness, rect55_rotation);
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, infiniteDistance, finiteDistance, finiteClamp,
+                               rect828_position, rect828_box, rect828_scale, rect828_roundness, rect828_rotation);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

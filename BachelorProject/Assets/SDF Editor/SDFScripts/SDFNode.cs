@@ -30,7 +30,6 @@ public abstract class SDFNode : ScriptableObject
         SmoothIntersect,
         Lerp,
         Subtract,
-        Intersect,
         Output
     }
 

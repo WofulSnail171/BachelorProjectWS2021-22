@@ -8,7 +8,9 @@ using UnityEngine;
 
 [ExecuteAlways][CreateAssetMenu(menuName = "SDF Output/Output")]
 public class SDFOutput : SDFNode{
-
+    
+    #region ShaderVariables
+    
     [SerializeField] private string shaderName; 
         
     private string pathShaderFile;
@@ -40,7 +42,7 @@ public class SDFOutput : SDFNode{
         set {
             if (this._positionSDF == value) return;
             this._positionSDF = value;
-            this.OnValueChange?.Invoke(this);
+            this.isDirty = true;
         }
     }
     
@@ -49,7 +51,7 @@ public class SDFOutput : SDFNode{
         set {
             if (this._scaleSDF == value) return;
             this._scaleSDF = value;
-            this.OnValueChange?.Invoke(this);
+            this.isDirty = true;
         }
     }
     
@@ -58,20 +60,91 @@ public class SDFOutput : SDFNode{
         set {
             if (this._rotationSDF == value) return;
             this._rotationSDF = value;
-            this.OnValueChange?.Invoke(this);
+            this.isDirty = true;
         }
     }
-
+    
     public Material sdfMaterial;
     private Shader sdfShader;
     
     public bool applyMaterial;
-    
-    private List<string> shaderStrings = new List<string>();
-    private List<string> includeStrings = new List<string>();
-    private List <SDFNode>  SDFNodes = new List<SDFNode>();
 
-    //Color variables
+    [Header("Repetition")]
+    [SerializeField] private bool infinite;
+    private bool _infinite;
+
+    [SerializeField] private Vector2 infiniteDistance;
+    private Vector2 _infiniteDistance;
+    
+    [Space]
+    [SerializeField] private bool finite;
+    private bool _finite;
+    
+    [SerializeField] private Vector2 finiteDistance;
+    private Vector2 _finiteDistance;
+    
+    [SerializeField] private Vector2 finiteClamp;
+    private Vector2 _finiteClamp;
+
+    private bool infiniteSwitch;
+    
+    public bool Infinite {
+        get => this._infinite;
+        set {
+            if (this._infinite == value) return;
+            this._infinite = value;
+            this.infiniteSwitch = true;
+            if (this._infinite && this.Finite) {
+                this.finite = false;
+                this.Finite = false;
+            }
+        }
+    }
+    
+    public Vector2 InfiniteDistance {
+        get => this._infiniteDistance;
+        set {
+            if (this._infiniteDistance == value) return;
+            this._infiniteDistance = value;
+            if (this.infinite)
+                this.isDirty = true;
+        }
+    }
+    
+    public bool Finite {
+        get => this._finite;
+        set {
+            if (this._finite == value) return;
+            this._finite = value;
+            if (this._finite && this.Infinite) {
+                this.infinite = false;
+                this.Infinite = false;
+            }
+        }
+    }
+    
+    public Vector2 FiniteDistance {
+        get => this._finiteDistance;
+        set {
+            if (this._finiteDistance == value) return;
+            this._finiteDistance = value;
+            if (this.finite)
+                this.isDirty = true;
+        }
+    }
+    
+    public Vector2 FiniteClamp {
+        get => this._finiteClamp;
+        set {
+            if (this._finiteClamp == value) return;
+            this._finiteClamp = value;
+            if (this.finite)
+                this.isDirty = true;
+        }
+    }
+    
+#endregion
+
     #region Color
 
     private enum ColorChange {
@@ -313,12 +386,23 @@ public class SDFOutput : SDFNode{
     }
 
     #endregion
-
+    
+    
+    private List<string> shaderStrings = new List<string>();
+    private List<string> includeStrings = new List<string>();
+    private List <SDFNode>  SDFNodes = new List<SDFNode>();
+    
     private void OnValidate() {
         this.Input = this.input;
         this.PositionSDF = this.positionSDF;
         this.ScaleSDF = this.scaleSDF;
         this.RotationSDF = this.rotationSDF;
+
+        this.Infinite = this.infinite;
+        this.InfiniteDistance = this.infiniteDistance;
+        this.Finite = this.finite;
+        this.FiniteDistance = this.finiteDistance;
+        this.FiniteClamp = this.finiteClamp;
 
         this.InsideTex = this.insideTex;
         this.InsideColor = this.insideColor;
@@ -341,6 +425,16 @@ public class SDFOutput : SDFNode{
         this.Thickness = this.thickness;
         this.Repetition = this.repetition;
         this.LineDistance = this.lineDistance;
+
+        if (this.isDirty) {
+            this.OnValueChange(this);
+            this.isDirty = false;
+        }
+
+        if (this.infiniteSwitch) {
+            this.OnInputChange();
+            this.infiniteSwitch = false;
+        }
         
         if (this.isInsideDirty) {
             this.colorChange = ColorChange.Inside;
@@ -565,6 +659,10 @@ public class SDFOutput : SDFNode{
             [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
             [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
 
+            [HideInInspector] infiniteDistance (""infiniteDistance"", Vector) = (0,0,0,0)
+            [HideInInspector] finiteDistance (""finiteDistance"", Vector) = (0,0,0,0)
+            [HideInInspector] finiteClamp (""finiteClamp"", Vector) = (0,0,0,0)
+
             [HideInInspector] insideTex (""inside Texture"", 2D) = ""white""{}
             [HideInInspector] insideColor (""inside Color"", Color) = (1,1,1,1)
             [HideInInspector] insideTexPosition (""inside Texture Position"", Vector) = (0,0,0,0)
@@ -663,7 +761,7 @@ public class SDFOutput : SDFNode{
 
         return @"
      CBUFFER_START(UnityPerMaterial)
-        float2 positionSDF;
+        float2 positionSDF, infiniteDistance, finiteDistance, finiteClamp;
         float rotationSDF, scaleSDF;
      " + shaderVariables + @"
         float4 insideColor, outsideColor, outlineColor;
@@ -697,7 +795,7 @@ public class SDFOutput : SDFNode{
         {    
             i.uv -= float2(0.5, 0.5);
 
-            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF,
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, infiniteDistance, finiteDistance, finiteClamp,
                                " + shaderVariables + @");
             
             float4 col = sdfColor(i.uv, sdfOut,
@@ -726,6 +824,7 @@ public class SDFOutput : SDFNode{
     }
     
     private string GenerateShaderSdfFunction(SDFNode node) {
+        string repetition = "";
         string shaderVariables = "";
         string sdfFunction = "";
         
@@ -744,6 +843,11 @@ public class SDFOutput : SDFNode{
         }
         shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
 
+        if (this.Infinite)
+            repetition = "uv = fmod(uv + 0.5 * infiniteDistance, infiniteDistance) - 0.5 + infiniteDistance;";
+        if (this.Finite)
+            repetition = " uv = uv - finiteDistance * clamp(round(uv/finiteDistance), -finiteClamp, finiteClamp);";
+
         return @"
     
     float dot2( in float2 v ) { return dot(v,v); }
@@ -755,10 +859,11 @@ public class SDFOutput : SDFNode{
         return t;
     }
 
-    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF,
+    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 infiniteDistance, float2 finiteDistance, float2 finiteClamp,
                " + shaderVariables + @"){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
+        " + repetition + @"
         " + sdfFunction + @"
 
 
@@ -912,6 +1017,13 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector("positionSDF", this.PositionSDF);
                 this.sdfMaterial.SetFloat("rotationSDF", this.RotationSDF);
                 this.sdfMaterial.SetFloat("scaleSDF", this.ScaleSDF);
+                if(this.Infinite)
+                    this.sdfMaterial.SetVector("infiniteDistance", this.InfiniteDistance);
+                if (this.Finite) {
+                    this.sdfMaterial.SetVector("finiteDistance", this.FiniteDistance);
+                    this.sdfMaterial.SetVector("finiteClamp", this.FiniteClamp);
+                }
+
                 break;
             }
             default: {

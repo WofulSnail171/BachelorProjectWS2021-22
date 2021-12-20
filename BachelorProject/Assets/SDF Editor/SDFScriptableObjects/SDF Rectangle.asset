@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df76ed01223f4a4086b85788543c7c3, type: 3}
   m_Name: SDF Rectangle
   m_EditorClassIdentifier: 
-  o: rect534_out
-  sdfName: rect534
+  o: rect55_out
+  sdfName: rect55
   variables:
-  - rect534_position
-  - rect534_box
-  - rect534_scale
-  - rect534_roundness
-  - rect534_rotation
+  - rect55_position
+  - rect55_box
+  - rect55_scale
+  - rect55_roundness
+  - rect55_rotation
   types:
   - float2
   - float2

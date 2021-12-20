@@ -11,19 +11,20 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF,
-               float2 rect55_position, float2 rect55_box, float rect55_scale, float4 rect55_roundness, float rect55_rotation){ 
+    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 infiniteDistance, float2 finiteDistance, float2 finiteClamp,
+               float2 rect828_position, float2 rect828_box, float rect828_scale, float4 rect828_roundness, float rect828_rotation){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
+        uv = fmod(uv + 0.5 * infiniteDistance, infiniteDistance) - 0.5 + infiniteDistance;
         
-        float2 t_rect55 = transform(rect55_position, rect55_rotation, rect55_scale, uv);
-        rect55_roundness.xy = (t_rect55.x > 0.0) ? rect55_roundness.xy : rect55_roundness.zw;
-        rect55_roundness.x  = (t_rect55.y  > 0.0) ? rect55_roundness.x  : rect55_roundness.y;
-        float2 q_rect55 = abs(t_rect55) - rect55_box + rect55_roundness.x;
-        float rect55_out = (min(max(q_rect55.x,q_rect55.y),0.0) + length(max(q_rect55,0.0)) - rect55_roundness.x) * rect55_scale;
+        float2 t_rect828 = transform(rect828_position, rect828_rotation, rect828_scale, uv);
+        rect828_roundness.xy = (t_rect828.x > 0.0) ? rect828_roundness.xy : rect828_roundness.zw;
+        rect828_roundness.x  = (t_rect828.y  > 0.0) ? rect828_roundness.x  : rect828_roundness.y;
+        float2 q_rect828 = abs(t_rect828) - rect828_box + rect828_roundness.x;
+        float rect828_out = (min(max(q_rect828.x,q_rect828.y),0.0) + length(max(q_rect828,0.0)) - rect828_roundness.x) * rect828_scale;
 
 
-        return rect55_out*scaleSDF;
+        return rect828_out*scaleSDF;
     }
         
 
