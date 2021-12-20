@@ -236,11 +236,11 @@ Material:
     - line982_roundness: 1.77
     - line982_scale: 0.7
     - lineDistance: 0.62
-    - outlineLineDistance: 1.35
-    - outlineRepetition: 2
+    - outlineLineDistance: 1
+    - outlineRepetition: 1
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 1.24
+    - outlineThickness: 0.2
     - outsideTexRotation: 0
     - outsideTexScale: 1
     - rect121_rotation: 39.44
@@ -275,6 +275,7 @@ Material:
     - rect962_scale: 0.3
     - rect983_scale: 2
     - repetition: 17.09
+    - rotationSDF: 0.46
     - sCombine93_k: 0.18
     - sIntersect842_k: 0.19
     - sSubtract899_k: 0.03
@@ -282,6 +283,7 @@ Material:
     - sblend571_k: 0.29
     - sblend896_k: 0.28
     - sblend989_k: 0
+    - scaleSDF: 0.79
     - tex338_rotation: 0
     - tex338_scale: 1
     - tex649_rotation: -0.26
@@ -400,6 +402,7 @@ Material:
     - outlineTexPosition: {r: 0, g: 0, b: 0, a: 0}
     - outsideColor: {r: 1, g: 1, b: 1, a: 0}
     - outsideTexPosition: {r: 0, g: 0, b: 0, a: 0}
+    - positionSDF: {r: 0, g: 0, b: 0, a: 0}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect121_position: {r: 0.02, g: 0, b: 0, a: 0}
     - rect121_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}

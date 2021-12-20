@@ -10,6 +10,10 @@ Shader "SDF/test"
             [HideInInspector] rect55_roundness ("rect55_roundness", Vector) = (0,0,0,0)
             [HideInInspector] rect55_rotation ("rect55_rotation", Float) = 0
                 
+            
+            [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
+            [HideInInspector] scaleSDF ("scaleSDF", Float) = 1
+            [HideInInspector] rotationSDF ("rotationSDF", Float) = 0
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
             [HideInInspector] insideColor ("inside Color", Color) = (1,1,1,1)

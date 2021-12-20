@@ -550,16 +550,6 @@ public class SDFOutput : SDFNode{
                 ";
                     break;
                 }
-                case NodeType.Output: {
-                    var n = (SDFLerp) node;
-                    properties += @"
-            [HideInInspector] positionSDF (""positionSDF"", Vector) = (0,0,0,0)
-            [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
-            [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
-                }
-                ";
-                    break;
-                }
                 default: {
                     break;
                 }
@@ -570,6 +560,10 @@ public class SDFOutput : SDFNode{
         Properties
         {
             " + properties + @"
+            
+            [HideInInspector] positionSDF (""positionSDF"", Vector) = (0,0,0,0)
+            [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
+            [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
 
             [HideInInspector] insideTex (""inside Texture"", 2D) = ""white""{}
             [HideInInspector] insideColor (""inside Color"", Color) = (1,1,1,1)
