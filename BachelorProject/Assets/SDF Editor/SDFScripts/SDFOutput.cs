@@ -412,6 +412,7 @@ public class SDFOutput : SDFNode{
         foreach (SDFNode s in this.SDFNodes) {
             this.ChangeShaderValues(s);
         }
+        this.ChangeShaderValues(this);
         
     }
 
@@ -577,13 +578,13 @@ public class SDFOutput : SDFNode{
             [HideInInspector] insideTexRotation (""inside Texture Rotation"", Float) = 0
 
             [HideInInspector] outsideTex (""outside Texture"", 2D) = ""white""{}
-            [HideInInspector] outsideColor (""outside Color"", Color) = (1,1,1,1)
+            [HideInInspector] outsideColor (""outside Color"", Color) = (1,1,1,0)
             [HideInInspector] outsideTexPosition (""outside Texture Position"", Vector) = (0,0,0,0)
             [HideInInspector] outsideTexScale (""outside Texture Scale"", Float) = 1
             [HideInInspector] outsideTexRotation (""outside Texture Rotation"", Float) = 0
 
             [HideInInspector] outlineTex (""outline Texture"", 2D) = ""white""{}
-            [HideInInspector] outlineColor (""outline Color"", Color) = (1,1,1,1)
+            [HideInInspector] outlineColor (""outline Color"", Color) = (0,0,0,1)
             [HideInInspector] outlineTexPosition (""outline Texture Position"", Vector) = (0,0,0,0)
             [HideInInspector] outlineTexScale (""outline Texture Scale"", Float) = 1
             [HideInInspector] outlineTexRotation (""outline Texture Rotation"", Float) = 0
@@ -800,8 +801,8 @@ public class SDFOutput : SDFNode{
         if (this.shaderName == null) {
             this.shaderName = "defaultSDFShader";
         }
-        this.pathShaderFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".shader";
-        this.pathIncludeFile = "Assets/SDFEditor/SDFShader/" + this.shaderName + ".hlsl";
+        this.pathShaderFile = "Assets/SDF Editor/SDFShader/" + this.shaderName + ".shader";
+        this.pathIncludeFile = "Assets/SDF Editor/SDFShader/" + this.shaderName + ".hlsl";
         
         using (StreamWriter sw = File.CreateText(this.pathIncludeFile)) {
             foreach (string s in this.includeStrings) {
@@ -913,7 +914,7 @@ public class SDFOutput : SDFNode{
                 break;
             }
             case NodeType.Output: {
-                var n = (SDFOutput) node;
+                Debug.Log("setting output shader variables");
                 this.sdfMaterial.SetVector("positionSDF", this.PositionSDF);
                 this.sdfMaterial.SetFloat("rotationSDF", this.RotationSDF);
                 this.sdfMaterial.SetFloat("scaleSDF", this.ScaleSDF);
@@ -925,16 +926,18 @@ public class SDFOutput : SDFNode{
         }
 #if UNITY_EDITOR
         EditorUtility.SetDirty(this.sdfMaterial);
+        AssetDatabase.Refresh();
 #endif
     }
     
     private void UpdateColor( ColorChange change){
+        Debug.Log("setting output color variables");
         if (this.sdfMaterial == null) {
             Debug.LogWarning("material has not been applied or assigned");
             return;
         }
 #if UNITY_EDITOR
-        Undo.RecordObject(this.sdfMaterial, "changed Material");        
+        Undo.RecordObject(this.sdfMaterial, "changed Color");        
 #endif
         switch (change) {
             case ColorChange.Inside: {
@@ -974,6 +977,7 @@ public class SDFOutput : SDFNode{
         }
 #if UNITY_EDITOR
         EditorUtility.SetDirty(this.sdfMaterial);
+        AssetDatabase.Refresh();
 #endif        
     }
 

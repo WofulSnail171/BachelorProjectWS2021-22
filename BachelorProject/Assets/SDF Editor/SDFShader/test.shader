@@ -4,17 +4,11 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] sSubtract899_k ("sSubtract899_k", Float) = 0
-                
-            [HideInInspector] circle662_position ("circle662_position", Vector) = (0,0,0,0)
-            [HideInInspector] circle662_radius ("circle662_radius", Float) = 0.2
-                
-            [HideInInspector] triangle600_position ("triangle600_position", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_a ("triangle600_a", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_b ("triangle600_b", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_c ("triangle600_c", Vector) = (0,0,0,0)
-            [HideInInspector] triangle600_scale ("triangle600_scale", Float) = 1
-            [HideInInspector] triangle600_rotation ("triangle600_rotation", Float) = 0
+            [HideInInspector] rect55_position ("rect55_position", Vector) = (0,0,0,0)
+            [HideInInspector] rect55_box ("rect55_box", Vector) = (0,0,0,0)
+            [HideInInspector] rect55_scale ("rect55_scale", Float) = 1
+            [HideInInspector] rect55_roundness ("rect55_roundness", Vector) = (0,0,0,0)
+            [HideInInspector] rect55_rotation ("rect55_rotation", Float) = 0
                 
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
@@ -24,13 +18,13 @@ Shader "SDF/test"
             [HideInInspector] insideTexRotation ("inside Texture Rotation", Float) = 0
 
             [HideInInspector] outsideTex ("outside Texture", 2D) = "white"{}
-            [HideInInspector] outsideColor ("outside Color", Color) = (1,1,1,1)
+            [HideInInspector] outsideColor ("outside Color", Color) = (1,1,1,0)
             [HideInInspector] outsideTexPosition ("outside Texture Position", Vector) = (0,0,0,0)
             [HideInInspector] outsideTexScale ("outside Texture Scale", Float) = 1
             [HideInInspector] outsideTexRotation ("outside Texture Rotation", Float) = 0
 
             [HideInInspector] outlineTex ("outline Texture", 2D) = "white"{}
-            [HideInInspector] outlineColor ("outline Color", Color) = (1,1,1,1)
+            [HideInInspector] outlineColor ("outline Color", Color) = (0,0,0,1)
             [HideInInspector] outlineTexPosition ("outline Texture Position", Vector) = (0,0,0,0)
             [HideInInspector] outlineTexScale ("outline Texture Scale", Float) = 1
             [HideInInspector] outlineTexRotation ("outline Texture Rotation", Float) = 0
@@ -92,15 +86,11 @@ Shader "SDF/test"
      CBUFFER_START(UnityPerMaterial)
         float2 positionSDF;
         float rotationSDF, scaleSDF;
-        float sSubtract899_k;
-        float2 circle662_position;
-        float circle662_radius;
-        float2 triangle600_position;
-        float2 triangle600_a;
-        float2 triangle600_b;
-        float2 triangle600_c;
-        float triangle600_scale;
-        float triangle600_rotation;
+        float2 rect55_position;
+        float2 rect55_box;
+        float rect55_scale;
+        float4 rect55_roundness;
+        float rect55_rotation;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
@@ -113,7 +103,7 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
 
             float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF,
-                               triangle600_position, triangle600_a, triangle600_b, triangle600_c, triangle600_scale, triangle600_rotation, circle662_position, circle662_radius, sSubtract899_k);
+                               rect55_position, rect55_box, rect55_scale, rect55_roundness, rect55_rotation);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

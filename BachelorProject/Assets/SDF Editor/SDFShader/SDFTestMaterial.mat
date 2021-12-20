@@ -160,11 +160,15 @@ Material:
     - circle125_radius: 0.12
     - circle167_radius: 0.2
     - circle258_radius: 0.12
+    - circle266_radius: 0.1
     - circle283_radius: 0.25
+    - circle392_radius: 0.27
     - circle429_radius: 0.13
     - circle477_radius: 0.2
     - circle479_radius: 0.2
+    - circle484_radius: 0.48
     - circle535_radius: 0.17
+    - circle551_radius: 0.48
     - circle646_radius: 0.25
     - circle662_radius: 0.32
     - circle673_radius: 0.27
@@ -232,11 +236,11 @@ Material:
     - line982_roundness: 1.77
     - line982_scale: 0.7
     - lineDistance: 0.62
-    - outlineLineDistance: 1
-    - outlineRepetition: 1
+    - outlineLineDistance: 1.35
+    - outlineRepetition: 2
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 0.2
+    - outlineThickness: 1.24
     - outsideTexRotation: 0
     - outsideTexScale: 1
     - rect121_rotation: 39.44
@@ -254,7 +258,11 @@ Material:
     - rect519_rotation: 51.2
     - rect519_scale: 0.3
     - rect530_scale: 1.45
+    - rect534_rotation: 0
+    - rect534_scale: 1
     - rect550_scale: 2
+    - rect55_rotation: 0
+    - rect55_scale: 1
     - rect651_rotation: 57.36
     - rect651_scale: 0.42
     - rect761_scale: 1
@@ -325,11 +333,15 @@ Material:
     - circle125_position: {r: 0, g: 0, b: 0, a: 0}
     - circle167_position: {r: 0, g: 0, b: 0, a: 0}
     - circle258_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle266_position: {r: 0, g: 0, b: 0, a: 0}
     - circle283_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle392_position: {r: 0, g: 0, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle477_position: {r: 0, g: 0, b: 0, a: 0}
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle484_position: {r: 0, g: 0, b: 0, a: 0}
     - circle535_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle551_position: {r: 0, g: 0, b: 0, a: 0}
     - circle646_position: {r: 0.1, g: 0.01, b: 0, a: 0}
     - circle662_position: {r: 0, g: 0, b: 0, a: 0}
     - circle673_position: {r: 0, g: 0, b: 0, a: 0}
@@ -418,9 +430,15 @@ Material:
     - rect530_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect530_position: {r: 0, g: 0, b: 0, a: 0}
     - rect530_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}
+    - rect534_box: {r: 0.2, g: 0.5, b: 0, a: 0}
+    - rect534_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect534_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect550_box: {r: 0.11, g: 0.23, b: 0, a: 0}
     - rect550_position: {r: 0.25, g: 0, b: 0, a: 0}
     - rect550_roundness: {r: 0, g: 0, b: 0.1, a: 0.1}
+    - rect55_box: {r: 0.2, g: 0.5, b: 0, a: 0}
+    - rect55_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect55_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect651_box: {r: 0.68, g: 0.47, b: 0, a: 0}
     - rect651_position: {r: 0.1, g: 0, b: 0, a: 0}
     - rect651_roundness: {r: 0.23, g: 0.07, b: 0.01, a: 0.14}
