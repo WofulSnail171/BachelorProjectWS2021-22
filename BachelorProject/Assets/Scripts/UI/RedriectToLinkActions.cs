@@ -14,13 +14,15 @@ public class RedriectToLinkActions : MonoBehaviour
 
 
     [SerializeField] public static string URL;
-    [SerializeField] public static string displayText;
+    [SerializeField] public static string displayText = "inactive";
+    [SerializeField] public static string formName;
 
     private void Start()
     {
         LinkButton.GetComponent<Button>().onClick.AddListener(() => { OpenLink(); });
         LaterButton.GetComponent<Button>().onClick.AddListener(() => { Close(); });
         ThanksButton.GetComponent<Button>().onClick.AddListener(() => { Close(); });
+        displayText = "inactive";
     }
 
     private void OnEnable()
@@ -35,7 +37,7 @@ public class RedriectToLinkActions : MonoBehaviour
     private void OpenLink()
     {
         Application.OpenURL(URL);
-
+        DatabaseManager._instance.activePlayerData.answeredForms.Add(formName);
         UIEnablerManager.Instance.DisableElement("InfoAvailable",false);
         LaterButton.SetActive(false);
         ThanksButton.SetActive(true);
@@ -44,6 +46,8 @@ public class RedriectToLinkActions : MonoBehaviour
     private void Close()
     {
         UIEnablerManager.Instance.DisableElement("LinkInfo", true);
+        displayText = "inactive";
+        FormsManager._instance.TryDisplayForm();
     }
 
 }

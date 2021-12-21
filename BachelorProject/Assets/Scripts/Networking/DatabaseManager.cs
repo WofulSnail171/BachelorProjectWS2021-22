@@ -382,6 +382,8 @@ public class PlayerData
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
 
+    public List<string> answeredForms;
+
     public void AffectRewardTierBuff(int _amount)
     {
         rewardTierBuff += _amount;
@@ -754,4 +756,16 @@ public class GlobalData
 {
     public int defaultUpdate;
     public int versionNum;
+    public List<FormEntry> formData;
+}
+
+[System.Serializable]
+public class FormEntry
+{
+    public int count;
+    public string title;
+    public string message;
+    public string link;
+    public string condition;
+    public string conVal;
 }
