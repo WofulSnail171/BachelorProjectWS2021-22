@@ -197,15 +197,22 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PullGlobalData:
                 DatabaseManager._instance.UpdateGlobalDataFromServer(lastMessage);
                 break;
+            case Request.pushDexEntries:
+                //DatabaseManager._instance.UpdateGlobalDataFromServer(lastMessage);
+                break;
             default:
                 break;
         }
         WebRequestInstance _temp = webRequestQueue[0];
         webRequestQueue.RemoveAt(0); //in case one of the functions throw an error i want to ´still remove the message
         if (_temp.simpleEvent != null)
+        {
             _temp.simpleEvent();
+        }
         if (_temp.messageEvent != null)
+        {
             _temp.messageEvent(lastMessage);
+        }
 
         if (webRequestQueue.Count >= 1)
             CommVis.SetActive(true);
@@ -257,6 +264,8 @@ public class ServerCommunicationManager : MonoBehaviour
                 break;
             case Request.PullGlobalData:
                 break;
+            case Request.pushDexEntries:
+                break;
             default:
                 break;
         }
@@ -265,6 +274,7 @@ public class ServerCommunicationManager : MonoBehaviour
     public void PopRequestQueue()
     {
         WebRequestInstance _temp = webRequestQueue[0];
+        errorInfoText.text = _temp.requestType.ToString();
         _webRequest = _temp.request;
         _webRequest.timeout = (int)waitTime;
         _webRequest.SendWebRequest();
@@ -404,6 +414,9 @@ public class ServerCommunicationManager : MonoBehaviour
             case Request.PullGlobalData:
                 ServerCommunicationManager._instance.GetInfo(Request.PullGlobalData, "", _simpleEvent, _messageEvent);
                 break;
+            case Request.pushDexEntries:
+                //ServerCommunicationManager._instance.GetInfo(Request.PullGlobalData, "", _simpleEvent, _messageEvent);
+                break;
             default:
                 break;
         }
@@ -435,7 +448,8 @@ public enum Request
     UpdateOffer,
     PullTradeOffers,
     DeleteOffers,
-    PullGlobalData
+    PullGlobalData,
+    pushDexEntries
 }
 
 //for the request queue:

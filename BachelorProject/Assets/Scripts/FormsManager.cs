@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class FormsManager : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class FormsManager : MonoBehaviour
         }
         foreach (var item in DatabaseManager._instance.globalData.formData)
         {
-            if (!DatabaseManager._instance.activePlayerData.answeredForms.Contains(item.title)) //+condition is met! ToDo
+            if (!DatabaseManager._instance.activePlayerData.answeredForms.Contains(item.title) && CheckFormCondition(item)) //+condition is met! ToDo
             {
                 //Do the Routine for the ui
                 RedriectToLinkActions.displayText = item.message;
@@ -50,4 +51,34 @@ public class FormsManager : MonoBehaviour
         }
     }
 
+    public bool CheckFormCondition(FormEntry _entry)
+    {
+        if (_entry.conVal == "")
+            return true;
+        int conVal = int.Parse(_entry.conVal);
+        if (conVal <= 0)
+            return true;
+        switch (_entry.condition)
+        {
+            case "days":
+                if (DateTime.Now.ToUniversalTime().Subtract(DateTime.Parse(DatabaseManager._instance.activePlayerData.joinDate).ToUniversalTime()).TotalDays >= conVal)
+                    return true;
+                break;
+            case "runs":
+                if (DatabaseManager._instance.activePlayerData.mtdCounter >= conVal)
+                    return true;
+                break;
+            case "trades":
+                if (DatabaseManager._instance.activePlayerData.tradeCounter >= conVal)
+                    return true;
+                break;
+            case "heroCount":
+                if (DatabaseManager._instance.activePlayerData.inventory.Count >= conVal)
+                    return true;
+                break;
+            default:
+                return true;
+        }
+        return false;
+    }
 }

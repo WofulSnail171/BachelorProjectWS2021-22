@@ -220,7 +220,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     {
         Debug.Log("Finished Login");
         DungeonManager._instance.CreateDailyDungeons();
-        if(DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
+        
+        if (DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
         {
             DungeonManager._instance.RevalidateMaxStepsAndRandomNums();
             DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.gameObject.SetActive(true);
@@ -231,7 +232,6 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
         }
-
         SceneManager.LoadScene(1);
     }
     void Start()

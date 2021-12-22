@@ -131,6 +131,25 @@ public class IncomingHeroData
                 defaultHeroDictionary.Add(hero.heroId, hero);
         }
     }
+
+    public DefaultHero GetDefHeroByIndex(int _index)
+    {
+        if(_index < defaultHeroList.Length)
+        {
+            return defaultHeroList[_index];
+        }
+        return null;
+    }
+
+    public int DefHeroIndex(string _heroId) 
+    {
+        for (int i = 0; i < defaultHeroList.Length; i++)
+        {
+            if (defaultHeroList[i].heroId == _heroId)
+                return i;
+        }
+        return -1;
+    }
 }
 
 [System.Serializable]

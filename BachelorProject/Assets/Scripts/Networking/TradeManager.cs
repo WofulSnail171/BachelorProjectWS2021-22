@@ -254,6 +254,7 @@ public class TradeManager : MonoBehaviour
         {
             if (trade.available != "" && trade.playerId == DatabaseManager._instance.activePlayerData.playerId)
             {
+                DatabaseManager._instance.activePlayerData.tradeCounter++;
                 SwapHeros(trade);
                 toDelete.Add(trade);
                 DatabaseManager._instance.activePlayerData.AffectRewardTierBuff(1);

@@ -14972,7 +14972,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 406a9a33bf13a2f4d9838c17e190efdf, type: 3}
   - name: Manny
     sprite: {fileID: 21300000, guid: 3e842cbb14419a94dbf295ff237e938e, type: 3}
-  - name: Markus
+  - name: Mark
     sprite: {fileID: 21300000, guid: 19314a89a9c07ad4999a386977f3a3b1, type: 3}
   - name: Mia
     sprite: {fileID: 21300000, guid: cce6667c055017344beb2381981e0afd, type: 3}
