@@ -68,23 +68,21 @@ public class SDFOutput : SDFNode{
     private Shader sdfShader;
     
     public bool applyMaterial;
-
+    
+    #region repetition
     [Header("Repetition")]
     [SerializeField] private bool infinite;
     private bool _infinite;
 
-    [SerializeField] private Vector2 distance;
-    private Vector2 _distance;
+    [SerializeField] private Vector2 distance = new Vector2(0.5f, 0.5f);
+    private Vector2 _distance = new Vector2(0.5f, 0.5f);
     
     [Space]
     [SerializeField] private bool finite;
     private bool _finite;
-    
-    [SerializeField] private Vector2 finiteDistance;
-    private Vector2 _finiteDistance;
-    
-    [SerializeField] private Vector2 finiteClamp;
-    private Vector2 _finiteClamp;
+
+    [SerializeField] private Vector2 finiteClamp = new Vector2(1f, 1f);
+    private Vector2 _finiteClamp = new Vector2(1f, 1f);
 
     private bool infiniteSwitch;
     
@@ -132,6 +130,7 @@ public class SDFOutput : SDFNode{
                 this.isDirty = true;
         }
     }
+    #endregion
     
 #endregion
 
@@ -202,8 +201,11 @@ public class SDFOutput : SDFNode{
     [SerializeField] private float thickness = 0.2f;
     private float _thickness = 0.2f;
 
-    [SerializeField] private int repetition = 1;
-    private int _repetition = 1;
+    [SerializeField] private float inRepetition = 1;
+    private float _inRepetition = 1;
+    
+    [SerializeField] private float outRepetition = 1;
+    private float _outRepetition = 1;
 
     [SerializeField] private float lineDistance = 1f;
     private float _lineDistance = 1f;
@@ -357,11 +359,20 @@ public class SDFOutput : SDFNode{
         }
     }
     
-    public int Repetition {
-        get => this._repetition;
+    public float InRepetition {
+        get => this._inRepetition;
         set {
-            if (this._repetition == value) return;
-            this._repetition = value;
+            if (this._inRepetition == value) return;
+            this._inRepetition = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
+    public float OutRepetition {
+        get => this._outRepetition;
+        set {
+            if (this._outRepetition == value) return;
+            this._outRepetition = value;
             this.isOutlineDirty = true;
         }
     }
@@ -412,7 +423,8 @@ public class SDFOutput : SDFNode{
         this.OutlineTexRotation = this.outlineTexRotation;
         
         this.Thickness = this.thickness;
-        this.Repetition = this.repetition;
+        this.InRepetition = this.inRepetition;
+        this.OutRepetition = this.outRepetition;
         this.LineDistance = this.lineDistance;
 
         if (this.isDirty) {
@@ -648,8 +660,8 @@ public class SDFOutput : SDFNode{
             [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
             [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
 
-            [HideInInspector] distance (""distance"", Vector) = (0,0,0,0)
-            [HideInInspector] finiteClamp (""finiteClamp"", Vector) = (0,0,0,0)
+            [HideInInspector] distance (""distance"", Vector) = (0.5,0.5,0,0)
+            [HideInInspector] finiteClamp (""finiteClamp"", Vector) = (1,1,0,0)
 
             [HideInInspector] insideTex (""inside Texture"", 2D) = ""white""{}
             [HideInInspector] insideColor (""inside Color"", Color) = (1,1,1,1)
@@ -670,7 +682,8 @@ public class SDFOutput : SDFNode{
             [HideInInspector] outlineTexRotation (""outline Texture Rotation"", Float) = 0
 
             [HideInInspector] outlineThickness (""outline Thickness"", Float) = 0.2
-            [HideInInspector] outlineRepetition (""outline Repetition"", Float) = 1
+            [HideInInspector] outlineInRepetition (""outline In Repetition"", Float) = 1
+            [HideInInspector] outlineOutRepetition (""outline Out Repetition"", Float) = 1
             [HideInInspector] outlineLineDistance (""outline LineDistance"", Float) = 1
 
             [Enum(Off, 0, On, 1)] _ZWrite (""Z Write"", Float) = 1
@@ -685,7 +698,8 @@ public class SDFOutput : SDFNode{
         return@"
             SubShader
             {
-            Tags { ""RenderType""=""Opaque"" 
+            Tags { ""RenderType""=""Transparent"" 
+                   ""Queue""=""Transparent""
                    ""RenderPipeline""=""UniversalRenderPipeline""
                  }
             LOD 100";
@@ -751,11 +765,12 @@ public class SDFOutput : SDFNode{
      CBUFFER_START(UnityPerMaterial)
         float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
+
      " + shaderVariables + @"
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
         float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
      CBUFFER_END";
     }
 
@@ -790,7 +805,7 @@ public class SDFOutput : SDFNode{
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
                                   outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
                                   outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
-                                  outlineThickness, outlineRepetition, outlineLineDistance);
+                                  outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
 
             return col;
         }
@@ -867,7 +882,7 @@ public class SDFOutput : SDFNode{
                      float4 insideColor, sampler2D insideTex, float2 insideTexPosition, float insideTexScale, float insideTexRotation, 
                      float4 outsideColor, sampler2D outsideTex, float2 outsideTexPosition, float outsideTexScale, float outsideTexRotation, 
                      float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
-                     float outlineThickness, float outlineRepetition, float outlineLineDistance){
+                     float outlineThickness, float outlineInRepetition, float outlineOutRepetition, float outlineLineDistance){
 
         float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv) + float2(0.5, 0.5)) * insideColor;
         float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv) + float2(0.5, 0.5)) * outsideColor;
@@ -876,7 +891,8 @@ public class SDFOutput : SDFNode{
         float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
         float4 col = lerp(iColor ,oColor, sdf);
         float outline = 1-smoothstep(0, outlineThickness*0.01 ,abs(frac(sdfOut / (outlineLineDistance*0.1) + 0.5) - 0.5) * (outlineLineDistance*0.1));
-        outline *= step(sdfOut - outlineRepetition *0.01, 0);
+        outline *= step(sdfOut - max(outlineOutRepetition *0.01, 0), 0);
+        outline = min(step(1-sdfOut - max((outlineInRepetition+100)*0.01, 0), 0), outline);
         col = lerp(col, olColor, outline);
 
         return col;
@@ -1059,7 +1075,8 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetFloat("outlineTexRotation",this.OutlineTexRotation);
 
                 this.sdfMaterial.SetFloat("outlineThickness", this.Thickness);
-                this.sdfMaterial.SetFloat("outlineRepetition" , this.Repetition);
+                this.sdfMaterial.SetFloat("outlineInRepetition" , this.InRepetition);
+                this.sdfMaterial.SetFloat("outlineOutRepetition" , this.OutRepetition);
                 this.sdfMaterial.SetFloat("outlineLineDistance" , this.LineDistance);
                 break;
             }

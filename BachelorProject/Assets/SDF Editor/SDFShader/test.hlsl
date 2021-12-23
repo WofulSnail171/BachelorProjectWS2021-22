@@ -15,7 +15,7 @@
                float2 circle439_position, float circle439_radius){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
-         uv = uv - distance * clamp(round(uv/distance), -finiteClamp, finiteClamp);
+        
         
         float circle439_out = length(circle439_position- uv)- circle439_radius;
 
@@ -28,7 +28,7 @@
                      float4 insideColor, sampler2D insideTex, float2 insideTexPosition, float insideTexScale, float insideTexRotation, 
                      float4 outsideColor, sampler2D outsideTex, float2 outsideTexPosition, float outsideTexScale, float outsideTexRotation, 
                      float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
-                     float outlineThickness, float outlineRepetition, float outlineLineDistance){
+                     float outlineThickness, float outlineInRepetition, float outlineOutRepetition, float outlineLineDistance){
 
         float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv) + float2(0.5, 0.5)) * insideColor;
         float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv) + float2(0.5, 0.5)) * outsideColor;
@@ -37,7 +37,8 @@
         float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
         float4 col = lerp(iColor ,oColor, sdf);
         float outline = 1-smoothstep(0, outlineThickness*0.01 ,abs(frac(sdfOut / (outlineLineDistance*0.1) + 0.5) - 0.5) * (outlineLineDistance*0.1));
-        outline *= step(sdfOut - outlineRepetition *0.01, 0);
+        outline *= step(sdfOut - max(outlineInRepetition *0.01, 0), 0);
+        outline = min(step(1-sdfOut - max((outlineOutRepetition+100)*0.01, 0), 0), outline);
         col = lerp(col, olColor, outline);
 
         return col;

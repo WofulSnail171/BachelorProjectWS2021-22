@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada6bec956caa6a4d979622427d63399, type: 3}
   m_Name: SDF Circle
   m_EditorClassIdentifier: 
-  o: circle484_out
-  sdfName: circle484
+  o: circle439_out
+  sdfName: circle439
   variables:
-  - circle484_position
-  - circle484_radius
+  - circle439_position
+  - circle439_radius
   types:
   - float2
   - float
   nodeType: 0
   position: {x: 0, y: 0}
-  radius: 0.48
+  radius: 0.28

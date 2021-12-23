@@ -25,10 +25,9 @@ MonoBehaviour:
   sdfMaterial: {fileID: 0}
   applyMaterial: 0
   infinite: 0
-  distance: {x: 0, y: 0}
+  distance: {x: 0.5, y: 0.5}
   finite: 0
-  finiteDistance: {x: 0, y: 0}
-  finiteClamp: {x: 0, y: 0}
+  finiteClamp: {x: 1, y: 1}
   insideTex: {fileID: 0}
   insideColor: {r: 1, g: 1, b: 1, a: 1}
   insideTexPosition: {x: 0, y: 0}
@@ -45,5 +44,6 @@ MonoBehaviour:
   outlineTexScale: 1
   outlineTexRotation: 0
   thickness: 0.2
-  repetition: 1
+  inRepetition: 1
+  outRepetition: 1
   lineDistance: 1

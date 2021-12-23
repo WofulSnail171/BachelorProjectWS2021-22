@@ -12,8 +12,8 @@ Shader "SDF/test"
             [HideInInspector] scaleSDF ("scaleSDF", Float) = 1
             [HideInInspector] rotationSDF ("rotationSDF", Float) = 0
 
-            [HideInInspector] distance ("distance", Vector) = (0,0,0,0)
-            [HideInInspector] finiteClamp ("finiteClamp", Vector) = (0,0,0,0)
+            [HideInInspector] distance ("distance", Vector) = (0.5,0.5,0,0)
+            [HideInInspector] finiteClamp ("finiteClamp", Vector) = (1,1,0,0)
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
             [HideInInspector] insideColor ("inside Color", Color) = (1,1,1,1)
@@ -34,7 +34,8 @@ Shader "SDF/test"
             [HideInInspector] outlineTexRotation ("outline Texture Rotation", Float) = 0
 
             [HideInInspector] outlineThickness ("outline Thickness", Float) = 0.2
-            [HideInInspector] outlineRepetition ("outline Repetition", Float) = 1
+            [HideInInspector] outlineInRepetition ("outline In Repetition", Float) = 1
+            [HideInInspector] outlineOutRepetition ("outline Out Repetition", Float) = 1
             [HideInInspector] outlineLineDistance ("outline LineDistance", Float) = 1
 
             [Enum(Off, 0, On, 1)] _ZWrite ("Z Write", Float) = 1
@@ -46,7 +47,8 @@ Shader "SDF/test"
 
             SubShader
             {
-            Tags { "RenderType"="Opaque" 
+            Tags { "RenderType"="Transparent" 
+                   "Queue"="Transparent"
                    "RenderPipeline"="UniversalRenderPipeline"
                  }
             LOD 100
@@ -90,13 +92,14 @@ Shader "SDF/test"
      CBUFFER_START(UnityPerMaterial)
         float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
+
         float2 circle439_position;
         float circle439_radius;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
         float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineRepetition, outlineLineDistance;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
@@ -110,7 +113,7 @@ Shader "SDF/test"
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
                                   outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
                                   outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
-                                  outlineThickness, outlineRepetition, outlineLineDistance);
+                                  outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
 
             return col;
         }

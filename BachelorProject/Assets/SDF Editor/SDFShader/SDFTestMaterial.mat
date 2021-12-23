@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
@@ -164,6 +164,7 @@ Material:
     - circle283_radius: 0.25
     - circle392_radius: 0.27
     - circle429_radius: 0.13
+    - circle439_radius: 0.28
     - circle477_radius: 0.2
     - circle479_radius: 0.2
     - circle484_radius: 0.48
@@ -236,11 +237,13 @@ Material:
     - line982_roundness: 1.77
     - line982_scale: 0.7
     - lineDistance: 0.62
-    - outlineLineDistance: 0.22
-    - outlineRepetition: 31
+    - outlineInRepetition: 1
+    - outlineLineDistance: 0.5
+    - outlineOutRepetition: 1
+    - outlineRepetition: 1
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 0.32
+    - outlineThickness: 2.75
     - outsideTexRotation: 0
     - outsideTexScale: 1
     - rect121_rotation: 39.44
@@ -251,6 +254,8 @@ Material:
     - rect2_scale: 1
     - rect354_rotation: 39.44
     - rect354_scale: 0.59
+    - rect461_rotation: 0
+    - rect461_scale: 1
     - rect494_scale: 1.45
     - rect517_scale: 1
     - rect518_rotation: 56.35
@@ -277,7 +282,7 @@ Material:
     - rect962_scale: 0.3
     - rect983_scale: 2
     - repetition: 17.09
-    - rotationSDF: -0.02
+    - rotationSDF: -0.14
     - sCombine93_k: 0.18
     - sIntersect842_k: 0.19
     - sSubtract899_k: 0.03
@@ -285,7 +290,7 @@ Material:
     - sblend571_k: 0.29
     - sblend896_k: 0.28
     - sblend989_k: 0
-    - scaleSDF: 0.3
+    - scaleSDF: 1.03
     - tex338_rotation: 0
     - tex338_scale: 1
     - tex649_rotation: -0.26
@@ -341,6 +346,7 @@ Material:
     - circle283_position: {r: 0, g: 0, b: 0, a: 0}
     - circle392_position: {r: 0, g: 0, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
+    - circle439_position: {r: 0, g: 0, b: 0, a: 0}
     - circle477_position: {r: 0, g: 0, b: 0, a: 0}
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
     - circle484_position: {r: 0, g: 0, b: 0, a: 0}
@@ -362,7 +368,8 @@ Material:
     - color646: {r: 0.36405307, g: 0.9076464, b: 0.9528302, a: 1}
     - color665: {r: 0.3066038, g: 1, b: 0.64235353, a: 1}
     - color855: {r: 0, g: 0, b: 0, a: 1}
-    - finiteClamp: {r: 2, g: 4, b: 0, a: 0}
+    - distance: {r: 0.43, g: 0.74, b: 0, a: 0}
+    - finiteClamp: {r: 2, g: 2, b: 0, a: 0}
     - finiteDistance: {r: 1, g: 1, b: 0, a: 0}
     - infiniteDistance: {r: 0.31, g: 0.56, b: 0, a: 0}
     - insideColor: {r: 1, g: 1, b: 1, a: 1}
@@ -403,9 +410,9 @@ Material:
     - line982_a: {r: 0, g: 0, b: 0, a: 0}
     - line982_b: {r: -0.2, g: 1.45, b: 0, a: 0}
     - line982_position: {r: 0, g: 0, b: 0, a: 0}
-    - outlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - outlineColor: {r: 1, g: 0, b: 0, a: 1}
     - outlineTexPosition: {r: 0, g: 0, b: 0, a: 0}
-    - outsideColor: {r: 1, g: 1, b: 1, a: 0}
+    - outsideColor: {r: 0, g: 1, b: 0.50954247, a: 0}
     - outsideTexPosition: {r: 0, g: 0, b: 0, a: 0}
     - positionSDF: {r: 0, g: 0, b: 0, a: 0}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
@@ -423,6 +430,9 @@ Material:
     - rect354_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect354_position: {r: 0.02, g: 0, b: 0, a: 0}
     - rect354_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
+    - rect461_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect461_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect461_roundness: {r: 0.13, g: 0.15, b: 0.16, a: 0.16}
     - rect494_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect494_position: {r: 0, g: 0, b: 0, a: 0}
     - rect494_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}
