@@ -44,6 +44,7 @@ MonoBehaviour:
   outlineTexScale: 1
   outlineTexRotation: 0
   thickness: 0.2
+  smoothness: 0.2
   inRepetition: 1
   outRepetition: 1
   lineDistance: 1

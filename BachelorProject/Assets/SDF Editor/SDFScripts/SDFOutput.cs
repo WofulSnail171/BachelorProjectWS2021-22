@@ -200,6 +200,9 @@ public class SDFOutput : SDFNode{
 
     [SerializeField] private float thickness = 0.2f;
     private float _thickness = 0.2f;
+    
+    [SerializeField] private float smoothness =2f;
+    private float _smoothness = 2f;
 
     [SerializeField] private float inRepetition = 1;
     private float _inRepetition = 1;
@@ -359,6 +362,15 @@ public class SDFOutput : SDFNode{
         }
     }
     
+    public float Smoothness {
+        get => this._smoothness;
+        set {
+            if (this._smoothness == value) return;
+            this._smoothness = value;
+            this.isOutlineDirty = true;
+        }
+    }
+    
     public float InRepetition {
         get => this._inRepetition;
         set {
@@ -423,6 +435,7 @@ public class SDFOutput : SDFNode{
         this.OutlineTexRotation = this.outlineTexRotation;
         
         this.Thickness = this.thickness;
+        this.Smoothness = this.smoothness;
         this.InRepetition = this.inRepetition;
         this.OutRepetition = this.outRepetition;
         this.LineDistance = this.lineDistance;
@@ -682,6 +695,7 @@ public class SDFOutput : SDFNode{
             [HideInInspector] outlineTexRotation (""outline Texture Rotation"", Float) = 0
 
             [HideInInspector] outlineThickness (""outline Thickness"", Float) = 0.2
+            [HideInInspector] outlineSmoothness (""outline Smoothness"", Float) = 2
             [HideInInspector] outlineInRepetition (""outline In Repetition"", Float) = 1
             [HideInInspector] outlineOutRepetition (""outline Out Repetition"", Float) = 1
             [HideInInspector] outlineLineDistance (""outline LineDistance"", Float) = 1
@@ -770,7 +784,7 @@ public class SDFOutput : SDFNode{
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
         float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineSmoothness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
      CBUFFER_END";
     }
 
@@ -805,7 +819,7 @@ public class SDFOutput : SDFNode{
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
                                   outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
                                   outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
-                                  outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
+                                  outlineThickness, outlineSmoothness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
 
             return col;
         }
@@ -882,15 +896,20 @@ public class SDFOutput : SDFNode{
                      float4 insideColor, sampler2D insideTex, float2 insideTexPosition, float insideTexScale, float insideTexRotation, 
                      float4 outsideColor, sampler2D outsideTex, float2 outsideTexPosition, float outsideTexScale, float outsideTexRotation, 
                      float4 outlineColor, sampler2D outlineTex, float2 outlineTexPosition, float outlineTexScale, float outlineTexRotation, 
-                     float outlineThickness, float outlineInRepetition, float outlineOutRepetition, float outlineLineDistance){
+                     float outlineThickness,float outlineSmoothness, float outlineInRepetition, float outlineOutRepetition, float outlineLineDistance){
 
         float4 iColor = tex2D(insideTex, transform(insideTexPosition, insideTexRotation, insideTexScale, uv) + float2(0.5, 0.5)) * insideColor;
         float4 oColor = tex2D(outsideTex, transform(outsideTexPosition, outsideTexRotation, outsideTexScale, uv) + float2(0.5, 0.5)) * outsideColor;
         float4 olColor = tex2D(outlineTex, transform(outlineTexPosition, outlineTexRotation, outlineTexScale, uv) + float2(0.5, 0.5)) * outlineColor;
 
-        float sdf = smoothstep(0, outlineThickness *0.01 - outlineThickness*0.005 ,sdfOut);
+        oColor.rgb = oColor.a == 0 ? olColor.rgb : oColor.rgb;
+        outlineInRepetition += outlineThickness;
+        outlineOutRepetition += outlineThickness;
+
+        float sdf = smoothstep(-0.0025, 0.0025  ,sdfOut);
         float4 col = lerp(iColor ,oColor, sdf);
         float outline = 1-smoothstep(0, outlineThickness*0.01 ,abs(frac(sdfOut / (outlineLineDistance*0.1) + 0.5) - 0.5) * (outlineLineDistance*0.1));
+        outline = smoothstep(0, outlineSmoothness*0.1, outline);
         outline *= step(sdfOut - max(outlineOutRepetition *0.01, 0), 0);
         outline = min(step(1-sdfOut - max((outlineInRepetition+100)*0.01, 0), 0), outline);
         col = lerp(col, olColor, outline);
@@ -1075,6 +1094,7 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetFloat("outlineTexRotation",this.OutlineTexRotation);
 
                 this.sdfMaterial.SetFloat("outlineThickness", this.Thickness);
+                this.sdfMaterial.SetFloat("outlineSmoothness", this.Smoothness);
                 this.sdfMaterial.SetFloat("outlineInRepetition" , this.InRepetition);
                 this.sdfMaterial.SetFloat("outlineOutRepetition" , this.OutRepetition);
                 this.sdfMaterial.SetFloat("outlineLineDistance" , this.LineDistance);

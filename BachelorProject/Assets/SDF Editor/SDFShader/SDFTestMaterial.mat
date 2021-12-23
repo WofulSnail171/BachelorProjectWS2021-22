@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
@@ -238,12 +238,12 @@ Material:
     - line982_scale: 0.7
     - lineDistance: 0.62
     - outlineInRepetition: 1
-    - outlineLineDistance: 0.5
+    - outlineLineDistance: 1
     - outlineOutRepetition: 1
-    - outlineRepetition: 1
+    - outlineRepetition: 9.29
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 2.75
+    - outlineThickness: 3.12
     - outsideTexRotation: 0
     - outsideTexScale: 1
     - rect121_rotation: 39.44
@@ -282,7 +282,7 @@ Material:
     - rect962_scale: 0.3
     - rect983_scale: 2
     - repetition: 17.09
-    - rotationSDF: -0.14
+    - rotationSDF: 0
     - sCombine93_k: 0.18
     - sIntersect842_k: 0.19
     - sSubtract899_k: 0.03
@@ -290,7 +290,7 @@ Material:
     - sblend571_k: 0.29
     - sblend896_k: 0.28
     - sblend989_k: 0
-    - scaleSDF: 1.03
+    - scaleSDF: 1
     - tex338_rotation: 0
     - tex338_scale: 1
     - tex649_rotation: -0.26
@@ -368,7 +368,7 @@ Material:
     - color646: {r: 0.36405307, g: 0.9076464, b: 0.9528302, a: 1}
     - color665: {r: 0.3066038, g: 1, b: 0.64235353, a: 1}
     - color855: {r: 0, g: 0, b: 0, a: 1}
-    - distance: {r: 0.43, g: 0.74, b: 0, a: 0}
+    - distance: {r: 0.69, g: 0.68, b: 0, a: 0}
     - finiteClamp: {r: 2, g: 2, b: 0, a: 0}
     - finiteDistance: {r: 1, g: 1, b: 0, a: 0}
     - infiniteDistance: {r: 0.31, g: 0.56, b: 0, a: 0}
@@ -410,9 +410,9 @@ Material:
     - line982_a: {r: 0, g: 0, b: 0, a: 0}
     - line982_b: {r: -0.2, g: 1.45, b: 0, a: 0}
     - line982_position: {r: 0, g: 0, b: 0, a: 0}
-    - outlineColor: {r: 1, g: 0, b: 0, a: 1}
+    - outlineColor: {r: 0, g: 0, b: 0, a: 1}
     - outlineTexPosition: {r: 0, g: 0, b: 0, a: 0}
-    - outsideColor: {r: 0, g: 1, b: 0.50954247, a: 0}
+    - outsideColor: {r: 1, g: 1, b: 1, a: 0}
     - outsideTexPosition: {r: 0, g: 0, b: 0, a: 0}
     - positionSDF: {r: 0, g: 0, b: 0, a: 0}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}

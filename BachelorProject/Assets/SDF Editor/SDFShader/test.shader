@@ -4,8 +4,11 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] circle439_position ("circle439_position", Vector) = (0,0,0,0)
-            [HideInInspector] circle439_radius ("circle439_radius", Float) = 0.2
+            [HideInInspector] rect461_position ("rect461_position", Vector) = (0,0,0,0)
+            [HideInInspector] rect461_box ("rect461_box", Vector) = (0,0,0,0)
+            [HideInInspector] rect461_scale ("rect461_scale", Float) = 1
+            [HideInInspector] rect461_roundness ("rect461_roundness", Vector) = (0,0,0,0)
+            [HideInInspector] rect461_rotation ("rect461_rotation", Float) = 0
                 
             
             [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
@@ -34,6 +37,7 @@ Shader "SDF/test"
             [HideInInspector] outlineTexRotation ("outline Texture Rotation", Float) = 0
 
             [HideInInspector] outlineThickness ("outline Thickness", Float) = 0.2
+            [HideInInspector] outlineSmoothness ("outline Smoothness", Float) = 0.2
             [HideInInspector] outlineInRepetition ("outline In Repetition", Float) = 1
             [HideInInspector] outlineOutRepetition ("outline Out Repetition", Float) = 1
             [HideInInspector] outlineLineDistance ("outline LineDistance", Float) = 1
@@ -93,13 +97,16 @@ Shader "SDF/test"
         float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
 
-        float2 circle439_position;
-        float circle439_radius;
+        float2 rect461_position;
+        float2 rect461_box;
+        float rect461_scale;
+        float4 rect461_roundness;
+        float rect461_rotation;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
         float2 insideTexPosition, outsideTexPosition, outlineTexPosition;
-        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
+        float insideTexScale, insideTexRotation, outsideTexScale, outsideTexRotation, outlineTexScale, outlineTexRotation, outlineThickness, outlineSmoothness, outlineInRepetition, outlineOutRepetition, outlineLineDistance;
      CBUFFER_END
 
         float4 frag (v2f i) : SV_Target
@@ -107,13 +114,13 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
 
             float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, distance, finiteClamp,
-                               circle439_position, circle439_radius);
+                               rect461_position, rect461_box, rect461_scale, rect461_roundness, rect461_rotation);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 
                                   outsideColor, outsideTex, outsideTexPosition, outsideTexScale, outsideTexRotation, 
                                   outlineColor, outlineTex, outlineTexPosition, outlineTexScale, outlineTexRotation, 
-                                  outlineThickness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
+                                  outlineThickness, outlineSmoothness, outlineInRepetition, outlineOutRepetition, outlineLineDistance);
 
             return col;
         }
