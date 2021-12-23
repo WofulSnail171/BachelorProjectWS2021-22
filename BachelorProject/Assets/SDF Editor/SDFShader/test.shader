@@ -4,19 +4,15 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] rect828_position ("rect828_position", Vector) = (0,0,0,0)
-            [HideInInspector] rect828_box ("rect828_box", Vector) = (0,0,0,0)
-            [HideInInspector] rect828_scale ("rect828_scale", Float) = 1
-            [HideInInspector] rect828_roundness ("rect828_roundness", Vector) = (0,0,0,0)
-            [HideInInspector] rect828_rotation ("rect828_rotation", Float) = 0
+            [HideInInspector] circle439_position ("circle439_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle439_radius ("circle439_radius", Float) = 0.2
                 
             
             [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
             [HideInInspector] scaleSDF ("scaleSDF", Float) = 1
             [HideInInspector] rotationSDF ("rotationSDF", Float) = 0
 
-            [HideInInspector] infiniteDistance ("infiniteDistance", Vector) = (0,0,0,0)
-            [HideInInspector] finiteDistance ("finiteDistance", Vector) = (0,0,0,0)
+            [HideInInspector] distance ("distance", Vector) = (0,0,0,0)
             [HideInInspector] finiteClamp ("finiteClamp", Vector) = (0,0,0,0)
 
             [HideInInspector] insideTex ("inside Texture", 2D) = "white"{}
@@ -92,13 +88,10 @@ Shader "SDF/test"
         }
 
      CBUFFER_START(UnityPerMaterial)
-        float2 positionSDF, infiniteDistance, finiteDistance, finiteClamp;
+        float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
-        float2 rect828_position;
-        float2 rect828_box;
-        float rect828_scale;
-        float4 rect828_roundness;
-        float rect828_rotation;
+        float2 circle439_position;
+        float circle439_radius;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
@@ -110,8 +103,8 @@ Shader "SDF/test"
         {    
             i.uv -= float2(0.5, 0.5);
 
-            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, infiniteDistance, finiteDistance, finiteClamp,
-                               rect828_position, rect828_box, rect828_scale, rect828_roundness, rect828_rotation);
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, distance, finiteClamp,
+                               circle439_position, circle439_radius);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

@@ -11,20 +11,16 @@
         return t;
     }
 
-    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 infiniteDistance, float2 finiteDistance, float2 finiteClamp,
-               float2 rect828_position, float2 rect828_box, float rect828_scale, float4 rect828_roundness, float rect828_rotation){ 
+    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 distance, float2 finiteClamp,
+               float2 circle439_position, float circle439_radius){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
-        uv = fmod(uv + 0.5 * infiniteDistance, infiniteDistance) - 0.5 + infiniteDistance;
+         uv = uv - distance * clamp(round(uv/distance), -finiteClamp, finiteClamp);
         
-        float2 t_rect828 = transform(rect828_position, rect828_rotation, rect828_scale, uv);
-        rect828_roundness.xy = (t_rect828.x > 0.0) ? rect828_roundness.xy : rect828_roundness.zw;
-        rect828_roundness.x  = (t_rect828.y  > 0.0) ? rect828_roundness.x  : rect828_roundness.y;
-        float2 q_rect828 = abs(t_rect828) - rect828_box + rect828_roundness.x;
-        float rect828_out = (min(max(q_rect828.x,q_rect828.y),0.0) + length(max(q_rect828,0.0)) - rect828_roundness.x) * rect828_scale;
+        float circle439_out = length(circle439_position- uv)- circle439_radius;
 
 
-        return rect828_out*scaleSDF;
+        return circle439_out*scaleSDF;
     }
         
 

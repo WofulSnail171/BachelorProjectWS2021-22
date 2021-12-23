@@ -73,8 +73,8 @@ public class SDFOutput : SDFNode{
     [SerializeField] private bool infinite;
     private bool _infinite;
 
-    [SerializeField] private Vector2 infiniteDistance;
-    private Vector2 _infiniteDistance;
+    [SerializeField] private Vector2 distance;
+    private Vector2 _distance;
     
     [Space]
     [SerializeField] private bool finite;
@@ -101,11 +101,11 @@ public class SDFOutput : SDFNode{
         }
     }
     
-    public Vector2 InfiniteDistance {
-        get => this._infiniteDistance;
+    public Vector2 Distance {
+        get => this._distance;
         set {
-            if (this._infiniteDistance == value) return;
-            this._infiniteDistance = value;
+            if (this._distance == value) return;
+            this._distance = value;
             if (this.infinite)
                 this.isDirty = true;
         }
@@ -122,17 +122,7 @@ public class SDFOutput : SDFNode{
             }
         }
     }
-    
-    public Vector2 FiniteDistance {
-        get => this._finiteDistance;
-        set {
-            if (this._finiteDistance == value) return;
-            this._finiteDistance = value;
-            if (this.finite)
-                this.isDirty = true;
-        }
-    }
-    
+
     public Vector2 FiniteClamp {
         get => this._finiteClamp;
         set {
@@ -399,9 +389,8 @@ public class SDFOutput : SDFNode{
         this.RotationSDF = this.rotationSDF;
 
         this.Infinite = this.infinite;
-        this.InfiniteDistance = this.infiniteDistance;
+        this.Distance = this.distance;
         this.Finite = this.finite;
-        this.FiniteDistance = this.finiteDistance;
         this.FiniteClamp = this.finiteClamp;
 
         this.InsideTex = this.insideTex;
@@ -659,8 +648,7 @@ public class SDFOutput : SDFNode{
             [HideInInspector] scaleSDF (""scaleSDF"", Float) = 1
             [HideInInspector] rotationSDF (""rotationSDF"", Float) = 0
 
-            [HideInInspector] infiniteDistance (""infiniteDistance"", Vector) = (0,0,0,0)
-            [HideInInspector] finiteDistance (""finiteDistance"", Vector) = (0,0,0,0)
+            [HideInInspector] distance (""distance"", Vector) = (0,0,0,0)
             [HideInInspector] finiteClamp (""finiteClamp"", Vector) = (0,0,0,0)
 
             [HideInInspector] insideTex (""inside Texture"", 2D) = ""white""{}
@@ -761,7 +749,7 @@ public class SDFOutput : SDFNode{
 
         return @"
      CBUFFER_START(UnityPerMaterial)
-        float2 positionSDF, infiniteDistance, finiteDistance, finiteClamp;
+        float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
      " + shaderVariables + @"
         float4 insideColor, outsideColor, outlineColor;
@@ -795,7 +783,7 @@ public class SDFOutput : SDFNode{
         {    
             i.uv -= float2(0.5, 0.5);
 
-            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, infiniteDistance, finiteDistance, finiteClamp,
+            float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, distance, finiteClamp,
                                " + shaderVariables + @");
             
             float4 col = sdfColor(i.uv, sdfOut,
@@ -844,9 +832,9 @@ public class SDFOutput : SDFNode{
         shaderVariables = shaderVariables.Substring(0, shaderVariables.Length - 2);
 
         if (this.Infinite)
-            repetition = "uv = fmod(uv + 0.5 * infiniteDistance, infiniteDistance) - 0.5 + infiniteDistance;";
+            repetition = "uv = uv - distance * round(uv/distance);";
         if (this.Finite)
-            repetition = " uv = uv - finiteDistance * clamp(round(uv/finiteDistance), -finiteClamp, finiteClamp);";
+            repetition = " uv = uv - distance * clamp(round(uv/distance), -finiteClamp, finiteClamp);";
 
         return @"
     
@@ -859,7 +847,7 @@ public class SDFOutput : SDFNode{
         return t;
     }
 
-    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 infiniteDistance, float2 finiteDistance, float2 finiteClamp,
+    float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 distance, float2 finiteClamp,
                " + shaderVariables + @"){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
@@ -1017,10 +1005,9 @@ public class SDFOutput : SDFNode{
                 this.sdfMaterial.SetVector("positionSDF", this.PositionSDF);
                 this.sdfMaterial.SetFloat("rotationSDF", this.RotationSDF);
                 this.sdfMaterial.SetFloat("scaleSDF", this.ScaleSDF);
-                if(this.Infinite)
-                    this.sdfMaterial.SetVector("infiniteDistance", this.InfiniteDistance);
+                if(this.Infinite || this.Finite)
+                    this.sdfMaterial.SetVector("distance", this.Distance);
                 if (this.Finite) {
-                    this.sdfMaterial.SetVector("finiteDistance", this.FiniteDistance);
                     this.sdfMaterial.SetVector("finiteClamp", this.FiniteClamp);
                 }
 

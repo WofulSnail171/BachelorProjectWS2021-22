@@ -16,16 +16,16 @@ MonoBehaviour:
   sdfName: newSDF
   variables: []
   types: []
-  nodeType: 14
-  shaderName: test
-  input: {fileID: 11400000, guid: c1ab2d8dd820cb54fa56b9ec45b07a22, type: 2}
+  nodeType: 13
+  shaderName: 
+  input: {fileID: 0}
   positionSDF: {x: 0, y: 0}
-  scaleSDF: 0.77
-  rotationSDF: 0.49
-  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
+  scaleSDF: 1
+  rotationSDF: 0
+  sdfMaterial: {fileID: 0}
   applyMaterial: 0
   infinite: 0
-  infiniteDistance: {x: 0, y: 0}
+  distance: {x: 0, y: 0}
   finite: 0
   finiteDistance: {x: 0, y: 0}
   finiteClamp: {x: 0, y: 0}
