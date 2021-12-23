@@ -17,12 +17,12 @@ MonoBehaviour:
   variables: []
   types: []
   nodeType: 13
-  shaderName: 
-  input: {fileID: 0}
+  shaderName: test
+  input: {fileID: 11400000, guid: c1ab2d8dd820cb54fa56b9ec45b07a22, type: 2}
   positionSDF: {x: 0, y: 0}
   scaleSDF: 1
   rotationSDF: 0
-  sdfMaterial: {fileID: 0}
+  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
   infinite: 0
   distance: {x: 0.5, y: 0.5}
@@ -43,8 +43,8 @@ MonoBehaviour:
   outlineTexPosition: {x: 0, y: 0}
   outlineTexScale: 1
   outlineTexRotation: 0
-  thickness: 0.2
-  smoothness: 0.2
+  thickness: 0.41
+  smoothness: 3.59
   inRepetition: 1
   outRepetition: 1
   lineDistance: 1

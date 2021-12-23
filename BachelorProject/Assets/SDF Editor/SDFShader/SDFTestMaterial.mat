@@ -241,9 +241,10 @@ Material:
     - outlineLineDistance: 1
     - outlineOutRepetition: 1
     - outlineRepetition: 9.29
+    - outlineSmoothness: 3.59
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 3.12
+    - outlineThickness: 0.41
     - outsideTexRotation: 0
     - outsideTexScale: 1
     - rect121_rotation: 39.44

@@ -509,6 +509,12 @@ public class SDFOutput : SDFNode{
             Debug.LogWarning("forgot to assign Input in Output Node");
             return;
         }
+        if (this.Input.nodeType == NodeType.Output) {
+            this.Input = null;
+            this.input = null;
+            Debug.LogWarning(("wrong node"));
+        }
+        
         if (!this.sdfMaterial) {
             Debug.LogWarning("forgot to assign Material in Output Node");
             return; 
