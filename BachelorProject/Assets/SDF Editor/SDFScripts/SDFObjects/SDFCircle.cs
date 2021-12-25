@@ -13,7 +13,6 @@ public class SDFCircle : SDFObject {
             if (this._radius == value) return;
             this._radius = value;
             this.isDirty = true;
-            Debug.Log("changing radius");
         }
     }
     

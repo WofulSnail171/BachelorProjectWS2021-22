@@ -85,9 +85,12 @@ public class SDFSmoothSubtract : SDFFunction
     
     public override void GetActiveNodes(List<SDFNode> activeNodes) {
         activeNodes.Add(this);
-        
-        this.GetActiveNodes(activeNodes, this.InputA);
-        this.GetActiveNodes(activeNodes, this.InputB);
+        if (this.inputA.sdfName != null) {
+            this.GetActiveNodes(activeNodes, this.InputA);
+        }
+
+        if(this.inputB.sdfName != null)
+            this.GetActiveNodes(activeNodes, this.InputB);
         
     }
 }

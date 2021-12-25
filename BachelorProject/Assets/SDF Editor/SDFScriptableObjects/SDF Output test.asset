@@ -7,10 +7,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
-  m_Name: SDF Output
+  m_Name: SDF Output test
   m_EditorClassIdentifier: 
   o: 
   sdfName: newSDF
@@ -18,15 +18,15 @@ MonoBehaviour:
   types: []
   nodeType: 13
   shaderName: test
-  input: {fileID: 11400000, guid: c1ab2d8dd820cb54fa56b9ec45b07a22, type: 2}
+  input: {fileID: 11400000, guid: 5db05d2db6e06fb4fa2fbea5964e3d74, type: 2}
   positionSDF: {x: 0, y: 0}
-  scaleSDF: 1
-  rotationSDF: 0
+  scaleSDF: 0.38
+  rotationSDF: 0.79
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
   infinite: 0
-  distance: {x: 0.5, y: 0.5}
-  finite: 0
+  distance: {x: 0.55, y: 0.55}
+  finite: 1
   finiteClamp: {x: 1, y: 1}
   insideTex: {fileID: 0}
   insideColor: {r: 1, g: 1, b: 1, a: 1}
@@ -43,8 +43,8 @@ MonoBehaviour:
   outlineTexPosition: {x: 0, y: 0}
   outlineTexScale: 1
   outlineTexRotation: 0
-  thickness: 0.41
-  smoothness: 3.59
-  inRepetition: 1
-  outRepetition: 1
-  lineDistance: 1
+  thickness: 0.4
+  smoothness: 6.82
+  inRepetition: 0.2
+  outRepetition: 4.12
+  lineDistance: 0.14

@@ -104,7 +104,7 @@ public class SDFOutput : SDFNode{
         set {
             if (this._distance == value) return;
             this._distance = value;
-            if (this.infinite)
+            if (this.Infinite || this.Finite)
                 this.isDirty = true;
         }
     }
@@ -441,12 +441,12 @@ public class SDFOutput : SDFNode{
         this.LineDistance = this.lineDistance;
 
         if (this.isDirty) {
-            this.OnValueChange(this);
+            this.OnValueChange?.Invoke(this);
             this.isDirty = false;
         }
 
         if (this.infiniteSwitch) {
-            this.OnInputChange();
+            this.OnInputChange?.Invoke();
             this.infiniteSwitch = false;
         }
         
@@ -473,6 +473,10 @@ public class SDFOutput : SDFNode{
     }
 
     private void Awake() {
+        
+        if(this.Input && this.sdfMaterial)
+            this.ApplyMaterial();
+
         this.OnInputChange += this.UpdateShader;
         this.OnValueChange += this.ChangeShaderValues;
         this.OnColorChange += this.UpdateColor;
@@ -1042,14 +1046,15 @@ public class SDFOutput : SDFNode{
                 break;
             }
             case NodeType.Output: {
-                Debug.Log("setting output shader variables");
+                //Debug.Log("setting output shader variables");
                 this.sdfMaterial.SetVector("positionSDF", this.PositionSDF);
                 this.sdfMaterial.SetFloat("rotationSDF", this.RotationSDF);
                 this.sdfMaterial.SetFloat("scaleSDF", this.ScaleSDF);
-                if(this.Infinite || this.Finite)
+                if (this.Infinite || this.Finite) {
                     this.sdfMaterial.SetVector("distance", this.Distance);
-                if (this.Finite) {
-                    this.sdfMaterial.SetVector("finiteClamp", this.FiniteClamp);
+                    if (this.Finite) {
+                        this.sdfMaterial.SetVector("finiteClamp", this.FiniteClamp);
+                    }
                 }
 
                 break;
@@ -1065,7 +1070,7 @@ public class SDFOutput : SDFNode{
     }
     
     private void UpdateColor( ColorChange change){
-        Debug.Log("setting output color variables");
+        //Debug.Log("setting output color variables");
         if (this.sdfMaterial == null) {
             Debug.LogWarning("material has not been applied or assigned");
             return;

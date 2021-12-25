@@ -12,7 +12,7 @@ public abstract class SDFNode : ScriptableObject
     [HideInInspector]public List<string> variables = new List<string>();
     [HideInInspector]public List<string> types = new List<string>();
 
-    protected bool isDirty;
+    protected bool isDirty = false;
     public Action<SDFNode> OnValueChange;
     public Action OnInputChange;
 
@@ -38,19 +38,22 @@ public abstract class SDFNode : ScriptableObject
     public abstract string GenerateHlslFunction();
 
     public void GetActiveNodes(List<SDFNode> nodes, SDFNode input) {
-
+        if (input == null) {return;}
+        
         if (input is SDFFunction) {
             SDFFunction i = (SDFFunction) input;
             i.GetActiveNodes(nodes);
         }
-        else {
-            bool d;
+
+        else if (nodes.Count == 0) {
+            nodes.Add(input);
+        }
+        else{
             foreach (SDFNode s in nodes) {
                 if (s.sdfName == input.sdfName) {
                     return;
                 }
             }
-
             nodes.Add(input);
         }
     }

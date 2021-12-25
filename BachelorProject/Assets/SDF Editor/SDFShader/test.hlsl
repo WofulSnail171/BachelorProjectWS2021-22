@@ -12,19 +12,23 @@
     }
 
     float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 distance, float2 finiteClamp,
-               float2 rect461_position, float2 rect461_box, float rect461_scale, float4 rect461_roundness, float rect461_rotation){ 
+               float2 rect465_position, float2 rect465_box, float rect465_scale, float4 rect465_roundness, float rect465_rotation, float2 circle129_position, float circle129_radius, float sSubtract310_k){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
+         uv = uv - distance * clamp(round(uv/distance), -finiteClamp, finiteClamp);
         
-        
-        float2 t_rect461 = transform(rect461_position, rect461_rotation, rect461_scale, uv);
-        rect461_roundness.xy = (t_rect461.x > 0.0) ? rect461_roundness.xy : rect461_roundness.zw;
-        rect461_roundness.x  = (t_rect461.y  > 0.0) ? rect461_roundness.x  : rect461_roundness.y;
-        float2 q_rect461 = abs(t_rect461) - rect461_box + rect461_roundness.x;
-        float rect461_out = (min(max(q_rect461.x,q_rect461.y),0.0) + length(max(q_rect461,0.0)) - rect461_roundness.x) * rect461_scale;
+        float2 t_rect465 = transform(rect465_position, rect465_rotation, rect465_scale, uv);
+        rect465_roundness.xy = (t_rect465.x > 0.0) ? rect465_roundness.xy : rect465_roundness.zw;
+        rect465_roundness.x  = (t_rect465.y  > 0.0) ? rect465_roundness.x  : rect465_roundness.y;
+        float2 q_rect465 = abs(t_rect465) - rect465_box + rect465_roundness.x;
+        float rect465_out = (min(max(q_rect465.x,q_rect465.y),0.0) + length(max(q_rect465,0.0)) - rect465_roundness.x) * rect465_scale;
+        float circle129_out = length(circle129_position- uv)- circle129_radius;
+
+    float h_sSubtract310 = clamp( 0.5 - 0.5*(circle129_out+rect465_out)/sSubtract310_k, 0.0, 1.0 );
+    float sSubtract310_out = lerp( circle129_out, -rect465_out, h_sSubtract310 ) + sSubtract310_k*h_sSubtract310*(1.0-h_sSubtract310);
 
 
-        return rect461_out*scaleSDF;
+        return sSubtract310_out*scaleSDF;
     }
         
 
