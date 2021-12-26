@@ -12,23 +12,30 @@
     }
 
     float sdf (float2 uv, float2 positionSDF, float rotationSDF, float scaleSDF, float2 distance, float2 finiteClamp,
-               float2 rect465_position, float2 rect465_box, float rect465_scale, float4 rect465_roundness, float rect465_rotation, float2 circle129_position, float circle129_radius, float sSubtract310_k){ 
+               float2 rect365_position, float2 rect365_box, float rect365_scale, float4 rect365_roundness, float rect365_rotation, float2 circle442_position, float circle442_radius, float sSubtract665_k, float2 line490_position, float2 line490_a, float2 line490_b, float line490_roundness, float line490_scale, float line490_rotation){ 
         
         uv = transform(positionSDF, rotationSDF, scaleSDF, uv);
          uv = uv - distance * clamp(round(uv/distance), -finiteClamp, finiteClamp);
         
-        float2 t_rect465 = transform(rect465_position, rect465_rotation, rect465_scale, uv);
-        rect465_roundness.xy = (t_rect465.x > 0.0) ? rect465_roundness.xy : rect465_roundness.zw;
-        rect465_roundness.x  = (t_rect465.y  > 0.0) ? rect465_roundness.x  : rect465_roundness.y;
-        float2 q_rect465 = abs(t_rect465) - rect465_box + rect465_roundness.x;
-        float rect465_out = (min(max(q_rect465.x,q_rect465.y),0.0) + length(max(q_rect465,0.0)) - rect465_roundness.x) * rect465_scale;
-        float circle129_out = length(circle129_position- uv)- circle129_radius;
+        float2 t_rect365 = transform(rect365_position, rect365_rotation, rect365_scale, uv);
+        rect365_roundness.xy = (t_rect365.x > 0.0) ? rect365_roundness.xy : rect365_roundness.zw;
+        rect365_roundness.x  = (t_rect365.y  > 0.0) ? rect365_roundness.x  : rect365_roundness.y;
+        float2 q_rect365 = abs(t_rect365) - rect365_box + rect365_roundness.x;
+        float rect365_out = (min(max(q_rect365.x,q_rect365.y),0.0) + length(max(q_rect365,0.0)) - rect365_roundness.x) * rect365_scale;
+        float circle442_out = length(circle442_position- uv)- circle442_radius;
 
-    float h_sSubtract310 = clamp( 0.5 - 0.5*(circle129_out+rect465_out)/sSubtract310_k, 0.0, 1.0 );
-    float sSubtract310_out = lerp( circle129_out, -rect465_out, h_sSubtract310 ) + sSubtract310_k*h_sSubtract310*(1.0-h_sSubtract310);
+    float h_sSubtract665 = clamp( 0.5 - 0.5*(circle442_out+rect365_out)/sSubtract665_k, 0.0, 1.0 );
+    float sSubtract665_out = lerp( circle442_out, -rect365_out, h_sSubtract665 ) + sSubtract665_k*h_sSubtract665*(1.0-h_sSubtract665);
+        
+        float2 pa_line490 = transform(line490_position, line490_rotation, line490_scale, uv) - line490_a;
+        float2 ba_line490 = line490_b - line490_a;
+        float h_line490 = clamp(dot(pa_line490, ba_line490)/dot(ba_line490, ba_line490), 0, 1);
+        float line490_out = (length(pa_line490 - ba_line490*h_line490) - (0.01 * line490_roundness)) * line490_scale;
+
+        float comb897_out = min(line490_out,sSubtract665_out);
 
 
-        return sSubtract310_out*scaleSDF;
+        return comb897_out*scaleSDF;
     }
         
 

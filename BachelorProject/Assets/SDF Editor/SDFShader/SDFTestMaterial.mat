@@ -159,6 +159,7 @@ Material:
     - circle110_radius: 0.4
     - circle114_radius: 0.21
     - circle125_radius: 0.12
+    - circle129_radius: 0.2
     - circle167_radius: 0.2
     - circle175_radius: 0.2
     - circle210_radius: 0.4
@@ -170,6 +171,7 @@ Material:
     - circle429_radius: 0.13
     - circle42_radius: 0.4
     - circle439_radius: 0.28
+    - circle442_radius: 0.36
     - circle477_radius: 0.4
     - circle479_radius: 0.2
     - circle484_radius: 0.48
@@ -226,6 +228,9 @@ Material:
     - line431_rotation: 83.9
     - line431_roundness: 21
     - line431_scale: 0.51
+    - line490_rotation: 0
+    - line490_roundness: 9.39
+    - line490_scale: 1
     - line59_rotation: 7.28
     - line59_roundness: 2.37
     - line59_scale: 1
@@ -264,10 +269,14 @@ Material:
     - rect2_scale: 1
     - rect354_rotation: 39.44
     - rect354_scale: 0.59
+    - rect365_rotation: 0
+    - rect365_scale: 0.7
     - rect400_rotation: 0
     - rect400_scale: 1
     - rect461_rotation: 0
     - rect461_scale: 1
+    - rect465_rotation: 0
+    - rect465_scale: 1
     - rect494_scale: 1.45
     - rect512_rotation: 0
     - rect512_scale: 0.7
@@ -302,12 +311,13 @@ Material:
     - rect962_scale: 0.3
     - rect983_scale: 2
     - repetition: 17.09
-    - rotationSDF: 0.79
+    - rotationSDF: 1.43
     - sCombine93_k: 0.18
     - sIntersect842_k: 0.19
     - sSubtract133_k: 0.34
     - sSubtract15_k: 0.34
     - sSubtract170_k: 0.34
+    - sSubtract310_k: 0
     - sSubtract558_k: 0
     - sSubtract665_k: 0.34
     - sSubtract870_k: 0.34
@@ -367,6 +377,7 @@ Material:
     - circle110_position: {r: 0, g: 0, b: 0, a: 0}
     - circle114_position: {r: 0, g: 0, b: 0, a: 0}
     - circle125_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle129_position: {r: 0, g: 0, b: 0, a: 0}
     - circle167_position: {r: 0, g: 0, b: 0, a: 0}
     - circle175_position: {r: 0, g: 0, b: 0, a: 0}
     - circle210_position: {r: 0, g: 0, b: 0, a: 0}
@@ -378,6 +389,7 @@ Material:
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle42_position: {r: 0, g: 0, b: 0, a: 0}
     - circle439_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle442_position: {r: 0, g: 0, b: 0, a: 0}
     - circle477_position: {r: 0, g: 0, b: 0, a: 0}
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
     - circle484_position: {r: 0, g: 0, b: 0, a: 0}
@@ -402,7 +414,7 @@ Material:
     - color665: {r: 0.3066038, g: 1, b: 0.64235353, a: 1}
     - color855: {r: 0, g: 0, b: 0, a: 1}
     - distance: {r: 0.55, g: 0.55, b: 0, a: 0}
-    - finiteClamp: {r: 1, g: 1, b: 0, a: 0}
+    - finiteClamp: {r: 1, g: 2, b: 0, a: 0}
     - finiteDistance: {r: 1, g: 1, b: 0, a: 0}
     - infiniteDistance: {r: 0.31, g: 0.56, b: 0, a: 0}
     - insideColor: {r: 1, g: 1, b: 1, a: 1}
@@ -425,6 +437,9 @@ Material:
     - line431_a: {r: 0.42, g: -0.1, b: 0, a: 0}
     - line431_b: {r: -0.8, g: 0.59, b: 0, a: 0}
     - line431_position: {r: -0.2, g: 0, b: 0, a: 0}
+    - line490_a: {r: 0, g: 0.98, b: 0, a: 0}
+    - line490_b: {r: 0, g: -1.27, b: 0, a: 0}
+    - line490_position: {r: 0, g: 0, b: 0, a: 0}
     - line59_a: {r: 0.34, g: 0, b: 0, a: 0}
     - line59_b: {r: 0, g: 0, b: 0, a: 0}
     - line59_position: {r: 0, g: 0, b: 0, a: 0}
@@ -466,12 +481,18 @@ Material:
     - rect354_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect354_position: {r: 0.02, g: 0, b: 0, a: 0}
     - rect354_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
+    - rect365_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect365_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect365_roundness: {r: 0, g: 0.24, b: -0.1, a: 0}
     - rect400_box: {r: 0, g: 0, b: 0, a: 0}
     - rect400_position: {r: 0, g: 0, b: 0, a: 0}
     - rect400_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect461_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect461_position: {r: 0, g: 0, b: 0, a: 0}
     - rect461_roundness: {r: 0.13, g: 0.15, b: 0.16, a: 0.16}
+    - rect465_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect465_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect465_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect494_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect494_position: {r: 0, g: 0, b: 0, a: 0}
     - rect494_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}

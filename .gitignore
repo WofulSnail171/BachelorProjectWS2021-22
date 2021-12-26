@@ -63,3 +63,7 @@ BachelorProject/.vsconfig
 BachelorProject/.idea/.idea.BachelorProject/
 
 BachelorProject/ProjectSettings/EditorBuildSettings.asset
+BachelorProject/Assets/SDF Editor/SDFShader/.idea/
+BachelorProject/Packages/manifest.json
+BachelorProject/Packages/packages-lock.json
+BachelorProject/ProjectSettings/ProjectVersion.txt

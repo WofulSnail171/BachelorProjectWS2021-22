@@ -114,6 +114,7 @@ public class SDFOutput : SDFNode{
         set {
             if (this._finite == value) return;
             this._finite = value;
+			this.infiniteSwitch = true;
             if (this._finite && this.Infinite) {
                 this.infinite = false;
                 this.Infinite = false;
