@@ -22,4 +22,4 @@ MonoBehaviour:
   - float
   nodeType: 0
   position: {x: 0, y: 0}
-  radius: 0.36
+  radius: 0.4

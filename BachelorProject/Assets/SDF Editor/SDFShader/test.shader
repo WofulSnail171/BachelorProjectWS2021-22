@@ -4,23 +4,16 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] line490_position ("line490_position", Vector) = (0,0,0,0)
-            [HideInInspector] line490_a ("line490_a", Vector) = (0,0,0,0)
-            [HideInInspector] line490_b ("line490_b", Vector) = (0,0,0,0)
-            [HideInInspector] line490_scale ("line490_scale", Float) = 1
-            [HideInInspector] line490_roundness ("line490_roundness", Float) = 1
-            [HideInInspector] line490_rotation ("line490_rotation", Float) = 0
+            [HideInInspector] sSubtract894_k ("sSubtract894_k", Float) = 0
                 
-            [HideInInspector] sSubtract665_k ("sSubtract665_k", Float) = 0
+            [HideInInspector] circle37_position ("circle37_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle37_radius ("circle37_radius", Float) = 0.2
                 
-            [HideInInspector] circle442_position ("circle442_position", Vector) = (0,0,0,0)
-            [HideInInspector] circle442_radius ("circle442_radius", Float) = 0.2
-                
-            [HideInInspector] rect365_position ("rect365_position", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_box ("rect365_box", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_scale ("rect365_scale", Float) = 1
-            [HideInInspector] rect365_roundness ("rect365_roundness", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_rotation ("rect365_rotation", Float) = 0
+            [HideInInspector] rect937_position ("rect937_position", Vector) = (0,0,0,0)
+            [HideInInspector] rect937_box ("rect937_box", Vector) = (0,0,0,0)
+            [HideInInspector] rect937_scale ("rect937_scale", Float) = 1
+            [HideInInspector] rect937_roundness ("rect937_roundness", Vector) = (0,0,0,0)
+            [HideInInspector] rect937_rotation ("rect937_rotation", Float) = 0
                 
             
             [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
@@ -109,20 +102,14 @@ Shader "SDF/test"
         float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
 
-        float2 line490_position;
-        float2 line490_a;
-        float2 line490_b;
-        float line490_roundness;
-        float line490_scale;
-        float line490_rotation;
-        float sSubtract665_k;
-        float2 circle442_position;
-        float circle442_radius;
-        float2 rect365_position;
-        float2 rect365_box;
-        float rect365_scale;
-        float4 rect365_roundness;
-        float rect365_rotation;
+        float sSubtract894_k;
+        float2 circle37_position;
+        float circle37_radius;
+        float2 rect937_position;
+        float2 rect937_box;
+        float rect937_scale;
+        float4 rect937_roundness;
+        float rect937_rotation;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
@@ -135,7 +122,7 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
 
             float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, distance, finiteClamp,
-                               rect365_position, rect365_box, rect365_scale, rect365_roundness, rect365_rotation, circle442_position, circle442_radius, sSubtract665_k, line490_position, line490_a, line490_b, line490_roundness, line490_scale, line490_rotation);
+                               rect937_position, rect937_box, rect937_scale, rect937_roundness, rect937_rotation, circle37_position, circle37_radius, sSubtract894_k);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

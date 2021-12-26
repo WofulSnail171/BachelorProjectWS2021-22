@@ -18,16 +18,16 @@ MonoBehaviour:
   types: []
   nodeType: 13
   shaderName: test
-  input: {fileID: 11400000, guid: e3e92ac8b1f4b284590dc618a7ccbefa, type: 2}
+  input: {fileID: 11400000, guid: 5db05d2db6e06fb4fa2fbea5964e3d74, type: 2}
   positionSDF: {x: 0, y: 0}
-  scaleSDF: 0.38
-  rotationSDF: 1.43
+  scaleSDF: 0.37
+  rotationSDF: 0.79
   sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
   applyMaterial: 0
   infinite: 0
-  distance: {x: 0.55, y: 0.55}
-  finite: 0
-  finiteClamp: {x: 1, y: 2}
+  distance: {x: 0.5, y: 0.5}
+  finite: 1
+  finiteClamp: {x: 1, y: 1}
   insideTex: {fileID: 0}
   insideColor: {r: 1, g: 1, b: 1, a: 1}
   insideTexPosition: {x: 0, y: 0}
@@ -43,8 +43,8 @@ MonoBehaviour:
   outlineTexPosition: {x: 0, y: 0}
   outlineTexScale: 1
   outlineTexRotation: 0
-  thickness: 0.4
-  smoothness: 6.82
-  inRepetition: 0.2
-  outRepetition: 4.12
+  thickness: 0.19
+  smoothness: 10.96
+  inRepetition: 6.67
+  outRepetition: 4.27
   lineDistance: 0.14
