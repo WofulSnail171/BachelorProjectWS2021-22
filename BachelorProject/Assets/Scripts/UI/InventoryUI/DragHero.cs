@@ -14,6 +14,16 @@ public class DragHero : MonoBehaviour
     [SerializeField] GameObject TradeStatusUI;
     [SerializeField] GameObject DungeonStatusUI;
 
+    private void OnEnable()
+    {
+        AudioManager.PlayEffect("drag");
+    }
+
+    private void OnDisable()
+    {
+        AudioManager.PlayEffect("drop");
+    }
+
     public void updateDragHero(PlayerHero hero, Sprite sprite, int rarity)
     {
         portrait.sprite = sprite;

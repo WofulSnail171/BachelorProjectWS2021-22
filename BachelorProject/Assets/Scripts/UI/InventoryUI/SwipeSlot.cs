@@ -13,7 +13,7 @@ public class SwipeSlot : MonoBehaviour
     [HideInInspector] public int slotID;
     [HideInInspector] public int originalSlotReferenceID;
 
-    [SerializeField] private GameObject heroCard;
+    [SerializeField] public GameObject heroCard;
     [SerializeField] private GameObject disabledCard;
 
     [SerializeField] GameObject rarityGroup;

@@ -28,8 +28,17 @@ public class DungeonMapActions : MonoBehaviour
 
         cancelButton.GetComponent<Button>().onClick.AddListener(() => { ClickedCancel(); });
         selectButton.GetComponent<Button>().onClick.AddListener(() => { ClickedSelect(); });
+
+        cancelButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //selectButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
     }
 
+
+
+    private void ClickSound()
+    {
+        AudioManager.PlayEffect("click");
+    }
 
     //click checks
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,6 +47,7 @@ public class DungeonMapActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
         UIEnablerManager.Instance.EnableElement("General", true);
         UIEnablerManager.Instance.SwitchElements( "DungeonMapSelect", "HeroHub", true);
+
 
         hub.UpdateHubState(HubState.HeroHub);
     }

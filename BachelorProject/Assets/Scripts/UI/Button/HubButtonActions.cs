@@ -60,6 +60,7 @@ public class HubButtonActions : MonoBehaviour
     [SerializeField] GameObject NextHeroExchange;
     [SerializeField] GameObject FinishHeroExchange;
     [SerializeField] GameObject FinishTrade;
+    [SerializeField] GameObject ShowBuff;
     [SerializeField] GameObject ContinueTrade;
     [SerializeField] GameObject CancelAdd1;
     [SerializeField] GameObject CancelAdd2;
@@ -106,6 +107,7 @@ public class HubButtonActions : MonoBehaviour
 
     private void Start()
     {
+
         tradeButton.GetComponent<Button>().onClick.AddListener(() => { ClickedTrade(); });
         dungeonButton.GetComponent<Button>().onClick.AddListener(() => { ClickedDungeon(); });
         hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickedHub(); });
@@ -142,8 +144,47 @@ public class HubButtonActions : MonoBehaviour
         FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { FinishExchange(); });
         FinishTrade.GetComponent<Button>().onClick.AddListener(() => { FinishedTrade(); });
         ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ContinueToSwipe(); });
+        ShowBuff.GetComponent<Button>().onClick.AddListener(() => { ShowBuffUI(); });
+
+        //sound
+        FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        tradeButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        dungeonButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        hubButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //tradeFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //dungeonFocusedButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //dungeonReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //tradeReadyButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        ContinueHeroGrowthButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueEndTextButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueShardButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ReleaseHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        DiscardHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueHeroPullButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        CancelReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        Cancel1.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        Cancel2.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
 
 
+        ConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //CloseWarningButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //CannotConfirmReleaseButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+
+        //CloseAddWarning.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAdd1.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAdd2.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        SubmitAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        //BlockedAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        CancelAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        DontWantAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        YesWantAddHero.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        NextHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        FinishHeroExchange.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        FinishTrade.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        ContinueTrade.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
 
         //delevents
         DeleventSystem.DungeonStep += UpdateStates;
@@ -167,6 +208,11 @@ public class HubButtonActions : MonoBehaviour
         UpdateStates();
     }
 
+    private void ClickSound()
+    {
+        AudioManager.PlayEffect("click");
+    }
+
 
     private void UpdateStates()
     {
@@ -186,6 +232,7 @@ public class HubButtonActions : MonoBehaviour
 
         if (tradeState == ProgressState.Done)
         {
+
             tradeProgressBar.gameObject.SetActive(false);
             tradeTextGroup.SetActive(false);
             tradeSungleTextGroup.SetActive(true);
@@ -372,12 +419,14 @@ public class HubButtonActions : MonoBehaviour
                 {
                     case HubState.HeroHub:
                         UIEnablerManager.Instance.SwitchElements("HeroHub", "DungeonMapSelect", true);
+
                         UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
 
 
                         break;
                     case HubState.TradeHub:
                         UIEnablerManager.Instance.SwitchElements("TradeObserve", "DungeonMapSelect", true);
+
                         if (tradeState != ProgressState.Done)
                             UpdateTradeButton(ButtonState.Unfocused);
 
@@ -540,7 +589,7 @@ public class HubButtonActions : MonoBehaviour
                 UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                 //buttons
-                if (tradeState == ProgressState.Pending)
+                if (tradeState != ProgressState.Done)
                     UpdateTradeButton(ButtonState.Unfocused);
 
                 else
@@ -706,6 +755,8 @@ public class HubButtonActions : MonoBehaviour
     //tradedone
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    private bool showsshards = false;
+
     [HideInInspector]public bool oneMatch;
     [HideInInspector]public bool allMatch;
     [HideInInspector]public List<Match> allMatchList = new List<Match>();
@@ -727,7 +778,7 @@ public class HubButtonActions : MonoBehaviour
     {
         if(IsPulling)
         { 
-            UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
+            //UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
 
             allMatchList.Clear();
             allMatchListPotential.Clear();
@@ -752,7 +803,7 @@ public class HubButtonActions : MonoBehaviour
                     UIEnablerManager.Instance.EnableElement("HeroHub", true);
 
                     //buttons
-                    if (dungeonState == ProgressState.Pending)
+                    if (dungeonState != ProgressState.Done )
                         UpdateDungeonButton(ButtonState.Unfocused);
 
                     else
@@ -821,13 +872,16 @@ public class HubButtonActions : MonoBehaviour
             //no matches
             else
                 {
-                    if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
+                
+
+                if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
                     {
                         UIEnablerManager.Instance.DisableBlur();
                         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
                         UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
                         UIEnablerManager.Instance.EnableElement("AddHero", true);
-                    }
+                        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+                }
 
                     else
                     {
@@ -855,6 +909,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void FinishExchange()
     {
+        UIEnablerManager.Instance.DisableElement("BuffReward", true);
+
+
         FinishHeroExchange.GetComponent<Button>().enabled = false;
 
         UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
@@ -862,6 +919,7 @@ public class HubButtonActions : MonoBehaviour
 
         //update logic
         TradeManager._instance.ApplySuccessfulTrades();
+
         TradeInventoryUI.RefreshTradeUI();
         InventoryUI.UpdateInventory();
 
@@ -873,6 +931,8 @@ public class HubButtonActions : MonoBehaviour
         UIEnablerManager.Instance.EnableElement("AddHero", true);
 
         currentHubFocus = HubState.TradeHub;
+
+
     }
 
 
@@ -881,6 +941,9 @@ public class HubButtonActions : MonoBehaviour
 
     private void DoNotAddHeroToRoster()
     {
+        //UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+
+
         InventoryUI.DoAdd = false;
 
         //go to trade swipe
@@ -902,6 +965,7 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.DoAdd = true;
 
         UIEnablerManager.Instance.DisableElement("AddHeroToTrade", true);
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
     }
 
     private void CannotAddHeroSubmit()
@@ -961,7 +1025,7 @@ public class HubButtonActions : MonoBehaviour
         //close addhero ui and go to swipe
         InventoryUI.DoAdd = false;
 
-        UIEnablerManager.Instance.DisableElement("Genral", false);
+        UIEnablerManager.Instance.DisableElement("General", false);
         UIEnablerManager.Instance.DisableElement("AddHeroDone", false);
         UIEnablerManager.Instance.DisableElement("AddHeroSubmit", false);
         UIEnablerManager.Instance.DisableElement("AddHeroBlocked", false);
@@ -980,10 +1044,10 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.DoAdd = false;
 
         //go to swipe inventory
-        UIEnablerManager.Instance.DisableBlur();
-        UIEnablerManager.Instance.DisableElement("HeroHub", false);
+        UIEnablerManager.Instance.DisableElement("HeroHub", true);
+        UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
         UIEnablerManager.Instance.EnableElement("TradeSwipe", true);
-        UIEnablerManager.Instance.DisableElement("General", false);
+        UIEnablerManager.Instance.DisableElement("General", true);
         UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
     }
 
@@ -991,6 +1055,9 @@ public class HubButtonActions : MonoBehaviour
     //no more heroes in trade inventory
     private void FinishedTrade()
     {
+        UIEnablerManager.Instance.DisableElement("BuffReward", true);
+        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+
         UIEnablerManager.Instance.DisableBlur();
         UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
 
@@ -1006,10 +1073,18 @@ public class HubButtonActions : MonoBehaviour
         InventoryUI.UpdateInventory();
 
         UpdateTradeButton(ButtonState.Unfocused);
+        UpdateHubButton(ButtonState.Focused);
 
         currentHubFocus = HubState.HeroHub;
     }
 
+
+    private void ShowBuffUI()
+    {
+        showsshards = true;
+
+        UIEnablerManager.Instance.EnableElement("BuffReward", true);
+    }
 
     //update buttons
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1114,9 +1189,13 @@ public class HubButtonActions : MonoBehaviour
 
     IEnumerator DisableEnableExchange()
     {
+        if(showsshards)
+        {
+            UIEnablerManager.Instance.DisableElement("BuffReward", true);
+            showsshards = false;
+        }
 
-
-        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", true);
+        UIEnablerManager.Instance.DisableElement("ExchangeHeroes", false);
 
         yield return new WaitForSeconds(.6f);
 

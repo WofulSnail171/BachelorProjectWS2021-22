@@ -11,16 +11,19 @@ public class HeroPopUpActions : MonoBehaviour
     [SerializeField] GameObject ReleaseWarningLastContinue;
     [SerializeField] GameObject ReleaseSubmit;
     [SerializeField] GameObject ReleaseCancel;
+    [SerializeField] GameObject Detail;
+    [SerializeField] GameObject Hero;
 
     [SerializeField] HubButtonActions hub;
 
     [SerializeField] UpdateHeroCard card;
 
     [SerializeField] InventoryUI InventoryUI;
+    [SerializeField] SwipeInventory Swipe;
 
     private void OnEnable()
     {
-        if (hub.currentHubFocus == HubState.HeroHub && !hub.isRewarding)
+        if (hub.currentHubFocus == HubState.HeroHub && !hub.isRewarding && Swipe.isActiveAndEnabled == false)
             ReleaseButton.SetActive(true);
 
         else
@@ -35,6 +38,13 @@ public class HeroPopUpActions : MonoBehaviour
         ReleaseCancel.GetComponent<Button>().onClick.AddListener(() => { OnReleaseCancel(); });
         ReleaseWarningContinue.GetComponent<Button>().onClick.AddListener(() => { OnReleaseWarningContinue(); });
         ReleaseWarningLastContinue.GetComponent<Button>().onClick.AddListener(() => { OnReleaseLastContinue(); });
+        Detail.GetComponent<Button>().onClick.AddListener(() => { PageSound(); });
+        Hero.GetComponent<Button>().onClick.AddListener(() => { PageSound(); });
+    }
+
+    private void PageSound()
+    {
+        AudioManager.PlayEffect("pageTurn");
     }
 
     private void CloseHeroPopUp()

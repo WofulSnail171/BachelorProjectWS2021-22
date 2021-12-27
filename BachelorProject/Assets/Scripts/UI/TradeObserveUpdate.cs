@@ -20,22 +20,25 @@ public class TradeObserveUpdate : MonoBehaviour
 
     private void InitObserve()
     {
+        if(textFilled.Count ==0)
          textFilled.Clear();
+            { 
 
-            foreach(TextMeshProUGUI uGUI in texts)
-            {
-                textFilled.Add(uGUI.text);
-                uGUI.text = "???";
-            }
+                foreach(TextMeshProUGUI uGUI in texts)
+                {
+                    textFilled.Add(uGUI.text);
+                    uGUI.text = "???";
+                }
 
-            foreach(Image image in bars)
-            {
-                image.fillAmount = 0;
-            }
+                foreach(Image image in bars)
+                {
+                    image.fillAmount = 0;
+                }
 
-            foreach (GameObject gameObject in done)
-            {
-                gameObject.SetActive(false);
+                foreach (GameObject gameObject in done)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
 

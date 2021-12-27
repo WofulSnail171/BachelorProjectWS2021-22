@@ -13,9 +13,15 @@ public class DungeonDetailActions : MonoBehaviour
     private void Start()
     {
         cancelButton.GetComponent<Button>().onClick.AddListener(() => { ClickedCancel(); });
-        confirmButton.GetComponent<Button>().onClick.AddListener(() => { ClickedConfirm(); });
+        confirmButton.GetComponent<Button>().onClick.AddListener(() => { ClickedConfirm(); });        
+        cancelButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
+        confirmButton.GetComponent<Button>().onClick.AddListener(() => { ClickSound(); });
     }
 
+    private void ClickSound()
+    {
+        AudioManager.PlayEffect("click");
+    }
 
     private void ClickedCancel()
     {
@@ -31,6 +37,7 @@ public class DungeonDetailActions : MonoBehaviour
         //go to hero selection
         //save the selected map in data
         UIEnablerManager.Instance.SwitchElements("DungeonDetailSelect", "DungeonHeroSelect", true);
+
         UIEnablerManager.Instance.EnableElement("HeroHub", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
 

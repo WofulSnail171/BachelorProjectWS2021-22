@@ -193,6 +193,8 @@ public class TradeInventoryUI : MonoBehaviour
 
     private void DoubleClick(int index)
     {
+        AudioManager.PlayEffect("delete");
+
         RemoveHeroFromSlot(tradeSlots[index]);
         tradeSlots[index].removeHero();
         tradeSlots[index].hideHero();

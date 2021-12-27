@@ -41,11 +41,12 @@ public class TradSelectActions : MonoBehaviour
     {
         bool confirmed = tradeInventory.ConfirmAllHeroesForTrade();
 
-        if(confirmed)
+        if (confirmed)
         {
+            AudioManager.PlayEffect("click");
 
             //go to swipe
-            UIEnablerManager.Instance.SwitchElements("TradeSelect","TradeSwipe",true);
+            UIEnablerManager.Instance.SwitchElements("TradeSelect", "TradeSwipe", true);
             UIEnablerManager.Instance.DisableElement("HeroHub", true);
             UIEnablerManager.Instance.DisableElement("ShardAndBuff", true);
 
@@ -65,5 +66,8 @@ public class TradSelectActions : MonoBehaviour
             //push own offer data
             TradeManager._instance.UploadOffer(playerHeroes.ToArray());
         }
+
+        else
+            AudioManager.PlayEffect("blocked");
     }
 }

@@ -8,7 +8,8 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
-        StopAllCoroutines();
+        //StopCoroutine(Pause());
+
 
         if (gameObject.activeSelf == false)
             gameObject.SetActive(true);
@@ -23,7 +24,8 @@ public class CenteredAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(Pause());
+
 
         gameObject.SetActive(true);
 

@@ -9,7 +9,6 @@ public class MapClick : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI QuestName;
     [SerializeField] TextMeshProUGUI QuestDescription;
-    [SerializeField] TextMeshProUGUI QuestReward;
     [SerializeField] GameObject DisablePanel;
 
 
@@ -66,7 +65,6 @@ public class MapClick : MonoBehaviour
         }
         QuestName.text = quest.eventName;
         QuestDescription.text = quest.description;
-        QuestReward.text = quest.endText;
 
     }
 
@@ -77,6 +75,8 @@ public class MapClick : MonoBehaviour
 
     private void MapClicked()
     {
+        AudioManager.PlayEffect("click");
+
         //go to the map instance
         //
         //

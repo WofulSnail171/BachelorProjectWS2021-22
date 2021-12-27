@@ -131,7 +131,31 @@ public class DatabaseManager : MonoBehaviour
             {
                 _hero.invIndex++;
             }
-        }            
+        }
+        ValidateDexEntry(_hero);
+    }
+
+    static void ValidateDexEntry(PlayerHero _hero)
+    {
+        int dexIndex = _instance.defaultHeroData.DefHeroIndex(_hero.heroId);
+        DefaultHero defHero = _instance.defaultHeroData.defaultHeroDictionary[_hero.heroId];
+        int oldDexEntry = _instance.activePlayerData.dex[dexIndex];
+        int newDexEntry = 1; //if the hero is in the inventory they should already be in the dex
+        if(_hero.pVal >= _hero.pPot-1 && _hero.mVal >= _hero.mPot - 1 && _hero.sVal >= _hero.sPot - 1)
+        {
+            newDexEntry = 2;
+        }
+        if (_hero.pVal >= defHero.pMaxPot - 1 && _hero.mVal >= defHero.mMaxPot - 1 && _hero.sVal >= defHero.sMaxPot - 1)
+        {
+            newDexEntry = 3;
+        }
+        if (newDexEntry > oldDexEntry)
+        {
+            _instance.activePlayerData.dex[dexIndex] = newDexEntry;
+            //pushEntry
+            DexEntry entry = new DexEntry { dexIndex = dexIndex, newVal = newDexEntry, playerInfo = new LoginInfo { playerId = _instance.activePlayerData.playerId, password = _instance.activePlayerData.password } };
+            ServerCommunicationManager._instance.GetInfo(Request.pushDexEntries, JsonUtility.ToJson(entry));
+        }
     }
 
     private static bool CheckUniqueId(PlayerHero _hero, int _uniqueId)
@@ -381,6 +405,10 @@ public class PlayerData
 
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
+
+    public List<string> answeredForms;
+
+    public List<int> dex;
 
     public void AffectRewardTierBuff(int _amount)
     {
@@ -754,4 +782,24 @@ public class GlobalData
 {
     public int defaultUpdate;
     public int versionNum;
+    public List<FormEntry> formData;
+}
+
+[System.Serializable]
+public class FormEntry
+{
+    public int count;
+    public string title;
+    public string message;
+    public string link;
+    public string condition;
+    public string conVal;
+}
+
+[System.Serializable]
+public class DexEntry
+{
+    public LoginInfo playerInfo;
+    public int dexIndex;
+    public int newVal;
 }

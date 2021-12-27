@@ -314,7 +314,6 @@ public class UIEnablerManager : MonoBehaviour
         //mix of enable and disable
         //wait for disable before do enable (at least for certain objects) or do smooth transition
         float waitTime = DisableElement(oldElement, DoAnimation);
-
         StartCoroutine(Pause(waitTime, DoAnimation, newElement));
     }
 

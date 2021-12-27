@@ -13,8 +13,8 @@ public class ShardBuffHeader : MonoBehaviour
     {
         if (shardText != null && buffText != null && DatabaseManager.CheckDatabaseValid())
         {
-            shardText.text = DatabaseManager._instance.activePlayerData.shards.ToString() + " / 5 Shards";
-            buffText.text = DatabaseManager._instance.activePlayerData.rewardTierBuff.ToString() + " / 9 Buff";
+            shardText.text = DatabaseManager._instance.activePlayerData.shards.ToString() + " / 5 Reknown";
+            buffText.text = DatabaseManager._instance.activePlayerData.rewardTierBuff.ToString() + " / 9 Reward Buff";
         }
     }
 }

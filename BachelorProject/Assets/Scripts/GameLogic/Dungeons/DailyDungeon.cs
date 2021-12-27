@@ -22,6 +22,10 @@ public class DailyDungeon
         {
             MonoBehaviour.Destroy(dungeonLayout.gameObject);
         }
+        if (!DungeonManager._instance.layoutList.layoutPrefabs.ContainsKey(layoutId))
+        {
+            layoutId = DungeonManager._instance.layoutList.layouts[0].name;
+        }
         GameObject go = GameObject.Instantiate(DungeonManager._instance.layoutList.layoutPrefabs[layoutId], new Vector3(0, 0, 0), Quaternion.identity);
         dungeonLayout =  go.GetComponent<DungeonLayOut>();
         if(DatabaseManager._instance.rewardTable.dungeonDifficulties.Count > difficultyIndex)

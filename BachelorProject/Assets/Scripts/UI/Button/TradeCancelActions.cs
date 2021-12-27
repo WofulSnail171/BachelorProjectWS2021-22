@@ -19,6 +19,7 @@ public class TradeCancelActions : MonoBehaviour
         no.GetComponent<Button>().onClick.AddListener(() => { ClickedNo(); });
     }
 
+
     private void ClickedYes()
     {
         //do cancel
@@ -35,6 +36,7 @@ public class TradeCancelActions : MonoBehaviour
         UIEnablerManager.Instance.DisableElement("TradeSwipe", true);
         UIEnablerManager.Instance.EnableElement( "HeroHub", true);
         UIEnablerManager.Instance.EnableElement("ShardAndBuff", true);
+        UIEnablerManager.Instance.EnableElement("WaitingForTrade", true);
 
         hub.currentHubFocus = HubState.HeroHub;
     }

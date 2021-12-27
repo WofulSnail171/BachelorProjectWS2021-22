@@ -17,8 +17,15 @@ public class PopUpAnimation : AbstractElementAnimation
 
     public override float HideObject()
     {
+        //StopCoroutine(Pause());
+
         //bg
-         LeanTween.value(blur.gameObject, 1f, 0f, animSpeed)
+        gameObject.SetActive(true);
+
+        AudioManager.PlayEffect("closePopUp");
+
+
+        LeanTween.value(blur.gameObject, 1f, 0f, animSpeed)
          .setOnUpdate((value) =>
          {
              blur.color = new Color(blur.color.r, blur.color.g, blur.color.b, value);
@@ -50,7 +57,10 @@ public class PopUpAnimation : AbstractElementAnimation
 
     public override void ShowObject()
     {
-        StopAllCoroutines();
+
+        StopCoroutine(Pause());
+
+        AudioManager.PlayEffect("openPopUp");
 
         //bg
         gameObject.SetActive(true);
