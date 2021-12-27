@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SDFTestMaterial
-  m_Shader: {fileID: 4800000, guid: 09116151715420e40ac59557271594a6, type: 3}
+  m_Shader: {fileID: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -167,6 +167,7 @@ Material:
     - circle266_radius: 0.1
     - circle283_radius: 0.25
     - circle295_radius: 0.4
+    - circle37_radius: 0.2
     - circle380_radius: 0.2
     - circle392_radius: 0.27
     - circle429_radius: 0.13
@@ -317,6 +318,8 @@ Material:
     - rect828_scale: 1
     - rect853_scale: 1
     - rect85_scale: 1
+    - rect937_rotation: 0
+    - rect937_scale: 1
     - rect939_rotation: 51.2
     - rect939_scale: 0.3
     - rect962_rotation: 51.2
@@ -335,6 +338,7 @@ Material:
     - sSubtract558_k: 0
     - sSubtract665_k: 0.34
     - sSubtract870_k: 0.34
+    - sSubtract894_k: 0
     - sSubtract899_k: 0.03
     - sblend343_k: 0.28
     - sblend571_k: 0.29
@@ -399,6 +403,7 @@ Material:
     - circle266_position: {r: 0, g: 0, b: 0, a: 0}
     - circle283_position: {r: 0, g: 0, b: 0, a: 0}
     - circle295_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle37_position: {r: 0, g: 0, b: 0, a: 0}
     - circle380_position: {r: 0, g: 0, b: 0, a: 0}
     - circle392_position: {r: 0, g: 0, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
@@ -575,6 +580,9 @@ Material:
     - rect85_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect85_position: {r: 0, g: 0, b: 0, a: 0}
     - rect85_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect937_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect937_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect937_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect939_box: {r: 0.68, g: 0.47, b: 0, a: 0}
     - rect939_position: {r: 0, g: 0, b: 0, a: 0}
     - rect939_roundness: {r: 0.5, g: -0.23, b: 0.29, a: -0.12}
