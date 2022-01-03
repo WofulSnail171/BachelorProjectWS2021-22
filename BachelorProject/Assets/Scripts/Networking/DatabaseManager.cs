@@ -139,6 +139,23 @@ public class DatabaseManager : MonoBehaviour
     {
         int dexIndex = _instance.defaultHeroData.DefHeroIndex(_hero.heroId);
         DefaultHero defHero = _instance.defaultHeroData.defaultHeroDictionary[_hero.heroId];
+        if(_instance.activePlayerData.dex == null || _instance.activePlayerData.dex.Count <= dexIndex)
+        {
+            //create valid dex
+            List<int> newDex = new List<int>();
+            if(_instance.activePlayerData.dex != null)
+            {
+                foreach (var item in _instance.activePlayerData.dex)
+                {
+                    newDex.Add(item);
+                }
+            }
+            while(newDex.Count < _instance.defaultHeroData.defaultHeroList.Length || newDex.Count <= dexIndex)
+            {
+                newDex.Add(0);
+            }
+            _instance.activePlayerData.dex = newDex;
+        }
         int oldDexEntry = _instance.activePlayerData.dex[dexIndex];
         int newDexEntry = 1; //if the hero is in the inventory they should already be in the dex
         if(_hero.pVal >= _hero.pPot-1 && _hero.mVal >= _hero.mPot - 1 && _hero.sVal >= _hero.sPot - 1)
