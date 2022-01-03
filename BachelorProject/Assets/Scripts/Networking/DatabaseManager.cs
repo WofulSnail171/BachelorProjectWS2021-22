@@ -82,9 +82,70 @@ public class DatabaseManager : MonoBehaviour
         if(localSave == null)
         {
             //perform no local load event
+            return;
         }
-        else
-        {            
+        if (localSave.activePlayerData == null)
+        {
+            return;
+        }
+        if (localSave.activePlayerData.inventory == null || localSave.activePlayerData.inventory.Count <= 0)
+        {
+            return;
+        }
+        if (localSave.defaultHeroData == null || localSave.defaultHeroData.defaultHeroList.Length <= 0)
+        {
+            return;
+        }
+        if(localSave.eventData == null)
+        {
+            return;
+        }
+        if (localSave.eventData.basicQuestDeck == null || localSave.eventData.basicQuestDeck.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.eventData.doomQuestDeck == null || localSave.eventData.doomQuestDeck.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.eventData.eventDecks == null || localSave.eventData.eventDecks.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.eventData.nodeTypes == null || localSave.eventData.nodeTypes.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.eventData.pathTypes == null || localSave.eventData.pathTypes.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.eventData.textFlavours == null)
+        {
+            return;
+        }
+        if (localSave.eventData.textFlavours.textsEnemyNames == null || localSave.eventData.textFlavours.textsEnemyNames.Length <= 0)
+        {
+            return;
+        }
+        if (localSave.globalData == null)
+        {
+            return;
+        }
+        if (localSave.rewardTable == null)
+        {
+            return;
+        }
+        if (localSave.rewardTable.dungeonDifficulties == null || localSave.rewardTable.dungeonDifficulties.Count <= 0)
+        {
+            return;
+        }
+        if (localSave.rewardTable.rewardTiers == null || localSave.rewardTable.rewardTiers.Count <= 0)
+        {
+            return;
+        }
+
+        {
             if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) < 0)
             {
                 //online save is younger the local one -> played on an other device -> need to fire special event
