@@ -134,14 +134,8 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         else
         {
             outputTextfield.text = "SignUp successful";
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadHeroList);
-            ServerCommunicationManager._instance.DoServerRequest(Request.DownloadEventData);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullRewardTable);
-            ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
-            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);
-            DeleventSystem.eventDataDownloaded += FirstSignUp;
-            DatabaseManager._instance.SaveGameDataLocally();            
-            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedLogIn);
+            DatabaseManager._instance.UpdateActivePlayerFromServer(_message);      
+            ServerCommunicationManager._instance.DoServerRequest(Request.PullTradeOffers, FinishedSignUp);
         }
     }
 
@@ -196,13 +190,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
 
     public void FirstSignUp()
     {
-        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(3));
-        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
-        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
-        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(1));
         
-        DatabaseManager._instance.SaveGameDataLocally();
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
         DeleventSystem.eventDataDownloaded -= FirstSignUp;
     }
 
@@ -214,6 +202,17 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     private void OnDisable()
     {
 
+    }
+
+    public void FinishedSignUp()
+    {
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(3));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(2));
+        DatabaseManager._instance.activePlayerData.inventory.Add(HeroCreator.GetRandomHeroOfRarity(1));
+        DatabaseManager._instance.SaveGameDataLocally();
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        FinishedLogIn();
     }
 
     public void FinishedLogIn()
