@@ -250,11 +250,14 @@ public class DungeonManager : MonoBehaviour
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.ResetNodes();
         UnityEngine.Random.InitState(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
         EnterNewActivityState(DungeonActivity.startQuest, false);
+
         while (currentCalcRun.currentNode != DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.endNode || currentCalcRun.remainingActivitySteps > 0)
         {
             StepCalcRun();
         }
+
         _dungeonRun.maxSteps = currentCalcRun.currentStep;
+        PushManager.ScheduleNotification("Quest Finished!", "The party completed: " + DatabaseManager._instance.dungeonData.currentRun.dungeon.questName, DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date).ToLocalTime().AddSeconds(currentCalcRun.currentStep), DatabaseManager._instance.dungeonData.currentRun.party[0].heroId);
         DatabaseManager._instance.dungeonData.currentRun.dungeon.dungeonLayout.SetupDungeonRunSeed(DatabaseManager._instance.dungeonData.currentRun.dungeonSeed);
 
         UnityEngine.Random.InitState((int)DateTime.Now.ToUniversalTime().Ticks);

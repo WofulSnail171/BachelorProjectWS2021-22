@@ -10,6 +10,7 @@ public class MobileLogger : MonoBehaviour
         if(_instance == null)
         {
             _instance = this;
+            DontDestroyOnLoad(this);
         }
         else
         {
@@ -28,7 +29,7 @@ public class MobileLogger : MonoBehaviour
     {
         if (_instance == null)
             return;
-        _instance.logText.text += "\n" + _text;
+        _instance.logText.text = _text + "\n" + _instance.logText.text;
     }
 
     // Start is called before the first frame update

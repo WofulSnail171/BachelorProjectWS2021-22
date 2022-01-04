@@ -60,6 +60,7 @@ public class TradeManager : MonoBehaviour
     public void FastForwardToStep(int _targetStep)
     {
         CurrentStep = _targetStep;
+        PushManager.ScheduleNotification("Trade results available!", "Check your trade results. Maybe you got something nice.", DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToLocalTime().AddSeconds(TargetStep));
         done = false;
         DeleventSystem.TradeStep?.Invoke();
     }
@@ -102,6 +103,7 @@ public class TradeManager : MonoBehaviour
         TargetStep = _targetStep;
         CurrentStep = 0;
         DeleventSystem.TradeStart?.Invoke();
+        PushManager.ScheduleNotification("Trade results available!", "Check your trade results. Maybe you got something nice.", DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToLocalTime().AddSeconds(TargetStep));
     }
     IEnumerator AutoplayRoutine()
     {

@@ -79,7 +79,7 @@ public class DatabaseManager : MonoBehaviour
     {
         //just happens on opening the app (i guessssss)
         localSave = LocalSaveSystem.LoadLocalData();
-        if(localSave == null)
+        if (localSave == null)
         {
             //perform no local load event
             return;
@@ -144,7 +144,6 @@ public class DatabaseManager : MonoBehaviour
         {
             return;
         }
-
         {
             if (activePlayerData.lastUpdate != "" && DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) < 0)
             {

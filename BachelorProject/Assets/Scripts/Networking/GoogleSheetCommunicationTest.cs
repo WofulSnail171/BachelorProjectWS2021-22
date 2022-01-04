@@ -15,7 +15,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
     public Button localSaveNo;
     public void LocalSaveScreenInit()
     {
-        Application.runInBackground = true;
+        Application.runInBackground = false;
 
         localSaveScreen.SetActive(true);
         localSaveYes.interactable = false;
@@ -233,6 +233,9 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         }
         SceneManager.LoadScene(1);
     }
+
+    
+
     void Start()
     {
         LocalSaveScreenInit();

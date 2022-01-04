@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class DungeonRun
@@ -14,6 +15,7 @@ public class DungeonRun
     public int maxSteps;
     public List<RandomNum> randomNums;
     public List<int>  otherRandNums;
+    
 }
 
 [System.Serializable]
@@ -152,6 +154,15 @@ public class CalculatedDungeonRun
         dungeonLogArr = dungeonLog.ToArray();
         if (DungeonManager.events)
             DeleventSystem.DungeonLog?.Invoke();
+        else
+        {
+            int tempNextHero = nextHero;
+            if (DatabaseManager._instance.dungeonData.currentRun.party.Count <= nextHero)
+            {
+                tempNextHero = 0;
+            }
+            //PushManager.ScheduleNotification("new DungeonLog", replacedText, DateTime.Parse(DatabaseManager._instance.dungeonData.currentRun.date).ToLocalTime().AddSeconds(currentStep), DatabaseManager._instance.dungeonData.currentRun.party[tempNextHero].heroId);
+        }
     }
     public void SetActivitySteps(int _newSteps)
     {
