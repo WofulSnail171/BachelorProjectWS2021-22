@@ -320,10 +320,10 @@ public class TradeManager : MonoBehaviour
 
     
 
-    public void CancelOwnTrades()
+    public void CancelOwnTrades(DeleventSystem.SimpleEvent _simpleEvent = null, DeleventSystem.MessageEvent _messageEvent = null)
     {
         DeleteOffers(DatabaseManager._instance.tradeData.ownOffers.ToArray());
-        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData);
+        ServerCommunicationManager._instance.DoServerRequest(Request.PushPlayerData, _simpleEvent, _messageEvent);
     }
 
     public List<Match> GetTradingResults()
