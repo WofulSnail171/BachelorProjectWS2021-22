@@ -73,7 +73,7 @@ public class FormsManager : MonoBehaviour
                     return true;
                 break;
             case "heroCount":
-                if (DatabaseManager._instance.activePlayerData.inventory.Count >= conVal)
+                if (DatabaseManager._instance.activePlayerData.DexCount() >= conVal)
                     return true;
                 break;
             default:

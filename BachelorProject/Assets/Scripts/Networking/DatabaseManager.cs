@@ -568,6 +568,20 @@ public class PlayerData
         }
         return false;
     }
+
+    public int DexCount()
+    {
+        int result = 0;
+        if(dex != null && dex.Count > 0)
+        {
+            foreach (var item in dex)
+            {
+                if (item > 0)
+                    result++;
+            }
+        }
+        return result;
+    }
 }
 
 [System.Serializable]
