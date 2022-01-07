@@ -297,7 +297,15 @@ public class DatabaseManager : MonoBehaviour
     public void UpdateActivePlayerFromServer(string _message)
     {
         var blackList = activePlayerData.blacklist;
+        List<PlayerHero> oldInventory = activePlayerData.inventory;
+        string oldPlayerId = activePlayerData.playerId;
         activePlayerData = JsonUtility.FromJson<PlayerData>(_message);
+        if(oldInventory.Count > activePlayerData.inventory.Count && oldPlayerId == activePlayerData.playerId)
+        {
+            //Online inventory is probably not complete or corrupted -> we should reuse the local one
+            activePlayerData.inventory = oldInventory;
+        }
+
         activePlayerData.blacklist = blackList;
         //check for dates lol
         //var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime());

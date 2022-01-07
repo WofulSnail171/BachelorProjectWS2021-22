@@ -40449,7 +40449,7 @@ MonoBehaviour:
   OpenButton: {fileID: 484674332}
   CreditsButton: {fileID: 430492047}
   HelpButton: {fileID: 1662713175}
-  URL: https://www.dict.cc/
+  URL: https://www.dict.cc/?s=help
 --- !u!1 &614666135
 GameObject:
   m_ObjectHideFlags: 0
