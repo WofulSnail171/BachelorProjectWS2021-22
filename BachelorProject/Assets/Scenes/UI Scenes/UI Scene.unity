@@ -20512,6 +20512,7 @@ GameObject:
   - component: {fileID: 336663357}
   - component: {fileID: 336663356}
   - component: {fileID: 336663355}
+  - component: {fileID: 336663358}
   m_Layer: 5
   m_Name: PopUp
   m_TagString: Untagged
@@ -20607,6 +20608,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 336663353}
   m_CullTransparentMesh: 1
+--- !u!114 &336663358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336663353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 0, y: 60, z: 0, w: 60}
+  m_Softness: {x: 10, y: 10}
 --- !u!1 &342094990
 GameObject:
   m_ObjectHideFlags: 0
@@ -78466,7 +78481,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 7560.79}
+  m_SizeDelta: {x: 0, y: 18586.125}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1175816907
 MonoBehaviour:
@@ -78488,11 +78503,65 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Markus Vollmer\n<size= 90>Lead Programmer</size>\n\nFrederike Hantschel\n<size=
-    90>Game Designer\nUI/ UX Designer and Programmer \nSound Manager and Producer</size>\n\n\nSarah
-    Rac\n<size= 90>Tech Artist\nTool Programmer\nEmotional Support</size>\n\nSpecial
-    Thanks to:\n\n<size= 90>Boris Kunkel\nThomas Nickel\nMax Trautvetter\nPaul Nasdalack</size>\n\nPhilip
-    Caligagan\nR\xE9n\xE9-Sophie Lauth\nElisabeth M\xF6ller\n\n\nFree Sound Library:\n\n"
+  m_text: "Markus Vollmer\n<size= 80>Lead Programmer</size>\n\nFrederike Hantschel\n<size=
+    80>Game Designer\nUI/ UX Designer and Programmer \nSound Manager and Producer</size>\n\n\nSarah
+    Rac\n<size= 80>Tech Artist\nTool Programmer\nEmotional Support</size>\n\nSpecial
+    Thanks to:\n<size= 80>Boris Kunkel\nThomas Nickel\nMax Trautvetter\nPaul Nasdalack</size>\n\nGuest
+    Apperance:<size=80>\nPhilip Caligagan\nR\xE9n\xE9-Sophie Lauth\n\nTerminus\nAsset
+    provided by Elisabeth M\xF6ller</size>\n\n\nSounds used:\n<size=50>\nSound pack
+    downloaded from Freesound\r\n----------------------------------------\r\n\r\nThis
+    pack of sounds contains sounds by the following user:\r\n - rhodesmas ( https://freesound.org/people/rhodesmas/
+    )\r\n\r\nYou can find this pack online at: https://freesound.org/people/rhodesmas/packs/18050/\r\n\r\nLicense
+    details\r\n---------------\r\n\r\nAttribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n\r\nSounds
+    in this pack\r\n-------------------\r\n\r\n  * 380292__rhodesmas__ui-03.wav\r\n   
+    * url: https://freesound.org/s/380292/\r\n    * license: Attribution\r\n  * 380291__rhodesmas__ui-04.wav\r\n   
+    * url: https://freesound.org/s/380291/\r\n    * license: Attribution\r\n  * 380290__rhodesmas__ui-05.wav\r\n   
+    * url: https://freesound.org/s/380290/\r\n    * license: Attribution\r\n  * 380289__rhodesmas__ui-06.wav\r\n   
+    * url: https://freesound.org/s/380289/\r\n    * license: Attribution\r\n  * 322900__rhodesmas__tap-01.wav\r\n   
+    * url: https://freesound.org/s/322900/\r\n    * license: Attribution\r\n  * 322899__rhodesmas__tap-02.wav\r\n   
+    * url: https://freesound.org/s/322899/\r\n    * license: Attribution\r\n  * 322898__rhodesmas__ui-02.wav\r\n   
+    * url: https://freesound.org/s/322898/\r\n    * license: Attribution\r\n  * 321717__rhodesmas__ui-01.wav\r\n   
+    * url: https://freesound.org/s/321717/\r\n    * license: Attribution\r\n\r\n\r\n----------------------------------------------------------------------------\r\n----------------------------------------------------------------------------\r\nFurther
+    sounds:\r\n\r\n\r\n*https://freesound.org/people/MattRuthSound/sounds/529123/\r\n*Chair
+    straining under stress percussion.wav\r\n*https://freesound.org/s/529123/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/JustinBW/\r\n*buttonchime02up.wav\r\n*https://freesound.org/s/80921/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*UI_11
+    Star glass.Leaf through menu pages_1-2(1lrs).wav\r\n*https://freesound.org/s/607148/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*UI_3-1
+    FHSandal sinus(Sytrus,arpegio,multiprocessing,rsmpl).wav\r\n*https://freesound.org/s/515827/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/shinephoenixstormcrow/\r\n*320655__rhodesmas__level-up-01.mp3\r\n*https://freesound.org/s/337049/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/rhodesmas/\r\n*
+    Level Up 02\r\n*https://freesound.org/s/320654/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/Headphaze/\r\n*UI
+    Completed Status Alert Notification SFX001.wav\r\n*https://freesound.org/s/277033/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*Typing
+    wtr grv lp (no fx, tremolo only)6.wav\r\n*https://freesound.org/s/517448/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/xtrgamr/\r\n*CARTOONISH
+    POP.wav\r\n*https://freesound.org/s/256983/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/EminYILDIRIM/\r\n*UI
+    Pop Up\r\n*https://freesound.org/s/540568/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/DataJunk/\r\n*https://freesound.org/s/423265/\r\n*levelup
+    Short By DataJunk.wav\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/Headphaze/\r\n*UI
+    Completed Status Alert Notification SFX002.wav\r\n*https://freesound.org/s/277032/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/rhodesmas/\r\n*Score
+    Counter 01\r\n*https://freesound.org/s/342759/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*UI_1
+    Sweet saw(Sytrus,arpegio,multiprocessing,rsmpl).wav\r\n*https://freesound.org/s/515830/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*UI_5
+    Bright star(Sytrus,arpegio,multiprocessing,rsmpl).wav\r\n*https://freesound.org/s/515832/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/EminYILDIRIM/\r\n*UI
+    Click Menu Hover\r\n*https://freesound.org/s/611451/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/Headphaze/\r\n*UI
+    Completed Status Alert Notification SFX003.wav\r\n*https://freesound.org/s/277031/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/newlocknew/\r\n*UI_5
+    Bright star(Sytrus,arpegio,multiprocessing,rsmpl).wav\r\n*https://freesound.org/s/515832/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n\r\n*https://freesound.org/people/nezuai/\r\n*UI
+    Sound Design 2 \xBB ui sound 10.wav\r\n*https://freesound.org/s/582595/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/Headphaze/\r\n*UI
+    Completed Status Alert Notification SFX001.wav\r\n*https://freesound.org/s/277033/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/flag2/\r\n*Page
+    Turn - Please Turn Over (PTO) - paper_turn_over.wav\r\n*https://freesound.org/s/63318/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n\r\n*https://freesound.org/people/morrisjm/\r\n*Notifications
+    \xBB dingaling\r\n*https://freesound.org/s/268756/\r\n*Attribution: http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/JFRecords/\r\n*Notification
+    Sounds (Sounds for App Development) \xBB vMax Bells.wav\r\n*https://freesound.org/s/420512/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\r\n\r\n*https://freesound.org/people/komanderkyle/\r\n*Space
+    Cowboy game \xBB snd_blockdeleted.wav\r\n*https://freesound.org/s/482221/\r\n*Attribution:
+    http://creativecommons.org/licenses/by/3.0/\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 01cf3a22e4a1ea843a7fbb70efb6cdcb, type: 2}
   m_sharedMaterial: {fileID: -3436447030638567217, guid: 01cf3a22e4a1ea843a7fbb70efb6cdcb, type: 2}
@@ -78555,7 +78624,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 20, y: 80, z: 20, w: 80}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -91508,8 +91577,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -200}
-  m_SizeDelta: {x: 1080, y: 200}
+  m_AnchoredPosition: {x: 576, y: -200}
+  m_SizeDelta: {x: 1152, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1349218373
 MonoBehaviour:

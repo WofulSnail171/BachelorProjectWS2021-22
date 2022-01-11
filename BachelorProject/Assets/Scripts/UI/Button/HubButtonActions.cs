@@ -776,7 +776,9 @@ public class HubButtonActions : MonoBehaviour
     //wait until data fetched
     private void OnPullTradeOffers()
     {
-        if(IsPulling)
+        tradeState = ProgressState.Empty;
+
+        if (IsPulling)
         { 
             //UIEnablerManager.Instance.DisableElement("WaitingForTrade",true);
 
@@ -872,7 +874,8 @@ public class HubButtonActions : MonoBehaviour
             //no matches
             else
                 {
-                
+
+                UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
 
                 if (DatabaseManager._instance.tradeData.ownOffers.Count < 4)
                     {
@@ -880,7 +883,7 @@ public class HubButtonActions : MonoBehaviour
                         UIEnablerManager.Instance.EnableElement("AddHeroToTrade", true);
                         UIEnablerManager.Instance.SwitchElements("General", "AddHeroDone", true);
                         UIEnablerManager.Instance.EnableElement("AddHero", true);
-                        UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
+                        //UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
                 }
 
                     else
