@@ -48,7 +48,7 @@ public class DungeonObserveHeader : MonoBehaviour
     void Awake()
     {
         DeleventSystem.DungeonStep += UpdateAfterStep;
-        DeleventSystem.DungeonStep += UpdateAfterStep;
+
         DeleventSystem.DungeonStart += InitVisuals;
         DeleventSystem.DungeonEvent += UpdateEvent;
         
