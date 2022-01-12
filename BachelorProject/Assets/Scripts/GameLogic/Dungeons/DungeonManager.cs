@@ -668,6 +668,7 @@ public class DungeonManager : MonoBehaviour
     public void WrapUpDungeon()
     {
         DatabaseManager._instance.activePlayerData.mtdCounter++;
+        DatabaseManager._instance.activePlayerData.dungeonCleared += 1;
         ApplyGrowth();
         currentCalcRun = null;
 

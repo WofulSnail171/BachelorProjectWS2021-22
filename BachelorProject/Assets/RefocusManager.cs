@@ -22,6 +22,7 @@ public class RefocusManager : MonoBehaviour
     {
         if (focus == true && SceneManager.GetActiveScene().buildIndex == 1 && _instance == this)
         {
+            DatabaseManager._instance.activePlayerData.appOpen += 1;
             if (DatabaseManager._instance.dungeonData.currentRun != null && DatabaseManager._instance.dungeonData.currentRun.valid == true)
             {
                 DungeonManager._instance.RevalidateMaxStepsAndRandomNums();

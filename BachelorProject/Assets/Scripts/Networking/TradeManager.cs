@@ -102,8 +102,10 @@ public class TradeManager : MonoBehaviour
         done = false;
         TargetStep = _targetStep;
         CurrentStep = 0;
-        DeleventSystem.TradeStart?.Invoke();
+        DatabaseManager._instance.activePlayerData.tradeStarted += 1;
+        DatabaseManager._instance.activePlayerData.tradeStartDate = DateTime.Now.ToUniversalTime().ToString("u");
         PushManager.ScheduleNotification("Trade results available!", "Check your trade results. Maybe you got something nice.", DateTime.Parse(DatabaseManager._instance.activePlayerData.tradeStartDate).ToLocalTime().AddSeconds(TargetStep));
+        DeleventSystem.TradeStart?.Invoke();
     }
     IEnumerator AutoplayRoutine()
     {

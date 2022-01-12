@@ -487,6 +487,9 @@ public class PlayerData
     public int rewardTierBuff;
     public int shards;
     public string tradeStartDate;
+    public int appOpen;
+    public int tradeStarted;
+    public int dungeonCleared;
 
     public List <BlacklistEntry> blacklist;
     public List<PlayerHero> inventory;
@@ -609,6 +612,9 @@ public class UploadPlayerData
         rewardTierBuff = _playerData.rewardTierBuff;
         shards = _playerData.shards;
         tradeStartDate = _playerData.tradeStartDate;
+        appOpen = _playerData.appOpen;
+        tradeStarted = _playerData.tradeStarted;
+        dungeonCleared = _playerData.dungeonCleared;
     }
     public string playerId;
     public string password;
@@ -622,6 +628,9 @@ public class UploadPlayerData
     public int rewardTierBuff;
     public int shards;
     public string tradeStartDate;
+    public int appOpen;
+    public int tradeStarted;
+    public int dungeonCleared;
 }
 
 [System.Serializable]

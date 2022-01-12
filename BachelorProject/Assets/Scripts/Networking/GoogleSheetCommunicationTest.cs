@@ -231,6 +231,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
         {
             TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
         }
+        DatabaseManager._instance.activePlayerData.appOpen += 1;
         SceneManager.LoadScene(1);
     }
 
