@@ -15,6 +15,10 @@ public class DungeonLayOut : MonoBehaviour
     public void FocusCamera()
     {
         //ToDo
+        if (PlayerParty.visualsActive)
+            CameraMover.SetTargetPos(PlayerParty._instance.visuals.transform.position);
+        else
+            CameraMover.SetTargetPos(startNode.transform.position);
     }
 
     public void SetupDungeonDailySeed(int _seed, DungeonDifficulty _ddiff = null)

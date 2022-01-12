@@ -31,6 +31,41 @@ public class CameraMover : MonoBehaviour
     float amplitude = .15f;
     float period = 5f;
 
+    bool dragMode = false;
+    Vector3 touchPos;
+    Vector3 dragPos;
+    public Vector3 speed = Vector3.zero;
+    public float speedThreshold = .01f;
+
+    void OnTouchDown()
+    {
+        //switch cameramover to drag mode
+        dragMode = true;
+        touchPos = Input.mousePosition;
+    }
+
+    void OnTouchUp()
+    {
+        //Swtich cameramover to lerp mode
+        dragMode = false;
+        SetTargetPos(targetPosition - offset);
+    }
+
+    void DragUpdate()
+    {
+        dragPos = Input.mousePosition;
+        if ((touchPos - dragPos).sqrMagnitude >= 3f)
+        {
+            speed = (CameraMover._instance.cam.ScreenToWorldPoint(dragPos) - CameraMover._instance.cam.ScreenToWorldPoint(touchPos)) * .03f;
+            if(speed.sqrMagnitude > (speed.normalized * speedThreshold).sqrMagnitude)
+            {
+                speed = (speed.normalized * speedThreshold);
+            }
+            transform.Translate(speed);
+        }
+    }
+
+
     void Start()
     {
         currentPosition = transform.position;
@@ -57,11 +92,26 @@ public class CameraMover : MonoBehaviour
     void Update()
     {
         mousePosition = CameraMover._instance.cam.ScreenToWorldPoint(Input.mousePosition);
-        DoLerp();
-        //Breath();
-        if(currentZoom != targetZoom)
+        if (Input.GetMouseButtonDown(0))
         {
-            DoZoom();
+            OnTouchDown();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            OnTouchUp();
+        }
+        if (dragMode)
+        {
+            DragUpdate();
+        }
+        else
+        {
+            DoLerp();
+            //Breath();
+            if (currentZoom != targetZoom)
+            {
+                DoZoom();
+            }
         }
     }
 

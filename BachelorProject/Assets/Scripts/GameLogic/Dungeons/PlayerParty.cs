@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class PlayerParty : MonoBehaviour
 {
+    public static bool visualsActive = false;
+    public static PlayerParty _instance;
+    private void Awake()
+    {
+        if(_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
     public GameObject visuals;
     //public TMP_Text activityText;
     //public TMP_Text steps;
@@ -31,10 +44,14 @@ public class PlayerParty : MonoBehaviour
         if(!DatabaseManager.CheckDatabaseValid() || DatabaseManager._instance.dungeonData.currentRun == null || !DatabaseManager._instance.dungeonData.currentRun.valid || DungeonManager._instance.currentCalcRun == null || DungeonManager._instance.currentCalcRun.currentNode == null)
         {
             visuals.SetActive(false);
+            visualsActive = false;
             return;
         }
         if (visuals != null && visuals.activeSelf != true)
+        {
             visuals.SetActive(true);
+            visualsActive = true;
+        }
 
         //pgBar.SetVal(DungeonManager._instance.currentCalcRun.remainingActivitySteps, DungeonManager._instance.currentCalcRun.startActivitySteps);
 
