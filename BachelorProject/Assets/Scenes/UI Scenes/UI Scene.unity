@@ -15311,13 +15311,13 @@ MonoBehaviour:
     color: {r: 0.254717, g: 0.11801334, b: 0.056037746, a: 1}
   - name: forest
     sprite: {fileID: 21300000, guid: ec4a6a58a2392c647bd635bd2782c389, type: 3}
-    color: {r: 0.1278273, g: 0.3301887, b: 0.06570755, a: 1}
+    color: {r: 0.20250207, g: 0.26415092, b: 0.18316126, a: 1}
   - name: mountains
     sprite: {fileID: 21300000, guid: 2c4802e5f58a1914ebce93ce9f97a584, type: 3}
-    color: {r: 0.13171624, g: 0.099368095, b: 0.2735849, a: 1}
+    color: {r: 0.10124597, g: 0.08410466, b: 0.16981131, a: 1}
   - name: plain
     sprite: {fileID: 21300000, guid: 74cbba53dbd383149b8847d124759baf, type: 3}
-    color: {r: 0.6226415, g: 0.5421681, b: 0.22027412, a: 1}
+    color: {r: 0.4433962, g: 0.4003277, b: 0.23215556, a: 1}
   - name: ruins
     sprite: {fileID: 21300000, guid: a14658192b5e7344f83266631a46030a, type: 3}
     color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
@@ -15326,13 +15326,13 @@ MonoBehaviour:
     color: {r: 0.0028479954, g: 0.40611735, b: 0.6037736, a: 1}
   - name: settlement
     sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
-    color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
+    color: {r: 0.5660378, g: 0.3508908, b: 0.19490923, a: 1}
   - name: final destination
-    sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
-    color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
+    sprite: {fileID: 21300000, guid: 33c26bd4c8c148e4eaf7886a7c2d96bf, type: 3}
+    color: {r: 0.6226415, g: 0.14240704, b: 0.09104663, a: 1}
   - name: home town
-    sprite: {fileID: 21300000, guid: e5ea3511a3d3f9d48957d5c1e1bf46ad, type: 3}
-    color: {r: 0.865, g: 0.39491934, b: 0.053042475, a: 1}
+    sprite: {fileID: 21300000, guid: ac00b67796aea3f49b61d16ae124c102, type: 3}
+    color: {r: 0.754717, g: 0.5939555, b: 0.19579923, a: 1}
 --- !u!1 &250211646
 GameObject:
   m_ObjectHideFlags: 0
