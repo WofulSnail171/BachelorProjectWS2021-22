@@ -30,6 +30,6 @@ public class MottomMenuActions : MonoBehaviour
 
     private void HelpLink()
     {
-        Application.OpenURL(URL);
+        Application.OpenURL(URL.Replace("SomeUserName", DatabaseManager._instance.activePlayerData.playerId));
     }
 }
