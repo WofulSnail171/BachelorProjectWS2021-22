@@ -15,7 +15,6 @@ public class PushManager : MonoBehaviour
             DontDestroyOnLoad(this);
             var channel = new GameNotificationChannel("ChannelId", "Default Game Channel", "Generic notifications");
             manager.Initialize(channel);
-            ScheduleNotification("We miss you!", "Come and check up again on your heroes", DateTime.Now.AddDays(1));
         }
         else
         {
