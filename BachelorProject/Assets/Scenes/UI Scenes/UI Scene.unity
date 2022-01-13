@@ -15284,6 +15284,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d28e3b750b753b24895f81b0c0079ca7, type: 3}
   - name: Zenia
     sprite: {fileID: 21300000, guid: 901a68f0898334948a8c861f588cf994, type: 3}
+  - name: Phil
+    sprite: {fileID: 21300000, guid: c868e1ab082b5734b896f321494de4d5, type: 3}
+  - name: Anti-Phil
+    sprite: {fileID: 21300000, guid: a9a6681a4ca7e2348a73b15808e9deae, type: 3}
 --- !u!114 &249821545
 MonoBehaviour:
   m_ObjectHideFlags: 0
