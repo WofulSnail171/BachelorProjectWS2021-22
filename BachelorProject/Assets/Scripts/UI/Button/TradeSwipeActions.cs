@@ -51,7 +51,8 @@ public class TradeSwipeActions : MonoBehaviour
 
     private void OnPullTradeOffers()
     {
-        if(DatabaseManager._instance.tradeData.GetNumberOFOpenOffers() >= 1)
+
+        if (DatabaseManager._instance.tradeData.GetNumberOFOpenOffers() >= 1)
         {
             UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
             UIEnablerManager.Instance.DisableBlur();
@@ -75,7 +76,8 @@ public class TradeSwipeActions : MonoBehaviour
 
         else
         {
-            UIEnablerManager.Instance.SwitchElements("WaitingForTrade","NoTradeFound", true);
+            UIEnablerManager.Instance.EnableElement("NoTradeFound", true);
+            UIEnablerManager.Instance.DisableElement("WaitingForTrade", true);
             UIEnablerManager.Instance.DisableBlur();
 
             //go to observe
