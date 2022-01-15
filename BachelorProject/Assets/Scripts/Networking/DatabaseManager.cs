@@ -309,7 +309,7 @@ public class DatabaseManager : MonoBehaviour
         activePlayerData.blacklist = blackList;
         //check for dates lol
         //var bla = DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime());
-        if (localSave == null || DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) > 0)
+        if (localSave == null || localSave.activePlayerData.lastUpdate == "" || DateTime.Parse(localSave.activePlayerData.lastUpdate).ToUniversalTime().CompareTo(DateTime.Parse(activePlayerData.lastUpdate).ToUniversalTime()) > 0)
         {
             //online save is younger the local one -> played on an other device -> need to fire special event
             SaveGameDataLocally();
