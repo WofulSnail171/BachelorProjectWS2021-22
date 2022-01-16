@@ -34,7 +34,7 @@ public class RefocusManager : MonoBehaviour
             {
                 TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
             }
-            PushManager.ScheduleNotification("We miss you!", "Come and check up again on your heroes", System.DateTime.Now.AddHours(9));
+            PushManager.ScheduleNotification("We miss you!", "Come and check up again on your heroes", System.DateTime.Now.AddHours(17));
         }
     }
 }

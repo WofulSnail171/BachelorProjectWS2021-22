@@ -232,7 +232,7 @@ public class GoogleSheetCommunicationTest : MonoBehaviour
             TradeManager._instance.FastForwardToStep(TradeManager._instance.GetCurrentStep());
         }
         DatabaseManager._instance.activePlayerData.appOpen += 1;
-        PushManager.ScheduleNotification("We miss you!", "Come and check up again on your heroes", DateTime.Now.AddHours(8));
+        PushManager.ScheduleNotification("We miss you!", "Come and check up again on your heroes", DateTime.Now.AddHours(17));
         SceneManager.LoadScene(1);
     }
 
