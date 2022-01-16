@@ -173,6 +173,8 @@ public class PushManager : MonoBehaviour
     public static void ScheduleNotification(string _title, string _body, DateTime _deliveryTime, string icon = "random")
     {
         IGameNotification notification = _instance.manager.CreateNotification();
+        if (notification == null)
+            return;
         notification.Title = _title;
         icon = StringForIcon(icon);
         if (icon == "random" && DatabaseManager._instance.defaultHeroData != null && DatabaseManager._instance.defaultHeroData.defaultHeroList.Length > 0)
@@ -187,6 +189,8 @@ public class PushManager : MonoBehaviour
     public static void ScheduleNotification(string _title, string _body, int _delay, string icon = "random")
     {
         IGameNotification notification = _instance.manager.CreateNotification();
+        if (notification == null)
+            return;
         notification.Title = _title;
         notification.BadgeNumber = _delay;
         icon = StringForIcon(icon);
@@ -203,6 +207,8 @@ public class PushManager : MonoBehaviour
     public static void ScheduleError(string _body, string _title = "error")
     {
         IGameNotification notification = _instance.manager.CreateNotification();
+        if (notification == null)
+            return;
         notification.Title = _title;
         notification.LargeIcon = "error";
         notification.SmallIcon = "smol";
