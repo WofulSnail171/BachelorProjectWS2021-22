@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7490a9996a536b48922ee0c77414018, type: 3}
+  m_Name: Output 1
+  m_EditorClassIdentifier: 
+  o: 
+  sdfName: newSDF
+  variables: []
+  types: []
+  nodeType: 13
+  shaderName: test
+  input: {fileID: 11400000, guid: 499316d20245a1a4caf67a8c3e03fbf6, type: 2}
+  positionSDF: {x: 0, y: 0}
+  scaleSDF: 1
+  rotationSDF: 0
+  sdfMaterial: {fileID: 2100000, guid: fb0340f5e89a09841b70da80a35f612b, type: 2}
+  applyMaterial: 0
+  infinite: 0
+  distance: {x: 0.5, y: 0.5}
+  finite: 0
+  finiteClamp: {x: 1, y: 1}
+  insideTex: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
+  insideColor: {r: 0.9339623, g: 0.39500067, b: 0.3568441, a: 1}
+  insideTexPosition: {x: 0, y: 0.01}
+  insideTexScale: 0.08
+  insideTexRotation: 0
+  outsideTex: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
+  outsideColor: {r: 0.035866853, g: 0.13613687, b: 0.24528301, a: 1}
+  outsideTexPosition: {x: 0, y: -0.02}
+  outsideTexScale: -0.69
+  outsideTexRotation: 0
+  outlineTex: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
+  outlineColor: {r: 0.7735849, g: 0.018244924, b: 0.018244924, a: 1}
+  outlineTexPosition: {x: 0, y: 0}
+  outlineTexScale: 1
+  outlineTexRotation: 0
+  thickness: 0.5
+  smoothness: 5
+  inRepetition: 2
+  outRepetition: 0.5
+  lineDistance: 0.17

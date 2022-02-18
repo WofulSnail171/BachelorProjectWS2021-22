@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 677f389da7180654581bece8a96bdf25, type: 3}
+  m_Name: Texture
+  m_EditorClassIdentifier: 
+  o: tex720_out
+  sdfName: tex720
+  variables:
+  - tex720_position
+  - tex720_tex
+  - tex720_scale
+  - tex720_rotation
+  types:
+  - float2
+  - sampler2D
+  - float
+  - float
+  nodeType: 5
+  position: {x: 0, y: 0}
+  sdfTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+  scale: 0.17
+  rotation: 0.36

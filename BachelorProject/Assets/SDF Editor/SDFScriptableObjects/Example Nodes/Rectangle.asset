@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0df76ed01223f4a4086b85788543c7c3, type: 3}
+  m_Name: Rectangle
+  m_EditorClassIdentifier: 
+  o: rect415_out
+  sdfName: rect415
+  variables:
+  - rect415_position
+  - rect415_box
+  - rect415_scale
+  - rect415_roundness
+  - rect415_rotation
+  types:
+  - float2
+  - float2
+  - float
+  - float4
+  - float
+  nodeType: 1
+  position: {x: 0, y: 0}
+  rotation: 0.28
+  scale: 0.74
+  box: {x: 0.2, y: 0.28}
+  roundness: {x: 0, y: 0, z: 0, w: 0}

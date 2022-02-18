@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 235321f7c72979e4c90d9fb64067e04a, type: 3}
+  m_Name: Subtract
+  m_EditorClassIdentifier: 
+  o: subtract189_out
+  sdfName: subtract189
+  variables: []
+  types: []
+  nodeType: 12
+  inputA: {fileID: 11400000, guid: 22288abca93066847aa1db8316bb7c8b, type: 2}
+  inputB: {fileID: 11400000, guid: 93ecfdd9b1f05c64b9cc2efc8ce206dc, type: 2}

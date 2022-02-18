@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b8f266ae2ae0642b3eb64a0a12f537, type: 3}
+  m_Name: Triangle
+  m_EditorClassIdentifier: 
+  o: triangle306_out
+  sdfName: triangle306
+  variables:
+  - triangle306_position
+  - triangle306_a
+  - triangle306_b
+  - triangle306_c
+  - triangle306_scale
+  - triangle306_rotation
+  types:
+  - float2
+  - float2
+  - float2
+  - float2
+  - float
+  - float
+  nodeType: 2
+  position: {x: 0, y: 0}
+  rotation: 0
+  scale: 0.5
+  a: {x: -0.14, y: 0.07}
+  b: {x: 0, y: -0.1}
+  c: {x: 0.14, y: 0.07}

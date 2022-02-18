@@ -4,16 +4,39 @@ Shader "SDF/test"
         Properties
         {
             
-            [HideInInspector] sSubtract133_k ("sSubtract133_k", Float) = 0
+            [HideInInspector] sCombine917_k ("sCombine917_k", Float) = 0
                 
-            [HideInInspector] circle442_position ("circle442_position", Vector) = (0,0,0,0)
-            [HideInInspector] circle442_radius ("circle442_radius", Float) = 0.2
+            [HideInInspector] sCombine226_k ("sCombine226_k", Float) = 0
                 
-            [HideInInspector] rect365_position ("rect365_position", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_box ("rect365_box", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_scale ("rect365_scale", Float) = 1
-            [HideInInspector] rect365_roundness ("rect365_roundness", Vector) = (0,0,0,0)
-            [HideInInspector] rect365_rotation ("rect365_rotation", Float) = 0
+            [HideInInspector] circle606_position ("circle606_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle606_radius ("circle606_radius", Float) = 0.2
+                
+            [HideInInspector] circle295_position ("circle295_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle295_radius ("circle295_radius", Float) = 0.2
+                
+            [HideInInspector] triangle152_position ("triangle152_position", Vector) = (0,0,0,0)
+            [HideInInspector] triangle152_a ("triangle152_a", Vector) = (0,0,0,0)
+            [HideInInspector] triangle152_b ("triangle152_b", Vector) = (0,0,0,0)
+            [HideInInspector] triangle152_c ("triangle152_c", Vector) = (0,0,0,0)
+            [HideInInspector] triangle152_scale ("triangle152_scale", Float) = 1
+            [HideInInspector] triangle152_rotation ("triangle152_rotation", Float) = 0
+                
+            [HideInInspector] sCombine148_k ("sCombine148_k", Float) = 0
+                
+            [HideInInspector] sCombine489_k ("sCombine489_k", Float) = 0
+                
+            [HideInInspector] circle941_position ("circle941_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle941_radius ("circle941_radius", Float) = 0.2
+                
+            [HideInInspector] circle470_position ("circle470_position", Vector) = (0,0,0,0)
+            [HideInInspector] circle470_radius ("circle470_radius", Float) = 0.2
+                
+            [HideInInspector] triangle332_position ("triangle332_position", Vector) = (0,0,0,0)
+            [HideInInspector] triangle332_a ("triangle332_a", Vector) = (0,0,0,0)
+            [HideInInspector] triangle332_b ("triangle332_b", Vector) = (0,0,0,0)
+            [HideInInspector] triangle332_c ("triangle332_c", Vector) = (0,0,0,0)
+            [HideInInspector] triangle332_scale ("triangle332_scale", Float) = 1
+            [HideInInspector] triangle332_rotation ("triangle332_rotation", Float) = 0
                 
             
             [HideInInspector] positionSDF ("positionSDF", Vector) = (0,0,0,0)
@@ -102,14 +125,30 @@ Shader "SDF/test"
         float2 positionSDF, distance, finiteClamp;
         float rotationSDF, scaleSDF;
 
-        float sSubtract133_k;
-        float2 circle442_position;
-        float circle442_radius;
-        float2 rect365_position;
-        float2 rect365_box;
-        float rect365_scale;
-        float4 rect365_roundness;
-        float rect365_rotation;
+        float sCombine917_k;
+        float sCombine226_k;
+        float2 circle606_position;
+        float circle606_radius;
+        float2 circle295_position;
+        float circle295_radius;
+        float2 triangle152_position;
+        float2 triangle152_a;
+        float2 triangle152_b;
+        float2 triangle152_c;
+        float triangle152_scale;
+        float triangle152_rotation;
+        float sCombine148_k;
+        float sCombine489_k;
+        float2 circle941_position;
+        float circle941_radius;
+        float2 circle470_position;
+        float circle470_radius;
+        float2 triangle332_position;
+        float2 triangle332_a;
+        float2 triangle332_b;
+        float2 triangle332_c;
+        float triangle332_scale;
+        float triangle332_rotation;
         
         float4 insideColor, outsideColor, outlineColor;
         sampler2D insideTex, outsideTex, outlineTex;
@@ -122,7 +161,7 @@ Shader "SDF/test"
             i.uv -= float2(0.5, 0.5);
 
             float sdfOut = sdf(i.uv, positionSDF, rotationSDF, scaleSDF, distance, finiteClamp,
-                               rect365_position, rect365_box, rect365_scale, rect365_roundness, rect365_rotation, circle442_position, circle442_radius, sSubtract133_k);
+                               triangle332_position, triangle332_a, triangle332_b, triangle332_c, triangle332_scale, triangle332_rotation, circle470_position, circle470_radius, circle941_position, circle941_radius, sCombine489_k, sCombine148_k, triangle152_position, triangle152_a, triangle152_b, triangle152_c, triangle152_scale, triangle152_rotation, circle295_position, circle295_radius, circle606_position, circle606_radius, sCombine226_k, sCombine917_k);
             
             float4 col = sdfColor(i.uv, sdfOut,
                                   insideColor, insideTex, insideTexPosition, insideTexScale, insideTexRotation, 

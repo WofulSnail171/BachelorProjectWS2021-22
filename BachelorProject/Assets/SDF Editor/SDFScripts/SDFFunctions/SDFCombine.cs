@@ -18,7 +18,7 @@ public class SDFCombine : SDFFunction {
             if (this._inputA == value) return;
             this._inputA = value;
             this.OnInputChange?.Invoke();
-            Debug.Log("input A has changed");
+            //Debug.Log("input A has changed");
         }
     }
     
@@ -28,19 +28,19 @@ public class SDFCombine : SDFFunction {
             if (this._inputB == value) return;
             this._inputB = value;
             this.OnInputChange?.Invoke();
-            Debug.Log("input B has changed");
+            //Debug.Log("input B has changed");
         }
     }
 
     private void OnValidate() {
         if (this.inputA != null && this.sdfName == this.inputA.sdfName) {
-            Debug.LogWarning("invalid node in Input A");
+            //Debug.LogWarning("invalid node in Input A");
             this.inputA = null;
             return;
         }
 
         if (this.inputB != null && this.sdfName == this.inputB.sdfName) {
-            Debug.LogWarning("invalid node in Input B");
+            //Debug.LogWarning("invalid node in Input B");
             this.inputB = null;
             return;
         }

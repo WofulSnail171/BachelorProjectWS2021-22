@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SDFTestMaterial
-  m_Shader: {fileID: 0}
+  m_Shader: {fileID: 4800000, guid: 09116151715420e40ac59557271594a6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -53,15 +53,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - insideTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - outlineTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - outsideTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 4744c691c20f9ec49a636e17f48788da, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - tex310_tex:
@@ -86,6 +86,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - tex705_tex:
         m_Texture: {fileID: 2800000, guid: 4d2322a723caa334d80e6eaf2263af79, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - tex720_tex:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - tex733_tex:
@@ -145,6 +149,9 @@ Material:
     - _Surface: 1
     - _ZTest: 4
     - _ZWrite: 0
+    - bezier308_rotation: 0
+    - bezier308_roundness: 4.67
+    - bezier308_scale: 1
     - bezier444_rotation: 0.2
     - bezier444_roundness: 6.15
     - bezier444_scale: 1.27
@@ -160,37 +167,64 @@ Material:
     - circle114_radius: 0.21
     - circle125_radius: 0.12
     - circle129_radius: 0.2
+    - circle15_radius: 0.2
     - circle167_radius: 0.2
     - circle175_radius: 0.2
     - circle210_radius: 0.4
+    - circle239_radius: 0.2
+    - circle255_radius: 0.4
     - circle258_radius: 0.12
     - circle266_radius: 0.1
     - circle283_radius: 0.25
     - circle295_radius: 0.4
+    - circle304_radius: 0.2
+    - circle307_radius: 0.21
+    - circle332_radius: 0.2
+    - circle353_radius: 0.2
+    - circle369_radius: 0.2
     - circle37_radius: 0.2
     - circle380_radius: 0.2
     - circle392_radius: 0.27
+    - circle415_radius: 0.1
     - circle429_radius: 0.13
     - circle42_radius: 0.4
     - circle439_radius: 0.28
     - circle442_radius: 0.4
+    - circle466_radius: 0.05
     - circle477_radius: 0.4
     - circle479_radius: 0.2
     - circle484_radius: 0.48
+    - circle501_radius: 0.4
     - circle535_radius: 0.17
+    - circle543_radius: 0.24
+    - circle549_radius: 0.1
     - circle551_radius: 0.48
+    - circle56_radius: 0.2
+    - circle605_radius: 0.1
     - circle610_radius: 0.2
+    - circle63_radius: 0.2
     - circle646_radius: 0.4
     - circle662_radius: 0.32
     - circle673_radius: 0.27
     - circle686_radius: 0.13
     - circle717_radius: 0.2
+    - circle762_radius: 0.21
+    - circle779_radius: 0.2
     - circle780_radius: 0
+    - circle78_radius: 0.1
     - circle801_radius: 0.4
+    - circle876_radius: 0.67
+    - circle886_radius: 0.4
     - circle891_radius: 0.33
+    - circle895_radius: 0.21
     - circle89_radius: 0.17
+    - circle910_radius: 0.4
+    - circle913_radius: 0.2
     - circle936_radius: 0.13
+    - circle949_radius: 0.05
+    - circle953_radius: 0.4
     - circle959_radius: 0.33
+    - circle991_radius: 0.2
     - colorOutput107_lineDistance: 39.69
     - colorOutput107_repetition: 8
     - colorOutput107_thickness: 1.84
@@ -201,13 +235,16 @@ Material:
     - colorOutput839_repetition: 12
     - colorOutput839_thickness: 1.07
     - insideTexRotation: 0
-    - insideTexScale: 1
+    - insideTexScale: 0.08
     - lerp10_t: -7.62
     - lerp189_t: 0
+    - lerp254_t: 1.76
+    - lerp297_t: 1.13
     - lerp305_t: 1
     - lerp374_t: -1
     - lerp385_t: -1.03
     - lerp498_t: 0.39
+    - lerp557_t: 0
     - lerp764_t: -1
     - lerp771_t: 0.17
     - lerp788_t: -2.96
@@ -243,6 +280,9 @@ Material:
     - line702_rotation: 0
     - line702_roundness: 0.79
     - line702_scale: 0.18
+    - line70_rotation: 0
+    - line70_roundness: 3.14
+    - line70_scale: 1
     - line804_rotation: -3.62
     - line804_roundness: 3
     - line804_scale: 0.36
@@ -258,20 +298,28 @@ Material:
     - line982_roundness: 1.77
     - line982_scale: 0.7
     - lineDistance: 0.62
-    - outlineInRepetition: 6.67
-    - outlineLineDistance: 0.14
-    - outlineOutRepetition: 4.27
+    - outlineInRepetition: 2
+    - outlineLineDistance: 0.17
+    - outlineOutRepetition: 0.5
     - outlineRepetition: 9.29
-    - outlineSmoothness: 10.96
+    - outlineSmoothness: 5
     - outlineTexRotation: 0
     - outlineTexScale: 1
-    - outlineThickness: 0.19
+    - outlineThickness: 0.5
     - outsideTexRotation: 0
-    - outsideTexScale: 1
+    - outsideTexScale: -0.69
+    - rect106_rotation: 0
+    - rect106_scale: 1
     - rect121_rotation: 39.44
     - rect121_scale: 0.59
+    - rect137_rotation: 0
+    - rect137_scale: 1
     - rect138_rotation: 48.57
     - rect138_scale: 0.55
+    - rect147_rotation: 1.1
+    - rect147_scale: 0.43
+    - rect208_rotation: 0
+    - rect208_scale: 1
     - rect230_rotation: 0
     - rect230_scale: 0.7
     - rect254_rotation: 0
@@ -286,6 +334,8 @@ Material:
     - rect365_scale: 0.7
     - rect400_rotation: 0
     - rect400_scale: 1
+    - rect415_rotation: 0.28
+    - rect415_scale: 0.74
     - rect461_rotation: 0
     - rect461_scale: 1
     - rect465_rotation: 0
@@ -298,18 +348,34 @@ Material:
     - rect518_scale: 0.51
     - rect519_rotation: 51.2
     - rect519_scale: 0.3
+    - rect522_rotation: 0
+    - rect522_scale: 1
     - rect530_scale: 1.45
     - rect534_rotation: 0
     - rect534_scale: 1
     - rect550_scale: 2
     - rect55_rotation: 0
     - rect55_scale: 1
+    - rect593_rotation: 0
+    - rect593_scale: 0.7
     - rect651_rotation: 57.36
     - rect651_scale: 0.42
     - rect671_rotation: 0
     - rect671_scale: 0.7
+    - rect676_rotation: 0
+    - rect676_scale: 1
+    - rect709_rotation: 0
+    - rect709_scale: 1
+    - rect713_rotation: 0
+    - rect713_scale: 0.7
+    - rect71_rotation: 0
+    - rect71_scale: 0.7
     - rect720_rotation: 0
     - rect720_scale: 0.7
+    - rect750_rotation: 2.11
+    - rect750_scale: 0.53
+    - rect759_rotation: 0
+    - rect759_scale: 0.7
     - rect761_scale: 1
     - rect766_scale: 0.63
     - rect794_rotation: 0
@@ -318,6 +384,8 @@ Material:
     - rect828_scale: 1
     - rect853_scale: 1
     - rect85_scale: 1
+    - rect922_rotation: 0
+    - rect922_scale: 1
     - rect937_rotation: 0
     - rect937_scale: 1
     - rect939_rotation: 51.2
@@ -325,43 +393,88 @@ Material:
     - rect962_rotation: 51.2
     - rect962_scale: 0.3
     - rect983_scale: 2
+    - rect992_rotation: 0
+    - rect992_scale: 0.7
     - repetition: 17.09
-    - rotationSDF: 0.79
+    - rotationSDF: 0
+    - sCombine205_k: 0.018
+    - sCombine239_k: 0.018
+    - sCombine247_k: 0
+    - sCombine351_k: 0.018
+    - sCombine461_k: 0.02
+    - sCombine615_k: 0.1
+    - sCombine674_k: 0.1
+    - sCombine693_k: 0
+    - sCombine727_k: 0.07
+    - sCombine839_k: 0.2
+    - sCombine894_k: 0
+    - sCombine928_k: 0.1
     - sCombine93_k: 0.18
+    - sCombine969_k: 0.1
+    - sCombine9_k: 0.018
+    - sIntersect180_k: 0
+    - sIntersect797_k: 0.06
     - sIntersect842_k: 0.19
+    - sSubtract111_k: 0.34
     - sSubtract133_k: 0.34
     - sSubtract15_k: 0.34
     - sSubtract170_k: 0.34
     - sSubtract217_k: 0
+    - sSubtract243_k: 0
     - sSubtract310_k: 0
+    - sSubtract346_k: 0
+    - sSubtract369_k: 0.001
+    - sSubtract391_k: 0
     - sSubtract394_k: 0
+    - sSubtract513_k: 0.11
     - sSubtract558_k: 0
+    - sSubtract645_k: 0.34
     - sSubtract665_k: 0.34
+    - sSubtract762_k: 0.34
+    - sSubtract7_k: 0.34
     - sSubtract870_k: 0.34
+    - sSubtract880_k: 0.27
     - sSubtract894_k: 0
     - sSubtract899_k: 0.03
+    - sSubtract929_k: 0
     - sblend343_k: 0.28
     - sblend571_k: 0.29
     - sblend896_k: 0.28
     - sblend989_k: 0
-    - scaleSDF: 0.37
+    - scaleSDF: 1
     - tex338_rotation: 0
     - tex338_scale: 1
     - tex649_rotation: -0.26
     - tex649_scale: 0.93
     - tex705_rotation: -0.32
     - tex705_scale: 0.94
+    - tex720_rotation: 0.36
+    - tex720_scale: 0.17
     - thickness: 0.88
     - triangle106_scale: 1
+    - triangle143_rotation: 0
+    - triangle143_scale: 1
     - triangle154_rotation: 2.79
     - triangle154_scale: 2.35
     - triangle274_rotation: 2.79
     - triangle274_scale: 2.35
+    - triangle306_rotation: 0
+    - triangle306_scale: 0.5
     - triangle490_rotation: 2.79
     - triangle490_scale: 2.35
     - triangle600_rotation: 0
     - triangle600_scale: 1
+    - triangle679_rotation: 18.22
+    - triangle679_scale: 1
+    - triangle710_rotation: 0
+    - triangle710_scale: 1
+    - triangle78_rotation: 0
+    - triangle78_scale: 1
     - triangle826_scale: 1
+    - triangle911_rotation: 0
+    - triangle911_scale: 1
+    - triangle965_rotation: 0
+    - triangle965_scale: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0.46666667}
     - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
@@ -372,6 +485,10 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - bezier308_a: {r: 0.2, g: 0.26, b: 0, a: 0}
+    - bezier308_b: {r: -0.27, g: 0.28, b: 0, a: 0}
+    - bezier308_c: {r: 0.21, g: -0.38, b: 0, a: 0}
+    - bezier308_position: {r: 0, g: 0, b: 0, a: 0}
     - bezier444_a: {r: 0.22, g: -0.13, b: 0, a: 0}
     - bezier444_b: {r: 0.08, g: 0.43, b: 0, a: 0}
     - bezier444_c: {r: -0.4, g: 0, b: 0, a: 0}
@@ -396,37 +513,64 @@ Material:
     - circle114_position: {r: 0, g: 0, b: 0, a: 0}
     - circle125_position: {r: 0, g: 0, b: 0, a: 0}
     - circle129_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle15_position: {r: 0, g: 0, b: 0, a: 0}
     - circle167_position: {r: 0, g: 0, b: 0, a: 0}
     - circle175_position: {r: 0, g: 0, b: 0, a: 0}
     - circle210_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle239_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle255_position: {r: 0, g: 0, b: 0, a: 0}
     - circle258_position: {r: 0, g: 0, b: 0, a: 0}
     - circle266_position: {r: 0, g: 0, b: 0, a: 0}
     - circle283_position: {r: 0, g: 0, b: 0, a: 0}
     - circle295_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle304_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle307_position: {r: 0, g: 0.24, b: 0, a: 0}
+    - circle332_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle353_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle369_position: {r: 0, g: 0, b: 0, a: 0}
     - circle37_position: {r: 0, g: 0, b: 0, a: 0}
     - circle380_position: {r: 0, g: 0, b: 0, a: 0}
     - circle392_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle415_position: {r: 0.1, g: 0.1, b: 0, a: 0}
     - circle429_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle42_position: {r: 0, g: 0, b: 0, a: 0}
     - circle439_position: {r: 0, g: 0, b: 0, a: 0}
     - circle442_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle466_position: {r: -0.1, g: 0.1, b: 0, a: 0}
     - circle477_position: {r: 0, g: 0, b: 0, a: 0}
     - circle479_position: {r: 0, g: 0, b: 0, a: 0}
     - circle484_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle501_position: {r: 0, g: 0, b: 0, a: 0}
     - circle535_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle543_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle549_position: {r: 0.1, g: 0.1, b: 0, a: 0}
     - circle551_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle56_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle605_position: {r: -0.1, g: 0.1, b: 0, a: 0}
     - circle610_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle63_position: {r: 0, g: 0, b: 0, a: 0}
     - circle646_position: {r: 0, g: 0, b: 0, a: 0}
     - circle662_position: {r: 0, g: 0, b: 0, a: 0}
     - circle673_position: {r: 0, g: 0, b: 0, a: 0}
     - circle686_position: {r: -0.13, g: -0.36, b: 0, a: 0}
     - circle717_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle762_position: {r: 0, g: 0.24, b: 0, a: 0}
+    - circle779_position: {r: 0, g: 0, b: 0, a: 0}
     - circle780_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle78_position: {r: -0.1, g: 0.1, b: 0, a: 0}
     - circle801_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle876_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle886_position: {r: 0, g: 0, b: 0, a: 0}
     - circle891_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle895_position: {r: 0, g: 0.24, b: 0, a: 0}
     - circle89_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle910_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle913_position: {r: 0, g: 0, b: 0, a: 0}
     - circle936_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle949_position: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - circle953_position: {r: 0, g: 0, b: 0, a: 0}
     - circle959_position: {r: 0, g: 0, b: 0, a: 0}
+    - circle991_position: {r: 0, g: 0, b: 0, a: 0}
     - color378: {r: 0.36405307, g: 0.9076464, b: 0.9528302, a: 1}
     - color504: {r: 0, g: 0, b: 0, a: 1}
     - color560: {r: 0.5636104, g: 0.8962264, b: 0.18178178, a: 1}
@@ -438,8 +582,8 @@ Material:
     - finiteClamp: {r: 1, g: 1, b: 0, a: 0}
     - finiteDistance: {r: 1, g: 1, b: 0, a: 0}
     - infiniteDistance: {r: 0.31, g: 0.56, b: 0, a: 0}
-    - insideColor: {r: 1, g: 1, b: 1, a: 1}
-    - insideTexPosition: {r: 0, g: 0, b: 0, a: 0}
+    - insideColor: {r: 0.9339623, g: 0.39500067, b: 0.3568441, a: 1}
+    - insideTexPosition: {r: 0, g: 0.01, b: 0, a: 0}
     - line249_a: {r: 0, g: 0, b: 0, a: 0}
     - line249_b: {r: 0, g: 0, b: 0, a: 0}
     - line249_position: {r: 0, g: 0, b: 0, a: 0}
@@ -470,6 +614,9 @@ Material:
     - line702_a: {r: 0.14, g: -0.3, b: 0, a: 0}
     - line702_b: {r: -0.39, g: 0.23, b: 0, a: 0}
     - line702_position: {r: 0, g: 0, b: 0, a: 0}
+    - line70_a: {r: 0.21, g: 0.28, b: 0, a: 0}
+    - line70_b: {r: 0, g: -0.43, b: 0, a: 0}
+    - line70_position: {r: 0, g: 0, b: 0, a: 0}
     - line804_a: {r: 0.27, g: -0.18, b: 0, a: 0}
     - line804_b: {r: -0.24, g: 0.23, b: 0, a: 0}
     - line804_position: {r: 0.13, g: -0.15, b: 0, a: 0}
@@ -485,17 +632,29 @@ Material:
     - line982_a: {r: 0, g: 0, b: 0, a: 0}
     - line982_b: {r: -0.2, g: 1.45, b: 0, a: 0}
     - line982_position: {r: 0, g: 0, b: 0, a: 0}
-    - outlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - outlineColor: {r: 0.7735849, g: 0.018244924, b: 0.018244924, a: 1}
     - outlineTexPosition: {r: 0, g: 0, b: 0, a: 0}
-    - outsideColor: {r: 1, g: 1, b: 1, a: 0}
-    - outsideTexPosition: {r: 0, g: 0, b: 0, a: 0}
+    - outsideColor: {r: 0.035866853, g: 0.13613687, b: 0.24528301, a: 1}
+    - outsideTexPosition: {r: 0, g: -0.02, b: 0, a: 0}
     - positionSDF: {r: 0, g: 0, b: 0, a: 0}
+    - rect106_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect106_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect106_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect121_box: {r: 0.2, g: 0.09, b: 0, a: 0}
     - rect121_position: {r: 0.02, g: 0, b: 0, a: 0}
     - rect121_roundness: {r: -0.14, g: -0.12, b: 0, a: 0}
+    - rect137_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect137_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect137_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect138_box: {r: 0.85, g: 0.21, b: 0, a: 0}
     - rect138_position: {r: 0, g: 0, b: 0, a: 0}
     - rect138_roundness: {r: 0.55, g: 0.55, b: 0.01, a: 0.14}
+    - rect147_box: {r: 0.3, g: 0.2, b: 0, a: 0}
+    - rect147_position: {r: -0.02, g: 0, b: 0, a: 0}
+    - rect147_roundness: {r: 0, g: 0.28, b: 0.23, a: 0}
+    - rect208_box: {r: 2.38, g: 2.99, b: 0, a: 0}
+    - rect208_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect208_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect230_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect230_position: {r: 0, g: 0, b: 0, a: 0}
     - rect230_roundness: {r: 0.2, g: 0, b: 0, a: 0.2}
@@ -520,6 +679,9 @@ Material:
     - rect400_box: {r: 0, g: 0, b: 0, a: 0}
     - rect400_position: {r: 0, g: 0, b: 0, a: 0}
     - rect400_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect415_box: {r: 0.2, g: 0.28, b: 0, a: 0}
+    - rect415_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect415_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect461_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect461_position: {r: 0, g: 0, b: 0, a: 0}
     - rect461_roundness: {r: 0.13, g: 0.15, b: 0.16, a: 0.16}
@@ -541,6 +703,9 @@ Material:
     - rect519_box: {r: 0.68, g: 0.47, b: 0, a: 0}
     - rect519_position: {r: 0, g: 0, b: 0, a: 0}
     - rect519_roundness: {r: 0.5, g: -0.23, b: 0.29, a: -0.12}
+    - rect522_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect522_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect522_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect530_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect530_position: {r: 0, g: 0, b: 0, a: 0}
     - rect530_roundness: {r: 0.03, g: 0.03, b: 0.03, a: 0.03}
@@ -553,15 +718,36 @@ Material:
     - rect55_box: {r: 0.2, g: 0.5, b: 0, a: 0}
     - rect55_position: {r: 0, g: 0, b: 0, a: 0}
     - rect55_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect593_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect593_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect593_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
     - rect651_box: {r: 0.68, g: 0.47, b: 0, a: 0}
     - rect651_position: {r: 0.1, g: 0, b: 0, a: 0}
     - rect651_roundness: {r: 0.23, g: 0.07, b: 0.01, a: 0.14}
     - rect671_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect671_position: {r: 0, g: 0, b: 0, a: 0}
     - rect671_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
+    - rect676_box: {r: 0, g: 0, b: 0, a: 0}
+    - rect676_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect676_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect709_box: {r: 0.12, g: 0.27, b: 0, a: 0}
+    - rect709_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect709_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect713_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect713_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect713_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
+    - rect71_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect71_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect71_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
     - rect720_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect720_position: {r: 0, g: 0, b: 0, a: 0}
     - rect720_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
+    - rect750_box: {r: 0.5, g: 0.59, b: 0, a: 0}
+    - rect750_position: {r: 0.4, g: 0, b: 0, a: 0}
+    - rect750_roundness: {r: -0.57, g: 0.04, b: -0.55, a: -0.54}
+    - rect759_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect759_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect759_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
     - rect761_box: {r: 0.5, g: 0.2, b: 0, a: 0}
     - rect761_position: {r: 0, g: 0, b: 0, a: 0}
     - rect761_roundness: {r: 0, g: 0, b: 0, a: 0}
@@ -580,6 +766,9 @@ Material:
     - rect85_box: {r: 0.2, g: 0.2, b: 0, a: 0}
     - rect85_position: {r: 0, g: 0, b: 0, a: 0}
     - rect85_roundness: {r: 0, g: 0, b: 0, a: 0}
+    - rect922_box: {r: 0.12, g: 0.27, b: 0, a: 0}
+    - rect922_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect922_roundness: {r: 0, g: 0, b: 0, a: 0}
     - rect937_box: {r: 0, g: 0, b: 0, a: 0}
     - rect937_position: {r: 0, g: 0, b: 0, a: 0}
     - rect937_roundness: {r: 0, g: 0, b: 0, a: 0}
@@ -592,6 +781,9 @@ Material:
     - rect983_box: {r: 0.11, g: 0.23, b: 0, a: 0}
     - rect983_position: {r: 0.25, g: 0, b: 0, a: 0}
     - rect983_roundness: {r: 0, g: 0, b: 0.1, a: 0.1}
+    - rect992_box: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - rect992_position: {r: 0, g: 0, b: 0, a: 0}
+    - rect992_roundness: {r: 0, g: -0.1, b: -0.1, a: 0}
     - tex338_color: {r: 1, g: 1, b: 1, a: 1}
     - tex338_position: {r: 0, g: 0, b: 0, a: 0}
     - tex394_position: {r: 0, g: 0, b: 0, a: 0}
@@ -601,12 +793,17 @@ Material:
     - tex649_position: {r: 0.22, g: -0.7, b: 0, a: 0}
     - tex705_color: {r: 1, g: 1, b: 1, a: 1}
     - tex705_position: {r: 0.06, g: -0.58, b: 0, a: 0}
+    - tex720_position: {r: 0, g: 0, b: 0, a: 0}
     - tex733_position: {r: -2.36, g: 3.96, b: 0, a: 0}
     - tex829_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle106_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle106_b: {r: -0.4, g: 0.4, b: 0, a: 0}
     - triangle106_c: {r: 0.4, g: 0.4, b: 0, a: 0}
     - triangle106_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle143_a: {r: 0, g: 0, b: 0, a: 0}
+    - triangle143_b: {r: 0, g: 0, b: 0, a: 0}
+    - triangle143_c: {r: 0, g: 0, b: 0, a: 0}
+    - triangle143_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle154_a: {r: 0.35, g: 0.91, b: 0, a: 0}
     - triangle154_b: {r: -0.11, g: 0.03, b: 0, a: 0}
     - triangle154_c: {r: 0.12, g: -0.13, b: 0, a: 0}
@@ -615,6 +812,10 @@ Material:
     - triangle274_b: {r: -0.07, g: 0.02, b: 0, a: 0}
     - triangle274_c: {r: 0.12, g: -0.13, b: 0, a: 0}
     - triangle274_position: {r: 0.25, g: 0, b: 0, a: 0}
+    - triangle306_a: {r: -0.14, g: 0.07, b: 0, a: 0}
+    - triangle306_b: {r: 0, g: -0.1, b: 0, a: 0}
+    - triangle306_c: {r: 0.14, g: 0.07, b: 0, a: 0}
+    - triangle306_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle490_a: {r: 0.35, g: 0.91, b: 0, a: 0}
     - triangle490_b: {r: -0.11, g: 0.03, b: 0, a: 0}
     - triangle490_c: {r: 0.12, g: -0.13, b: 0, a: 0}
@@ -623,8 +824,28 @@ Material:
     - triangle600_b: {r: -0.5, g: -0.5, b: 0, a: 0}
     - triangle600_c: {r: 0.5, g: -0.5, b: 0, a: 0}
     - triangle600_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle679_a: {r: 0.5, g: 0, b: 0, a: 0}
+    - triangle679_b: {r: -0.5, g: 0, b: 0, a: 0}
+    - triangle679_c: {r: 0, g: 0.62, b: 0, a: 0}
+    - triangle679_position: {r: 0, g: -0.43, b: 0, a: 0}
+    - triangle710_a: {r: -0.14, g: 0.07, b: 0, a: 0}
+    - triangle710_b: {r: 0, g: -0.1, b: 0, a: 0}
+    - triangle710_c: {r: 0.14, g: 0.07, b: 0, a: 0}
+    - triangle710_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle78_a: {r: 0, g: 0, b: 0, a: 0}
+    - triangle78_b: {r: 0, g: 0, b: 0, a: 0}
+    - triangle78_c: {r: 0, g: 0, b: 0, a: 0}
+    - triangle78_position: {r: 0, g: 0, b: 0, a: 0}
     - triangle826_a: {r: 0, g: -0.4, b: 0, a: 0}
     - triangle826_b: {r: -0.4, g: 0.4, b: 0, a: 0}
     - triangle826_c: {r: 0.4, g: 0.4, b: 0, a: 0}
     - triangle826_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle911_a: {r: 0.27, g: 0.11, b: 0, a: 0}
+    - triangle911_b: {r: -0.15, g: 0.03, b: 0, a: 0}
+    - triangle911_c: {r: 0, g: -0.48, b: 0, a: 0}
+    - triangle911_position: {r: 0, g: 0, b: 0, a: 0}
+    - triangle965_a: {r: -0.14, g: 0.07, b: 0, a: 0}
+    - triangle965_b: {r: 0, g: -0.1, b: 0, a: 0}
+    - triangle965_c: {r: 0.14, g: 0.07, b: 0, a: 0}
+    - triangle965_position: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
